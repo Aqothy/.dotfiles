@@ -27,7 +27,7 @@ return {
             "clangd",
             "gopls",
             "jdtls",
-            "typescript-language-server",
+            -- "typescript-language-server", -- just manually download on mason, dk why its broken
         },
     })
 
