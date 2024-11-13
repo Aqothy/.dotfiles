@@ -21,5 +21,11 @@ return {
     --   end,
     -- })
 
+    vim.api.nvim_create_autocmd("VimLeave", {
+      callback = function()
+        vim.fn.system("eslint_d stop")
+      end,
+    })
+
   end,
 }
