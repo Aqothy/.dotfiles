@@ -7,7 +7,6 @@ return {
 			-- Configuration for vimtex
 			vim.g.vimtex_view_method = "skim" -- PDF viewer
 			vim.g.vimtex_compiler_method = "latexmk" -- Auto compile with latexmk
-			vim.g.vimtex_syntax_enabled = 1 -- Enable syntax highlighting
 			vim.g.vimtex_compiler_latexmk = {
 				options = {
 					"-pdf",

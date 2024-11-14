@@ -21,3 +21,5 @@ vim.opt.updatetime = 50
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+vim.o.showmode = false
