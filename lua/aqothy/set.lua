@@ -12,9 +12,12 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.writebackup = false
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
 vim.opt.updatetime = 50
 
+vim.opt.splitright = true
+vim.opt.splitbelow = true

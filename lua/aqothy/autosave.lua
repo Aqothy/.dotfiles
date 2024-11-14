@@ -11,3 +11,5 @@ vim.api.nvim_create_autocmd({"InsertLeave", "TextChanged"}, {
     vim.cmd("silent! write")                       -- Automatically save the current buffer
   end,
 })
+
+
