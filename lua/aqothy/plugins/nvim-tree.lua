@@ -10,7 +10,7 @@ return {
 
 		nvimtree.setup({
 			view = {
-				width = 25,
+				width = 30,
 				relativenumber = true,
 			},
 
