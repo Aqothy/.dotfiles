@@ -41,6 +41,10 @@ return {
 				"pylint",
 				"eslint_d",
 				"latexindent",
+				"clang-format",
+				"gofumpt",
+				"goimports-reviser",
+				"golines",
 			},
 		})
 	end,

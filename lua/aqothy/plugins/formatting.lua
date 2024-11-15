@@ -18,7 +18,22 @@ return {
 				lua = { "stylua" },
 				python = { "isort" },
 				tex = { "latexindent" },
+				cpp = { "clang-format" },
+				go = { "gofumpt", "golines", "goimports-reviser" },
+			},
+			format_on_save = {
+				lsp_fallback = true,
+				async = false,
+				timeout_ms = 1000,
 			},
 		})
+
+		vim.keymap.set({ "n", "v" }, "<C-s>", function()
+			conform.format({
+				lsp_fallback = true,
+				async = false,
+				timeout_ms = 1000,
+			})
+		end, { desc = "Format file or range (in visual mode)" })
 	end,
 }
