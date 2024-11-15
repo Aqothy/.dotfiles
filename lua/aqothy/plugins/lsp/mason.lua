@@ -40,8 +40,8 @@ return {
 				"isort", -- python formatter
 				"pylint",
 				"eslint_d",
+				"latexindent",
 			},
 		})
 	end,
 }
-

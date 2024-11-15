@@ -1,4 +1,4 @@
-vim.opt.nu = true
+vim.opt.number = true
 vim.opt.relativenumber = true
 
 vim.opt.tabstop = 2
@@ -22,4 +22,9 @@ vim.opt.updatetime = 50
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
-vim.o.showmode = false
+vim.opt.showmode = false
+
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+vim.opt.clipboard = "unnamedplus"
