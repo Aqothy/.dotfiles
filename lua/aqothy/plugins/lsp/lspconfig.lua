@@ -30,14 +30,13 @@ return {
       underline = true,
       update_in_insert = false,
       float = {
-        focusable = false,
+--        focusable = false,
         style = "minimal",
         border = "rounded",
         source = "always",
         header = "",
         prefix = "",
         close_events = { "CursorMoved", "InsertEnter"},
-
       },
     })
 
@@ -46,6 +45,7 @@ return {
         vim.diagnostic.open_float()
       end,
     })
+
 
     -- LSP server setup
     local capabilities = cmp_nvim_lsp.default_capabilities()
