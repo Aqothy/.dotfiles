@@ -23,7 +23,7 @@ return {
 				"tailwindcss",
 				"lua_ls",
 				-- "emmet_ls",
-				"pyright",
+				"ruff",
 				"clangd",
 				"gopls",
 				"jdtls",
@@ -37,8 +37,7 @@ return {
 			ensure_installed = {
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
-				"isort", -- python formatter
-				"pylint",
+				"black", -- python formatter
 				"eslint_d",
 				"latexindent",
 				"clang-format",

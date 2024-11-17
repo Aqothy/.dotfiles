@@ -16,7 +16,7 @@ return {
 				yaml = { "prettier" },
 				markdown = { "prettier" },
 				lua = { "stylua" },
-				python = { "isort" },
+				python = { "black" },
 				tex = { "latexindent" },
 				cpp = { "clang-format" },
 				go = { "gofumpt", "golines", "goimports-reviser" },
