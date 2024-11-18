@@ -22,7 +22,7 @@ return {
 				"cssls",
 				"tailwindcss",
 				"lua_ls",
-				-- "emmet_ls",
+		   	"emmet_ls",
 				"ruff",
 				"clangd",
 				"gopls",
