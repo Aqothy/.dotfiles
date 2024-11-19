@@ -16,7 +16,7 @@ return {
 			callback = function(ev)
 				local opts = { buffer = ev.buf, silent = true }
 
-				vim.keymap.set("n", "ld", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+				vim.keymap.set("n", "<leader>ld", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
 				vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, opts) -- show type definition
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
