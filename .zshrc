@@ -1,6 +1,6 @@
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="agnoster"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -53,3 +53,5 @@ if [ -f "/Users/aqothy/miniforge3/etc/profile.d/mamba.sh" ]; then
 fi
 # <<< conda initialize <<<
 
+# Bind Ctrl+F to run the fzf_cd.sh script
+bindkey -s '^F' 'source fzf_cd.sh\n'
