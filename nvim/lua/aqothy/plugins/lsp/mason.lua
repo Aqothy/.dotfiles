@@ -24,6 +24,7 @@ return {
 				"lua_ls",
 				"emmet_ls",
 				"ruff",
+                "jedi_language_server",
 				"clangd",
 				"gopls",
 				"jdtls",
