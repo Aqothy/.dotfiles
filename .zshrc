@@ -14,6 +14,8 @@ source $ZSH/oh-my-zsh.sh
 
 alias zshc="nvim ~/.zshrc"
 
+alias cm="chmod +x"
+
 alias py="python3"
 
 #alias nv="nvim"
@@ -61,10 +63,45 @@ if [ -f "/Users/aqothy/miniforge3/etc/profile.d/mamba.sh" ]; then
 fi
 # <<< conda initialize <<<
 
-# Bind Ctrl+F to run the fzf_cd.sh script
-bindkey -s '^F' 'source fzf_cd.sh\n'
+select_dir() {
+    # Use `fzf` to select a directory
+    find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d | fzf
+}
 
-export FZF_DEFAULT_COMMAND='rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*"'
+fzf_append_dir_widget() {
+    local dir
+    dir=$(select_dir) || return # Call the function and store the result
+    if [[ -n $dir ]]; then
+        LBUFFER+="$dir" # Append the selected directory to the current command
+        zle redisplay   # Refresh the prompt to show the updated command
+    fi
+}
+
+zle -N fzf_append_dir_widget
+
+# Bind Ctrl+F to run the fzf_cd.sh script
+bindkey '^F' fzf_append_dir_widget
+
+# Set FZF_DEFAULT_COMMAND to always search in ~ and prepend ~ to results correctly
+export FZF_DEFAULT_COMMAND='cd ~ && rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*" | sed "s|^|$HOME/|"'
+
+# Ensure Ctrl-T uses the same default command
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Define FZF_CHILD_COMMAND for searching in the current directory
+export FZF_CHILD_COMMAND='rg --files --glob "!**/.git/*"'
+
+# Bind Ctrl-H to use FZF in the current (child) directory
+fzf_child_widget() {
+    local selected
+    selected=$(eval "$FZF_CHILD_COMMAND" | fzf) || return
+    LBUFFER+="$selected" # Append the selected file/directory to the current command
+    zle redisplay
+}
+
+zle -N fzf_child_widget
+
+bindkey '^H' fzf_child_widget
 
 #nf() {
 #    local file
@@ -74,7 +111,5 @@ export FZF_DEFAULT_COMMAND='rg --files --glob "!**/.git/*" --glob "!Pictures/*" 
 #        nvim "$(basename "$file")"
 #    fi
 #}
-
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 source <(fzf --zsh)
