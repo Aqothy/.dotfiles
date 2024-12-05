@@ -1,6 +1,5 @@
 return {
 	"nvim-tree/nvim-tree.lua",
-	dependencies = "nvim-tree/nvim-web-devicons",
 	config = function()
 		local nvimtree = require("nvim-tree")
 
@@ -14,9 +13,9 @@ return {
 				relativenumber = true,
 			},
 
-      diagnostics = {
-        enable = true,
-      },
+			diagnostics = {
+				enable = true,
+			},
 
 			-- disable window_picker for
 			-- explorer to work well with
@@ -30,9 +29,7 @@ return {
 			},
 			filters = {
 				custom = { ".DS_Store", "^.git$" },
-			},
-			git = {
-				ignore = false,
+				git_ignored = false,
 			},
 		})
 
@@ -40,12 +37,12 @@ return {
 		local keymap = vim.keymap -- for conciseness
 
 		keymap.set("n", "<leader>ee", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
-		keymap.set(
-			"n",
-			"<leader>ef",
-			"<cmd>NvimTreeFindFileToggle<CR>",
-			{ desc = "Toggle file explorer on current file" }
-		) -- toggle file explorer on current file
+		--		keymap.set(
+		--			"n",
+		--			"<leader>ef",
+		--			"<cmd>NvimTreeFindFileToggle<CR>",
+		--			{ desc = "Toggle file explorer on current file" }
+		--		) -- toggle file explorer on current file
 		keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
 	end,
 }

@@ -1,6 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPre", "BufNewFile" },
+    event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		{ "antosha417/nvim-lsp-file-operations", config = true },
@@ -17,39 +17,47 @@ return {
 				local opts = { buffer = ev.buf, silent = true }
 
 				vim.keymap.set("n", "<leader>ld", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
-				vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, opts) -- show type definition
+				vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, opts)
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+				vim.keymap.set("n", "]d", function()
+					vim.diagnostic.jump({ count = 1 })
+				end, opts)
+				vim.keymap.set("n", "[d", function()
+					vim.diagnostic.jump({ count = -1 })
+				end, opts)
 			end,
 		})
 
 		-- Diagnostics Configuration
 		vim.diagnostic.config({
-			virtual_text = false,
+			virtual_text = true,
 			underline = true,
-			update_in_insert = false,
+			-- update_in_insert = false,
 			float = {
-				--        focusable = false,
+				focusable = true,
 				style = "minimal",
 				border = "rounded",
 				source = "always",
 				header = "",
 				prefix = "",
-				close_events = { "CursorMoved", "InsertEnter" },
 			},
 		})
 
-		vim.api.nvim_create_autocmd("CursorHold", {
-			callback = function()
-				vim.diagnostic.open_float()
-			end,
-		})
+		--		vim.api.nvim_create_autocmd("CursorHold", {
+		--			callback = function()
+		--				vim.diagnostic.open_float()
+		--			end,
+		--		})
 
 		-- LSP server setup
-		local capabilities = cmp_nvim_lsp.default_capabilities()
+		local capabilities = vim.tbl_deep_extend(
+			"force",
+			{},
+			vim.lsp.protocol.make_client_capabilities(),
+			cmp_nvim_lsp.default_capabilities()
+		)
 
 		mason_lspconfig.setup_handlers({
 			function(server_name)

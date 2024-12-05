@@ -22,13 +22,13 @@ return {
 				"cssls",
 				"tailwindcss",
 				"lua_ls",
-		   	"emmet_ls",
+				"emmet_ls",
 				"ruff",
 				"clangd",
 				"gopls",
 				"jdtls",
 				"texlab",
-				"sqls",
+				--				"sqls",
 				-- "typescript-language-server", -- just manually download on mason, dk why its broken
 			},
 		})

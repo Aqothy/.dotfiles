@@ -1,4 +1,4 @@
--- Create an augroup for autosave
+-- Create an autogroup for autosave
 local autosave_augroup = vim.api.nvim_create_augroup("Autosave", { clear = true })
 
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {

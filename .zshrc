@@ -16,18 +16,18 @@ alias zshc="nvim ~/.zshrc"
 
 alias py="python3"
 
-alias nv="nvim"
+#alias nv="nvim"
 
 alias clang="clang++ -std=c++20"
 
 alias so="source ~/.zshrc"
 
+[[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
  
-export PATH=/Library/PostgreSQL/16/bin:$PATH
-
 export GOBIN=$HOME/go/bin
 
 export PATH=$PATH:$GOBIN
@@ -37,6 +37,10 @@ export PATH=$PATH:/usr/local/nvim-macos-arm64/bin
 export PATH=$PATH:/usr/local/lua-5.4.7/src
 
 export PATH=$PATH:/usr/local/texlive/2024basic/bin/universal-darwin
+
+export PATH=$PATH:/usr/local/google-cloud-sdk/bin
+
+export PATH=/opt/homebrew/opt/postgresql@16/bin:$PATH
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -62,11 +66,14 @@ bindkey -s '^F' 'source fzf_cd.sh\n'
 
 export FZF_DEFAULT_COMMAND='rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*"'
 
-nfz() {
-    local file
-    file=$(fzf)
-    [ -n "$file" ] && nvim "$file"
-}
+#nf() {
+#    local file
+#    file=$(fzf)
+#    if [ -n "$file" ]; then
+#        cd "$(dirname "$file")" || return
+#        nvim "$(basename "$file")"
+#    fi
+#}
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
