@@ -2,7 +2,7 @@ return {
 	"williamboman/mason.nvim",
 	dependencies = {
 		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
+--		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},
 	config = function()
 		-- import mason
@@ -11,7 +11,7 @@ return {
 		-- import mason-lspconfig
 		local mason_lspconfig = require("mason-lspconfig")
 
-		local mason_tool_installer = require("mason-tool-installer")
+--		local mason_tool_installer = require("mason-tool-installer")
 
 		mason.setup()
 
@@ -29,23 +29,24 @@ return {
 				"gopls",
 				"jdtls",
 				"texlab",
+                "eslint",
 				--				"sqls",
 				-- "typescript-language-server", -- just manually download on mason, dk why its broken
 			},
 		})
 
-		mason_tool_installer.setup({
-			ensure_installed = {
-				"prettier", -- prettier formatter
-				"stylua", -- lua formatter
-				"black", -- python formatter
-				"eslint_d",
-				"latexindent",
-				"clang-format",
-				"gofumpt",
-				"goimports-reviser",
-				"golines",
-			},
-		})
+--		mason_tool_installer.setup({
+--			ensure_installed = {
+--				"prettier", -- prettier formatter
+--				"stylua", -- lua formatter
+--				"black", -- python formatter
+--				"eslint_d",
+--				"latexindent",
+--				"clang-format",
+--				"gofumpt",
+--				"goimports-reviser",
+--				"golines",
+--			},
+--		})
 	end,
 }
