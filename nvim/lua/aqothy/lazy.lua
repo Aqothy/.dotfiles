@@ -18,7 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	spec = {
 		{ import = "aqothy.plugins" },
-		{ import = "aqothy.plugins.lsp" },
 	},
 
 	-- automatically check for plugin updates
