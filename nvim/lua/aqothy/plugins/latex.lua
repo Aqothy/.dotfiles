@@ -8,8 +8,8 @@ return {
 			vim.g.vimtex_view_method = "skim" -- PDF viewer
 			vim.g.vimtex_compiler_method = "latexmk" -- Auto compile with latexmk
 			vim.g.vimtex_quickfix_mode = 0 -- Don't open quickfix window_picker
-			vim.keymap.set("n", "<leader>lv", ":VimtexView<CR>", { desc = "Open VimTeX PDF viewer" })
-			vim.keymap.set("n", "<leader>ll", ":VimtexCompile<CR>", { desc = "Start VimTeX compilation" })
+			vim.keymap.set("n", "<leader>lv", "<cmd>VimtexView<CR>", { desc = "Open VimTeX PDF viewer" })
+			vim.keymap.set("n", "<leader>ll", "<cmd>VimtexCompile<CR>", { desc = "Start VimTeX compilation" })
 			-- inverse search and focus back to terminal
 			local function focus_terminal()
 				-- Replace "Kitty" with the name of your terminal app if it's different
@@ -18,6 +18,7 @@ return {
 
 			-- Register the function for the Vimtex inverse search event
 			vim.api.nvim_create_augroup("vimtex_event_focus", { clear = true })
+
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "VimtexEventViewReverse",
 				group = "vimtex_event_focus",

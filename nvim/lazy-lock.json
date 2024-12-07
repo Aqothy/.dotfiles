@@ -4,7 +4,7 @@
   "cmp-nvim-lsp": { "branch": "main", "commit": "39e2eda76828d88b773cc27a3f61d2ad782c922d" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp_luasnip": { "branch": "master", "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90" },
-  "copilot.vim": { "branch": "release", "commit": "87038123804796ca7af20d1b71c3428d858a9124" },
+  "copilot.lua": { "branch": "master", "commit": "c810500b69cb8bcea58f2be635cb1340011714b5" },
   "friendly-snippets": { "branch": "main", "commit": "de8fce94985873666bd9712ea3e49ee17aadb1ed" },
   "gruvbox.nvim": { "branch": "main", "commit": "68c3460a5d1d1a362318960035c9f3466d5011f5" },
   "lazy.nvim": { "branch": "main", "commit": "7967abe55752aa90532e6bb4bd4663fe27a264cb" },

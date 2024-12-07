@@ -27,7 +27,7 @@ return {
 				["<C-k>"] = cmp.mapping.select_prev_item(cmp_select), -- previous suggestion
 				["<C-j>"] = cmp.mapping.select_next_item(cmp_select), -- next suggestion
 				["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-				["<CR>"] = cmp.mapping.confirm({ select = true }),
+				["<C-enter>"] = cmp.mapping.confirm({ select = true }),
 			}),
 			-- sources for autocompletion
 			sources = cmp.config.sources({
