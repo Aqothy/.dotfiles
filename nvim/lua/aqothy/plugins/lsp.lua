@@ -1,10 +1,10 @@
 return {
   "neovim/nvim-lspconfig",
-  event = {
-    "BufReadPre",
-    "BufNewFile",
-    "CmdlineEnter",
-  },
+  --  event = {
+  --    "BufReadPre",
+  --    "BufNewFile",
+  --    "CmdlineEnter",
+  --  },
   dependencies = {
     {
       "hrsh7th/cmp-nvim-lsp",
@@ -33,7 +33,7 @@ return {
       callback = function(ev)
         local opts = { buffer = ev.buf, silent = true }
 
-        vim.keymap.set("n", "<leader>ld", "<cmd>Telescope lsp_definitions<CR>", opts)         -- show lsp definitions
+        vim.keymap.set("n", "<leader>ld", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
         vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
         vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
@@ -80,14 +80,12 @@ return {
         "tailwindcss",
         "lua_ls",
         "emmet_ls",
-        "ruff",
-        "jedi_language_server",
+        "pyright",
         "clangd",
         "gopls",
         "jdtls",
         "texlab",
         "eslint",
-        --				"sqls",
         -- "typescript-language-server", -- just manually download on mason, dk why its broken
       },
 
@@ -107,6 +105,20 @@ return {
                 },
                 completion = {
                   callSnippet = "Replace",
+                },
+              },
+            },
+          })
+        end,
+        ["pyright"] = function()
+          lspconfig["pyright"].setup({
+            capabilities = capabilities,
+            settings = {
+              python = {
+                analysis = {
+                  -- TODO: It would be nice to understand this better and turn these back on someday.
+                  reportMissingTypeStubs = false,
+                  typeCheckingMode = "off",
                 },
               },
             },

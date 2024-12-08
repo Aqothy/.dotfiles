@@ -1,6 +1,6 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPre", "BufNewFile" },
+--    event = { "BufReadPre", "BufNewFile" },
     build = ":TSUpdate",
     config = function()
         require("nvim-treesitter.configs").setup({
@@ -20,6 +20,9 @@ return {
                 "css",
                 "html",
                 "tsx",
+                "yaml",
+                "json",
+                "dockerfile",
             },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
