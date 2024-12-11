@@ -1,26 +1,7 @@
 return {
-    "zbirenbaum/copilot.lua", -- Copilot but lua
-    cmd = "Copilot",
-    event = "InsertEnter",
+    "github/copilot.vim",
     config = function()
-        -- make stupid tab work
----        vim.keymap.set("i", '<Tab>', function()
----            if require("copilot.suggestion").is_visible() then
----                require("copilot.suggestion").accept()
----            else
----                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
----            end
----        end, {
----            silent = true,
----        })
-
-        require("copilot").setup({
-            suggestion = {
-                auto_trigger = true,
-                keymap = {
-                    accept = "<C-y>",
-                },
-            },
-        })
+        vim.g.copilot_no_tab_map = true -- Disable default <Tab> mapping
+        vim.api.nvim_set_keymap("i", "<C-y>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end,
 }

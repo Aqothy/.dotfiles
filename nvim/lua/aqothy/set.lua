@@ -14,7 +14,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
 vim.opt.updatetime = 50
@@ -34,6 +34,35 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
+vim.opt.signcolumn = "yes"
+--vim.opt.colorcolumn = "80"
+vim.opt.isfname:append("@-@")
+
+--vim.opt.fileencoding = "utf-8"
+
+--local CleanSpaceGroup = augroup('CleanSpace', {})
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+local yank_group = augroup('HighlightYank', {})
+
+autocmd('TextYankPost', {
+    group = yank_group,
+    pattern = '*',
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = 'IncSearch',
+            timeout = 40,
+        })
+    end,
+})
+
+-- already handled by lsp format
+--autocmd({ "BufWritePre" }, {
+--    group = CleanSpaceGroup,
+--    pattern = "*",
+--    command = [[%s/\s\+$//e]],
+--})
+
 --vim.g.netrw_banner = 0
 --vim.g.netrw_browse_split = 4
 --vim.g.netrw_liststyle = 3
@@ -42,8 +71,6 @@ vim.opt.undofile = true
 
 --vim.opt.spelllang = 'en_us'
 --vim.opt.spell = true
-
---vim.opt.signcolumn = "yes"
 
 --vim.opt.foldcolumn = '1'
 --vim.opt.foldenable = true

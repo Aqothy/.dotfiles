@@ -8,11 +8,15 @@ ZSH_THEME="robbyrussell"
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
-plugins=(git)
+plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
+bindkey -v #vim mode in zsh
+
 alias zshc="nvim ~/.zshrc"
+
+alias icat="kitten icat"
 
 alias cm="chmod +x"
 
@@ -29,7 +33,7 @@ alias so="source ~/.zshrc"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
- 
+
 export GOBIN=$HOME/go/bin
 
 export PATH=$PATH:$GOBIN
