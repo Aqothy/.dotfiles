@@ -18,7 +18,7 @@ return {
 				markdown = { "prettierd" },
 				lua = { "stylua" },
 				python = { "black" },
-				tex = { "latexindent" },
+				--				tex = { "latexindent" },
 				--                cpp = { "clang-format" },
 				go = { "gofumpt", "golines", "goimports-reviser" },
 			},

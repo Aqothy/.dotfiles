@@ -167,7 +167,7 @@ return {
 				"stylua", -- lua formatter
 				"black", -- python formatter
 				--"eslint_d",
-				"latexindent",
+				--"latexindent",
 				--"clang-format",
 				"gofumpt",
 				"goimports-reviser",

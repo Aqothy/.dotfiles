@@ -28,6 +28,10 @@ return {
 						["<C-j>"] = actions.move_selection_next, -- Move to next result
 						["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
 					},
+					n = {
+						["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
+						["dd"] = actions.delete_buffer,
+					},
 				},
 			},
 			extensions = {
