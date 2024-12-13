@@ -4,6 +4,7 @@ return {
 	config = function()
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
+		local builtin = require("telescope.builtin")
 
 		local art = {
 			"             ⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀",
@@ -39,12 +40,16 @@ return {
 		-- Set menu
 		dashboard.section.buttons.val = {
 			dashboard.button("SPC ee", "  > Toggle file explorer", "<cmd>NvimTreeToggle<CR>"),
-			dashboard.button("SPC ff", "󰱼  > Find File", "<cmd>Telescope find_files<CR>"),
-			dashboard.button("SPC fs", "  > Find Word", "<cmd>Telescope live_grep<CR>"),
+			dashboard.button("SPC ff", "󰱼  > Find File", builtin.find_files),
+			dashboard.button("SPC fs", "  > Find Word", builtin.live_grep),
 			dashboard.button("q", "  > Quit NVIM", "<cmd>qa<CR>"),
 		}
 
-		dashboard.section.footer.val = "Good Luck!"
+		dashboard.section.footer.val = {
+			"",
+			"Good Luck!",
+		}
+		dashboard.section.footer.position = "center"
 
 		-- Send config to alpha
 		alpha.setup(dashboard.opts)

@@ -12,14 +12,6 @@ return {
 			"williamboman/mason.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 		},
-		{
-			"nvim-telescope/telescope.nvim",
-			dependencies = {
-				{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-				"nvim-tree/nvim-web-devicons",
-				"nvim-lua/plenary.nvim",
-			},
-		},
 	},
 	config = function()
 		local lspconfig = require("lspconfig")
@@ -36,60 +28,6 @@ return {
 		local builtin = require("telescope.builtin")
 
 		mason.setup()
-
-		-- Keymaps for LSP
-		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
-
-			callback = function(ev)
-				local opts = { buffer = ev.buf, silent = true }
-				--                local client = vim.lsp.get_client_by_id(ev.data and ev.data.client_id or nil)
-				--
-				--                if client and client.supports_method('textDocument/formatting') then
-				--                    -- Format the current buffer on save
-				--                    vim.api.nvim_create_autocmd('BufWritePre', {
-				--                        buffer = ev.buf,
-				--                        callback = function()
-				--                            vim.lsp.buf.format({ bufnr = ev.buf, id = client.id })
-				--                        end,
-				--                    })
-				--                end
-
-				-- Key mappings for LSP functions
-				vim.keymap.set("n", "<leader>ld", builtin.lsp_definitions, opts) -- show lsp definitions
-				vim.keymap.set("n", "<leader>lt", builtin.lsp_type_definitions, opts)
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-				vim.keymap.set("n", "<leader>fd", vim.diagnostic.open_float, opts)
-				vim.keymap.set("n", "<leader>lr", builtin.lsp_references, opts)
-				vim.keymap.set("n", "]d", function()
-					vim.diagnostic.goto_next({ float = false })
-				end, opts)
-				vim.keymap.set("n", "[d", function()
-					vim.diagnostic.goto_prev({ float = false })
-				end, opts)
-			end,
-		})
-
-		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-			border = "rounded",
-		})
-
-		-- Diagnostics Configuration
-		vim.diagnostic.config({
-			virtual_text = true,
-			underline = true,
-			-- update_in_insert = false,
-			float = {
-				focusable = true,
-				style = "minimal",
-				border = "rounded",
-				source = "always",
-				header = "",
-				prefix = "",
-			},
-		})
 
 		-- LSP server setup
 		local capabilities = vim.tbl_deep_extend(
@@ -172,6 +110,60 @@ return {
 				"gofumpt",
 				"goimports-reviser",
 				"golines",
+			},
+		})
+
+		-- Keymaps for LSP
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
+
+			callback = function(ev)
+				local opts = { buffer = ev.buf, silent = true }
+				--                local client = vim.lsp.get_client_by_id(ev.data and ev.data.client_id or nil)
+				--
+				--                if client and client.supports_method('textDocument/formatting') then
+				--                    -- Format the current buffer on save
+				--                    vim.api.nvim_create_autocmd('BufWritePre', {
+				--                        buffer = ev.buf,
+				--                        callback = function()
+				--                            vim.lsp.buf.format({ bufnr = ev.buf, id = client.id })
+				--                        end,
+				--                    })
+				--                end
+
+				-- Key mappings for LSP functions
+				vim.keymap.set("n", "<leader>ld", builtin.lsp_definitions, opts) -- show lsp definitions
+				vim.keymap.set("n", "<leader>lt", builtin.lsp_type_definitions, opts)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "<leader>fd", vim.diagnostic.open_float, opts)
+				vim.keymap.set("n", "<leader>lr", builtin.lsp_references, opts)
+				vim.keymap.set("n", "]d", function()
+					vim.diagnostic.goto_next({ float = false })
+				end, opts)
+				vim.keymap.set("n", "[d", function()
+					vim.diagnostic.goto_prev({ float = false })
+				end, opts)
+			end,
+		})
+
+		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+			border = "rounded",
+		})
+
+		-- Diagnostics Configuration
+		vim.diagnostic.config({
+			virtual_text = true,
+			underline = true,
+			-- update_in_insert = false,
+			float = {
+				focusable = true,
+				style = "minimal",
+				border = "rounded",
+				source = "always",
+				header = "",
+				prefix = "",
 			},
 		})
 	end,
