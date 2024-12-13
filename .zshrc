@@ -68,8 +68,8 @@ fi
 # <<< conda initialize <<<
 
 select_dir() {
-    # Use `fzf` to select a directory
-    find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d | fzf
+    # Include the root directories themselves as options
+    (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
 }
 
 fzf_append_dir_widget() {
