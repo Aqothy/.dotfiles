@@ -12,8 +12,6 @@ plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-bindkey -v #vim mode in zsh
-
 alias zshc="nvim ~/.zshrc"
 
 alias icat="kitten icat"

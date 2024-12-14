@@ -50,9 +50,11 @@ vim.opt.linebreak = true
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
---vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.opt.fileencoding = "utf-8"
+vim.opt.showcmd = false
+vim.opt.showtabline = 0
 
---vim.opt.fileencoding = "utf-8"
+--vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 --local CleanSpaceGroup = augroup('CleanSpace', {})
 local augroup = vim.api.nvim_create_augroup

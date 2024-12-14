@@ -1,10 +1,10 @@
 return {
 	"windwp/nvim-ts-autotag",
-	event = "InsertEnter",
+	ft = { "html", "javascriptreact", "typescriptreact" }, -- Load only for these filetypes
 	config = function()
 		require("nvim-ts-autotag").setup({
 			opts = {
-				enable_close = false, -- Auto close tags, dont need it if you have emmet lsp
+				enable_close = false, -- Auto close tags, don't need it if you have emmet LSP
 			},
 		})
 	end,

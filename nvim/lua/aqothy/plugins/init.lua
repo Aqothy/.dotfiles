@@ -1,4 +1,10 @@
 return {
-    --    "nvim-lua/plenary.nvim", -- lua functions that many plugins use
-    --	"christoomey/vim-tmux-navigator", -- tmux & split window navigation
+    "nvim-lua/plenary.nvim", -- Lua functions that many plugins use
+    {
+        "alanfortlink/blackjack.nvim",
+        cmd = "BlackJackNewGame", -- Lazy load when this command is executed
+        opts = {
+            scores_path = nil,    -- Disable score tracking by setting it to nil
+        },
+    },
 }

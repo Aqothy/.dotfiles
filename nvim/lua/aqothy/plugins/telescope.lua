@@ -3,6 +3,7 @@ return {
 	branch = "0.1.x",
 	dependencies = {
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		"nvim-telescope/telescope-project.nvim",
 		"nvim-tree/nvim-web-devicons",
 		"nvim-lua/plenary.nvim",
 	},
@@ -35,10 +36,17 @@ return {
 			},
 			extensions = {
 				fzf = {},
+				project = {
+					base_dirs = { "~/Code/Personal", "~/.config" },
+					hidden_files = false, -- default: false
+					order_by = "asc",
+					search_by = "title",
+				},
 			},
 		})
 
 		telescope.load_extension("fzf")
+		telescope.load_extension("project")
 
 		-- set keymaps
 		local keymap = vim.keymap -- for conciseness
@@ -47,5 +55,6 @@ return {
 		keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
 		keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "Telescope live grep" })
 		keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+		keymap.set("n", "<leader>fp", "<cmd>Telescope project<CR>", { desc = "Find Project" })
 	end,
 }
