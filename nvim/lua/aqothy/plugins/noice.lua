@@ -1,13 +1,16 @@
 return {
     "folke/noice.nvim",
     priority = 1000,
-    lazy = false,
+    event = "VeryLazy",
     dependencies = {
         "MunifTanjim/nui.nvim",
-        -- no need for notification
+        -- no need for flashy notification
     },
     config = function()
         vim.keymap.set("n", "<leader>nh", "<cmd>Noice<cr>", { noremap = true, silent = true })
+        if vim.o.filetype == "lazy" then
+            vim.cmd([[messages clear]])
+        end
         require("noice").setup({
             lsp = {
                 override = {
@@ -17,7 +20,7 @@ return {
                 },
             },
             presets = {
-                bottom_search = true,
+                bottom_search = false,
                 command_palette = false,
                 long_message_to_split = true,
                 inc_rename = true,
@@ -40,22 +43,22 @@ return {
                         },
                     },
                     opts = { skip = true },
-                }
-                -- 	{
-                -- 		filter = {
-                -- 			event = "msg_show",
-                -- 			any = {
-                -- 				{ find = "%d+L, %d+B" },
-                -- 				{ find = "; after #%d+" },
-                -- 				{ find = "; before #%d+" },
-                -- 				{ find = "^%d+ fewer lines$" },
-                -- 				{ find = "^%d+ more lines$" },
-                -- 				{ find = "^%d+ lines yanked$" },
-                -- 				{ find = "^%d+ lines [<>]ed %d+ time$" },
-                -- 			},
-                -- 		},
-                -- 		view = "mini",
-                -- 	},
+                },
+                {
+                    filter = {
+                        event = "msg_show",
+                        any = {
+                            { find = "%d+L, %d+B" },
+                            { find = "; after #%d+" },
+                            { find = "; before #%d+" },
+                            { find = "^%d+ fewer lines$" },
+                            { find = "^%d+ more lines$" },
+                            { find = "^%d+ lines yanked$" },
+                            { find = "^%d+ lines [<>]ed %d+ time$" },
+                        },
+                    },
+                    view = "mini",
+                },
                 -- 	{
                 -- 		filter = {
                 -- 			event = "lsp",

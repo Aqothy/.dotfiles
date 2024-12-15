@@ -13,6 +13,7 @@ return {
                     { "fileformat" },
                     { "filetype" },
                     { "filesize" },
+                    { "filename",  path = 2 },
                 },
             },
             options = {

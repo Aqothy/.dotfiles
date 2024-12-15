@@ -5,7 +5,7 @@ return {
         "alanfortlink/blackjack.nvim",
         cmd = "BlackJackNewGame", -- Lazy load when this command is executed
         opts = {
-            scores_path = nil,    -- Disable score tracking by setting it to nil
+            scores_path = "",     -- Disable score tracking by setting it to nil
         },
     },
 }

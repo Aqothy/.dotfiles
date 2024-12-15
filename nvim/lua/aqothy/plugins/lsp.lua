@@ -1,19 +1,44 @@
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
+        -- "hrsh7th/cmp-nvim-lsp",
         "mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
     },
     event = { "BufReadPost", "BufNewFile" },
+    cmd = { "Mason", "LspInfo", "LspInstall", "LspUninstall" },
     config = function()
         local lspconfig = require("lspconfig")
 
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        -- local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
         local builtin = require("telescope.builtin")
 
+        local mason = require("mason")
+
         local mason_lspconfig = require("mason-lspconfig")
+
+        mason.setup()
+
+        mason_lspconfig.setup({
+            -- list of servers for mason to install
+            ensure_installed = {
+                "html",
+                "cssls",
+                "tailwindcss",
+                "lua_ls",
+                "emmet_ls",
+                "pyright",
+                "clangd",
+                "gopls",
+                "jdtls",
+                "texlab",
+                "eslint",
+                -- "typescript-language-server", -- just manually download on mason, dk why its broken
+            },
+        })
 
         -- Keymaps for LSP
         vim.api.nvim_create_autocmd("LspAttach", {
@@ -44,7 +69,7 @@ return {
                         desc = 'LSP format on save',
                         callback = function()
                             -- note: do not enable async formatting
-                            vim.lsp.buf.format({ async = false, timeout_ms = 3000 })
+                            vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
                         end,
                     })
                 end
@@ -75,7 +100,8 @@ return {
             "force",
             {},
             vim.lsp.protocol.make_client_capabilities(),
-            cmp_nvim_lsp.default_capabilities()
+            require('blink.cmp').get_lsp_capabilities()
+        -- cmp_nvim_lsp.default_capabilities()
         )
 
         mason_lspconfig.setup_handlers({

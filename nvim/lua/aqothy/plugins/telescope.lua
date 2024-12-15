@@ -56,6 +56,7 @@ return {
         keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
         keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "Telescope live grep" })
         keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+        vim.keymap.set('n', '<leader>of', builtin.oldfiles, { desc = 'find old files, haha OF' })
         keymap.set("n", "<leader>fp", "<cmd>Telescope project<CR>", { desc = "Find Project" })
     end,
 }

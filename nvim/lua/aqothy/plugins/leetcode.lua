@@ -25,5 +25,6 @@ return {
                 home = "~/Code/Personal/leetcode",
             },
         })
+        vim.keymap.set("n", "<leader>le", ":Leet ")
     end,
 }

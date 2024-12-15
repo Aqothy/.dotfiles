@@ -32,7 +32,7 @@ vim.opt.termguicolors = true
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
+    vim.opt.clipboard = "unnamedplus"
 end)
 
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
@@ -62,14 +62,14 @@ local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup("HighlightYank", { clear = true })
 
 autocmd("TextYankPost", {
-	group = yank_group,
-	pattern = "*",
-	callback = function()
-		vim.highlight.on_yank({
-			higroup = "IncSearch",
-			timeout = 40,
-		})
-	end,
+    group = yank_group,
+    pattern = "*",
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "IncSearch",
+            timeout = 40,
+        })
+    end,
 })
 
 -- already handled by lsp format

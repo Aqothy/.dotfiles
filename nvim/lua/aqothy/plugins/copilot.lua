@@ -7,9 +7,9 @@ return {
         require("copilot").setup({
             panel = {
                 keymap = {
-                    jump_next = "<c-j>",
-                    jump_prev = "<c-k>",
-                    accept = "<c-y>",
+                    jump_next = "<C-j>",
+                    jump_prev = "<C-k>",
+                    accept = "<C-enter>",
                     refresh = "r",
                 },
             },
@@ -17,10 +17,10 @@ return {
                 enabled = true,
                 auto_trigger = true,
                 keymap = {
-                    accept = "<c-y>",
-                    next = "<c-j>",
-                    prev = "<c-k>",
-                    dismiss = "<c-h>",
+                    accept = "<C-enter>",
+                    next = "<C-j>",
+                    prev = "<C-k>",
+                    dismiss = "<C-h>",
                 },
                 filetypes = {
                     yaml = true,
@@ -33,7 +33,7 @@ return {
         })
         vim.api.nvim_set_keymap(
             "n",
-            "<C-s>",
+            "<c-s>",
             ":lua require('copilot.suggestion').toggle_auto_trigger()<CR>",
             { noremap = true, silent = true }
         )
