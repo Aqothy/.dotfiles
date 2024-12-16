@@ -15,9 +15,9 @@ return {
 					"alpha",
 					"NvimTree",
 					"Trouble",
-					"text",
 					"fugitive",
 					"leetcode.nvim",
+					"mason",
 				},
 			},
 			scope = {

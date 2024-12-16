@@ -29,6 +29,7 @@ return {
 						"fugitive",
 						"leetcode.nvim",
 						"terminal",
+						"mason",
 					},
 				},
 			},
