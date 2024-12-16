@@ -1,15 +1,20 @@
 return {
-    "OXY2DEV/markview.nvim",
-    ft = "markdown", -- If you decide to lazy-load anyway
-    dependencies = {
-        "nvim-treesitter/nvim-treesitter",
-        "nvim-tree/nvim-web-devicons"
-    },
-    -- TODO: add key bindings and configuration
-    config = function()
-        require("markview").setup({
-        })
-        vim.keymap.set('n', '<leader>mm', '<cmd>Markview splitToggle<CR>',
-            { desc = "Open split view for Markdown preview" })
-    end,
+	"OXY2DEV/markview.nvim",
+	ft = "markdown", -- If you decide to lazy-load anyway
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter",
+		"nvim-tree/nvim-web-devicons",
+	},
+	-- TODO: add key bindings and configuration
+	config = function()
+		require("markview").setup({
+			initial_state = false,
+		})
+		vim.keymap.set(
+			"n",
+			"<leader>mm",
+			"<cmd>Markview splitToggle<CR>",
+			{ desc = "Open split view for Markdown preview" }
+		)
+	end,
 }

@@ -8,12 +8,14 @@ return {
 
         lualine.setup({
             sections = {
+                lualine_c = {
+                    { "filename", path = 1 },
+                },
                 lualine_x = {
                     { "encoding" },
                     { "fileformat" },
                     { "filetype" },
                     { "filesize" },
-                    { "filename",  path = 2 },
                 },
             },
             options = {
