@@ -1,14 +1,13 @@
 return {
 	"hrsh7th/nvim-cmp",
-	event = { "BufReadPre", "BufNewFile" },
+	event = "InsertEnter",
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip", -- for autocompletion
-		"rafamadriz/friendly-snippets", -- useful snippets
+		"rafamadriz/friendly-snippets",
 		"hrsh7th/cmp-buffer", -- source for text in buffer
 	},
-
 	config = function()
 		local cmp = require("cmp")
 
@@ -27,11 +26,15 @@ return {
 					luasnip.lsp_expand(args.body)
 				end,
 			},
+
 			mapping = cmp.mapping.preset.insert({
-				["<C-k>"] = cmp.mapping.select_prev_item(cmp_select), -- previous suggestion
-				["<C-j>"] = cmp.mapping.select_next_item(cmp_select), -- next suggestion
+				["<C-H>"] = cmp.mapping.abort(),
+				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select), -- previous suggestion
+				["<C-n>"] = cmp.mapping.select_next_item(cmp_select), -- next suggestion
 				["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
+				["<C-enter>"] = cmp.mapping.confirm({ select = true }),
+				["<C-u>"] = cmp.mapping.scroll_docs(-4),
+				["<C-d>"] = cmp.mapping.scroll_docs(4),
 			}),
 			-- sources for autocompletion
 			sources = cmp.config.sources({

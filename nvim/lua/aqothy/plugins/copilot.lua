@@ -3,11 +3,20 @@ return {
 	-- lazy = false,
 	event = "VeryLazy",
 	config = function()
+		vim.keymap.set("i", "<Tab>", function()
+			if require("copilot.suggestion").is_visible() then
+				require("copilot.suggestion").accept()
+			else
+				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+			end
+		end, {
+			silent = true,
+		})
 		require("copilot").setup({
 			panel = {
 				keymap = {
-					jump_next = "<C-j>",
-					jump_prev = "<C-k>",
+					jump_next = "<C-n>",
+					jump_prev = "<C-p>",
 					accept = "<C-enter>",
 					refresh = "r",
 				},
@@ -16,10 +25,10 @@ return {
 				enabled = true,
 				auto_trigger = true,
 				keymap = {
-					accept = "<C-enter>",
-					next = "<C-j>",
-					prev = "<C-k>",
-					dismiss = "<C-h>",
+					accept = false,
+					next = "<C-n>",
+					prev = "<C-p>",
+					dismiss = "<C-H>",
 				},
 				filetypes = {
 					yaml = true,

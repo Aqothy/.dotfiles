@@ -103,7 +103,7 @@ fzf_child_widget() {
 
 zle -N fzf_child_widget
 
-bindkey '^H' fzf_child_widget
+bindkey '^S' fzf_child_widget
 
 #nf() {
 #    local file

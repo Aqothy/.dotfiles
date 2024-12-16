@@ -45,6 +45,7 @@ local set = vim.opt_local
 -- Set local settings for terminal buffers
 vim.api.nvim_create_autocmd("TermOpen", {
 	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+	--- call back for setting visual settings
 	callback = function()
 		set.number = false
 		set.relativenumber = false

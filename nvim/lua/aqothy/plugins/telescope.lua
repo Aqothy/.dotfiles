@@ -26,14 +26,19 @@ return {
 				path_display = { "smart" },
 				mappings = {
 					i = {
-						["<C-k>"] = actions.move_selection_previous, -- Move to prev result
-						["<C-j>"] = actions.move_selection_next, -- Move to next result
+						["<C-p>"] = actions.move_selection_previous, -- Move to prev result
+						["<C-n>"] = actions.move_selection_next, -- Move to next result
 						["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
 					},
 					n = {
 						["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
 						["dd"] = actions.delete_buffer,
 					},
+				},
+			},
+			pickers = {
+				colorscheme = {
+					enable_preview = true,
 				},
 			},
 			extensions = {
