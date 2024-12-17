@@ -82,6 +82,11 @@ return {
 				--     })
 				-- end
 
+				-- inlay hints
+				if client.supports_method("textDocument/inlayHint") then
+					vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+				end
+
 				-- Key mappings for LSP functions
 				-- vim.keymap.set({ "n", "x" }, "<leader>fm", vim.lsp.buf.format, opts)
 				vim.keymap.set("n", "<leader>ld", builtin.lsp_definitions, opts) -- show lsp definitions
@@ -115,6 +120,36 @@ return {
 					capabilities = capabilities,
 				})
 			end,
+			-- ["ts_ls"] = function()
+			-- 	lspconfig["ts_ls"].setup({
+			-- 		capabilities = capabilities,
+			-- 		settings = {
+			-- 			javascript = {
+			-- 				inlayHints = {
+			-- 					includeInlayEnumMemberValueHints = true,
+			-- 					includeInlayFunctionLikeReturnTypeHints = true,
+			-- 					includeInlayFunctionParameterTypeHints = true,
+			-- 					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+			-- 					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+			-- 					includeInlayPropertyDeclarationTypeHints = true,
+			-- 					includeInlayVariableTypeHints = true,
+			-- 				},
+			-- 			},
+			--
+			-- 			typescript = {
+			-- 				inlayHints = {
+			-- 					includeInlayEnumMemberValueHints = true,
+			-- 					includeInlayFunctionLikeReturnTypeHints = true,
+			-- 					includeInlayFunctionParameterTypeHints = true,
+			-- 					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+			-- 					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+			-- 					includeInlayPropertyDeclarationTypeHints = true,
+			-- 					includeInlayVariableTypeHints = true,
+			-- 				},
+			-- 			},
+			-- 		},
+			-- 	})
+			-- end,
 			["lua_ls"] = function()
 				lspconfig["lua_ls"].setup({
 					capabilities = capabilities,

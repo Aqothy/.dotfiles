@@ -35,6 +35,13 @@ return {
 				["<C-enter>"] = cmp.mapping.confirm({ select = true }),
 				["<C-u>"] = cmp.mapping.scroll_docs(-4),
 				["<C-d>"] = cmp.mapping.scroll_docs(4),
+				["<C-e>"] = cmp.mapping(function(fallback)
+					if require("luasnip").expandable() then
+						require("luasnip").expand()
+					else
+						fallback()
+					end
+				end),
 			}),
 			-- sources for autocompletion
 			sources = cmp.config.sources({

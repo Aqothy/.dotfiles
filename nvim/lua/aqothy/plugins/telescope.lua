@@ -46,7 +46,6 @@ return {
 				project = {
 					base_dirs = { "~/Code/Personal" },
 					hidden_files = false, -- default: false
-					order_by = "asc",
 					search_by = "title",
 				},
 				["ui-select"] = {

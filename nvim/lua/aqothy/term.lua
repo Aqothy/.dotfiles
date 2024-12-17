@@ -40,25 +40,25 @@
 -- -- Bind the function to a command
 -- vim.api.nvim_create_user_command("FloatingTerm", open_floating_terminal, {})
 
-local set = vim.opt_local
-
--- Set local settings for terminal buffers
-vim.api.nvim_create_autocmd("TermOpen", {
-	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
-	--- call back for setting visual settings
-	callback = function()
-		set.number = false
-		set.relativenumber = false
-		set.scrolloff = 0
-
-		vim.bo.filetype = "terminal"
-	end,
-})
-
--- Open a terminal at the bottom of the screen with a fixed height.
-vim.keymap.set("n", "<C-t>", function()
-	vim.cmd.new()
-	vim.cmd.wincmd("J")
-	vim.api.nvim_win_set_height(0, 15)
-	vim.cmd.term()
-end)
+-- local set = vim.opt_local
+--
+-- -- Set local settings for terminal buffers
+-- vim.api.nvim_create_autocmd("TermOpen", {
+-- 	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+-- 	--- call back for setting visual settings
+-- 	callback = function()
+-- 		set.number = false
+-- 		set.relativenumber = false
+-- 		set.scrolloff = 0
+--
+-- 		vim.bo.filetype = "terminal"
+-- 	end,
+-- })
+--
+-- -- Open a terminal at the bottom of the screen with a fixed height.
+-- vim.keymap.set("n", "<C-t>", function()
+-- 	vim.cmd.new()
+-- 	vim.cmd.wincmd("J")
+-- 	vim.api.nvim_win_set_height(0, 15)
+-- 	vim.cmd.term()
+-- end)

@@ -19,17 +19,20 @@ return {
 				},
 			},
 			options = {
+				theme = "auto",
+				disabled_buftypes = { "quickfix", "prompt", "nofile" },
 				disabled_filetypes = {
 					statusline = {
+						"Telescope",
 						"help",
 						"lazy",
-						"alpha",
+						"snacks_dashboard",
 						"NvimTree",
-						"Trouble",
+						"trouble",
 						"fugitive",
 						"leetcode.nvim",
-						"terminal",
 						"mason",
+						"terminal",
 					},
 				},
 			},

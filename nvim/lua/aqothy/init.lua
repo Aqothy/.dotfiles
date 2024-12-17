@@ -1,5 +1,5 @@
 require("aqothy.set")
 require("aqothy.remap")
 require("aqothy.lazy")
-require("aqothy.term")
+-- require("aqothy.term")
 --require("aqothy.autosave")

@@ -8,27 +8,27 @@ return {
 		-- require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 
 		--tester
-		-- local s = ls.snippet -- Define a snippet
-		-- local t = ls.text_node -- Define a text node
-		-- local i = ls.insert_node -- Define an insert node
-		--
-		-- ls.add_snippets("lua", {
-		-- 	s("func", {
-		-- 		t("function "),
-		-- 		i(1, "function_name"),
-		-- 		t("("),
-		-- 		i(2, "args"),
-		-- 		t(")"),
-		-- 		t({ "", "    " }),
-		-- 		i(3, "-- body"),
-		-- 		t({ "", "end" }),
-		-- 	}),
-		-- })
+		local s = ls.snippet -- Define a snippet
+		local t = ls.text_node -- Define a text node
+		local i = ls.insert_node -- Define an insert node
+
+		ls.add_snippets("lua", {
+			s("func", {
+				t("function "),
+				i(1, "function_name"),
+				t("("),
+				i(2, "args"),
+				t(")"),
+				t({ "", "    " }),
+				i(3, "-- body"),
+				t({ "", "end" }),
+			}),
+		})
 		ls.config.set_config({
 			enabled_autosnippets = true,
 		})
 
-		vim.keymap.set({ "i" }, "<C-K>", function()
+		vim.keymap.set({ "i" }, "<C-E>", function()
 			ls.expand()
 		end, { silent = true })
 		vim.keymap.set({ "i", "s" }, "<C-L>", function()
