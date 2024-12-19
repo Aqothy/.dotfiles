@@ -4,6 +4,7 @@ return {
 		"nvim-tree/nvim-web-devicons",
 	},
     lazy = false,
+    -- event = "VeryLazy",
 	config = function()
 		local lualine = require("lualine")
 
@@ -20,7 +21,7 @@ return {
 				},
 			},
 			options = {
-				theme = "auto",
+				theme = "gruvbox-material",
 				disabled_buftypes = { "quickfix", "prompt", "nofile" },
 				disabled_filetypes = {
 					statusline = {
