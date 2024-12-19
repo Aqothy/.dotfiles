@@ -1,13 +1,15 @@
 return {
 	"folke/noice.nvim",
 	priority = 1000,
-	-- event = "VeryLazy",
+	event = "VeryLazy",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 		-- no need for flashy notification
 	},
 	config = function()
-		vim.keymap.set("n", "<leader>nh", "<cmd>Noice<cr>", { noremap = true, silent = true })
+		if vim.o.filetype == "lazy" then
+			vim.cmd([[messages clear]])
+		end
 
 		require("noice").setup({
 			lsp = {

@@ -3,6 +3,7 @@ return {
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 	},
+    lazy = false,
 	config = function()
 		local lualine = require("lualine")
 
@@ -23,10 +24,11 @@ return {
 				disabled_buftypes = { "quickfix", "prompt", "nofile" },
 				disabled_filetypes = {
 					statusline = {
-						"Telescope",
 						"help",
 						"lazy",
+						"noice",
 						"snacks_dashboard",
+						"snacks_terminal",
 						"NvimTree",
 						"trouble",
 						"fugitive",

@@ -18,7 +18,7 @@ vim.keymap.set("n", "N", "Nzz")
 --vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("n", "<leader>a", "ggVG", { desc = "Select all text in the file" }) -- select all text in the file
-vim.keymap.set("n", "<leader>s", [[:cfdo %s/\<<C-r><C-w>\>//gI<left><Left><Left>]]) -- find and replace exact word under cursor in globally
+-- vim.keymap.set("n", "<leader>s", [[:cfdo %s/\v//g<left><left><Left><Left>]]) -- find and replace exact word in quickfix list
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true }) -- silent so noice doesn't show the command line
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 vim.keymap.set("n", "<down>", "<cmd>resize -2<CR>")
@@ -36,4 +36,5 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set("v", "<Tab>", ">gv")
 vim.keymap.set("v", "<S-Tab>", "<gv")
 vim.keymap.set("n", "<leader>bj", "<cmd>BlackJackNewGame<CR>")
+vim.keymap.set({ "i", "v", "n" }, "<C-/>", "<cmd>normal gcc<cr>", { silent = true }) -- comment line
 -- vim.keymap.set("n", "<C-t>", "<cmd>FloatingTerm<CR>", { desc = "Open floating terminal" })

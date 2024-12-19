@@ -1,47 +1,61 @@
 return {
-	"L3MON4D3/LuaSnip",
-	version = "v2.*",
-	build = "make install_jsregexp",
-	event = "VeryLazy",
-	config = function()
-		local ls = require("luasnip")
-		-- require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    event = "InsertEnter",
+    config = function()
+        local ls = require("luasnip")
+        -- require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
 
-		--tester
-		local s = ls.snippet -- Define a snippet
-		local t = ls.text_node -- Define a text node
-		local i = ls.insert_node -- Define an insert node
+        --tester
+        local s = ls.snippet
+        local t = ls.text_node
+        local i = ls.insert_node
+        local c = ls.choice_node
 
-		ls.add_snippets("lua", {
-			s("func", {
-				t("function "),
-				i(1, "function_name"),
-				t("("),
-				i(2, "args"),
-				t(")"),
-				t({ "", "    " }),
-				i(3, "-- body"),
-				t({ "", "end" }),
-			}),
-		})
-		ls.config.set_config({
-			enabled_autosnippets = true,
-		})
+        -- Add snippets for Lua
+        ls.add_snippets("lua", {
+            -- Function snippet
+            s("func", {
+                t("function "),
+                i(1, "function_name"),
+                t("("),
+                i(2, "args"),
+                t(")"),
+                t({ "", "    " }),
+                i(3, "-- body"),
+                t({ "", "end" }),
+            }),
 
-		vim.keymap.set({ "i" }, "<C-E>", function()
-			ls.expand()
-		end, { silent = true })
-		vim.keymap.set({ "i", "s" }, "<C-L>", function()
-			ls.jump(1)
-		end, { silent = true })
-		vim.keymap.set({ "i", "s" }, "<C-H>", function()
-			ls.jump(-1)
-		end, { silent = true })
+            -- Choice node snippet
+            s("choice", {
+                t("Choose: "),
+                c(1, {
+                    t("Option 1"),
+                    t("Option 2"),
+                    t("Option 3"),
+                }),
+            }),
+        })
 
-		vim.keymap.set({ "i", "s" }, "<C-S>", function()
-			if ls.choice_active() then
-				ls.change_choice(1)
-			end
-		end, { silent = true })
-	end,
+        ls.config.set_config({
+            enabled_autosnippets = true,
+        })
+
+        vim.keymap.set({ "i" }, "<C-K>", function()
+            ls.expand()
+        end, { silent = true })
+        vim.keymap.set({ "i", "s" }, "<C-L>", function()
+            ls.jump(1)
+        end, { silent = true })
+        vim.keymap.set({ "i", "s" }, "<C-H>", function()
+            ls.jump(-1)
+        end, { silent = true })
+
+        vim.keymap.set({ "i", "s" }, "<C-J>", function()
+            if ls.choice_active() then
+                ls.change_choice(1)
+            end
+        end, { silent = true })
+    end,
 }

@@ -1,0 +1,11 @@
+# This is Git's per-user configuration file.
+[user]
+	email = aq0335@gmail.com
+	name = Aqothy
+# Please adapt and uncomment the following lines:
+#	name = Anthony Qiu
+#	email = aq0335@gmail.com
+
+[credential]
+[core]
+	excludesfile = /Users/aqothy/.gitignore
