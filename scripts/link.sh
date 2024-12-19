@@ -12,6 +12,7 @@ FILES_TO_SYMLINK=(
 
 SCRIPTS_TO_LINK=(
     link.sh
+    nvupdate.sh
 )
 
 # Loop through files and create symlinks
@@ -35,7 +36,7 @@ for script in "${SCRIPTS_TO_LINK[@]}"; do
     if [ -e "$link" ]; then
         echo "Skipping $link: already exists."
     else
-        ln -s "$target" "$link"
+        sudo ln -s "$target" "$link"
         echo "Created symlink for $script"
     fi
 done

@@ -35,6 +35,5 @@ vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.keymap.set("v", "<Tab>", ">gv")
 vim.keymap.set("v", "<S-Tab>", "<gv")
-vim.keymap.set("n", "<leader>bj", "<cmd>BlackJackNewGame<CR>")
 vim.keymap.set({ "i", "v", "n" }, "<C-/>", "<cmd>normal gcc<cr>", { silent = true }) -- comment line
 -- vim.keymap.set("n", "<C-t>", "<cmd>FloatingTerm<CR>", { desc = "Open floating terminal" })

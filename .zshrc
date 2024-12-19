@@ -70,6 +70,7 @@ select_dir() {
     (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
 }
 
+# search in projects
 fzf_append_dir_widget() {
     local dir
     dir=$(select_dir) || return # Call the function and store the result
@@ -81,10 +82,9 @@ fzf_append_dir_widget() {
 
 zle -N fzf_append_dir_widget
 
-# Bind Ctrl+F to run the fzf_cd.sh script
 bindkey '^F' fzf_append_dir_widget
 
-# Set FZF_DEFAULT_COMMAND to always search in ~ and prepend ~ to results correctly
+# Define FZF_DEFAULT_COMMAND for searching in the home directory
 export FZF_DEFAULT_COMMAND='cd ~ && rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*" | sed "s|^|$HOME/|"'
 
 # Ensure Ctrl-T uses the same default command

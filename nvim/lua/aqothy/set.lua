@@ -39,7 +39,7 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
 vim.opt.signcolumn = "yes"
---vim.opt.colorcolumn = "80"
+-- vim.opt.colorcolumn = "80"
 vim.opt.isfname:append("@-@")
 
 vim.opt.mouse = "a"
@@ -88,9 +88,9 @@ autocmd("TextYankPost", {
 --vim.opt.spelllang = 'en_us'
 --vim.opt.spell = true
 
---vim.opt.foldcolumn = '1'
---vim.opt.foldenable = true
---vim.opt.foldexpr = 'v:lua.vim.lsp.foldexpr()'
---vim.opt.foldlevel = 99
---vim.opt.foldlevelstart = 99
---vim.opt.foldmethod = 'expr'
+vim.opt.foldcolumn = '1'
+vim.opt.foldenable = true
+vim.opt.foldexpr = 'v:lua.vim.lsp.foldexpr()'
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldmethod = 'expr'

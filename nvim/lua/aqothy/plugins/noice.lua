@@ -4,9 +4,9 @@ return {
 	event = "VeryLazy",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
-		-- no need for flashy notification
 	},
 	config = function()
+
 		if vim.o.filetype == "lazy" then
 			vim.cmd([[messages clear]])
 		end

@@ -1,6 +1,6 @@
 return {
 	"danymat/neogen",
-	event = { "BufRead", "BufNewFile" },
+    event = { 'BufReadPre', 'BufNewFile' },
 	dependencies = {
 		"L3MON4D3/LuaSnip",
 	},
