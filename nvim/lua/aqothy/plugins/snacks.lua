@@ -123,6 +123,10 @@ return {
         quickfile = { enabled = true },
         statuscolumn = {
             enabled = true,
+            folds = {
+                open = true,
+                git_hl = false,
+            },
         },
         scope = { enabled = false },
         words = { enabled = false },

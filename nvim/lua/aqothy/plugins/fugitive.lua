@@ -1,6 +1,6 @@
 return {
     "tpope/vim-fugitive",
-    cmd = { "Git", "G" },
+    cmd = { "Git", "G", "Git blame", "Gvdiffsplit" },
     keys = { { "<leader>gs", "<cmd>Git<CR>", desc = "Open Git status" }, { "<leader>gg", "<cmd>Git blame<CR>", desc = "Git blame file" }, { "<leader>gd", "<cmd>Gvdiffsplit!<CR>", { desc = "Open Fugitive vertical diff" } } }, -- Load when this keymap is pressed
     -- event = "VeryLazy",
     config = function()

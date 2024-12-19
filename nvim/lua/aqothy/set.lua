@@ -88,9 +88,16 @@ autocmd("TextYankPost", {
 --vim.opt.spelllang = 'en_us'
 --vim.opt.spell = true
 
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+vim.opt.foldenable = true     -- Enable folding by default
+vim.opt.foldlevel = 99        -- Start with all folds open
 vim.opt.foldcolumn = '1'
-vim.opt.foldenable = true
-vim.opt.foldexpr = 'v:lua.vim.lsp.foldexpr()'
-vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
-vim.opt.foldmethod = 'expr'
+
+
+-- vim.opt.foldenable = true
+-- vim.opt.foldexpr = 'v:lua.vim.lsp.foldexpr()'
+-- vim.opt.foldlevel = 99
+-- vim.opt.foldmethod = 'expr'
