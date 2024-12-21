@@ -36,4 +36,13 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set("v", "<Tab>", ">gv")
 vim.keymap.set("v", "<S-Tab>", "<gv")
 vim.keymap.set({ "i", "v", "n" }, "<C-/>", "<cmd>normal gcc<cr>", { silent = true }) -- comment line
+
+vim.keymap.set("n", "<leader>tt", function()
+    vim.diagnostic.setqflist({ open = true })
+end, { desc = "Send diagnostics to quickfix list" })
+vim.keymap.set("n", "<leader>tq", "<cmd>copen<CR>", { desc = "Open quickfix list" })
+
+vim.keymap.set("n", "]t", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "[t", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>fo", "za")
 -- vim.keymap.set("n", "<C-t>", "<cmd>FloatingTerm<CR>", { desc = "Open floating terminal" })

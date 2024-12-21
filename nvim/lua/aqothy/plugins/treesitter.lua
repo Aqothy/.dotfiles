@@ -1,65 +1,64 @@
 return {
-	"nvim-treesitter/nvim-treesitter",
-	build = ":TSUpdate",
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
     -- event = { 'BufReadPre', 'BufNewFile' },
     event = "VeryLazy",
-    cmd = { "TSInstall", "TSUpdate", "TSInstallInfo" },
-	config = function()
-		require("nvim-treesitter.configs").setup({
-			-- A list of parser names, or "all"
-			ensure_installed = {
-				"vimdoc",
-				"javascript",
-				"typescript",
-				"c",
-				"lua",
-				"cpp",
-				"python",
-				"java",
-				"go",
-				"jsdoc",
-				"bash",
-				"css",
-				"html",
-				"tsx",
-				"yaml",
-				"json",
-				"dockerfile",
-			},
+    -- cmd = { "TSInstall", "TSUpdate", "TSInstallInfo" },
+    config = function()
+        require("nvim-treesitter.configs").setup({
+            -- A list of parser names, or "all"
+            ensure_installed = {
+                "vimdoc",
+                "javascript",
+                "typescript",
+                "c",
+                "lua",
+                "cpp",
+                "python",
+                "java",
+                "go",
+                "jsdoc",
+                "bash",
+                "css",
+                "html",
+                "tsx",
+                "yaml",
+                "json",
+                "dockerfile",
+                "c_sharp",
+            },
 
-			-- Install parsers synchronously (only applied to `ensure_installed`)
-			sync_install = false,
+            -- Install parsers synchronously (only applied to `ensure_installed`)
+            sync_install = false,
 
-			-- Automatically install missing parsers when entering buffer
-			-- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
-			-- fuck latex
-			auto_install = false,
+            -- Automatically install missing parsers when entering buffer
+            -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
+            -- screw latex
+            auto_install = false,
 
-			indent = {
-				enable = true,
-			},
+            indent = {
+                enable = true,
+            },
 
-			highlight = {
-				-- `false` will disable the whole extension
-				enable = true,
+            highlight = {
+                -- `false` will disable the whole extension
+                enable = true,
 
-				-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-				-- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
-				-- Using this option may slow down your editor, and you may see some duplicate highlights.
-				-- Instead of true it can also be a list of languages
-				additional_vim_regex_highlighting = { "markdown" },
-			},
-		})
+                disable = function(lang, buf)
+                    local max_filesize = 1024 * 1024
+                    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                    if ok and stats and stats.size > max_filesize then
+                        return true
+                    end
+                end,
 
-		local treesitter_parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-		treesitter_parser_config.templ = {
-			install_info = {
-				url = "https://github.com/vrischmann/tree-sitter-templ.git",
-				files = { "src/parser.c", "src/scanner.c" },
-				branch = "master",
-			},
-		}
+                -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+                -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
+                -- Using this option may slow down your editor, and you may see some duplicate highlights.
+                -- Instead of true it can also be a list of languages
+                additional_vim_regex_highlighting = false,
+            },
+        })
 
-		vim.treesitter.language.register("templ", "templ")
-	end,
+    end,
 }

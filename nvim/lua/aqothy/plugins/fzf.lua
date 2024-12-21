@@ -5,7 +5,6 @@ return {
         "nvim-tree/nvim-web-devicons",
     },
     config = function()
-
         local fzf = require("fzf-lua")
 
         local actions = require("fzf-lua.actions")
@@ -14,7 +13,7 @@ return {
             fzf.fzf_exec(
                 "echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d",
                 {
-                    prompt = "Select a project> ",
+                    prompt = "Select a project > ",
                     actions = {
                         ["default"] = function(selected)
                             -- Use the chosen directory as the cwd for file search
@@ -26,20 +25,20 @@ return {
         end
 
         fzf.setup({
-            -- Global defaults for all pickers
             defaults = {
-                -- formatter = "path.filename_first",
                 formatter = "path.dirname_first",
-            },
-            previewers = {
-                builtin = {
-                    syntax_limit_b = 1024 * 512
-                },
             },
             keymap = {
                 builtin = {
-                    ["<c-d>"] = "preview-page-down",
-                    ["<c-u>"] = "preview-page-up",
+                    ["<c-f>"] = "preview-page-down",
+                    ["<c-b>"] = "preview-page-up",
+                },
+                fzf = {
+                    ["ctrl-q"] = "select-all+accept",
+                    ["ctrl-u"] = "half-page-up",
+                    ["ctrl-d"] = "half-page-down",
+                    ["ctrl-f"] = "preview-page-down",
+                    ["ctrl-b"] = "preview-page-up"
                 },
             },
             winopts = {
@@ -47,20 +46,10 @@ return {
                 height = 0.8,
                 row = 0.5,
                 col = 0.5,
-                preview = {
-                    scrollchars = { "┃", "" },
-                },
-            },
-            fzf_opts = {
-                ["--layout"] = "default",
             },
             files = {
-                -- fd_opts = "--type f --hidden --follow --exclude .git --exclude node_modules",
-                cwd_prompt = false,
                 actions = {
-                    ["ctrl-i"] = { actions.toggle_ignore },
                     ["ctrl-h"] = { actions.toggle_hidden },
-                    ["ctrl-q"] = actions.file_sel_to_qf,
                 },
             },
             grep = {
@@ -68,7 +57,6 @@ return {
                 actions = {
                     ["ctrl-i"] = { actions.toggle_ignore },
                     ["ctrl-h"] = { actions.toggle_hidden },
-                    ["ctrl-q"] = actions.file_sel_to_qf,
                 },
             },
             oldfiles = {
@@ -108,7 +96,7 @@ return {
         keymap.set("n", "<leader>of", function()
             fzf.oldfiles()
         end, { desc = "Fzf-lua old files" })
-        keymap.set("n", "<leader>fp", project_search, { desc = "Find Project" })
+        keymap.set("n", "<C-F>", project_search, { desc = "Find Project" })
         keymap.set("n", "<leader>fh", function()
             fzf.help_tags()
         end, { desc = "[F]ind [H]elp" })

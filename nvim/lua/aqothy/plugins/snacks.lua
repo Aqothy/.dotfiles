@@ -9,19 +9,15 @@ return {
         -- refer to the configuration section below
         bigfile = { enabled = true },
         dashboard = {
+
             enabled = true,
+
             preset = {
+
                 pick = "fzf-lua",
+
                 keys = {
                     { icon = " ", key = "SPC le", desc = "Leetcode", action = "<cmd>Leet<CR>" },
-                    {
-                        icon = " ",
-                        key = "SPC fp",
-                        desc = "Projects",
-                        action = function()
-                            project_search()
-                        end,
-                    },
                     { icon = " ", key = "SPC gs", desc = "Git", action = "<cmd>Git<CR>" },
                     {
                         icon = " ",
@@ -30,12 +26,6 @@ return {
                         action = function()
                             Snacks.gitbrowse()
                         end,
-                    },
-                    {
-                        icon = " ",
-                        key = "-",
-                        desc = "Oil up",
-                        action = "<cmd>Oil<CR>",
                     },
                     {
                         icon = "󰱼 ",
@@ -61,9 +51,24 @@ return {
                             require("fzf-lua").oldfiles()
                         end,
                     },
+                    {
+                        icon = " ",
+                        key = "ctrl f",
+                        desc = "Projects",
+                        action = function()
+                            project_search()
+                        end,
+                    },
+                    {
+                        icon = " ",
+                        key = "-",
+                        desc = "Oil up",
+                        action = "<cmd>Oil<CR>",
+                    },
                     { icon = " ", key = "c", desc = "Configs", action = "<cmd>e ~/.config/nvim<CR>" },
                     { icon = " ", key = "q", desc = "Quit NVIM", action = "<cmd>qa<CR>" },
                 },
+
                 header = [[
              ⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢠⣿⣄⣤⣤⣤⣤⣼⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀
@@ -92,6 +97,7 @@ return {
 ⠀⠀⠀⠀⠀⠉⠛⠛⠛⠉⠻⣿⡦⠀⠀⠀⠀⠈⢻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡇⠀⠀⠀⠀⠀⠀
                 ]],
             },
+
             sections = {
                 { section = "header",    align = "center" },
                 { section = "startup",   gap = 1,         padding = 1 },
@@ -110,16 +116,20 @@ return {
             },
             scope = {
                 enabled = false,
-                animate = {
-                    enabled = false,
-                },
             },
+            animate = {
+                enabled = false,
+            },
+
         },
         scroll = {
             enabled = false,
         },
         input = { enabled = false },
-        notifier = { enabled = true, level = vim.log.levels.INFO },
+        notifier = {
+            enabled = true,
+            level = vim.log.levels.INFO
+        },
         quickfile = { enabled = true },
         statuscolumn = {
             enabled = true,
@@ -130,6 +140,7 @@ return {
         },
         scope = { enabled = false },
         words = { enabled = false },
+
         terminal = {
             win = { style = "terminal", height = 0.3 },
         },
@@ -163,7 +174,7 @@ return {
             end,
             desc = "Toggle Zen Mode",
         },
-        { "<leader>hs", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+        { "<leader>nh", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
         -- {
         -- 	"<leader>gg",
         -- 	function()
@@ -201,7 +212,7 @@ return {
             mode = { "n", "v" },
         },
         {
-            "<leader>td",
+            "<leader>sd",
             function()
                 if dimmed then
                     -- If already dimmed, disable it

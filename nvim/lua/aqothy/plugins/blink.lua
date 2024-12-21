@@ -5,12 +5,23 @@ return {
     dependencies = {
         "rafamadriz/friendly-snippets",
         "L3MON4D3/LuaSnip",
+        -- {
+        --     'saghen/blink.compat',
+        --     version = '*',
+        --     lazy = true,
+        --     opts = {
+        --         impersonate_nvim_cmp = true,
+        --     }
+        -- },
     },
+    opts_extend = { "sources.default", "sources.compat" },
     opts = {
         keymap = {
-            ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-            ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-            ["<C-h>"] = { "hide", "fallback" },
+            preset = 'none',
+            ['<C-y>'] = { 'select_and_accept' },
+            ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+            ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+            ["<C-h>"] = { "hide", 'fallback' },
             ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
             ["<C-p>"] = { "select_prev", "fallback" },
             ["<C-n>"] = { "select_next", "fallback" },
@@ -19,17 +30,11 @@ return {
         -- default list of enabled providers defined so that you can extend it
         -- elsewhere in your config, without redefining it, via `opts_extend`
         sources = {
+            default = { 'lsp', 'path', 'snippets', 'buffer', 'luasnip' },
             -- adding any nvim-cmp sources here will enable them
             -- with blink.compat
-            completion = {
-                enabled_providers = {
-                    "snippets",
-                    "luasnip",
-                    "lsp",
-                    "path",
-                    "buffer",
-                },
-            },
+            -- compat = {},
+
             -- optionally disable cmdline completions
             -- cmdline = {},
         },
@@ -49,10 +54,10 @@ return {
             },
             documentation = {
                 auto_show = true,
-                auto_show_delay_ms = 200,
+                auto_show_delay_ms = 300,
             },
             trigger = {
-                show_on_insert_trigger_character = false,
+                show_on_insert_on_trigger_character = true,
             },
         },
 

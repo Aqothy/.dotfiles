@@ -28,6 +28,7 @@ alias so="source ~/.zshrc"
 
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
 
+### this will break in since some of the packages will be installed using homebrew
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
@@ -65,6 +66,8 @@ if [ -f "/Users/aqothy/miniforge3/etc/profile.d/mamba.sh" ]; then
 fi
 # <<< conda initialize <<<
 
+###
+
 select_dir() {
     # Include the root directories themselves as options
     (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
@@ -93,6 +96,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Define FZF_CHILD_COMMAND for searching in the current directory
 export FZF_CHILD_COMMAND='rg --files --glob "!**/.git/*"'
 
+export FZF_DEFAULT_OPTS="--layout=reverse"
+
 # Bind Ctrl-H to use FZF in the current (child) directory
 fzf_child_widget() {
     local selected
@@ -115,3 +120,5 @@ bindkey '^S' fzf_child_widget
 #}
 
 source <(fzf --zsh)
+
+export DOTNET_CLI_TELEMETRY_OPTOUT=1

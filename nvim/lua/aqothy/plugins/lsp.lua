@@ -22,6 +22,7 @@ return {
                     "emmet_ls",
                     "pyright",
                     "clangd",
+                    "omnisharp",
                     "gopls",
                     "jdtls",
                     "texlab",
@@ -30,7 +31,6 @@ return {
                 },
             })
         end,
-
     },
     {
         "neovim/nvim-lspconfig",
@@ -108,7 +108,7 @@ return {
                 {},
                 vim.lsp.protocol.make_client_capabilities(),
                 require("blink.cmp").get_lsp_capabilities()
-            -- cmp_nvim_lsp.default_capabilities()
+                -- cmp_nvim_lsp.default_capabilities()
             )
 
             mason_lspconfig.setup_handlers({
@@ -190,6 +190,24 @@ return {
                     lspconfig["emmet_ls"].setup({
                         capabilities = capabilities,
                         filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss" },
+                    })
+                end,
+                ["omnisharp"] = function()
+                    lspconfig["omnisharp"].setup({
+                        capabilities = capabilities,
+                        -- root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", ".git"),
+                        settings = {
+                            FormattingOptions = {
+                                EnableEditorConfigSupport = true,
+                                OrganizeImports = true,
+                            },
+                            RoslynExtensionsOptions = {
+                                EnableAnalyzersSupport = true,
+                                EnableImportCompletion = true,
+                                AnalyzeOpenDocumentsOnly = false,
+                            },
+
+                        }
                     })
                 end,
             })

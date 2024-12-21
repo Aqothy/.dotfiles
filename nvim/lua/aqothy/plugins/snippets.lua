@@ -38,8 +38,10 @@ return {
             }),
         })
 
-        ls.config.set_config({
-            enabled_autosnippets = true,
+        ls.config.set_config({ -- Setting LuaSnip config
+            -- Enable autotriggered snippets
+            enable_autosnippets = true,
+
         })
 
         vim.keymap.set({ "i" }, "<C-K>", function()

@@ -11,7 +11,7 @@ return {
     config = function()
         require("nvim-ts-autotag").setup({
             opts = {
-                enable_close = false, -- Auto close tags, don't need it if you have emmet LSP
+                enable_close = true,
             },
         })
     end,

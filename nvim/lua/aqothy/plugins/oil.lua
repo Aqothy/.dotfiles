@@ -22,7 +22,7 @@ return {
 				["<C-l>"] = false,
 				["<C-k>"] = false,
 				["<C-j>"] = false,
-				["<M-h>"] = "actions.select_split",
+                ["<C-t>"] = false,
 				["<C-c>"] = false,
 				["q"] = "actions.close",
 			},

@@ -25,7 +25,9 @@ return {
 				disabled_buftypes = { "quickfix", "prompt", "nofile" },
 				disabled_filetypes = {
 					statusline = {
+                        "qf",
 						"help",
+                        "oil",
 						"lazy",
 						"noice",
 						"snacks_dashboard",
