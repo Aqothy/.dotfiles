@@ -1,4 +1,3 @@
-local dimmed = false
 return {
     "folke/snacks.nvim",
     priority = 1000,
@@ -52,6 +51,14 @@ return {
                         end,
                     },
                     {
+                        icon = "󰆴 ",
+                        key = "SPC bd",
+                        desc = "Remove Dashboard",
+                        action = function()
+                            Snacks.bufdelete()
+                        end,
+                    },
+                    {
                         icon = " ",
                         key = "ctrl f",
                         desc = "Projects",
@@ -61,11 +68,13 @@ return {
                     },
                     {
                         icon = " ",
-                        key = "-",
-                        desc = "Oil up",
-                        action = "<cmd>Oil<CR>",
+                        key = "SPC ee",
+                        desc = "File Explorer",
+                        action = function()
+                            vim.cmd("NvimTreeToggle")
+                        end,
                     },
-                    { icon = " ", key = "c", desc = "Configs", action = "<cmd>e ~/.config/nvim<CR>" },
+                    -- { icon = " ", key = "c", desc = "Configs", action = "<cmd>e ~/.config/nvim<CR>" },
                     { icon = " ", key = "q", desc = "Quit NVIM", action = "<cmd>qa<CR>" },
                 },
 
@@ -104,7 +113,7 @@ return {
                 { header = "Good Luck!", align = "center" },
                 {
                     pane = 2,
-                    { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+                    { pane = 2, icon = " ", title = "Recent Projects", section = "projects", indent = 2, padding = 1 },
                     { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
                     { section = "keys", gap = 1 },
                 },
@@ -117,10 +126,6 @@ return {
             scope = {
                 enabled = false,
             },
-            animate = {
-                enabled = false,
-            },
-
         },
         scroll = {
             enabled = false,
@@ -132,9 +137,9 @@ return {
         },
         quickfile = { enabled = true },
         statuscolumn = {
-            enabled = true,
+            enabled = false, -- enabled in set lua
             folds = {
-                open = true,
+                open = false,
                 git_hl = false,
             },
         },
@@ -145,21 +150,75 @@ return {
             win = { style = "terminal", height = 0.3 },
         },
 
+        -- scratch = {
+        --     win_by_ft = {
+        --         javascript = {
+        --             keys = {
+        --                 ["source"] = {
+        --                     "<cr>",
+        --                     function(_)
+        --                         vim.cmd("w !node")
+        --                     end,
+        --                     desc = "Source buffer",
+        --                     mode = { "n", "x" },
+        --                 },
+        --             },
+        --         },
+        --         typescript = {
+        --             keys = {
+        --                 ["source"] = {
+        --                     "<cr>",
+        --                     function(_)
+        --                         vim.cmd("w !node")
+        --                     end,
+        --                     desc = "Source buffer",
+        --                     mode = { "n", "x" },
+        --                 },
+        --             },
+        --         },
+        --         python = {
+        --             keys = {
+        --                 ["source"] = {
+        --                     "<cr>",
+        --                     function(_)
+        --                         vim.cmd("w !python3")
+        --                     end,
+        --                     desc = "Source buffer",
+        --                     mode = { "n", "x" },
+        --                 },
+        --             },
+        --         },
+        --     },
+        -- },
+
+        zen = {
+            toggles = {
+                dim = false,
+                indent = false,
+            },
+            -- temporary solution to removing git signs, its acc pre nice to remove entire sign column
+            on_open = function()
+                -- require("gitsigns").toggle_signs(false)
+                vim.opt.signcolumn = "no"
+                vim.opt.statuscolumn = " "
+                vim.opt.conceallevel = 3
+            end,
+            on_close = function()
+                -- Re-enable Git signs after exiting Zen Mode
+                -- require("gitsigns").toggle_signs(true)
+                vim.opt.signcolumn = "yes"
+                vim.opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+                vim.opt.conceallevel = 2
+            end,
+        },
+
         styles = {
             -- your styles configuration comes here
             -- or leave it empty to use the default settings
             -- refer to the configuration section below
             zen = {
-                enter = true,
-                fixbuf = false,
-                minimal = false,
-                width = 133,
-                height = 0,
+                width = 150,
                 backdrop = { transparent = false, blend = 40 },
-                keys = { q = false },
-                wo = {
-                    winhighlight = "NormalFloat:Normal",
-                },
             },
             notification = {
                 wo = { wrap = true }, -- Wrap notifications
@@ -167,13 +226,6 @@ return {
         },
     },
     keys = {
-        {
-            "<leader>z",
-            function()
-                Snacks.zen()
-            end,
-            desc = "Toggle Zen Mode",
-        },
         { "<leader>nh", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
         -- {
         -- 	"<leader>gg",
@@ -182,20 +234,20 @@ return {
         -- 	end,
         -- 	desc = "Git Blame Line",
         -- },
-        {
-            "<leader>.",
-            function()
-                Snacks.scratch()
-            end,
-            desc = "Toggle Scratch Buffer",
-        },
-        {
-            "<leader>,",
-            function()
-                Snacks.scratch.select()
-            end,
-            desc = "Select Scratch Buffer",
-        },
+        -- {
+        --     "<leader>sc",
+        --     function()
+        --         Snacks.scratch()
+        --     end,
+        --     desc = "Toggle Scratch Buffer",
+        -- },
+        -- {
+        --     "<leader>sl",
+        --     function()
+        --         Snacks.scratch.select()
+        --     end,
+        --     desc = "Select Scratch Buffer",
+        -- },
         {
             "<leader>fr",
             function()
@@ -209,22 +261,6 @@ return {
                 Snacks.gitbrowse()
             end,
             desc = "Git Browse",
-            mode = { "n", "v" },
-        },
-        {
-            "<leader>sd",
-            function()
-                if dimmed then
-                    -- If already dimmed, disable it
-                    Snacks.dim.disable()
-                    dimmed = false
-                else
-                    -- If not dimmed, enable dimming
-                    Snacks.dim()
-                    dimmed = true
-                end
-            end,
-            desc = "Toggle Dim",
             mode = { "n", "v" },
         },
         {
@@ -266,4 +302,13 @@ return {
         -- 	mode = { "n", "t" },
         -- },
     },
+    config = function(_, opts)
+        require("snacks").setup(opts)
+        Snacks.toggle.dim():map("<leader>sd")
+        Snacks.toggle.zen():map("<leader>zz")
+        if vim.lsp.inlay_hint then
+            Snacks.toggle.inlay_hints():map("<leader>ti")
+        end
+        vim.g.snacks_animate = false -- disable animations
+    end,
 }

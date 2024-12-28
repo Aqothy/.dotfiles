@@ -2,7 +2,7 @@ return {
     "ibhagwan/fzf-lua",
     event = "VeryLazy",
     dependencies = {
-        "nvim-tree/nvim-web-devicons",
+        "nvim-tree/nvim-web-devicons"
     },
     config = function()
         local fzf = require("fzf-lua")
@@ -47,18 +47,18 @@ return {
                 row = 0.5,
                 col = 0.5,
             },
-            files = {
-                actions = {
-                    ["ctrl-h"] = { actions.toggle_hidden },
-                },
-            },
-            grep = {
-                -- rg_opts = "--column --line-number --no-heading --color=always --smart-case --hidden --follow --glob '!.git/' --glob '!node_modules'",
-                actions = {
-                    ["ctrl-i"] = { actions.toggle_ignore },
-                    ["ctrl-h"] = { actions.toggle_hidden },
-                },
-            },
+            -- files = {
+            --     actions = {
+            --         ["ctrl-h"] = { actions.toggle_hidden },
+            --     },
+            -- },
+            -- grep = {
+            --     -- rg_opts = "--column --line-number --no-heading --color=always --smart-case --hidden --follow --glob '!.git/' --glob '!node_modules'",
+            --     actions = {
+            --         ["ctrl-i"] = { actions.toggle_ignore },
+            --         ["ctrl-h"] = { actions.toggle_hidden },
+            --     },
+            -- },
             oldfiles = {
                 include_current_session = true
             },

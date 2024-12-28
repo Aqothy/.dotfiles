@@ -17,7 +17,7 @@ vim.opt.writebackup = false
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
-vim.opt.updatetime = 50
+vim.opt.updatetime = 300
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -54,38 +54,13 @@ vim.opt.fileencoding = "utf-8"
 vim.opt.showcmd = false
 vim.opt.showtabline = 0
 
---vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-
---local CleanSpaceGroup = augroup('CleanSpace', {})
-local augroup = vim.api.nvim_create_augroup
-local autocmd = vim.api.nvim_create_autocmd
-local yank_group = augroup("HighlightYank", { clear = true })
-
-autocmd("TextYankPost", {
-	group = yank_group,
-	pattern = "*",
-	callback = function()
-		vim.highlight.on_yank({
-			higroup = "IncSearch",
-			timeout = 40,
-		})
-	end,
-})
-
--- already handled by lsp format
---autocmd({ "BufWritePre" }, {
---    group = CleanSpaceGroup,
---    pattern = "*",
---    command = [[%s/\s\+$//e]],
---})
-
 --vim.g.netrw_banner = 0
 --vim.g.netrw_browse_split = 4
 --vim.g.netrw_liststyle = 3
 --vim.g.netrw_winsize = -28
 --vim.g.netrw_browsex_viewer = "open -a safari"
 
---vim.opt.spelllang = 'en_us'
+vim.opt.spelllang = 'en_us'
 --vim.opt.spell = true
 
 vim.opt.foldmethod = "expr"
@@ -96,8 +71,21 @@ vim.opt.foldlevel = 99        -- Start with all folds open
 vim.opt.foldcolumn = '1'
 vim.opt.foldlevelstart = 99
 
+vim.opt.completeopt = "menu,menuone,noselect"
+vim.opt.conceallevel = 2
+vim.opt.confirm = true
 
--- vim.opt.foldenable = true
--- vim.opt.foldexpr = 'v:lua.vim.lsp.foldexpr()'
--- vim.opt.foldlevel = 99
--- vim.opt.foldmethod = 'expr'
+vim.opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  diff = "╱",
+  eob = " ",
+}
+
+vim.opt.undolevels = 10000
+vim.opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+vim.opt.laststatus = 3
+
+vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+vim.opt.splitkeep = "screen"
+vim.opt.grepprg = "rg --vimgrep"

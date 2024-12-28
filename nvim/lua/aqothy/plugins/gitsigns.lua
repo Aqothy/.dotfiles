@@ -18,6 +18,14 @@ return {
                 topdelete = { text = "" },
                 changedelete = { text = "▎" },
             },
+            numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+            linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+            word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+            watch_gitdir = {
+                follow_files = true,
+            },
+            attach_to_untracked = true,
+            current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
             current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
             current_line_blame_opts = {
                 virt_text = true,
@@ -26,5 +34,7 @@ return {
                 ignore_whitespace = false,
             },
         })
+        --git blame
+        vim.keymap.set("n", "<leader>gg", "<cmd>Gitsigns blame<CR>")
     end,
 }

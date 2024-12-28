@@ -80,9 +80,9 @@ return {
                     -- end
 
                     -- inlay hints
-                    if client.supports_method("textDocument/inlayHint") then
-                        vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-                    end
+                    -- if client.supports_method("textDocument/inlayHint") then
+                    --     vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+                    -- end
 
                     -- Key mappings for LSP functions
                     vim.keymap.set({ "n", "x" }, "<leader>k", vim.lsp.buf.format, opts)
@@ -108,7 +108,7 @@ return {
                 {},
                 vim.lsp.protocol.make_client_capabilities(),
                 require("blink.cmp").get_lsp_capabilities()
-                -- cmp_nvim_lsp.default_capabilities()
+            -- cmp_nvim_lsp.default_capabilities()
             )
 
             mason_lspconfig.setup_handlers({
@@ -117,36 +117,38 @@ return {
                         capabilities = capabilities,
                     })
                 end,
-                -- ["ts_ls"] = function()
-                -- 	lspconfig["ts_ls"].setup({
-                -- 		capabilities = capabilities,
-                -- 		settings = {
-                -- 			javascript = {
-                -- 				inlayHints = {
-                -- 					includeInlayEnumMemberValueHints = true,
-                -- 					includeInlayFunctionLikeReturnTypeHints = true,
-                -- 					includeInlayFunctionParameterTypeHints = true,
-                -- 					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-                -- 					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                -- 					includeInlayPropertyDeclarationTypeHints = true,
-                -- 					includeInlayVariableTypeHints = true,
-                -- 				},
-                -- 			},
-                --
-                -- 			typescript = {
-                -- 				inlayHints = {
-                -- 					includeInlayEnumMemberValueHints = true,
-                -- 					includeInlayFunctionLikeReturnTypeHints = true,
-                -- 					includeInlayFunctionParameterTypeHints = true,
-                -- 					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-                -- 					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                -- 					includeInlayPropertyDeclarationTypeHints = true,
-                -- 					includeInlayVariableTypeHints = true,
-                -- 				},
-                -- 			},
-                -- 		},
-                -- 	})
-                -- end,
+                -- type hint is too much
+                ["ts_ls"] = function()
+                    lspconfig["ts_ls"].setup({
+                        capabilities = capabilities,
+                        settings = {
+                            typescript = {
+                                inlayHints = {
+                                    includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                    includeInlayFunctionParameterTypeHints = true,
+                                    includeInlayVariableTypeHints = true,
+                                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                                    includeInlayPropertyDeclarationTypeHints = true,
+                                    includeInlayFunctionLikeReturnTypeHints = true,
+                                    includeInlayEnumMemberValueHints = true,
+                                }
+                            },
+                            javascript = {
+                                inlayHints = {
+                                    includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+                                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                                    includeInlayFunctionParameterTypeHints = true,
+                                    includeInlayVariableTypeHints = true,
+                                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                                    includeInlayPropertyDeclarationTypeHints = true,
+                                    includeInlayFunctionLikeReturnTypeHints = true,
+                                    includeInlayEnumMemberValueHints = true,
+                                }
+                            }
+                        }
+                    })
+                end,
                 ["lua_ls"] = function()
                     lspconfig["lua_ls"].setup({
                         capabilities = capabilities,
@@ -167,8 +169,58 @@ return {
                         capabilities = capabilities,
                         cmd = {
                             "clangd",
-                            "--fallback-style=LLVM",
+                            "--background-index",
+                            "--clang-tidy",
+                            "--header-insertion=iwyu",
+                            "--completion-style=detailed",
+                            "--function-arg-placeholders",
+                            "--fallback-style=llvm",
                         },
+                        init_options = {
+                            usePlaceholders = true,
+                            -- completeUnimported = true,
+                            clangdFileStatus = true,
+                        },
+                    })
+                end,
+                ["gopls"] = function()
+                    lspconfig["gopls"].setup({
+                        settings = {
+                            gopls = {
+                                gofumpt = true,
+                                codelenses = {
+                                    gc_details = false,
+                                    generate = true,
+                                    regenerate_cgo = true,
+                                    run_govulncheck = true,
+                                    test = true,
+                                    tidy = true,
+                                    upgrade_dependency = true,
+                                    vendor = true,
+                                },
+                                hints = {
+                                    assignVariableTypes = true,
+                                    compositeLiteralFields = true,
+                                    compositeLiteralTypes = true,
+                                    constantValues = true,
+                                    functionTypeParameters = true,
+                                    parameterNames = true,
+                                    rangeVariableTypes = true,
+                                },
+                                analyses = {
+                                    fieldalignment = true,
+                                    nilness = true,
+                                    unusedparams = true,
+                                    unusedwrite = true,
+                                    useany = true,
+                                },
+                                usePlaceholders = true,
+                                completeUnimported = true,
+                                staticcheck = true,
+                                directoryFilters = { "-.git", "-.vscode", "-node_modules" },
+                                semanticTokens = true,
+                            }
+                        }
                     })
                 end,
                 ["pyright"] = function()

@@ -1,6 +1,6 @@
 return {
     "saghen/blink.cmp",
-    version = "v0.*",
+    version = '*',
     event = "InsertEnter",
     dependencies = {
         "rafamadriz/friendly-snippets",
@@ -37,6 +37,24 @@ return {
 
             -- optionally disable cmdline completions
             -- cmdline = {},
+            providers = {
+                lsp = {
+                    name = 'LSP',
+                    module = 'blink.cmp.sources.lsp',
+                    score_offset = 1000,
+                },
+
+                snippets = {
+                    name = 'Snippets',
+                    module = 'blink.cmp.sources.snippets',
+                    score_offset = 950,
+                },
+                luasnip = {
+                    name = 'Luasnip',
+                    module = 'blink.cmp.sources.luasnip',
+                    score_offset = 900,
+                },
+            }
         },
 
         completion = {
@@ -54,7 +72,7 @@ return {
             },
             documentation = {
                 auto_show = true,
-                auto_show_delay_ms = 300,
+                auto_show_delay_ms = 0,
             },
             trigger = {
                 show_on_insert_on_trigger_character = true,
@@ -83,7 +101,7 @@ return {
         },
 
         -- experimental signature help support
-        signature = { enabled = true },
+        signature = { enabled = false },
     },
     config = function(_, opts)
         require("blink.cmp").setup(opts)
