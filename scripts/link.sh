@@ -8,6 +8,7 @@ SCRIPT_DIR=/usr/local/bin
 FILES_TO_SYMLINK=(
   .zshrc
   .gitconfig
+  .ignore
 )
 
 SCRIPTS_TO_LINK=(

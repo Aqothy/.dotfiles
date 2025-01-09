@@ -1,0 +1,3 @@
+# To inclucd env files in fzf search
+!.env*
+!*/.env*

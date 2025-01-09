@@ -9,3 +9,5 @@
 [credential]
 [core]
 	excludesfile = /Users/aqothy/.gitignore
+[alias]
+	tree = log --graph --oneline --decorate --all

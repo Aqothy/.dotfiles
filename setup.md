@@ -22,8 +22,13 @@
 ### Install these first manually from the source
 
 - Homebrew
-    > Now install dependencies using brew file before installing rest of the packages, might need to set up fonts
-- oh my zsh (put this in robbyrussell theme PROMPT="%n@%m %(?:%{$fg_bold[green]%}%1{➜%} :%{$fg_bold[red]%}%1{➜%} )%{$fg[cyan]%}%c%{$reset_color%}")
+  > Now install dependencies using brew file before installing rest of the packages, might need to set up fonts
+- oh my zsh (put this in robbyrussell theme)
+
+```zsh
+PROMPT="%n@%m %(?:%{$fg_bold[green]%}%1{➜%} :%{$fg_bold[red]%}%1{➜%} )%{$fg[cyan]%}%c%{$reset_color%}"
+```
+
 - Neovim (already in external ssd)
 - vscode
 - kitty
@@ -40,7 +45,7 @@
 - ollama (already in external ssd)
 - vmware (already in external ssd)
 
-Then run the chmod the link.sh file and run it, also symlink bin and ollama manually
+Then run the chmod the link.sh file and run it, also symlink stdc++, ollama, neovim manually
 
 <!---
 Note that zshrc will probably be broken since some of the packages are installed now using brew instead of from source like before which affects the path. Also copilot will prob break in neovim due to the node path being different since node is being installed by homebrew too so manyally change the node directory in copilot as well

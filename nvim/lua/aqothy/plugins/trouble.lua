@@ -1,27 +1,41 @@
 return {
-    -- "folke/trouble.nvim",
-    -- dependencies = { "nvim-tree/nvim-web-devicons" },
-    -- opts = {
-    --     focus = true,
-    --     auto_preview = false,
-    --     warn_no_results = false, -- show a warning when there are no results
-    --     open_no_results = true,  -- open the trouble window when there are no results
-    -- },
-    -- cmd = "Trouble",
-    -- keys = {
-    --     { "<leader>tt", "<cmd>Trouble diagnostics toggle<CR>", desc = "Open trouble workspace diagnostics" },
-    --     { "<leader>tq", "<cmd>Trouble quickfix toggle<CR>",    desc = "Open trouble quickfix list" },
-    -- },
-    -- config = function(_, opts)
-    --
-    --     require("trouble").setup(opts)
-    --
-    --     vim.keymap.set("n", "[t", function()
-    --         require("trouble").next({ skip_groups = true, jump = true });
-    --     end)
-    --
-    --     vim.keymap.set("n", "]t", function()
-    --         require("trouble").previous({ skip_groups = true, jump = true });
-    --     end)
-    -- end,
+	-- "folke/trouble.nvim",
+	-- opts = {
+	-- 	-- focus = true,
+	-- 	-- auto_preview = false,
+	-- },
+	-- cmd = "Trouble",
+	-- keys = {
+	-- 	{ "<leader>tt", "<cmd>Trouble diagnostics toggle<CR>", desc = "Open trouble workspace diagnostics" },
+	-- 	{ "<leader>tq", "<cmd>Trouble quickfix toggle<CR>", desc = "Open trouble quickfix list" },
+	-- 	{ "<leader>td", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+	-- 	{
+	-- 		"[t",
+	-- 		function()
+	-- 			if require("trouble").is_open() then
+	-- 				require("trouble").prev({ skip_groups = true, jump = true })
+	-- 			else
+	-- 				local ok, err = pcall(vim.cmd.cprev)
+	-- 				if not ok then
+	-- 					vim.notify(err, vim.log.levels.ERROR)
+	-- 				end
+	-- 			end
+	-- 		end,
+	-- 		desc = "Previous Trouble/Quickfix Item",
+	-- 	},
+	-- 	{
+	-- 		"]t",
+	-- 		function()
+	-- 			if require("trouble").is_open() then
+	-- 				require("trouble").next({ skip_groups = true, jump = true })
+	-- 			else
+	-- 				local ok, err = pcall(vim.cmd.cnext)
+	-- 				if not ok then
+	-- 					vim.notify(err, vim.log.levels.ERROR)
+	-- 				end
+	-- 			end
+	-- 		end,
+	-- 		desc = "Next Trouble/Quickfix Item",
+	-- 	},
+	-- },
 }

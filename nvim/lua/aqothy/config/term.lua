@@ -1,3 +1,4 @@
+-- have snacks terminal but honestly could still use this
 -- -- Function to create a floating terminal
 -- local function open_floating_terminal()
 -- 	-- Get the current Neovim dimensions

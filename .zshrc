@@ -1,5 +1,6 @@
 export ZSH="$HOME/.oh-my-zsh"
 
+# TODO: Need to modify command prompt
 ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
@@ -8,6 +9,7 @@ ZSH_THEME="robbyrussell"
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
+# syntax highlighting not that helpful tbh
 plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
@@ -33,19 +35,18 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+# TODO: Might need to change paths in the future
 export GOBIN=$HOME/go/bin
 
 export PATH=$PATH:$GOBIN
 
-export PATH=$PATH:/usr/local/nvim-macos-arm64/bin
+# export PATH=$PATH:/usr/local/nvim-macos-arm64/bin
 
 export PATH=$PATH:/usr/local/lua-5.4.7/src
 
 export PATH=$PATH:/usr/local/texlive/2024basic/bin/universal-darwin
 
 export PATH=$PATH:/usr/local/google-cloud-sdk/bin
-
-export PATH=/opt/homebrew/opt/postgresql@16/bin:$PATH
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -68,9 +69,13 @@ fi
 
 ###
 
+# select_dir() {
+#     # Include the root directories themselves as options
+#     (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
+# }
+
 select_dir() {
-    # Include the root directories themselves as options
-    (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
+    (echo ~/.config; fd --type d --max-depth 1 --min-depth 1 . ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents) | fzf
 }
 
 # search in projects
@@ -88,13 +93,15 @@ zle -N fzf_append_dir_widget
 bindkey '^F' fzf_append_dir_widget
 
 # Define FZF_DEFAULT_COMMAND for searching in the home directory
-export FZF_DEFAULT_COMMAND='cd ~ && rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*" | sed "s|^|$HOME/|"'
+# export FZF_DEFAULT_COMMAND='cd ~ && rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*" | sed "s|^|$HOME/|"'
+# need to include . to return all results
+export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --exclude Pictures --exclude Movies --exclude Music --exclude go --exclude miniforge3 --exclude Library --exclude Applications . ~'
 
 # Ensure Ctrl-T uses the same default command
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Define FZF_CHILD_COMMAND for searching in the current directory
-export FZF_CHILD_COMMAND='rg --files --glob "!**/.git/*"'
+export FZF_CHILD_COMMAND='fd --type f --exclude .git'
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
 

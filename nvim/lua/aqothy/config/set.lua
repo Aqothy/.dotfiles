@@ -1,12 +1,11 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
 vim.opt.smartindent = true
+vim.opt.autoindent = true
 
 vim.opt.wrap = false
 
@@ -20,9 +19,8 @@ vim.opt.incsearch = true
 vim.opt.updatetime = 300
 
 vim.opt.splitright = true
+vim.opt.splitkeep = "screen"
 vim.opt.splitbelow = true
-
-vim.opt.showmode = false
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -50,42 +48,54 @@ vim.opt.linebreak = true
 -- Show which line your cursor is on
 vim.opt.cursorline = true
 
+vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
-vim.opt.showcmd = false
 vim.opt.showtabline = 0
 
---vim.g.netrw_banner = 0
---vim.g.netrw_browse_split = 4
---vim.g.netrw_liststyle = 3
---vim.g.netrw_winsize = -28
---vim.g.netrw_browsex_viewer = "open -a safari"
+vim.g.netrw_banner = 0
+vim.g.netrw_browse_split = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize = 20
+vim.g.netrw_browsex_viewer = "open -a safari"
 
-vim.opt.spelllang = 'en_us'
+vim.opt.spelllang = "en_us"
 --vim.opt.spell = true
 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
-vim.opt.foldenable = true     -- Enable folding by default
-vim.opt.foldlevel = 99        -- Start with all folds open
-vim.opt.foldcolumn = '1'
-vim.opt.foldlevelstart = 99
-
-vim.opt.completeopt = "menu,menuone,noselect"
-vim.opt.conceallevel = 2
-vim.opt.confirm = true
-
-vim.opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  diff = "╱",
-  eob = " ",
-}
-
 vim.opt.undolevels = 10000
-vim.opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
-vim.opt.laststatus = 3
 
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-vim.opt.splitkeep = "screen"
+vim.opt.splitkeep = "screen" -- no shift and screen stays stable when splitting
 vim.opt.grepprg = "rg --vimgrep"
+vim.opt.grepformat = "%f:%l:%c:%m"
+vim.opt.confirm = true
+-- vim.opt.winbar = "%=%m %f"
+-- vim.opt.inccommand = "split"
+vim.opt.wildmode = "longest:full,full"
+vim.opt.backspace = { "start", "eol", "indent" }
+vim.opt.ruler = false -- already handled by lualine
+vim.g.markdown_recommended_style = 0
+vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
+
+-- command line
+vim.opt.showcmd = false
+vim.opt.cmdheight = 0
+
+-- copilot
+vim.g.copilot_enabled = true
+
+-- folds
+vim.opt.fillchars = {
+	foldopen = "",
+	foldclose = "",
+	fold = " ",
+	foldsep = " ",
+	diff = "╱",
+	eob = " ",
+}
+vim.opt.foldcolumn = "0" -- 0 since snacks handles it
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
+-- animations
+-- vim.g.snacks_animate = false

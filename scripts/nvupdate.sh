@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # Path to Neovim source directory
-NVIM_SRC="neovim"
+NVIM_SRC="/Volumes/x/neovim"
 
 cd $NVIM_SRC || exit
 git pull

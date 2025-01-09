@@ -12,14 +12,14 @@ return {
 	-- config = function()
 	-- 	local telescope = require("telescope")
 	-- 	local actions = require("telescope.actions")
-	-- 	local transform_mod = require("telescope.actions.mt").transform_mod
-	--
-	-- 	-- Custom action to send to qflist and open Trouble
-	-- 	local custom_actions = transform_mod({
-	-- 		open_trouble_qflist = function()
-	-- 			vim.cmd("Trouble quickfix")
-	-- 		end,
-	-- 	})
+	-- 	-- local transform_mod = require("telescope.actions.mt").transform_mod
+	-- 	--
+	-- 	-- -- Custom action to send to qflist and open Trouble
+	-- 	-- local custom_actions = transform_mod({
+	-- 	-- 	open_trouble_qflist = function()
+	-- 	-- 		vim.cmd("Trouble quickfix")
+	-- 	-- 	end,
+	-- 	-- })
 	--
 	-- 	telescope.setup({
 	-- 		defaults = {
@@ -28,10 +28,10 @@ return {
 	-- 				i = {
 	-- 					["<C-p>"] = actions.move_selection_previous, -- Move to prev result
 	-- 					["<C-n>"] = actions.move_selection_next, -- Move to next result
-	-- 					["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
+	-- 					-- ["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
 	-- 				},
 	-- 				n = {
-	-- 					["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
+	-- 					-- ["<C-q>"] = actions.send_to_qflist + custom_actions.open_trouble_qflist,
 	-- 					["dd"] = actions.delete_buffer,
 	-- 				},
 	-- 			},
@@ -41,6 +41,9 @@ return {
 	-- 			},
 	-- 		},
 	-- 		pickers = {
+	-- 			find_files = {
+	-- 				hidden = true,
+	-- 			},
 	-- 			colorscheme = {
 	-- 				enable_preview = true,
 	-- 			},
@@ -66,7 +69,7 @@ return {
 	-- 	local keymap = vim.keymap -- for conciseness
 	-- 	local builtin = require("telescope.builtin")
 	--
-	-- 	keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+	-- 	keymap.set("n", "<leader>fm", builtin.find_files, { desc = "Telescope find files" })
 	-- 	keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "Telescope live grep" })
 	-- 	keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 	-- 	keymap.set("n", "<leader>of", builtin.oldfiles, { desc = "find old files, haha OF" })

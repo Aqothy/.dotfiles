@@ -7,6 +7,7 @@ brew "cmake"                  # Build system
 brew "ninja"                  # Build tool
 brew "ripgrep"                # Fast text searching
 brew "fzf"                    # Command-line fuzzy finder
+brew "fd"                     # Simple, fast and user-friendly alternative to find
 brew "yt-dlp"                 # YouTube downloader
 
 # Development tools
@@ -16,4 +17,4 @@ brew "go"                     # Go programming language
 brew "postgresql@16", restart_service: true # PostgreSQL database
 
 # Fonts
-cask "font-fira-code-nerd-font"
+cask "font-hack-nerd-font"
