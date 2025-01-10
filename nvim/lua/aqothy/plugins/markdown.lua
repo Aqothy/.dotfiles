@@ -1,42 +1,4 @@
 return {
-	-- {
-	-- 	"OXY2DEV/markview.nvim",
-	-- 	ft = "markdown", -- If you decide to lazy-load anyway
-	-- 	-- dependencies = {
-	-- 	-- "nvim-treesitter/nvim-treesitter",
-	-- 	-- "nvim-tree/nvim-web-devicons"
-	-- 	-- },
-	-- 	config = function()
-	-- 		require("markview").setup({
-	-- 			initial_state = true,
-	-- 			hybrid_modes = { "n" },
-	-- 		})
-	-- 		vim.keymap.set(
-	-- 			"n",
-	-- 			"<leader>mk",
-	-- 			"<cmd>Markview splitToggle<CR>",
-	-- 			{ desc = "Open split view for Markdown preview" }
-	-- 		)
-	-- 	end,
-	-- },
-	-- {
-	-- 	"iamcco/markdown-preview.nvim",
-	-- 	cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-	-- 	build = function()
-	-- 		vim.fn["mkdp#util#install"]()
-	-- 	end,
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>mm",
-	-- 			ft = "markdown",
-	-- 			"<cmd>MarkdownPreviewToggle<cr>",
-	-- 			desc = "Markdown Preview",
-	-- 		},
-	-- 	},
-	-- 	config = function()
-	-- 		vim.cmd([[do FileType]])
-	-- 	end,
-	-- },
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		opts = {

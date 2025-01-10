@@ -2,9 +2,6 @@ return {
 	"folke/noice.nvim",
 	priority = 1000,
 	event = "VeryLazy",
-	-- dependencies = {
-	-- "MunifTanjim/nui.nvim",
-	-- },
 	config = function()
 		if vim.o.filetype == "lazy" then
 			vim.cmd([[messages clear]])
@@ -12,11 +9,11 @@ return {
 
 		require("noice").setup({
 			lsp = {
-				override = {
-					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-					["vim.lsp.util.stylize_markdown"] = true,
-					["cmp.entry.get_documentation"] = true,
-				},
+				-- override = {
+				-- 	["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+				-- 	["vim.lsp.util.stylize_markdown"] = true,
+				-- 	["cmp.entry.get_documentation"] = true,
+				-- },
 			},
 			-- done by snacks
 			notify = {

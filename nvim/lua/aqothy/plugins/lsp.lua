@@ -22,14 +22,12 @@ return {
 					"cssls",
 					"tailwindcss",
 					"lua_ls",
-					"emmet_language_server",
 					"basedpyright",
 					"clangd",
 					"omnisharp",
 					"gopls",
-					"jdtls",
+					-- "jdtls",
 					"texlab",
-					"eslint",
 					-- "ts_ls", -- just manually download on mason, dk why its broken
 					"vtsls",
 				},
@@ -40,9 +38,6 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
-			-- "williamboman/mason-lspconfig.nvim",
-			-- "hrsh7th/cmp-nvim-lsp",
-			-- "saghen/blink.cmp",
 		},
 		event = { "LazyFile" },
 		cmd = { "LspInstall", "LspUninstall", "LspInfo" },
@@ -50,8 +45,6 @@ return {
 			local lspconfig = require("lspconfig")
 
 			local fzf = require("fzf-lua")
-
-			-- local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 			local mason_lspconfig = require("mason-lspconfig")
 
@@ -156,7 +149,6 @@ return {
 				{},
 				vim.lsp.protocol.make_client_capabilities(),
 				require("blink.cmp").get_lsp_capabilities()
-				-- cmp_nvim_lsp.default_capabilities()
 			)
 
 			capabilities.textDocument.foldingRange = {

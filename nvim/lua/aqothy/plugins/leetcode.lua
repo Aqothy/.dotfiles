@@ -3,11 +3,6 @@ return {
 	"kawre/leetcode.nvim",
 	lazy = leet_arg ~= vim.fn.argv(0, -1),
 	cmd = "Leet",
-	-- dependencies = {
-	-- "nvim-lua/plenary.nvim",
-	-- "MunifTanjim/nui.nvim",
-	-- "ibhagwan/fzf-lua",
-	-- },
 	keys = { { "<leader>le", ":Leet " } },
 	config = function()
 		require("leetcode").setup({

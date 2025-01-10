@@ -10,10 +10,6 @@ return {
 		vim.g.vimtex_quickfix_mode = 0 -- Don't open quickfix window_picker
 		vim.g.tex_flavor = "latex"
 		vim.g.vimtex_mappings_disable = { ["n"] = { "K" } } -- disable `K` as it conflicts with LSP hover
-		-- dont need it anymore since local map leader is set
-		--			vim.keymap.set("n", "<leader>lv", "<cmd>VimtexView<CR>", { desc = "Open VimTeX PDF viewer" })
-		--			vim.keymap.set("n", "<leader>ll", "<cmd>VimtexCompile<CR>", { desc = "Start VimTeX compilation" })
-		-- inverse search and focus back to terminal
 		local function focus_terminal()
 			-- Replace "Kitty" with the name of your terminal app if it's different
 			vim.fn.system({ "open", "-a", "Kitty" })

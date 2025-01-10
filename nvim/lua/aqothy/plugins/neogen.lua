@@ -10,9 +10,6 @@ return {
 			desc = "Generate Annotations (Neogen)",
 		},
 	},
-	-- dependencies = {
-	-- "L3MON4D3/LuaSnip",
-	-- },
 	config = function()
 		local neogen = require("neogen")
 
