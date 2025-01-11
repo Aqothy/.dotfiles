@@ -131,42 +131,6 @@ autocmd("BufReadPost", {
 	end,
 })
 
-local function match_at_cursor(pattern)
-	local col = vim.api.nvim_win_get_cursor(0)[2]
-	local text = vim.api.nvim_get_current_line():sub(col, col - 1 + pattern:len())
-	return text == pattern
-end
-
--- for newline between tags when pressing enter
-autocmd("FileType", {
-	group = augroup("newline_between_tags"),
-	pattern = {
-		"astro",
-		"css",
-		"heex",
-		"html",
-		"html-eex",
-		"javascript",
-		"javascriptreact",
-		"rust",
-		"svelte",
-		"typescript",
-		"typescriptreact",
-		"vue",
-	}, -- Add other filetypes as needed
-	callback = function()
-		vim.keymap.set("i", "<CR>", function()
-			-- Store original cursor position
-			local keys = "<CR>"
-			if match_at_cursor("></") then
-				-- If we're between tags, add an extra newline and move up
-				keys = "<CR><esc>O"
-			end
-			return vim.api.nvim_replace_termcodes(keys, true, true, true)
-		end, { buffer = true, expr = true })
-	end,
-})
-
 vim.cmd([[
   aunmenu PopUp
   anoremenu PopUp.Inspect     <cmd>Inspect<CR>

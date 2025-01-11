@@ -26,10 +26,12 @@ return {
 					"clangd",
 					"omnisharp",
 					"gopls",
+					"eslint",
 					-- "jdtls",
 					"texlab",
 					-- "ts_ls", -- just manually download on mason, dk why its broken
 					"vtsls",
+					"emmet_language_server",
 				},
 			})
 		end,
@@ -104,9 +106,14 @@ return {
 					vim.keymap.set("n", "<leader>fd", vim.diagnostic.open_float, opts)
 					vim.keymap.set("n", "<leader>lr", fzf.lsp_references, opts)
 					vim.keymap.set("n", "<leader>li", fzf.lsp_implementations, opts)
-					-- vim.keymap.set("n", "<leader>ws", fzf.lsp_workspace_symbols, opts)
 					vim.keymap.set("n", "<leader>ds", fzf.lsp_document_symbols, opts)
-					vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("i", "<C-i>", function()
+						local cmp = require("cmp")
+						if cmp.core.view:visible() then
+							cmp.close()
+						end
+						vim.lsp.buf.signature_help()
+					end, opts)
 					vim.keymap.set("n", "]d", function()
 						vim.diagnostic.goto_next()
 					end, opts)
@@ -148,12 +155,17 @@ return {
 				"force",
 				{},
 				vim.lsp.protocol.make_client_capabilities(),
-				require("blink.cmp").get_lsp_capabilities()
+				require("cmp_nvim_lsp").default_capabilities()
+				-- require("blink.cmp").get_lsp_capabilities()
 			)
 
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
+			capabilities.textDocument.completion.completionItem.snippetSupport = true
+			capabilities.textDocument.completion.completionItem.resolveSupport = {
+				properties = {
+					"documentation",
+					"detail",
+					"additionalTextEdits",
+				},
 			}
 
 			mason_lspconfig.setup_handlers({
@@ -162,42 +174,38 @@ return {
 						capabilities = capabilities,
 					})
 				end,
-				-- ["ts_ls"] = function()
-				--     lspconfig["ts_ls"].setup({
-				--         capabilities = capabilities,
-				--         settings = {
-				--             typescript = {
-				--                 inlayHints = {
-				--                     includeInlayParameterNameHints = 'literals', -- 'none' | 'literals' | 'all';
-				--                     includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-				--                     includeInlayFunctionParameterTypeHints = true,
-				--                     includeInlayVariableTypeHints = false,
-				--                     includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-				--                     includeInlayPropertyDeclarationTypeHints = true,
-				--                     includeInlayFunctionLikeReturnTypeHints = true,
-				--                     includeInlayEnumMemberValueHints = true,
-				--                 }
-				--             },
-				--         }
-				--     })
-				-- end,
 				["tailwindcss"] = function()
 					lspconfig["tailwindcss"].setup({
 						capabilities = capabilities,
 						-- make tailwind lsp only load with projects that have tailwind config
 						root_dir = function(fname)
-							local root_pattern = lspconfig.util.root_pattern(
+							local util = require("lspconfig.util")
+
+							-- Look for Tailwind configuration files
+							local root_pattern = util.root_pattern(
 								"tailwind.config.js",
 								"tailwind.config.cjs",
 								"tailwind.config.mjs",
-								"tailwind.config.ts",
-								"postcss.config.js",
-								"postcss.config.cjs",
-								"postcss.config.mjs",
-								"postcss.config.ts"
-							)
-							return root_pattern(fname)
+								"tailwind.config.ts"
+							)(fname)
+
+							if root_pattern then
+								return root_pattern
+							end
+
+							-- Return nil if no Tailwind-specific files or dependencies are found
+							return nil
 						end,
+					})
+				end,
+				["eslint"] = function()
+					lspconfig["eslint"].setup({
+						capabilities = capabilities,
+						settings = {
+							-- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+							workingDirectories = { mode = "auto" },
+							format = false,
+						},
 					})
 				end,
 				["vtsls"] = function()
@@ -320,20 +328,6 @@ return {
 						},
 					})
 				end,
-				-- ["pyright"] = function()
-				-- 	lspconfig["pyright"].setup({
-				-- 		capabilities = capabilities,
-				-- 		settings = {
-				-- 			python = {
-				-- 				analysis = {
-				-- 					-- TODO: It would be nice to understand this better and turn these back on someday.
-				-- 					reportMissingTypeStubs = false,
-				-- 					typeCheckingMode = "off",
-				-- 				},
-				-- 			},
-				-- 		},
-				-- 	})
-				-- end,
 				["basedpyright"] = function()
 					lspconfig["basedpyright"].setup({
 						capabilities = capabilities,

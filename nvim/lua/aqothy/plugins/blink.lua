@@ -3,6 +3,7 @@ return {
 	"saghen/blink.cmp",
 	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
+	enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -14,7 +15,7 @@ return {
 		--     }
 		-- },
 	},
-	opts_extend = { "sources.default", "sources.compat" },
+	opts_extend = { "sources.default" },
 	opts = {
 		keymap = {
 			preset = "none",
@@ -37,18 +38,14 @@ return {
 
 			-- optionally disable cmdline completions
 			-- cmdline = {},
-
 			providers = {
-				-- dont really need priority for now
-				snippets = {
-					name = "Snippets",
-					module = "blink.cmp.sources.snippets",
-					score_offset = 1000,
-				},
 				lsp = {
-					name = "LSP",
-					module = "blink.cmp.sources.lsp",
-					score_offset = 950,
+					transform_items = function(_, items)
+						-- Remove the "Text" source from lsp autocomplete
+						return vim.tbl_filter(function(item)
+							return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
+						end, items)
+					end,
 				},
 			},
 		},
@@ -56,19 +53,13 @@ return {
 			accept = {
 				-- experimental auto-brackets support
 				auto_brackets = {
-					enabled = true,
+					enabled = false,
 				},
 			},
 			menu = {
-				-- nvm cmp type menu
 				draw = {
-					columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
 					treesitter = { "lsp" },
 				},
-			},
-			documentation = {
-				auto_show = true,
-				auto_show_delay_ms = 300,
 			},
 			list = {
 				selection = {

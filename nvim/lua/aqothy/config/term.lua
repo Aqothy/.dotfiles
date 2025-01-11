@@ -1,65 +1,59 @@
--- have snacks terminal but honestly could still use this
--- -- Function to create a floating terminal
--- local function open_floating_terminal()
--- 	-- Get the current Neovim dimensions
--- 	local width = vim.api.nvim_get_option("columns")
--- 	local height = vim.api.nvim_get_option("lines")
+-- vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 --
--- 	-- Define floating window dimensions
--- 	local win_width = math.ceil(width * 0.7) -- 70% of screen width
--- 	local win_height = math.ceil(height * 0.7) -- 70% of screen height
--- 	local row = math.ceil((height - win_height) / 3) -- Centered vertically
--- 	local col = math.ceil((width - win_width) / 2) -- Centered horizontally
+-- local state = {
+-- 	floating = {
+-- 		buf = -1,
+-- 		win = -1,
+-- 	},
+-- }
 --
--- 	-- Create a new terminal buffer
--- 	local buf = vim.api.nvim_create_buf(false, true) -- No file, not listed
+-- local function create_floating_window(opts)
+-- 	opts = opts or {}
+-- 	local width = opts.width or math.floor(vim.o.columns * 0.7)
+-- 	local height = opts.height or math.floor(vim.o.lines * 0.7)
 --
--- 	-- Set up options for the floating window
--- 	local opts = {
+-- 	-- Calculate the position to center the window
+-- 	local col = math.floor((vim.o.columns - width) / 2)
+-- 	local row = math.floor((vim.o.lines - height) / 2)
+--
+-- 	-- Create a buffer
+-- 	local buf = nil
+-- 	if vim.api.nvim_buf_is_valid(opts.buf) then
+-- 		buf = opts.buf
+-- 	else
+-- 		buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+-- 	end
+--
+-- 	-- Define window configuration
+-- 	local win_config = {
 -- 		relative = "editor",
--- 		width = win_width,
--- 		height = win_height,
--- 		row = row,
+-- 		width = width,
+-- 		height = height,
 -- 		col = col,
--- 		style = "minimal",
--- 		border = "rounded", -- Options: "single", "double", "rounded", "solid", "shadow"
+-- 		row = row,
+-- 		style = "minimal", -- No borders or extra UI elements
+-- 		border = "rounded",
 -- 	}
 --
 -- 	-- Create the floating window
--- 	vim.api.nvim_open_win(buf, true, opts)
+-- 	local win = vim.api.nvim_open_win(buf, true, win_config)
 --
--- 	-- Start a terminal in the buffer
--- 	vim.fn.termopen(vim.o.shell)
---
--- 	-- Automatically enter insert mode after the terminal is created
--- 	vim.cmd("startinsert")
---
--- 	-- Optional: Set keybindings to close the terminal
--- 	vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "<cmd>close<CR>", { noremap = true, silent = true })
+-- 	return { buf = buf, win = win }
 -- end
 --
--- -- Bind the function to a command
--- vim.api.nvim_create_user_command("FloatingTerm", open_floating_terminal, {})
-
--- local set = vim.opt_local
+-- local toggle_terminal = function()
+-- 	if not vim.api.nvim_win_is_valid(state.floating.win) then
+-- 		state.floating = create_floating_window({ buf = state.floating.buf })
+-- 		if vim.bo[state.floating.buf].buftype ~= "terminal" then
+-- 			vim.cmd.terminal()
+-- 		end
+-- 		vim.cmd("startinsert")
+-- 	else
+-- 		vim.api.nvim_win_hide(state.floating.win)
+-- 	end
+-- end
 --
--- -- Set local settings for terminal buffers
--- vim.api.nvim_create_autocmd("TermOpen", {
--- 	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
--- 	--- call back for setting visual settings
--- 	callback = function()
--- 		set.number = false
--- 		set.relativenumber = false
--- 		set.scrolloff = 0
---
--- 		vim.bo.filetype = "terminal"
--- 	end,
--- })
---
--- -- Open a terminal at the bottom of the screen with a fixed height.
--- vim.keymap.set("n", "<C-t>", function()
--- 	vim.cmd.new()
--- 	vim.cmd.wincmd("J")
--- 	vim.api.nvim_win_set_height(0, 15)
--- 	vim.cmd.term()
--- end)
+-- -- Example usage:
+-- -- Create a floating window with default dimensions
+-- vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
+-- vim.keymap.set("n", "<C-t>", "<cmd>Floaterminal<cr>", { desc = "Toggle terminal" })

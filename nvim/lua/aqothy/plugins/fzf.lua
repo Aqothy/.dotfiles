@@ -72,7 +72,20 @@ return {
 			end,
 			desc = "Find Config File",
 		},
-		{ "<leader>fq", "<cmd>FzfLua quickfix<cr>", desc = "Quickfix List" },
+		{
+			"<leader>fq",
+			function()
+				require("fzf-lua").quickfix()
+			end,
+			desc = "Quickfix List",
+		},
+		{
+			"<leader>f/",
+			function()
+				require("fzf-lua").lgrep_curbuf()
+			end,
+			desc = "Fzf-lua live grep current buffer",
+		},
 	},
 	config = function()
 		local fzf = require("fzf-lua")

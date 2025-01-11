@@ -49,14 +49,6 @@ return {
 						desc = "Recent Files",
 						action = ":lua Snacks.dashboard.pick('oldfiles')",
 					},
-					-- {
-					-- 	icon = "󰆴 ",
-					-- 	key = "SPC bd",
-					-- 	desc = "Remove Dashboard",
-					-- 	action = function()
-					-- 		Snacks.bufdelete()
-					-- 	end,
-					-- },
 					{
 						icon = " ",
 						key = "ctrl f",
@@ -75,6 +67,7 @@ return {
 						end,
 					},
 					{ icon = " ", key = "le", desc = "Leetcode", action = "<cmd>Leet<CR>" },
+					{ icon = " ", key = "s", desc = "Restore Session", section = "session" },
 					{
 						icon = " ",
 						key = "c",
@@ -398,8 +391,8 @@ return {
 		require("snacks").setup(opts)
 		Snacks.toggle.dim():map("<leader>sd")
 		Snacks.toggle.zen():map("<leader>zz")
-		Snacks.toggle.profiler():map("<leader>pp")
 		Snacks.toggle.animate():map("<leader>ta")
+		Snacks.toggle.profiler():map("<leader>pp")
 
 		Snacks.toggle({
 			name = "Diffview",

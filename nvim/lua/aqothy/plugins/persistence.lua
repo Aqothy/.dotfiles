@@ -1,0 +1,28 @@
+return {
+	"folke/persistence.nvim",
+	event = "BufReadPre",
+	opts = {},
+	keys = {
+		{
+			"<leader>rs",
+			function()
+				require("persistence").load()
+			end,
+			desc = "Restore Session",
+		},
+		{
+			"<C-e>",
+			function()
+				require("persistence").select()
+			end,
+			desc = "Select Session",
+		},
+		{
+			"<leader>qs",
+			function()
+				require("persistence").stop()
+			end,
+			desc = "Don't Save Current Session",
+		},
+	},
+}

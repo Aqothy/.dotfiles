@@ -1,3 +1,6 @@
+vim.g.projects_dir = vim.env.HOME .. "/Code/Personal"
+vim.g.XDG_CONFIG_HOME = vim.env.HOME .. "/.config"
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -61,6 +64,9 @@ vim.g.netrw_browsex_viewer = "open -a safari"
 vim.opt.spelllang = "en_us"
 --vim.opt.spell = true
 
+vim.opt.pumheight = 10 -- Maximum number of entries in a popup
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
 vim.opt.undolevels = 10000
 
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
@@ -68,7 +74,7 @@ vim.opt.splitkeep = "screen" -- no shift and screen stays stable when splitting
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.confirm = true
--- vim.opt.winbar = "%=%m %f"
+vim.opt.laststatus = 3
 -- vim.opt.inccommand = "split"
 vim.opt.wildmode = "longest:full,full"
 vim.opt.backspace = { "start", "eol", "indent" }
@@ -85,17 +91,15 @@ vim.g.copilot_enabled = true
 
 -- folds
 vim.opt.fillchars = {
-	foldopen = "",
-	foldclose = "",
-	fold = " ",
-	foldsep = " ",
-	diff = "╱",
 	eob = " ",
 }
 vim.opt.foldcolumn = "0" -- 0 since snacks handles it
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldenable = true
+vim.opt.foldmethod = "expr"
+vim.opt.foldtext = ""
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- animations
 -- vim.g.snacks_animate = false
