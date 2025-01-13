@@ -78,7 +78,7 @@ vim.opt.laststatus = 3
 -- vim.opt.inccommand = "split"
 vim.opt.wildmode = "longest:full,full"
 vim.opt.backspace = { "start", "eol", "indent" }
-vim.opt.ruler = false -- already handled by lualine
+vim.opt.ruler = false -- already handled by statusline
 vim.g.markdown_recommended_style = 0
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
@@ -87,19 +87,27 @@ vim.opt.showcmd = false
 vim.opt.cmdheight = 0
 
 -- copilot
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = 1
+
+-- format
+vim.g.autoformat = true
 
 -- folds
 vim.opt.fillchars = {
 	eob = " ",
 }
 vim.opt.foldcolumn = "0" -- 0 since snacks handles it
-vim.opt.foldlevel = 99
-vim.opt.foldlevelstart = 99
-vim.opt.foldenable = true
-vim.opt.foldmethod = "expr"
-vim.opt.foldtext = ""
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+-- Disable health checks for these providers.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+
+vim.g.copilot_no_tab_map = true
 
 -- animations
 -- vim.g.snacks_animate = false

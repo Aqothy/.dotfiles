@@ -93,8 +93,6 @@ return {
 		-- local config = require("fzf-lua.config")
 		local actions = require("fzf-lua.actions")
 
-		-- config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
-
 		fzf.setup({
 			fzf_colors = true,
 			fzf_opts = {

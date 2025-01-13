@@ -41,9 +41,6 @@ return {
 				-- },
 				signature = {
 					enabled = true,
-					auto_open = {
-						enabled = false,
-					},
 				},
 				-- hover = {
 				--     enabled = false,

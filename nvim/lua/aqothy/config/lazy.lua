@@ -24,6 +24,7 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 require("lazy").setup({
 	spec = {
 		{ import = "aqothy.plugins" },
+		{ import = "aqothy.plugins.lsp" },
 	},
 
 	-- automatically check for plugin updates

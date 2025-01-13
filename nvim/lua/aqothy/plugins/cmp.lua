@@ -78,6 +78,7 @@ return {
 
 			-- sources for autocompletion
 			sources = cmp.config.sources({
+				{ name = "lazydev", group_index = 0 },
 				{
 					name = "nvim_lsp",
 					entry_filter = function(entry, _)

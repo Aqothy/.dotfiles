@@ -1,6 +1,12 @@
 return {
 	"windwp/nvim-ts-autotag",
-	event = { "LazyFile" },
+	ft = {
+		"html",
+		"javascript",
+		"typescript",
+		"javascriptreact",
+		"typescriptreact",
+	},
 	config = function()
 		require("nvim-ts-autotag").setup({
 			opts = {

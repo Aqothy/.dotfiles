@@ -171,7 +171,7 @@ return {
 			scope = { enabled = false, char = "▏" },
 		},
 		scroll = {
-			enabled = true,
+			enabled = false,
 		},
 		input = { enabled = true },
 		notifier = {
@@ -261,9 +261,9 @@ return {
 				backdrop = { transparent = false },
 				wo = {
 					number = false,
-					-- signcolumn = "no",
 					cursorcolumn = false,
 					relativenumber = false,
+					winbar = "",
 				},
 			},
 			notification = {
@@ -386,6 +386,13 @@ return {
 			desc = "Prev Reference",
 			mode = { "n", "t" },
 		},
+		{
+			"<leader>no",
+			function()
+				Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = "~/.config/TODO.md" })
+			end,
+			desc = "Todo List",
+		},
 	},
 	config = function(_, opts)
 		require("snacks").setup(opts)
@@ -397,7 +404,11 @@ return {
 		Snacks.toggle({
 			name = "Diffview",
 			get = function()
-				return require("diffview.lib").get_current_view()
+				if require("diffview.lib").get_current_view() then
+					return true
+				else
+					return false
+				end
 			end,
 			set = function(state)
 				if state then
@@ -408,10 +419,12 @@ return {
 			end,
 		}):map("<leader>gd")
 
+		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
+
 		Snacks.toggle({
 			name = "Copilot",
 			get = function()
-				return vim.g.copilot_enabled
+				return vim.g.copilot_enabled == 1
 			end,
 			set = function(state)
 				vim.g.copilot_enabled = state
@@ -421,12 +434,6 @@ return {
 					vim.cmd("Copilot disable")
 				end
 			end,
-		}):map("<leader>dc")
-
-		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-
-		vim.keymap.set("n", "<leader>no", function()
-			Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = "~/.config/TODO.md" })
-		end, { desc = "Todo List" })
+		}):map("<leader>tc")
 	end,
 }
