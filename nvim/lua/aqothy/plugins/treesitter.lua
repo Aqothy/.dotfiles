@@ -5,6 +5,10 @@ return {
 	event = { "LazyFile", "VeryLazy" },
 	lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
 	cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", "TSInfo" },
+	init = function(plugin)
+		require("lazy.core.loader").add_to_rtp(plugin)
+		require("nvim-treesitter.query_predicates")
+	end,
 	config = function()
 		require("nvim-treesitter.configs").setup({
 			-- A list of parser names, or "all"
@@ -51,6 +55,25 @@ return {
 
 			indent = {
 				enable = true,
+			},
+
+			textobjects = {
+				move = {
+					enable = true,
+					goto_next_start = {
+						["]f"] = "@function.outer",
+						["]c"] = "@class.outer",
+					},
+					goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+					goto_previous_start = {
+						["[f"] = "@function.outer",
+						["[c"] = "@class.outer",
+					},
+					goto_previous_end = {
+						["[F"] = "@function.outer",
+						["[C"] = "@class.outer",
+					},
+				},
 			},
 
 			highlight = {

@@ -161,7 +161,6 @@ M["emmet_language_server"] = {
 		"html-eex",
 		"javascript",
 		"javascriptreact",
-		"rust",
 		"svelte",
 		"typescript",
 		"typescriptreact",

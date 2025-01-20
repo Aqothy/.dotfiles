@@ -24,6 +24,8 @@ local groups = {
 	WinBarNC = { bg = colors.dark0_soft },
 	WinBarDir = { fg = colors.neutral_orange, bg = colors.dark0_soft, italic = true },
 	WinBarSeparator = { fg = colors.neutral_aqua, bg = colors.dark0_soft },
+	NormalFloat = { bg = colors.dark0_soft },
+	GruvboxBg2 = { fg = colors.gray },
 }
 
 -- Add mode-specific groups

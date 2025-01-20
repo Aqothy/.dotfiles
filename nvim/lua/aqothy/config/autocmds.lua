@@ -32,6 +32,7 @@ autocmd("FileType", {
 	pattern = {
 		"gitsigns-blame",
 		"help",
+		"git",
 		"checkhealth",
 		"qf",
 	},
@@ -102,8 +103,8 @@ autocmd("BufReadPost", {
 vim.cmd([[
   aunmenu PopUp
   anoremenu PopUp.Inspect     <cmd>Inspect<CR>
-  anoremenu PopUp.Definition  <cmd>lua require('fzf-lua').lsp_definitions()<CR>
-  anoremenu PopUp.References  <cmd>lua require('fzf-lua').lsp_references()<CR>
+  anoremenu PopUp.Definition  <cmd>lua require('snacks').picker.lsp_definitions()<CR>
+  anoremenu PopUp.References  <cmd>lua require('snacks').picker.lsp_references()<CR>
 ]])
 
 autocmd("MenuPopup", {

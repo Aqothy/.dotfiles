@@ -8,9 +8,6 @@ return {
 		require("leetcode").setup({
 			arg = leet_arg,
 			debug = false,
-			picker = {
-				provider = "fzf-lua",
-			},
 
 			-- dont really need injectors since no lsp is used
 			-- injector = {

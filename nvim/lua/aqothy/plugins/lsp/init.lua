@@ -10,8 +10,6 @@ local M = {
 M.config = function()
 	local lspconfig = require("lspconfig")
 
-	local fzf = require("fzf-lua")
-
 	require("aqothy.plugins.lsp.config.handlers").diagnostic_config()
 
 	local params = {
@@ -57,17 +55,11 @@ M.config = function()
 			end
 
 			-- Key mappings for LSP functions
-			-- vim.keymap.set({ "n", "x" }, "<leader>k", vim.lsp.buf.format, opts)
-			vim.keymap.set("n", "<leader>ld", fzf.lsp_definitions, opts) -- show lsp definitions
-			vim.keymap.set("n", "<leader>lt", fzf.lsp_typedefs, opts)
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-			vim.keymap.set({ "n", "v" }, "<leader>ca", fzf.lsp_code_actions, opts)
+			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 			vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-			vim.keymap.set("n", "<leader>fd", vim.diagnostic.open_float, opts)
-			vim.keymap.set("n", "<leader>lr", fzf.lsp_references, opts)
-			vim.keymap.set("n", "<leader>li", fzf.lsp_implementations, opts)
-			vim.keymap.set("n", "<leader>ds", fzf.lsp_document_symbols, opts)
-			vim.keymap.set("i", "<C-s>", function()
+			vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, opts)
+			vim.keymap.set({ "n", "i" }, "<C-s>", function()
 				local cmp = require("cmp")
 				if cmp.core.view:visible() then
 					cmp.close()
@@ -80,10 +72,6 @@ M.config = function()
 			vim.keymap.set("n", "[d", function()
 				vim.diagnostic.goto_prev()
 			end, opts)
-
-			vim.keymap.set("n", "<leader>tt", function()
-				vim.diagnostic.setqflist({ open = true })
-			end, { desc = "Send workspace diagnostics to quickfix list" })
 
 			vim.keymap.set("n", "<leader>td", function()
 				set_qflist(ev.buf)

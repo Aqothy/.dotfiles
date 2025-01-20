@@ -1,5 +1,5 @@
 vim.api.nvim_create_user_command("Todos", function()
-	require("fzf-lua").grep({ search = [[TODO:|todo!\(.*\)]], no_esc = true })
+	require("snacks").picker.grep({ search = [[TODO:|todo!\(.*\)]] })
 end, { desc = "Grep TODOs", nargs = 0 })
 
 vim.api.nvim_create_user_command("ToggleFormat", function()

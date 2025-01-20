@@ -11,3 +11,18 @@
 	excludesfile = /Users/aqothy/.gitignore
 [alias]
 	tree = log --graph --oneline --decorate --all
+
+[merge]
+    tool = nvimdiff
+[mergetool "nvimdiff"]
+    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+    prompt = false
+
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd L\"
+    prompt = false
+
+[push]
+	autoSetupRemote = true

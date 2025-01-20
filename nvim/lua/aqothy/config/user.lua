@@ -62,26 +62,4 @@ M.symbols = {
 	separator = "",
 }
 
-M.excluded_filetypes = {
-	"",
-	"qf",
-	"help",
-	"lazy",
-	"NeogitStatus",
-	"NeogitCommitView",
-	"noice",
-	"snacks_dashboard",
-	"snacks_terminal",
-	"leetcode.nvim",
-	"mason",
-	"terminal",
-	"fzf",
-	"netrw",
-	"undotree",
-	"undotreeDiff",
-	"gitsigns-blame",
-	"minifiles",
-	"DiffviewFiles",
-}
-
 return M

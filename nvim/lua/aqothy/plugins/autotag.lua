@@ -1,11 +1,16 @@
 return {
 	"windwp/nvim-ts-autotag",
 	ft = {
+		"astro",
+		"heex",
 		"html",
+		"html-eex",
 		"javascript",
-		"typescript",
 		"javascriptreact",
+		"svelte",
+		"typescript",
 		"typescriptreact",
+		"vue",
 	},
 	config = function()
 		require("nvim-ts-autotag").setup({

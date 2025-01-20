@@ -20,7 +20,7 @@ M.capabilities.textDocument.foldingRange = {
 
 M.diagnostic_config = function()
 	local config = {
-		virtual_text = false,
+		virtual_text = true,
 		underline = true,
 		update_in_insert = false,
 		signs = false,

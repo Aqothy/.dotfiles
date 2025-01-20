@@ -5,6 +5,6 @@ return {
 		{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
 	},
 	config = function()
-		require("undotree").setup({ float_diff = false })
+		require("undotree").setup()
 	end,
 }

@@ -1,4 +1,4 @@
-local signs = require("aqothy.config.user").signs
+local user = require("aqothy.config.user")
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
@@ -13,8 +13,6 @@ return {
 			enabled = true,
 
 			preset = {
-
-				pick = "fzf-lua",
 
 				keys = {
 					{
@@ -48,14 +46,6 @@ return {
 						key = "SPC of",
 						desc = "Recent Files",
 						action = ":lua Snacks.dashboard.pick('oldfiles')",
-					},
-					{
-						icon = " ",
-						key = "ctrl f",
-						desc = "Projects",
-						action = function()
-							project_search()
-						end,
 					},
 					{
 						icon = " ",
@@ -171,17 +161,17 @@ return {
 			scope = { enabled = false, char = "▏" },
 		},
 		scroll = {
-			enabled = false,
+			enabled = true,
 		},
 		input = { enabled = true },
 		notifier = {
 			enabled = true,
 			icons = {
-				error = signs.error,
-				warn = signs.warn,
-				info = signs.info,
-				debug = signs.debug,
-				trace = signs.trace,
+				error = user.signs.error,
+				warn = user.signs.warn,
+				info = user.signs.info,
+				debug = user.signs.debug,
+				trace = user.signs.trace,
 			},
 			level = vim.log.levels.INFO,
 		},
@@ -252,6 +242,10 @@ return {
 			},
 		},
 
+		picker = {
+			icons = user.kinds,
+		},
+
 		styles = {
 			-- your styles configuration comes here
 			-- or leave it empty to use the default settings
@@ -268,16 +262,6 @@ return {
 			},
 			notification = {
 				wo = { wrap = true }, -- Wrap notifications
-			},
-			input = {
-				-- center the ui input
-				row = function()
-					local total_rows = vim.api.nvim_get_option("lines")
-					local cmdheight = vim.api.nvim_get_option("cmdheight")
-					local usable_rows = total_rows - cmdheight
-					local center_row = math.floor(usable_rows / 2.1)
-					return center_row
-				end,
 			},
 			notification_history = {
 				minimal = true,
@@ -313,27 +297,6 @@ return {
 			end,
 			desc = "Dismiss All Notifications",
 		},
-		-- {
-		-- 	"<leader>gg",
-		-- 	function()
-		-- 		Snacks.git.blame_line()
-		-- 	end,
-		-- 	desc = "Git Blame Line",
-		-- },
-		-- {
-		--     "<leader>sc",
-		--     function()
-		--         Snacks.scratch()
-		--     end,
-		--     desc = "Toggle Scratch Buffer",
-		-- },
-		-- {
-		--     "<leader>sl",
-		--     function()
-		--         Snacks.scratch.select()
-		--     end,
-		--     desc = "Select Scratch Buffer",
-		-- },
 		{
 			"<leader>fr",
 			function()
@@ -357,7 +320,7 @@ return {
 			desc = "Toggle Terminal",
 		},
 		{
-			"<leader>bd",
+			"<leader>w",
 			function()
 				Snacks.bufdelete()
 			end,
@@ -393,6 +356,126 @@ return {
 			end,
 			desc = "Todo List",
 		},
+		{
+			"<leader>fb",
+			function()
+				Snacks.picker.buffers()
+			end,
+			desc = "Buffers",
+		},
+		{
+			"<leader>fc",
+			function()
+				Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+			end,
+			desc = "Find Config File",
+		},
+		{
+			"<leader>ff",
+			function()
+				Snacks.picker.files()
+			end,
+			desc = "Find Files",
+		},
+		{
+			"<leader>of",
+			function()
+				Snacks.picker.recent()
+			end,
+			desc = "Recent",
+		},
+		{
+			"<leader>gc",
+			function()
+				Snacks.picker.git_log()
+			end,
+			desc = "Git Log",
+		},
+		{
+			"<leader>gs",
+			function()
+				Snacks.picker.git_status()
+			end,
+			desc = "Git Status",
+		},
+		{
+			"<leader>fs",
+			function()
+				Snacks.picker.grep()
+			end,
+			desc = "Grep",
+		},
+		{
+			"<leader>ph",
+			function()
+				Snacks.picker.highlights()
+			end,
+			desc = "Highlights",
+		},
+		{
+			"<leader>ld",
+			function()
+				Snacks.picker.lsp_definitions()
+			end,
+			desc = "Goto Definition",
+		},
+		{
+			"<leader>lr",
+			function()
+				Snacks.picker.lsp_references()
+			end,
+			nowait = true,
+			desc = "References",
+		},
+		{
+			"<leader>li",
+			function()
+				Snacks.picker.lsp_implementations()
+			end,
+			desc = "Goto Implementation",
+		},
+		{
+			"<leader>lt",
+			function()
+				Snacks.picker.lsp_type_definitions()
+			end,
+			desc = "Goto T[y]pe Definition",
+		},
+		{
+			"<leader>ls",
+			function()
+				Snacks.picker.lsp_symbols()
+			end,
+			desc = "LSP Symbols",
+		},
+		{
+			"<leader>fq",
+			function()
+				Snacks.picker.qflist()
+			end,
+			desc = "Quickfix List",
+		},
+		{
+			"<leader>fh",
+			function()
+				Snacks.picker.help()
+			end,
+			desc = "Help Pages",
+		},
+		{
+			"<leader>gb",
+			function()
+				Snacks.picker.git_branches()
+			end,
+			desc = "Git Status",
+		},
+		{
+			"<leader>gd",
+			function()
+				Snacks.picker.git_diff()
+			end,
+			desc = "Git Status",
+		},
 	},
 	config = function(_, opts)
 		require("snacks").setup(opts)
@@ -400,24 +483,6 @@ return {
 		Snacks.toggle.zen():map("<leader>zz")
 		Snacks.toggle.animate():map("<leader>ta")
 		Snacks.toggle.profiler():map("<leader>pp")
-
-		Snacks.toggle({
-			name = "Diffview",
-			get = function()
-				if require("diffview.lib").get_current_view() then
-					return true
-				else
-					return false
-				end
-			end,
-			set = function(state)
-				if state then
-					require("diffview").open()
-				else
-					require("diffview").close()
-				end
-			end,
-		}):map("<leader>gd")
 
 		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
 

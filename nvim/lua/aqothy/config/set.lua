@@ -10,8 +10,6 @@ vim.opt.tabstop = 4
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 
-vim.opt.wrap = false
-
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -96,10 +94,14 @@ vim.g.autoformat = true
 vim.opt.fillchars = {
 	eob = " ",
 }
+
 vim.opt.foldcolumn = "0" -- 0 since snacks handles it
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
+vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldtext = ""
 
 -- Disable health checks for these providers.
 vim.g.loaded_python3_provider = 0
@@ -108,6 +110,8 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
 vim.g.copilot_no_tab_map = true
+
+vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 -- animations
 -- vim.g.snacks_animate = false
