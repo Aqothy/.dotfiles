@@ -14,6 +14,7 @@ vim.api.nvim_set_keymap("t", "<Esc><Esc>", "<C-\\><C-n>", { noremap = true, sile
 vim.keymap.set("n", "n", "nzz")
 vim.keymap.set("n", "N", "Nzz")
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<leader>c", [["_c]])
 vim.keymap.set("n", "<leader>a", "<cmd>normal ggVG<cr>", { silent = true, desc = "Select all text in the file" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true }) -- silent so noice doesn't show the command line
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
@@ -48,7 +49,3 @@ vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#<cr>", { desc = "Close all buffers
 vim.api.nvim_set_keymap("i", "<C-enter>", "copilot#Accept()", { expr = true, silent = true, noremap = false })
 vim.keymap.set("i", "<M-]>", "copilot#Next()", { expr = true, silent = true })
 vim.keymap.set("i", "<M-[>", "copilot#Previous()", { expr = true, silent = true })
-
-if vim.wo[0].diff then
-	print("diff")
-end

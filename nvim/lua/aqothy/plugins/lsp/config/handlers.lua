@@ -4,20 +4,6 @@ M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
 M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.capabilities)
 
-M.capabilities.textDocument.completion.completionItem.snippetSupport = true
-M.capabilities.textDocument.completion.completionItem.resolveSupport = {
-	properties = {
-		"documentation",
-		"detail",
-		"additionalTextEdits",
-	},
-}
-
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
-
 M.diagnostic_config = function()
 	local config = {
 		virtual_text = true,

@@ -23,16 +23,6 @@ M.config = function()
 		end
 	end
 
-	-- set quickfix list from diagnostics in a certain buffer, not the whole workspace
-	local set_qflist = function(buf_num, severity)
-		local diagnostics = nil
-		diagnostics = vim.diagnostic.get(buf_num, { severity = severity })
-
-		local qf_items = vim.diagnostic.toqflist(diagnostics)
-		vim.fn.setqflist({}, " ", { title = "Buffer Diagnostics", items = qf_items })
-		vim.cmd([[copen]])
-	end
-
 	vim.api.nvim_create_autocmd("LspAttach", {
 		group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 
@@ -56,7 +46,7 @@ M.config = function()
 
 			-- Key mappings for LSP functions
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+			vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, opts)
 			vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 			vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, opts)
 			vim.keymap.set({ "n", "i" }, "<C-s>", function()
@@ -72,10 +62,6 @@ M.config = function()
 			vim.keymap.set("n", "[d", function()
 				vim.diagnostic.goto_prev()
 			end, opts)
-
-			vim.keymap.set("n", "<leader>td", function()
-				set_qflist(ev.buf)
-			end, { desc = "Send buffer diagnostics to quickfix list" })
 		end,
 	})
 end

@@ -27,6 +27,11 @@ require("lazy").setup({
 		{ import = "aqothy.plugins.lsp" },
 	},
 
+	defaults = {
+		lazy = false,
+		version = false, -- always use the latest git commit
+		-- version = "*", -- try installing the latest stable version for plugins that support semver
+	},
 	-- automatically check for plugin updates
 	checker = { enabled = false },
 	performance = {

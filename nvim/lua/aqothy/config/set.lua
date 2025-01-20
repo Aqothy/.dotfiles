@@ -81,8 +81,8 @@ vim.g.markdown_recommended_style = 0
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 -- command line
-vim.opt.showcmd = false
 vim.opt.cmdheight = 0
+vim.opt.showcmd = false
 
 -- copilot
 vim.g.copilot_enabled = 1
