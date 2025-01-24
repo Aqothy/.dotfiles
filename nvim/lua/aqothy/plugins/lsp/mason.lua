@@ -18,13 +18,13 @@ return {
 			-- list of servers for mason to install
 			ensure_installed = {
 				-- "html",
-				"cssls",
-				"tailwindcss",
+				-- "cssls",
+				-- "tailwindcss",
 				"lua_ls",
-				"basedpyright",
-				"clangd",
+				-- "basedpyright",
+				-- "clangd",
 				"omnisharp",
-				"gopls",
+				-- "gopls",
 				"eslint",
 				-- "jdtls",
 				"texlab",
@@ -44,7 +44,7 @@ return {
 		local tools = {
 			"stylua",
 			"prettier",
-			"gofumpt",
+			-- "gofumpt",
 		}
 
 		-- installing tools without mason tool installer

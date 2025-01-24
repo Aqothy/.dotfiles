@@ -4,6 +4,7 @@ return {
 	lazy = leet_arg ~= vim.fn.argv(0, -1),
 	cmd = "Leet",
 	keys = { { "<leader>le", ":Leet " } },
+	enabled = false,
 	config = function()
 		require("leetcode").setup({
 			arg = leet_arg,
