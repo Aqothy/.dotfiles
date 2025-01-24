@@ -27,7 +27,7 @@ return {
 				-- "gopls",
 				"eslint",
 				-- "jdtls",
-				"texlab",
+				-- "texlab",
 				-- "ts_ls", -- just manually download on mason, dk why its broken
 				"vtsls",
 				"emmet_language_server",
