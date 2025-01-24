@@ -94,9 +94,11 @@ end
 function M.os_component()
 	if not M._os_cache then
 		local uname_info = uv.os_uname() or {}
-		local sysname = uname_info.sysname or "Unknown"
-		local icon = user.os[sysname] or "󱚟"
-		M._os_cache = string.format(" %%#%s#%s", sysname, icon)
+		local sysname = uname_info.sysname
+		sysname = sysname == "Darwin" and "macos" or sysname:lower()
+		local icon, icon_hl = require("mini.icons").get("os", sysname)
+
+		M._os_cache = string.format(" %%#%s#%s", icon_hl, icon)
 	end
 	return M._os_cache
 end
@@ -159,7 +161,7 @@ function M.lsp_status()
 	if #lsp_names > 0 then
 		table.insert(parts, table.concat(lsp_names, ", "))
 	end
-	if #formatters > 0 then
+	if #formatters > 0 and vim.g.autoformat then
 		table.insert(parts, table.concat(formatters, ", "))
 	end
 
@@ -206,15 +208,9 @@ function M.filetype_component()
 		ft = "[No Name]"
 	end
 
-	local devicons = require("nvim-web-devicons")
 	local buf_name = api.nvim_buf_get_name(0)
-	local name = fn.fnamemodify(buf_name, ":t")
-	local ext = fn.fnamemodify(buf_name, ":e")
 
-	local icon, icon_hl = devicons.get_icon(name, ext)
-	if not icon then
-		icon, icon_hl = devicons.get_icon_by_filetype(ft, { default = true })
-	end
+	local icon, icon_hl = require("mini.icons").get("file", buf_name)
 
 	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, ft)
 end

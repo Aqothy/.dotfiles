@@ -5,7 +5,7 @@ return {
 		file = {
 			[".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
 			["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
-			[".go-version"] = { glyph = "", hl = "MiniIconsBlue" },
+			[".go-version"] = { glyph = "󰟓", hl = "MiniIconsBlue" },
 			[".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
 			[".node-version"] = { glyph = "", hl = "MiniIconsGreen" },
 			[".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" },
@@ -19,6 +19,7 @@ return {
 		filetype = {
 			dotenv = { glyph = "", hl = "MiniIconsYellow" },
 			gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
+			go = { glyph = "", hl = "MiniIconsAzure" },
 		},
 	},
 	init = function()

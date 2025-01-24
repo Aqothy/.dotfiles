@@ -7,7 +7,7 @@ brew "cmake"                  # Build system
 brew "ninja"                  # Build tool
 brew "ripgrep"                # Fast text searching
 brew "fzf"                    # Command-line fuzzy finder
-brew "fd"                     # Simple, fast and user-friendly alternative to find
+brew "lazygit"                # Terminal UI for git
 brew "yt-dlp"                 # YouTube downloader
 
 # Development tools

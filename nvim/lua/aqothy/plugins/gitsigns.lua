@@ -35,6 +35,9 @@ return {
 			nmap("<leader>hs", gs.stage_hunk, "Stage hunk")
 			nmap("<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
 			nmap("<leader>gg", gs.blame, "Blame")
+			vim.keymap.set("v", "<leader>hs", function()
+				gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+			end, { desc = "Stage hunk" })
 
 			-- Text object:
 			vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<cr>")

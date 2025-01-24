@@ -2,7 +2,6 @@ return {
 	"lervag/vimtex", -- Main LaTeX plugin for Neovim
 	-- no lazy load for vimtex for inverse search function
 	lazy = false,
-	tag = "v2.15",
 	config = function()
 		-- Configuration for vimtex
 		vim.g.vimtex_view_method = "skim" -- PDF viewer

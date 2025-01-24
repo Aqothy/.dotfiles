@@ -91,9 +91,7 @@ vim.g.copilot_enabled = 1
 vim.g.autoformat = true
 
 -- folds
-vim.opt.fillchars = {
-	eob = " ",
-}
+vim.opt.fillchars = { eob = " " }
 
 vim.opt.foldcolumn = "0" -- 0 since snacks handles it
 vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -112,6 +110,8 @@ vim.g.loaded_node_provider = 0
 vim.g.copilot_no_tab_map = true
 
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 -- animations
 -- vim.g.snacks_animate = false

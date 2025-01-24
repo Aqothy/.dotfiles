@@ -72,13 +72,8 @@ fi
 
 ###
 
-# select_dir() {
-#     # Include the root directories themselves as options
-#     (echo ~/.config; find ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents ~/Documents/documents-mac -mindepth 1 -maxdepth 1 -type d) | fzf
-# }
-
 select_dir() {
-    (echo ~/.config; fd --type d --max-depth 1 --min-depth 1 . ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents) | fzf
+    (echo ~/.config; echo ~/Code; fd --type d --max-depth 1 --min-depth 1 . ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents) | fzf
 }
 
 # search in projects
@@ -119,15 +114,6 @@ fzf_child_widget() {
 zle -N fzf_child_widget
 
 bindkey '^S' fzf_child_widget
-
-#nf() {
-#    local file
-#    file=$(fzf)
-#    if [ -n "$file" ]; then
-#        cd "$(dirname "$file")" || return
-#        nvim "$(basename "$file")"
-#    fi
-#}
 
 source <(fzf --zsh)
 

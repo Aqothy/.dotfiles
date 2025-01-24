@@ -16,14 +16,11 @@ local groups = {
 	StatuslineTitle = { fg = colors.light3, bg = colors.dark0_soft, bold = true },
 	StatuslineLsp = { fg = colors.light3, bg = colors.dark0_soft },
 	StatuslineMacro = { fg = colors.bright_orange, bg = colors.dark0_soft },
-	Darwin = { fg = colors.light3, bg = colors.dark0_soft, bold = true },
-	Windows = { fg = colors.neutral_blue, bg = colors.dark0_soft, bold = true },
-	Linux = { fg = colors.faded_blue, bg = colors.dark0_soft, bold = true },
-	Unknown = { fg = colors.faded_purple, bg = colors.dark0_soft, bold = true },
 	WinBar = { fg = colors.light3, bg = colors.dark0_soft },
 	WinBarNC = { bg = colors.dark0_soft },
 	WinBarDir = { fg = colors.neutral_orange, bg = colors.dark0_soft, italic = true },
 	WinBarSeparator = { fg = colors.neutral_aqua, bg = colors.dark0_soft },
+	-- snacks picker
 	NormalFloat = { bg = colors.dark0_soft },
 	GruvboxBg2 = { fg = colors.gray },
 }

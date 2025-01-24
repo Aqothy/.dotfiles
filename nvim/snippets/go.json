@@ -1,0 +1,7 @@
+{
+  "If Error Check": {
+    "prefix": "ien",
+    "body": ["if err != nil {", "\t$1", "}", "$0"],
+    "description": "if err != nil block"
+  }
+}

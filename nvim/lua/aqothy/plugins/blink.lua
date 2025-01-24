@@ -38,16 +38,9 @@ return {
 
 			-- optionally disable cmdline completions
 			-- cmdline = {},
-			providers = {
-				lsp = {
-					transform_items = function(_, items)
-						-- Remove the "Text" source from lsp autocomplete
-						return vim.tbl_filter(function(item)
-							return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
-						end, items)
-					end,
-				},
-			},
+		},
+		fuzzy = {
+			use_typo_resistance = false,
 		},
 		completion = {
 			accept = {
@@ -65,6 +58,9 @@ return {
 				selection = {
 					auto_insert = false,
 				},
+			},
+			trigger = {
+				show_on_insert_on_trigger_character = true,
 			},
 		},
 

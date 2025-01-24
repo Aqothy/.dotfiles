@@ -1,0 +1,8 @@
+notARepository: "quit"
+os:
+  editPreset: nvim
+gui:
+  scrollHeight: 10
+  border: rounded
+  nerdFontsVersion: 3
+  showFileTree: false

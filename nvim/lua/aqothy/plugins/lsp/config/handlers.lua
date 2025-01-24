@@ -2,7 +2,25 @@ local M = {}
 
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
+-- M.capabilities = require("blink.cmp").get_lsp_capabilities(M.capabilities)
 M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.capabilities)
+
+M.capabilities.workspace = {
+	fileOperations = {
+		didRename = true,
+		willRename = true,
+	},
+}
+
+M.capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+M.capabilities.textDocument.completion.completionItem.resolveSupport = {
+	properties = {
+		"documentation",
+		"detail",
+		"additionalTextEdits",
+	},
+}
 
 M.diagnostic_config = function()
 	local config = {

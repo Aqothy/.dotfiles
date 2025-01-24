@@ -41,4 +41,3 @@ for script in "${SCRIPTS_TO_LINK[@]}"; do
         echo "Created symlink for $script"
     fi
 done
-
