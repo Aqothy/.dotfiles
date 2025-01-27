@@ -199,6 +199,7 @@ return {
 		},
 
 		picker = {
+			enabled = true,
 			icons = user.kinds,
 		},
 
@@ -330,5 +331,19 @@ return {
 				end
 			end,
 		}):map("<leader>tc")
+
+		Snacks.toggle({
+			name = "Diffview",
+			get = function()
+				return require("diffview.lib").get_current_view()
+			end,
+			set = function(state)
+				if state then
+					require("diffview").open()
+				else
+					require("diffview").close()
+				end
+			end,
+		}):map("<leader>gd")
 	end,
 }

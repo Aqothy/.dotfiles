@@ -2,24 +2,7 @@ local M = {}
 
 -- use enabled field to disable or enable a lsp
 
-M["tailwindcss"] = {
-	root_dir = function(fname)
-		local util = require("lspconfig.util")
-
-		-- Look for Tailwind configuration files
-		local root_pattern =
-			util.root_pattern("tailwind.config.js", "tailwind.config.cjs", "tailwind.config.mjs", "tailwind.config.ts")(
-				fname
-			)
-
-		if root_pattern then
-			return root_pattern
-		end
-
-		-- Return nil if no Tailwind-specific files or dependencies are found
-		return nil
-	end,
-}
+M["tailwindcss"] = {}
 
 M["eslint"] = {
 	settings = {
@@ -62,8 +45,17 @@ M["vtsls"] = {
 M["lua_ls"] = {
 	settings = {
 		Lua = {
+			runtime = {
+				version = "LuaJIT",
+			},
 			workspace = {
 				checkThirdParty = false,
+				library = {
+					vim.fn.expand("$VIMRUNTIME/lua"),
+					vim.fn.expand("${3rd}/luv/library"),
+					vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
+					vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua",
+				},
 			},
 			doc = {
 				privateName = { "^_" },

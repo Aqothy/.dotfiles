@@ -56,6 +56,7 @@ autocmd("FileType", {
 		"checkhealth",
 		"qf",
 		"grug-far",
+		"vim",
 	},
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false

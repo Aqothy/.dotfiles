@@ -76,15 +76,13 @@ return {
 				},
 			},
 
+			performance = {
+				max_view_entries = 10,
+			},
+
 			-- sources for autocompletion
 			sources = cmp.config.sources({
-				{ name = "lazydev", group_index = 0 },
-				{
-					name = "nvim_lsp",
-					entry_filter = function(entry, _)
-						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-					end,
-				},
+				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
 			}, {
 				{ name = "buffer" },

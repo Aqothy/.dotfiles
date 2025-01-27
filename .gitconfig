@@ -12,16 +12,6 @@
 [alias]
 	tree = log --graph --oneline --decorate --all
 
-[merge]
-    tool = nvimdiff
-
-[mergetool]
-    prompt = false
-    keepBackup = false
-
-[mergetool "nvimdiff"]
-    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-
 [push]
 	autoSetupRemote = true
 

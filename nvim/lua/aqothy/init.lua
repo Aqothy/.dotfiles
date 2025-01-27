@@ -1,4 +1,4 @@
-require("aqothy.config.set")
+require("aqothy.config.options")
 require("aqothy.config.keymaps")
 require("aqothy.config.lazy")
 require("aqothy.config.autocmds")
