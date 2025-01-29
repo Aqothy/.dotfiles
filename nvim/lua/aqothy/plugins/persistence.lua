@@ -11,7 +11,7 @@ return {
 			desc = "Restore Session",
 		},
 		{
-			"<C-e>",
+			"<leader>ss",
 			function()
 				require("persistence").select()
 			end,

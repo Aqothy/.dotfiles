@@ -23,7 +23,7 @@ return {
 				"lua_ls",
 				"basedpyright",
 				"clangd",
-				"omnisharp",
+				-- "omnisharp",
 				"gopls",
 				"eslint",
 				-- "jdtls",

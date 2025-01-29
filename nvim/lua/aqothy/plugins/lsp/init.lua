@@ -37,22 +37,20 @@ M.config = function()
 
 			-- inlay hints
 			if client.supports_method("textDocument/inlayHint") then
-				-- even thought omnisharp doesnt support inlay hints, it still bugs out for some reason so need this to fix it
-				if client.name ~= "omnisharp" then
-					vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-					Snacks.toggle.inlay_hints():map("<leader>ti")
-				end
+				vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+				Snacks.toggle.inlay_hints():map("<leader>ti")
 			end
 
 			-- Key mappings for LSP functions
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 			vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, opts)
 			vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-			vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, opts)
+			vim.keymap.set("n", "gh", vim.diagnostic.open_float, opts)
 			vim.keymap.set({ "n", "i" }, "<C-s>", function()
-				local cmp = require("cmp")
-				if cmp.core.view:visible() then
-					cmp.close()
+				local blink_window = require("blink.cmp.completion.windows.menu")
+				local blink = require("blink.cmp")
+				if blink_window.win:is_open() then
+					blink.hide()
 				end
 				vim.lsp.buf.signature_help()
 			end, opts)

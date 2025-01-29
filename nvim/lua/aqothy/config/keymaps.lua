@@ -42,6 +42,7 @@ vim.keymap.set("n", "<M-h>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>fo", "za")
 
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#<cr>", { desc = "Close all buffers but the current one" })
 
 vim.api.nvim_set_keymap("i", "<C-enter>", "copilot#Accept()", { expr = true, silent = true, noremap = false })
 vim.keymap.set("i", "<M-]>", "copilot#Next()", { expr = true, silent = true })

@@ -51,6 +51,7 @@ function M.render()
 				:totable(),
 			separator
 		),
+		vim.bo.modified and "  %m" or "",
 	})
 end
 

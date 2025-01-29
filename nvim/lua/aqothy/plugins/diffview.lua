@@ -23,7 +23,7 @@ return {
 				view = {
 					{
 						"n",
-						"<leader>cc",
+						"<leader>ga",
 						actions.conflict_choose("all"),
 						{ desc = "Choose all the versions of a conflict" },
 					},

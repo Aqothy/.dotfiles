@@ -31,7 +31,6 @@ return {
 			nmap("[h", gs.prev_hunk, "Previous hunk")
 			nmap("]h", gs.next_hunk, "Next hunk")
 			nmap("<leader>hp", gs.preview_hunk, "Preview hunk")
-			nmap("<leader>hr", gs.reset_hunk, "Reset hunk")
 			nmap("<leader>hs", gs.stage_hunk, "Stage hunk")
 			nmap("<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
 			nmap("<leader>gg", gs.blame, "Blame")

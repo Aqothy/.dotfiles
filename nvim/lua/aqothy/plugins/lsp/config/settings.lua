@@ -158,21 +158,24 @@ M["emmet_language_server"] = {
 		"typescriptreact",
 		"vue",
 	},
+	-- init_options = {
+	-- 	showSuggestionsAsSnippets = true,
+	-- },
 }
 
-M["omnisharp"] = {
-	settings = {
-		FormattingOptions = {
-			EnableEditorConfigSupport = true,
-			OrganizeImports = true,
-		},
-		RoslynExtensionsOptions = {
-			-- EnableAnalyzersSupport = true,
-			EnableImportCompletion = true,
-			AnalyzeOpenDocumentsOnly = false,
-		},
-	},
-}
+-- M["omnisharp"] = {
+-- settings = {
+-- 	FormattingOptions = {
+-- 		OrganizeImports = true,
+-- 	},
+-- 	RoslynExtensionsOptions = {
+-- 		EnableImportCompletion = true,
+-- 	},
+-- },
+-- 	enable_roslyn_analyzers = true,
+-- 	organize_imports_on_format = true,
+-- 	enable_import_completion = true,
+-- }
 
 M["cssls"] = {}
 

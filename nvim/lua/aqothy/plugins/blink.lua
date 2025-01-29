@@ -3,7 +3,7 @@ return {
 	"saghen/blink.cmp",
 	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -59,11 +59,18 @@ return {
 			menu = {
 				draw = {
 					treesitter = { "lsp" },
+					columns = {
+						{ "label", "label_description", gap = 1 },
+						{ "kind_icon", "kind" },
+					},
 				},
 			},
 			list = {
 				selection = { auto_insert = false },
 				max_items = 10,
+			},
+			documentation = {
+				window = { border = "rounded" },
 			},
 		},
 

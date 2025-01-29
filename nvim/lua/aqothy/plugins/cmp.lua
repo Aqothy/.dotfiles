@@ -10,7 +10,7 @@ return {
 	"iguanacucumber/magazine.nvim",
 	event = { "InsertEnter", "CmdLineEnter" },
 	version = false,
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
 		"saadparwaiz1/cmp_luasnip", -- for autocompletion
@@ -82,7 +82,12 @@ return {
 
 			-- sources for autocompletion
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
+				{
+					name = "nvim_lsp",
+					entry_filter = function(entry)
+						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+					end,
+				},
 				{ name = "luasnip" },
 			}, {
 				{ name = "buffer" },
