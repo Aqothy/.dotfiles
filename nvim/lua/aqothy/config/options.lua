@@ -93,12 +93,12 @@ vim.g.autoformat = true
 vim.opt.fillchars = { eob = " " }
 
 vim.opt.foldcolumn = "0" -- 0 since snacks handles it
-vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.opt.foldlevelstart = 99
-vim.opt.foldenable = true
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldtext = ""
+vim.o.foldenable = true
+vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldmethod = "expr"
+vim.o.foldtext = ""
 
 -- Disable health checks for these providers.
 vim.g.loaded_python3_provider = 0

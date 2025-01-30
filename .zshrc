@@ -41,9 +41,10 @@ export GOBIN=$HOME/go/bin
 export PATH=$PATH:$GOBIN
 
 export EDITOR="nvim"
+
 export VISUAL="nvim"
 
-export PATH=$PATH:/usr/local/nvim-macos-arm64/bin
+export PATH=$PATH:/usr/local/nvim-nightly/bin
 
 export PATH=$PATH:/usr/local/lua-5.4.7/src
 

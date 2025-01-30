@@ -52,13 +52,17 @@ M.config = function()
 				if blink_window.win:is_open() then
 					blink.hide()
 				end
+				-- local cmp = require("cmp")
+				-- if cmp.core.view:visible() then
+				-- 	cmp.close()
+				-- end
 				vim.lsp.buf.signature_help()
 			end, opts)
 			vim.keymap.set("n", "]d", function()
-				vim.diagnostic.goto_next()
+				vim.diagnostic.jump({ count = 1, float = true })
 			end, opts)
 			vim.keymap.set("n", "[d", function()
-				vim.diagnostic.goto_prev()
+				vim.diagnostic.jump({ count = -1, float = true })
 			end, opts)
 		end,
 	})

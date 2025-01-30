@@ -22,6 +22,11 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
+M.capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
+}
+
 M.diagnostic_config = function()
 	local config = {
 		virtual_text = true,
