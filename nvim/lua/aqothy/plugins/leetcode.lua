@@ -26,9 +26,7 @@ return {
 				["question_enter"] = function()
 					-- Add an autocommand to wait for LSP to attach
 					-- no lsp to simulate leetcode environment
-					local group = vim.api.nvim_create_augroup("StopLSPOnAttach", { clear = true })
 					vim.api.nvim_create_autocmd("LspAttach", {
-						group = group,
 						callback = function(args)
 							local client = vim.lsp.get_client_by_id(args.data.client_id)
 							client.stop()

@@ -1,6 +1,7 @@
 return {
 	"lewis6991/gitsigns.nvim",
 	event = { "LazyFile" },
+	-- enabled = false,
 	opts = {
 		signs = {
 			add = { text = " ▎" },
@@ -17,6 +18,7 @@ return {
 			topdelete = { text = " " },
 			changedelete = { text = " ▎" },
 		},
+		update_debounce = 300,
 		attach_to_untracked = true,
 		on_attach = function(bufnr)
 			local gs = package.loaded.gitsigns

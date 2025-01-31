@@ -23,6 +23,8 @@ local groups = {
 	-- snacks picker
 	NormalFloat = { bg = colors.dark0_soft },
 	GruvboxBg2 = { fg = colors.gray },
+	SignColumn = { bg = colors.dark0_soft },
+	Pmenu = { bg = colors.dark0_soft },
 }
 
 -- Add mode-specific groups

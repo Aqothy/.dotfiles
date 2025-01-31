@@ -2,6 +2,7 @@ return {
 	"folke/noice.nvim",
 	priority = 1000,
 	event = "VeryLazy",
+	enabled = false,
 	keys = {
 		{
 			"<c-f>",

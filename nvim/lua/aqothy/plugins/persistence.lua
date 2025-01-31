@@ -2,6 +2,7 @@ return {
 	"folke/persistence.nvim",
 	event = "BufReadPre",
 	opts = {},
+	enabled = false,
 	keys = {
 		{
 			"<leader>rs",

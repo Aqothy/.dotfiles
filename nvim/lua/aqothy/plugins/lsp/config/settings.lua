@@ -1,6 +1,8 @@
 local M = {}
 
 -- use enabled field to disable or enable a lsp
+-- make sure to initialize the lsp even if you don't want custom config
+-- since were not using mason-lspconfig it will not be initialized by default
 
 M["tailwindcss"] = {}
 
@@ -54,7 +56,7 @@ M["lua_ls"] = {
 					vim.fn.expand("$VIMRUNTIME/lua"),
 					vim.fn.expand("${3rd}/luv/library"),
 					vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
-					vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua",
+					-- vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua",
 				},
 			},
 			doc = {
@@ -148,20 +150,12 @@ M["emmet_language_server"] = {
 		"typescriptreact",
 		"vue",
 	},
-	-- init_options = {
-	-- 	showSuggestionsAsSnippets = true,
-	-- },
+	init_options = {
+		showSuggestionsAsSnippets = true,
+	},
 }
 
 -- M["omnisharp"] = {
--- settings = {
--- 	FormattingOptions = {
--- 		OrganizeImports = true,
--- 	},
--- 	RoslynExtensionsOptions = {
--- 		EnableImportCompletion = true,
--- 	},
--- },
 -- 	enable_roslyn_analyzers = true,
 -- 	organize_imports_on_format = true,
 -- 	enable_import_completion = true,

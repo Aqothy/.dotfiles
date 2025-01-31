@@ -2,6 +2,10 @@ return {
 	"stevearc/conform.nvim",
 	event = { "BufWritePre" },
 	cmd = { "ConformInfo" },
+	init = function()
+		vim.g.autoformat = true
+		vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+	end,
 	config = function()
 		local conform = require("conform")
 
@@ -9,6 +13,7 @@ return {
 		conform.setup({
 			log_level = vim.log.levels.DEBUG,
 			notify_on_error = false,
+			quiet = true,
 			formatters_by_ft = {
 				c = { name = "clangd", lsp_format = "prefer" },
 				javascript = { "prettier" },

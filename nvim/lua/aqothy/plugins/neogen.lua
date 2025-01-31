@@ -1,6 +1,7 @@
 return {
 	"danymat/neogen",
 	cmd = "Neogen",
+	enabled = false,
 	keys = {
 		{
 			"<leader>ng",

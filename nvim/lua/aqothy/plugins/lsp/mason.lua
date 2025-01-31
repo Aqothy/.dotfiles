@@ -1,59 +1,54 @@
 return {
 	"williamboman/mason.nvim",
-	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
-	},
-	build = ":MasonUpdate",
-	cmd = { "Mason", "MasonInstall", "MasonUninstall" },
+	event = "VeryLazy",
 	config = function()
 		local mason = require("mason")
 
-		local mason_lspconfig = require("mason-lspconfig")
-
 		local mason_registry = require("mason-registry")
 
-		mason.setup()
-
-		mason_lspconfig.setup({
-			-- list of servers for mason to install
-			ensure_installed = {
-				-- "html",
-				"cssls",
-				"tailwindcss",
-				"lua_ls",
-				"basedpyright",
-				"clangd",
-				-- "omnisharp",
-				"gopls",
-				"eslint",
-				-- "jdtls",
-				"texlab",
-				-- "ts_ls", -- just manually download on mason, dk why its broken
-				"vtsls",
-				"emmet_language_server",
-			},
-			icons = {
-				package_installed = "",
-				package_pending = "",
-				package_uninstalled = "",
+		mason.setup({
+			ui = {
+				icons = {
+					package_installed = "",
+					package_pending = "",
+					package_uninstalled = "",
+				},
 			},
 			log_level = vim.log.levels.INFO,
 			max_concurrent_installers = 3,
 		})
 
-		local tools = {
+		-- List of all LSP servers & tools to install manually
+		-- names are different from lspconfig names
+		local packages = {
+			-- LSP servers
+			"css-lsp",
+			"tailwindcss-language-server",
+			"lua-language-server",
+			"basedpyright",
+			"clangd",
+			"gopls",
+			"eslint-lsp",
+			"texlab",
+			"vtsls",
+			"emmet-language-server",
+
+			-- Tools (formatters, linters, etc.)
 			"stylua",
 			"prettier",
 			"gofumpt",
 		}
 
-		-- installing tools without mason tool installer
-		for _, tool in ipairs(tools) do
-			local ok, package = pcall(mason_registry.get_package, tool)
-			if ok and not package:is_installed() then
-				package:install()
-			elseif not ok then
-				vim.notify("Mason: Tool " .. tool .. " not found in the registry.", vim.log.levels.WARN)
+		-- installing tools without mason-lspconfig and tool installer
+		for _, package_name in ipairs(packages) do
+			local ok, pkg = pcall(mason_registry.get_package, package_name)
+			if ok then
+				if not pkg:is_installed() then
+					vim.notify("Mason: Installing " .. package_name, vim.log.levels.INFO)
+					pkg:install()
+				end
+			else
+				vim.notify("Mason: Package " .. package_name .. " not found", vim.log.levels.WARN)
 			end
 		end
 	end,

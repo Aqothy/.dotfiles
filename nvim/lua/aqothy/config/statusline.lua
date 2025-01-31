@@ -80,15 +80,15 @@ local function get_mode_hl(mode)
 	return "Other"
 end
 
-local function format_size(size)
-	local suffixes = { "B", "KB", "MB", "GB" }
-	local i = 1
-	while size > 1024 and i < #suffixes do
-		size = size / 1024
-		i = i + 1
-	end
-	return string.format((i == 1) and "%d%s" or "%.1f%s", size, suffixes[i])
-end
+-- local function format_size(size)
+-- 	local suffixes = { "B", "KB", "MB", "GB" }
+-- 	local i = 1
+-- 	while size > 1024 and i < #suffixes do
+-- 		size = size / 1024
+-- 		i = i + 1
+-- 	end
+-- 	return string.format((i == 1) and "%d%s" or "%.1f%s", size, suffixes[i])
+-- end
 
 -- Component functions with caching where appropriate
 function M.os_component()
@@ -117,56 +117,65 @@ function M.mode_component()
 	)
 end
 
-function M.git_components()
-	local git_info = vim.b.gitsigns_status_dict
-	if not git_info or git_info.head == "" then
-		return "", ""
+function M.git_component()
+	local head = vim.b.gitsigns_head
+	if not head or head == "" then
+		return ""
 	end
 
-	-- Head component
-	local head = string.format(" %s", git_info.head)
-
-	-- Status component
-	local status_parts = {}
-	if git_info.added and git_info.added > 0 then
-		table.insert(status_parts, "%#GitSignsAdd#+" .. git_info.added)
-	end
-	if git_info.changed and git_info.changed > 0 then
-		table.insert(status_parts, "%#GitSignsChange#~" .. git_info.changed)
-	end
-	if git_info.removed and git_info.removed > 0 then
-		table.insert(status_parts, "%#GitSignsDelete#-" .. git_info.removed)
-	end
-
-	return head, #status_parts > 0 and table.concat(status_parts, " ") .. " " or ""
+	return string.format(" %s", head)
 end
 
-function M.lsp_status()
-	local lsp_names = vim.tbl_filter(
-		function(name)
-			return name ~= nil
-		end,
-		vim.tbl_map(function(client)
-			if client.name:lower():match("copilot") then
-				return vim.g.copilot_enabled == 1 and user.kinds.Copilot or nil
-			end
-			return client.name:gsub("_language_server$", "_ls")
-		end, vim.lsp.get_clients({ bufnr = 0 }))
-	)
+-- function M.git_components()
+-- 	local git_info = vim.b.gitsigns_status_dict
+-- 	if not git_info or git_info.head == "" then
+-- 		return "", ""
+-- 	end
+--
+-- 	-- Head component
+-- 	local head = string.format(" %s", git_info.head)
+--
+-- 	-- Status component
+-- 	local status_parts = {}
+-- 	if git_info.added and git_info.added > 0 then
+-- 		table.insert(status_parts, "%#GitSignsAdd#+" .. git_info.added)
+-- 	end
+-- 	if git_info.changed and git_info.changed > 0 then
+-- 		table.insert(status_parts, "%#GitSignsChange#~" .. git_info.changed)
+-- 	end
+-- 	if git_info.removed and git_info.removed > 0 then
+-- 		table.insert(status_parts, "%#GitSignsDelete#-" .. git_info.removed)
+-- 	end
+--
+-- 	return head, #status_parts > 0 and table.concat(status_parts, " ") .. " " or ""
+-- end
 
-	local ft = vim.bo.filetype
-	local formatters = ft ~= "" and require("conform").formatters_by_ft[ft] or {}
-
-	local parts = {}
-	if #lsp_names > 0 then
-		table.insert(parts, table.concat(lsp_names, ", "))
-	end
-	if #formatters > 0 and vim.g.autoformat then
-		table.insert(parts, table.concat(formatters, ", "))
-	end
-
-	return #parts > 0 and string.format("%%#StatuslineLsp#%s", table.concat(parts, ", ")) or ""
-end
+-- function M.lsp_status()
+-- 	local lsp_names = vim.tbl_filter(
+-- 		function(name)
+-- 			return name ~= nil
+-- 		end,
+-- 		vim.tbl_map(function(client)
+-- 			if client.name:lower():match("copilot") then
+-- 				return vim.g.copilot_enabled == 1 and user.kinds.Copilot or nil
+-- 			end
+-- 			return client.name:gsub("_language_server$", "_ls")
+-- 		end, vim.lsp.get_clients({ bufnr = 0 }))
+-- 	)
+--
+-- 	local ft = vim.bo.filetype
+-- 	local formatters = ft ~= "" and require("conform").formatters_by_ft[ft] or {}
+--
+-- 	local parts = {}
+-- 	if #lsp_names > 0 then
+-- 		table.insert(parts, table.concat(lsp_names, ", "))
+-- 	end
+-- 	if #formatters > 0 and vim.g.autoformat then
+-- 		table.insert(parts, table.concat(formatters, ", "))
+-- 	end
+--
+-- 	return #parts > 0 and string.format("%%#StatuslineLsp#%s", table.concat(parts, ", ")) or ""
+-- end
 
 -- Cached diagnostics component
 local last_diagnostic_component = ""
@@ -215,25 +224,35 @@ function M.filetype_component()
 	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, ft)
 end
 
-function M.file_info_component()
-	local encoding = bo.fileencoding
-	local shiftwidth = bo.shiftwidth
-	local file_path = api.nvim_buf_get_name(0)
+function M.encoding_component()
+	local encoding = vim.bo.fileencoding
 
-	if file_path == "" and encoding == "" and shiftwidth == 0 then
+	if encoding == "" then
 		return ""
 	end
 
-	local size_str = ""
-	if file_path ~= "" then
-		local file_size = fn.getfsize(file_path)
-		if file_size > 0 then
-			size_str = format_size(file_size)
-		end
-	end
-
-	return string.format("%%#StatuslineModeSeparatorOther# %s  Tab:%d  %s", encoding, shiftwidth, size_str)
+	return string.format("%%#StatuslineModeSeparatorOther# %s", encoding)
 end
+
+-- function M.file_info_component()
+-- 	local encoding = bo.fileencoding
+-- 	local shiftwidth = bo.shiftwidth
+-- 	local file_path = api.nvim_buf_get_name(0)
+--
+-- 	if file_path == "" and encoding == "" and shiftwidth == 0 then
+-- 		return ""
+-- 	end
+--
+-- 	local size_str = ""
+-- 	if file_path ~= "" then
+-- 		local file_size = fn.getfsize(file_path)
+-- 		if file_size > 0 then
+-- 			size_str = format_size(file_size)
+-- 		end
+-- 	end
+--
+-- 	return string.format("%%#StatuslineModeSeparatorOther# %s  Tab:%d  %s", encoding, shiftwidth, size_str)
+-- end
 
 function M.position_component()
 	return string.format(
@@ -244,10 +263,10 @@ function M.position_component()
 	)
 end
 
-function M.macro_recording_component()
-	local reg = fn.reg_recording()
-	return reg ~= "" and string.format("%%#StatuslineMacro#Recording @%s", reg) or ""
-end
+-- function M.macro_recording_component()
+-- 	local reg = fn.reg_recording()
+-- 	return reg ~= "" and string.format("%%#StatuslineMacro#Recording @%s", reg) or ""
+-- end
 
 -- Efficient component concatenation
 local function concat_components(components)
@@ -256,25 +275,29 @@ end
 
 -- Main render function
 function M.render()
-	local git_head, git_status = M.git_components()
+	-- local git_head, git_status = M.git_components()
 
 	local left_components = vim.tbl_filter(function(component)
 		return #component > 0
 	end, {
 		M.os_component(),
 		M.mode_component(),
-		git_head,
-		M.lsp_status(),
-		git_status,
+		M.git_component(),
+		"%#StatuslineTitle#" .. "%t",
+		vim.bo.modified and "%m" or "", -- to make the spacing correct
+		M.diagnostics_component(),
+		-- git_head,
+		-- M.lsp_status(),
+		-- git_status,
 	})
 
 	local right_components = vim.tbl_filter(function(component)
 		return #component > 0
 	end, {
-		M.macro_recording_component(),
-		M.diagnostics_component(),
+		-- M.macro_recording_component(),
 		M.filetype_component(),
-		M.file_info_component(),
+		-- M.file_info_component(),
+		M.encoding_component(),
 		M.position_component(),
 	})
 

@@ -64,6 +64,7 @@ return {
 						{ "kind_icon", "kind", gap = 1 },
 					},
 				},
+				border = "rounded",
 			},
 			list = {
 				selection = { auto_insert = false },

@@ -6,3 +6,4 @@ gui:
   border: rounded
   nerdFontsVersion: 3
   showFileTree: false
+  filterMode: fuzzy

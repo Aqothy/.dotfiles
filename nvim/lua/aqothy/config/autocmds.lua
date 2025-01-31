@@ -134,28 +134,18 @@ autocmd("BufReadPost", {
 	end,
 })
 
-vim.cmd([[
-  aunmenu PopUp
-  anoremenu PopUp.Inspect     <cmd>Inspect<CR>
-  anoremenu PopUp.Definition  <cmd>lua require('snacks').picker.lsp_definitions()<CR>
-  anoremenu PopUp.References  <cmd>lua require('snacks').picker.lsp_references()<CR>
-]])
-
-autocmd("MenuPopup", {
-	pattern = "*",
-	group = augroup("nvim_popupmenu"),
-	desc = "Custom PopUp Setup",
-	callback = function()
-		vim.cmd([[
-      amenu disable PopUp.Definition
-      amenu disable PopUp.References
-    ]])
-
-		if vim.lsp.get_clients({ bufnr = 0 })[1] then
-			vim.cmd([[
-        amenu enable PopUp.Definition
-        amenu enable PopUp.References
-      ]])
-		end
+autocmd("LspProgress", {
+	group = augroup("lsp_progress_notify"),
+	---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+	callback = function(ev)
+		local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+		vim.notify(vim.lsp.status(), "info", {
+			id = "lsp_progress",
+			title = "LSP Progress",
+			opts = function(notif)
+				notif.icon = ev.data.params.value.kind == "end" and " "
+					or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+			end,
+		})
 	end,
 })

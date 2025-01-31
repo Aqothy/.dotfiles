@@ -1,6 +1,7 @@
 return {
 	"stevearc/quicker.nvim",
 	event = "VeryLazy",
+	enabled = false,
 	opts = {},
 	keys = {
 		{

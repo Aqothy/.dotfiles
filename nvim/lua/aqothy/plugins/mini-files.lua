@@ -84,7 +84,9 @@ return {
 			end
 		end
 
+		local files_group = vim.api.nvim_create_augroup("MiniFilesBuffer", { clear = true })
 		vim.api.nvim_create_autocmd("User", {
+			group = files_group,
 			pattern = "MiniFilesBufferCreate",
 			callback = function(args)
 				local buf_id = args.data.buf_id
@@ -110,7 +112,9 @@ return {
 			end,
 		})
 
+		local rename_group = vim.api.nvim_create_augroup("MiniFilesRename", { clear = true })
 		vim.api.nvim_create_autocmd("User", {
+			group = rename_group,
 			pattern = "MiniFilesActionRename",
 			callback = function(event)
 				Snacks.rename.on_rename_file(event.data.from, event.data.to)

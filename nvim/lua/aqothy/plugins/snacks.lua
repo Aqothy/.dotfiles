@@ -7,7 +7,7 @@ return {
 		bigfile = { enabled = true },
 		dashboard = {
 
-			enabled = true,
+			enabled = false,
 
 			preset = {
 
@@ -22,7 +22,6 @@ return {
 						key = "SPC ee",
 						desc = "File Explorer",
 						action = function()
-							-- vim.cmd("NvimTreeToggle")
 							require("mini.files").open(vim.uv.cwd(), true)
 						end,
 					},
@@ -108,7 +107,7 @@ return {
 		},
 		indent = {
 			indent = {
-				enabled = true,
+				enabled = false,
 				char = "▏",
 			},
 			-- chunk = {
@@ -117,9 +116,9 @@ return {
 			scope = { enabled = false, char = "▏" },
 		},
 		scroll = {
-			enabled = true,
+			enabled = false,
 		},
-		input = { enabled = true },
+		input = { enabled = false },
 		notifier = {
 			enabled = true,
 			icons = {
@@ -133,7 +132,7 @@ return {
 		},
 		quickfile = { enabled = true },
 		statuscolumn = {
-			enabled = true,
+			enabled = false,
 			left = { "sign", "git" },
 			right = { "mark", "fold" },
 			folds = {
@@ -142,7 +141,7 @@ return {
 			},
 		},
 		scope = { enabled = false },
-		words = { enabled = true, modes = { "n" } },
+		words = { enabled = false, modes = { "n" } },
 
 		-- scratch = {
 		--     win_by_ft = {
@@ -218,7 +217,7 @@ return {
 					number = false,
 					cursorcolumn = false,
 					relativenumber = false,
-					winbar = "",
+					signcolumn = "no",
 				},
 			},
 			notification = {
@@ -265,8 +264,8 @@ return {
 		},
 		{ "<M-w>", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
 		{ "<leader>sh", function() Snacks.notifier.show_history() end, desc = "Show Notifier History" },
-		{ "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
-		{ "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+		-- { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+		-- { "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
 		{
 			"<leader>no",
 			function()
@@ -280,17 +279,10 @@ return {
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
-		{ "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
-		{ "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
-		{ "gi", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
-		{ "<leader>lt", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-		{ "<leader>ls", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
-		{ "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Symbols" },
 		{ "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 		{ "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit" },
-        { "<leader>gl", function() Snacks.lazygit.log() end, desc = "Lazygit Log (cwd)" },
 		{
 			"<leader>f/",
 			function()
@@ -310,6 +302,8 @@ return {
 	},
 	config = function(_, opts)
 		require("snacks").setup(opts)
+		vim.g.snacks_animate = false
+
 		Snacks.toggle.dim():map("<leader>sd")
 		Snacks.toggle.zen():map("<leader>zz")
 		Snacks.toggle.animate():map("<leader>ta")
@@ -332,18 +326,18 @@ return {
 			end,
 		}):map("<leader>tc")
 
-		Snacks.toggle({
-			name = "Diffview",
-			get = function()
-				return require("diffview.lib").get_current_view()
-			end,
-			set = function(state)
-				if state then
-					require("diffview").open()
-				else
-					require("diffview").close()
-				end
-			end,
-		}):map("<leader>gd")
+		-- Snacks.toggle({
+		-- 	name = "Diffview",
+		-- 	get = function()
+		-- 		return require("diffview.lib").get_current_view()
+		-- 	end,
+		-- 	set = function(state)
+		-- 		if state then
+		-- 			require("diffview").open()
+		-- 		else
+		-- 			require("diffview").close()
+		-- 		end
+		-- 	end,
+		-- }):map("<leader>gd")
 	end,
 }
