@@ -3,6 +3,7 @@ return {
 	-- event = { "VeryLazy" },
 	ft = "markdown",
 	build = "deno task --quiet build:fast",
+	enabled = false,
 	config = function()
 		require("peek").setup()
 		vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
