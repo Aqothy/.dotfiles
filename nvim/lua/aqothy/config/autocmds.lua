@@ -104,18 +104,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- remove dashboard when opening quickfix
-autocmd("FileType", {
-	group = augroup("Remove_Dashboard"),
-	pattern = { "qf" },
-	once = true,
-	callback = function()
-		if vim.api.nvim_buf_is_valid(1) then
-			Snacks.bufdelete({ buf = 1 })
-		end
-	end,
-})
-
 -- go to last loc when opening a buffer
 autocmd("BufReadPost", {
 	group = augroup("last_loc"),

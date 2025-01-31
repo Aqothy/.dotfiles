@@ -30,6 +30,14 @@ return {
 			completion = {
 				completeopt = "menu,menuone,noinsert",
 			},
+			window = {
+				completion = {
+					border = "rounded",
+				},
+				documentation = {
+					border = "rounded",
+				},
+			},
 			snippet = { -- configure how nvim-cmp interacts with snippet engine
 				expand = function(args)
 					luasnip.lsp_expand(args.body)
@@ -84,9 +92,9 @@ return {
 			sources = cmp.config.sources({
 				{
 					name = "nvim_lsp",
-					entry_filter = function(entry)
-						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-					end,
+					-- entry_filter = function(entry)
+					-- 	return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+					-- end,
 				},
 				{ name = "luasnip" },
 			}, {
@@ -109,14 +117,6 @@ return {
 					cmp.config.compare.kind,
 				},
 			},
-		})
-
-		cmp.setup.filetype("gitcommit", {
-			sources = cmp.config.sources({
-				{ name = "git" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-			}, {
-				{ name = "buffer" },
-			}),
 		})
 
 		cmp.setup.cmdline({ "/", "?" }, {

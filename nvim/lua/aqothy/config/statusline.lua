@@ -224,14 +224,15 @@ function M.filetype_component()
 	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, ft)
 end
 
-function M.encoding_component()
+function M.file_info_component()
 	local encoding = vim.bo.fileencoding
+	local shiftwidth = vim.bo.shiftwidth
 
-	if encoding == "" then
+	if encoding == "" and shiftwidth == 0 then
 		return ""
 	end
 
-	return string.format("%%#StatuslineModeSeparatorOther# %s", encoding)
+	return string.format("%%#StatuslineModeSeparatorOther# %s  Tab:%d", encoding, shiftwidth)
 end
 
 -- function M.file_info_component()
@@ -283,9 +284,9 @@ function M.render()
 		M.os_component(),
 		M.mode_component(),
 		M.git_component(),
-		"%#StatuslineTitle#" .. "%t",
+		M.filetype_component(),
+		-- "%#StatuslineTitle#" .. "%t",
 		vim.bo.modified and "%m" or "", -- to make the spacing correct
-		M.diagnostics_component(),
 		-- git_head,
 		-- M.lsp_status(),
 		-- git_status,
@@ -295,9 +296,8 @@ function M.render()
 		return #component > 0
 	end, {
 		-- M.macro_recording_component(),
-		M.filetype_component(),
-		-- M.file_info_component(),
-		M.encoding_component(),
+		M.diagnostics_component(),
+		M.file_info_component(),
 		M.position_component(),
 	})
 

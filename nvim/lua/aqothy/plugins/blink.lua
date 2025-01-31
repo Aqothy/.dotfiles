@@ -26,28 +26,51 @@ return {
 			["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-p>"] = { "select_prev", "fallback" },
 			["<C-n>"] = { "select_next", "fallback" },
+			cmdline = {
+				preset = "none",
+				["<C-y>"] = { "select_and_accept" },
+				["<C-b>"] = { "scroll_documentation_up", "fallback" },
+				["<C-f>"] = { "scroll_documentation_down", "fallback" },
+				["<C-h>"] = { "hide", "fallback" },
+				["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+				["<C-p>"] = { "select_prev", "fallback" },
+				["<C-n>"] = { "select_next", "fallback" },
+			},
 		},
 
 		-- default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, via `opts_extend`
 		sources = {
 			default = { "lsp", "path", "snippets", "buffer" },
+
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies
 			-- compat = {},
-			providers = {
-				lsp = {
-					transform_items = function(_, items)
-						-- Remove the "Text" source from lsp autocomplete
-						return vim.tbl_filter(function(item)
-							return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
-						end, items)
-					end,
-				},
-			},
 
-			-- optionally disable cmdline completions
-			-- cmdline = {},
+			-- providers = {
+			-- 	lsp = {
+			-- 		transform_items = function(_, items)
+			-- 			-- Remove the "Text" source from lsp autocomplete
+			-- 			return vim.tbl_filter(function(item)
+			-- 				return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
+			-- 			end, items)
+			-- 		end,
+			-- 	},
+			-- },
+
+			-- disable cmdline by passing empty table
+			cmdline = function()
+				local type = vim.fn.getcmdtype()
+				-- Search forward and backward
+				if type == "/" or type == "?" then
+					return { "buffer" }
+				end
+				-- Commands
+				if type == ":" or type == "@" then
+					return { "cmdline" }
+				end
+				return {}
+			end,
 		},
 		completion = {
 			accept = {

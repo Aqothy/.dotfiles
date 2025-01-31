@@ -1,6 +1,7 @@
 return {
 	"williamboman/mason.nvim",
-	event = "VeryLazy",
+	build = ":MasonUpdate",
+	-- Don't lazy load this plugin :(
 	config = function()
 		local mason = require("mason")
 
