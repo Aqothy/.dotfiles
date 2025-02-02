@@ -10,10 +10,10 @@ return {
 	"iguanacucumber/magazine.nvim",
 	event = { "InsertEnter", "CmdLineEnter" },
 	version = false,
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
-		"saadparwaiz1/cmp_luasnip", -- for autocompletion
+		"abeldekat/cmp-mini-snippets",
 		"hrsh7th/cmp-buffer", -- source for text in buffer
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
@@ -22,7 +22,7 @@ return {
 		local user = require("aqothy.config.user")
 		local cmp = require("cmp")
 
-		local luasnip = require("luasnip")
+		-- local luasnip = require("luasnip")
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -38,16 +38,19 @@ return {
 					border = "rounded",
 				},
 			},
-			snippet = { -- configure how nvim-cmp interacts with snippet engine
-				expand = function(args)
-					luasnip.lsp_expand(args.body)
+			snippet = {
+				expand = function(args) -- mini.snippets expands snippets from lsp...
+					local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+					insert({ body = args.body }) -- Insert at cursor
+					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+					require("cmp.config").set_onetime({ sources = {} })
 				end,
 			},
 			experimental = {
 				ghost_text = false,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<C-h>"] = cmp.mapping.abort(),
+				["<C-e>"] = cmp.mapping.abort(),
 				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select), -- previous suggestion
 				["<C-n>"] = cmp.mapping.select_next_item(cmp_select), -- next suggestion
 				["<C-space>"] = function()
@@ -85,6 +88,11 @@ return {
 			},
 
 			performance = {
+				debounce = 5,
+				throttle = 6,
+				fetching_timeout = 10000,
+				confirm_resolve_timeout = 6,
+				async_budget = 1,
 				max_view_entries = 10,
 			},
 
@@ -96,7 +104,7 @@ return {
 					-- 	return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
 					-- end,
 				},
-				{ name = "luasnip" },
+				{ name = "mini_snippets" },
 			}, {
 				{ name = "buffer" },
 				{ name = "path" },

@@ -22,11 +22,13 @@ alias cm="chmod +x"
 
 alias py="python3"
 
-#alias nv="nvim"
+alias tm="tmux"
 
 alias clang="clang++ -std=c++20"
 
 alias so="source ~/.zshrc"
+
+alias lg="lazygit"
 
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
 
@@ -73,48 +75,20 @@ fi
 
 ###
 
-select_dir() {
-    (echo ~/.config; echo ~/Code; fd --type d --max-depth 1 --min-depth 1 . ~/.config ~/Code ~/Code/School ~/Code/Personal ~/Documents/documents-mac ~/Documents/documents-mac/school ~/Documents) | fzf
-}
-
 # search in projects
 fzf_append_dir_widget() {
     local dir
-    dir=$(select_dir) || return # Call the function and store the result
-    if [[ -n $dir ]]; then
-        LBUFFER+="$dir" # Append the selected directory to the current command
-        zle redisplay   # Refresh the prompt to show the updated command
+    dir=$(fzf_dir.sh) || return
+    if [[ -n "$dir" ]]; then
+        LBUFFER+="$dir" # add the selected directory to the command line
+        zle redisplay # refresh the command line
     fi
 }
 
 zle -N fzf_append_dir_widget
-
 bindkey '^F' fzf_append_dir_widget
 
-# Define FZF_DEFAULT_COMMAND for searching in the home directory
-# export FZF_DEFAULT_COMMAND='cd ~ && rg --files --glob "!**/.git/*" --glob "!Pictures/*" --glob "!Movies/*" --glob "!Music/*" --glob "!go/*" --glob "!miniforge3/*" --glob "!Library/*" --glob "!Applications/*" | sed "s|^|$HOME/|"'
-# need to include . to return all results
-export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --exclude Pictures --exclude Movies --exclude Music --exclude go --exclude miniforge3 --exclude Library --exclude Applications . ~'
-
-# Ensure Ctrl-T uses the same default command
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-# Define FZF_CHILD_COMMAND for searching in the current directory
-export FZF_CHILD_COMMAND='fd --type f --exclude .git'
-
-export FZF_DEFAULT_OPTS="--layout=reverse"
-
-# Bind Ctrl-H to use FZF in the current (child) directory
-fzf_child_widget() {
-    local selected
-    selected=$(eval "$FZF_CHILD_COMMAND" | fzf) || return
-    LBUFFER+="$selected" # Append the selected file/directory to the current command
-    zle redisplay
-}
-
-zle -N fzf_child_widget
-
-bindkey '^S' fzf_child_widget
+export FZF_DEFAULT_COMMAND='fd --type f --exclude .git'
 
 source <(fzf --zsh)
 

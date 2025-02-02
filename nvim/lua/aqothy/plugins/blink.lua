@@ -3,7 +3,7 @@ return {
 	"saghen/blink.cmp",
 	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -22,8 +22,8 @@ return {
 			["<C-y>"] = { "select_and_accept" },
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
-			["<C-h>"] = { "hide", "fallback" },
-			["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+			["<C-e>"] = { "hide", "fallback" },
+			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-p>"] = { "select_prev", "fallback" },
 			["<C-n>"] = { "select_next", "fallback" },
 			cmdline = {
@@ -31,8 +31,8 @@ return {
 				["<C-y>"] = { "select_and_accept" },
 				["<C-b>"] = { "scroll_documentation_up", "fallback" },
 				["<C-f>"] = { "scroll_documentation_down", "fallback" },
-				["<C-h>"] = { "hide", "fallback" },
-				["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+				["<C-e>"] = { "hide", "fallback" },
+				["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 				["<C-p>"] = { "select_prev", "fallback" },
 				["<C-n>"] = { "select_next", "fallback" },
 			},
@@ -98,7 +98,7 @@ return {
 			},
 		},
 
-		snippets = { preset = "luasnip" },
+		snippets = { preset = "mini_snippets" },
 
 		appearance = {
 			-- Sets the fallback highlight groups to nvim-cmp's highlight groups

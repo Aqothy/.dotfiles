@@ -55,7 +55,6 @@ autocmd("FileType", {
 		"git",
 		"checkhealth",
 		"qf",
-		"grug-far",
 		"vim",
 	},
 	callback = function(event)

@@ -35,7 +35,10 @@ keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = tru
 keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 keymap("v", "<Tab>", ">gv")
 keymap("v", "<S-Tab>", "<gv")
-keymap({ "i", "v", "n" }, "<C-/>", "<cmd>normal gcc<cr>", { silent = true }) -- comment line
+
+-- for in and outside of tmux LOL (commenting)
+keymap({ "n", "v", "i" }, "<C-_>", "<cmd>normal gcc<CR>", { desc = "Toggle comment", silent = true })
+keymap({ "n", "v", "i" }, "<C-/>", "<cmd>normal gcc<CR>", { desc = "Toggle comment", silent = true })
 
 keymap("n", "<M-l>", "<cmd>cnext<CR>zz")
 keymap("n", "<M-h>", "<cmd>cprev<CR>zz")
@@ -44,3 +47,4 @@ keymap("n", "<leader>fo", "za")
 
 keymap("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 keymap("n", "<leader>bo", "<cmd>%bd|e#<cr>", { desc = "Close all buffers but the current one" })
+keymap("n", "q:", "<nop>")

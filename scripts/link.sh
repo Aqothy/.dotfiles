@@ -5,6 +5,7 @@ DOTFILES_DIR=~/.config
 SCRIPT_DIR=/usr/local/bin
 
 # List of files/folders to symlink
+# Gotta do lazygit config manually
 FILES_TO_SYMLINK=(
   .zshrc
   .gitconfig
@@ -12,8 +13,7 @@ FILES_TO_SYMLINK=(
 )
 
 SCRIPTS_TO_LINK=(
-    link.sh
-    nvupdate.sh
+    ts.sh
 )
 
 # Loop through files and create symlinks

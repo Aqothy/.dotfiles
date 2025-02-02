@@ -1,6 +1,7 @@
 return {
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	event = "VeryLazy",
+	enabled = false,
 	config = function()
 		-- If treesitter is already loaded, we need to run config again for textobjects
 		local Config = require("lazy.core.config")

@@ -1,12 +1,14 @@
 local M = {}
 
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
+local cmp_cap = {}
 
 if pcall(require, "blink.cmp") then
-	M.capabilities = require("blink.cmp").get_lsp_capabilities(M.capabilities)
+	cmp_cap = require("blink.cmp").get_lsp_capabilities()
 elseif pcall(require, "cmp_nvim_lsp") then
-	M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.capabilities)
+	cmp_cap = require("cmp_nvim_lsp").default_capabilities()
 end
+
+M.capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), cmp_cap)
 
 M.capabilities.workspace = {
 	fileOperations = {
@@ -78,15 +80,15 @@ M.on_attach = function(client, bufnr)
 
 	if client:supports_method("textDocument/signatureHelp") then
 		keymap({ "n", "i" }, "<C-s>", function()
-			local blink_window = require("blink.cmp.completion.windows.menu")
-			local blink = require("blink.cmp")
-			if blink_window.win:is_open() then
-				blink.hide()
-			end
-			-- local cmp = require("cmp")
-			-- if cmp.core.view:visible() then
-			-- 	cmp.close()
+			-- local blink_window = require("blink.cmp.completion.windows.menu")
+			-- local blink = require("blink.cmp")
+			-- if blink_window.win:is_open() then
+			-- 	blink.hide()
 			-- end
+			local cmp = require("cmp")
+			if cmp.core.view:visible() then
+				cmp.close()
+			end
 			vim.lsp.buf.signature_help()
 		end, opts)
 	end
