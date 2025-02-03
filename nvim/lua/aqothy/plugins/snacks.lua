@@ -273,15 +273,17 @@ return {
 			end,
 			desc = "Todo List",
 		},
-		{ "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+		{ "<S-l>", function() Snacks.picker.buffers({ on_show = function()
+              vim.cmd.stopinsert()
+            end,}) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },
-		{ "<leader>ff", function() Snacks.picker.files({hidden = true}) end, desc = "Find Files" },
+		{ "<C-p>", function() Snacks.picker.files({hidden = true}) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep({hidden = true}) end, desc = "Grep" },
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
 		{ "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 		{ "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
+        { "<leader>gl", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit" },
 		{
 			"<leader>f/",
@@ -295,7 +297,9 @@ return {
 			end,
 			desc = "Grep Lines",
 		},
-		{ "<leader>u", function() Snacks.picker.undo() end, desc = "Buffer Lines" },
+		{ "<leader>u", function() Snacks.picker.undo({ on_show = function()
+              vim.cmd.stopinsert()
+            end,}) end, desc = "undo tree" },
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
         { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
@@ -319,9 +323,9 @@ return {
 			set = function(state)
 				vim.g.copilot_enabled = state
 				if state then
-					vim.cmd("Copilot enable")
+					vim.cmd("silent Copilot enable")
 				else
-					vim.cmd("Copilot disable")
+					vim.cmd("silent Copilot disable")
 				end
 			end,
 		}):map("<leader>tc")

@@ -14,5 +14,4 @@ select_dir() {
     ) | sed 's:/*$::' | fzf
 }
 
-selected=$(select_dir)
-[[ -n "$selected" ]] && echo "$selected"
+select_dir

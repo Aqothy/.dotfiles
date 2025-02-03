@@ -48,14 +48,14 @@ return {
 			-- compat = {},
 
 			-- providers = {
-			-- 	lsp = {
-			-- 		transform_items = function(_, items)
-			-- 			-- Remove the "Text" source from lsp autocomplete
-			-- 			return vim.tbl_filter(function(item)
-			-- 				return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
-			-- 			end, items)
-			-- 		end,
-			-- 	},
+			-- lsp = {
+			-- 	transform_items = function(_, items)
+			-- 		-- Remove the "Text" source from lsp autocomplete
+			-- 		return vim.tbl_filter(function(item)
+			-- 			return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
+			-- 		end, items)
+			-- 	end,
+			-- },
 			-- },
 
 			-- disable cmdline by passing empty table
@@ -98,7 +98,7 @@ return {
 			},
 		},
 
-		snippets = { preset = "mini_snippets" },
+		snippets = { preset = "luasnip" },
 
 		appearance = {
 			-- Sets the fallback highlight groups to nvim-cmp's highlight groups

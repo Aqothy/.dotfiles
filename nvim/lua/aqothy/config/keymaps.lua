@@ -23,7 +23,6 @@ keymap("n", "<M-j>", "<cmd>resize -2<CR>")
 keymap("n", "<M-k>", "<cmd>resize +2<CR>")
 keymap("n", "<M-l>", "<cmd>vertical resize +2<CR>")
 keymap("n", "<M-h>", "<cmd>vertical resize -2<CR>")
-keymap("n", "<leader>nh", "<cmd>nohlsearch<CR>", { desc = "Escape and clear hlsearch" })
 keymap("n", "<C-h>", "<C-w>h") -- Move to the split left
 keymap("n", "<C-j>", "<C-w>j") -- Move to the split below
 keymap("n", "<C-k>", "<C-w>k") -- Move to the split above
@@ -44,7 +43,8 @@ keymap("n", "<M-l>", "<cmd>cnext<CR>zz")
 keymap("n", "<M-h>", "<cmd>cprev<CR>zz")
 
 keymap("n", "<leader>fo", "za")
+keymap({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
-keymap("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+keymap("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
 keymap("n", "<leader>bo", "<cmd>%bd|e#<cr>", { desc = "Close all buffers but the current one" })
-keymap("n", "q:", "<nop>")
+keymap("n", "<C-k>", "<cmd>silent !tmux neww ts<cr>", { desc = "New tmux session" }) -- need to be in tmux already for this to work

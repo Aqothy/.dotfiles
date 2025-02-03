@@ -118,7 +118,7 @@ function M.mode_component()
 end
 
 function M.git_component()
-	local head = vim.b.gitsigns_head
+	local head = vim.g.gitsigns_head
 	if not head or head == "" then
 		return ""
 	end
@@ -127,7 +127,7 @@ function M.git_component()
 end
 
 -- function M.git_components()
--- 	local git_info = vim.b.gitsigns_status_dict
+-- 	local git_info = vim.g.gitsigns_status_dict
 -- 	if not git_info or git_info.head == "" then
 -- 		return "", ""
 -- 	end

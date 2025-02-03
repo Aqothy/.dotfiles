@@ -13,7 +13,7 @@ return {
 	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
-		"abeldekat/cmp-mini-snippets",
+		"saadparwaiz1/cmp_luasnip",
 		"hrsh7th/cmp-buffer", -- source for text in buffer
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
@@ -22,7 +22,7 @@ return {
 		local user = require("aqothy.config.user")
 		local cmp = require("cmp")
 
-		-- local luasnip = require("luasnip")
+		local luasnip = require("luasnip")
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -39,11 +39,8 @@ return {
 				},
 			},
 			snippet = {
-				expand = function(args) -- mini.snippets expands snippets from lsp...
-					local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-					insert({ body = args.body }) -- Insert at cursor
-					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
-					require("cmp.config").set_onetime({ sources = {} })
+				expand = function(args)
+					luasnip.lsp_expand(args.body)
 				end,
 			},
 			experimental = {
@@ -104,7 +101,7 @@ return {
 					-- 	return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
 					-- end,
 				},
-				{ name = "mini_snippets" },
+				{ name = "luasnip" },
 			}, {
 				{ name = "buffer" },
 				{ name = "path" },

@@ -22,14 +22,10 @@
 ### Install these first manually from the source
 
 - Homebrew
+
   > Now install dependencies using brew file before installing rest of the packages, might need to set up fonts
-- oh my zsh (put this in robbyrussell theme)
 
-```zsh
-PROMPT="%n@%m %(?:%{$fg_bold[green]%}%1{➜%} :%{$fg_bold[red]%}%1{➜%} )%{$fg[cyan]%}%c%{$reset_color%}"
-```
-
-- Neovim (already in external ssd)
+- Neovim
 - vscode
 - kitty
 - app cleaner
@@ -44,6 +40,7 @@ PROMPT="%n@%m %(?:%{$fg_bold[green]%}%1{➜%} :%{$fg_bold[red]%}%1{➜%} )%{$fg[
 - karabiner element
 - ollama (already in external ssd)
 - vmware (already in external ssd)
+- mini-forge, go, lua
 
 Then run the chmod the link.sh file and run it, also symlink stdc++, ollama, neovim manually
 

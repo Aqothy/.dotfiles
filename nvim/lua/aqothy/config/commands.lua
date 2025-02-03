@@ -1,5 +1,12 @@
 vim.api.nvim_create_user_command("Todos", function()
-	require("snacks").picker.grep({ search = [[TODO:|todo!\(.*\)]] })
+	require("snacks").picker.grep({
+		search = [[TODO:|todo!\(.*\)]],
+		live = false,
+		supports_live = false,
+		on_show = function()
+			vim.cmd.stopinsert()
+		end,
+	})
 end, { desc = "Grep TODOs", nargs = 0 })
 
 vim.api.nvim_create_user_command("ToggleFormat", function()

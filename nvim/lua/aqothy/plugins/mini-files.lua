@@ -3,41 +3,57 @@ return {
 	-- custom lazy load for mini files
 	init = function()
 		vim.api.nvim_create_autocmd("BufEnter", {
-			group = vim.api.nvim_create_augroup("mini-files-start", { clear = true }),
+			group = vim.api.nvim_create_augroup("mini_files_start", { clear = true }),
 			desc = "Start mini files with a directory",
 			once = true,
 			callback = function()
 				if package.loaded["mini.files"] then
 					return
-				end
-
-				-- Ensure there are arguments (argv) and check if the first argument is a directory
-				local argv = vim.fn.argv(0)
-				if argv and vim.uv.fs_stat(argv) and vim.uv.fs_stat(argv).type == "directory" then
-					require("mini.files")
-					require("mini.files").open(argv, true)
+				else
+					local stats = vim.uv.fs_stat(vim.fn.argv(0))
+					if stats and stats.type == "directory" then
+						require("mini.files")
+						require("mini.files").open()
+					end
 				end
 			end,
 		})
 	end,
-	opts = {
-		options = {
-			use_as_default_explorer = true,
-			permanent_delete = false,
-		},
-		mappings = {
-			go_in = "l",
-			go_in_plus = "<CR>",
-			go_out = "h",
-			go_out_plus = "-",
-		},
-		windows = {
-			preview = true,
-			width_focus = 30,
-			width_preview = 30,
-			width_nofocus = 30,
-		},
-	},
+	opts = function()
+		local filter_show = function(entry)
+			return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
+		end
+
+		local filter_hide = function(entry)
+			return filter_show(entry) and not vim.startswith(entry.name, ".")
+		end
+
+		return {
+			options = {
+				use_as_default_explorer = true,
+				permanent_delete = false,
+			},
+			mappings = {
+				go_in = "l",
+				go_in_plus = "<CR>",
+				go_out = "h",
+				go_out_plus = "-",
+			},
+			content = {
+				filter = filter_show,
+			},
+			windows = {
+				preview = true,
+				width_focus = 30,
+				width_preview = 30,
+				width_nofocus = 30,
+			},
+			custom_filters = {
+				show = filter_show,
+				hide = filter_hide,
+			},
+		}
+	end,
 	keys = {
 		{
 			-- just like oil
@@ -57,22 +73,13 @@ return {
 		},
 	},
 	config = function(_, opts)
-		-- copy pasted straight from lazyvim docs
 		require("mini.files").setup(opts)
 
 		local show_dotfiles = true
 
-		local filter_show = function(_)
-			return true
-		end
-
-		local filter_hide = function(fs_entry)
-			return not vim.startswith(fs_entry.name, ".")
-		end
-
 		local toggle_dotfiles = function()
 			show_dotfiles = not show_dotfiles
-			local new_filter = show_dotfiles and filter_show or filter_hide
+			local new_filter = show_dotfiles and opts.custom_filters.show or opts.custom_filters.hide
 			require("mini.files").refresh({ content = { filter = new_filter } })
 		end
 
@@ -91,23 +98,7 @@ return {
 			callback = function(args)
 				local buf_id = args.data.buf_id
 
-				vim.keymap.set("n", "<C-g>", toggle_dotfiles, { buffer = buf_id, desc = "Toggle hidden files" })
-
-				-- close with <ESC> as well as q
-				vim.keymap.set("n", "<ESC>", function()
-					require("mini.files").close()
-				end, { buffer = buf_id })
-
-				--write with :w
-				vim.api.nvim_set_option_value("buftype", "acwrite", { buf = buf_id })
-				vim.api.nvim_buf_set_name(buf_id, string.format("mini.files-%s", vim.loop.hrtime()))
-				vim.api.nvim_create_autocmd("BufWriteCmd", {
-					buffer = buf_id,
-					callback = function()
-						require("mini.files").synchronize()
-					end,
-				})
-
+				vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = buf_id, desc = "Toggle hidden files" })
 				vim.keymap.set("n", "gc", files_set_cwd, { buffer = args.data.buf_id, desc = "Set cwd" })
 			end,
 		})
