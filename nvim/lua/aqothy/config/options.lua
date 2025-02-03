@@ -1,6 +1,3 @@
--- vim.g.projects_dir = vim.env.HOME .. "/Code/Personal"
--- vim.g.XDG_CONFIG_HOME = vim.env.HOME .. "/.config"
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 

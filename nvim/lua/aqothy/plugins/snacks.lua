@@ -273,7 +273,7 @@ return {
 			end,
 			desc = "Todo List",
 		},
-		{ "<S-l>", function() Snacks.picker.buffers({ on_show = function()
+		{ "<C-space>", function() Snacks.picker.buffers({ on_show = function()
               vim.cmd.stopinsert()
             end,}) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },

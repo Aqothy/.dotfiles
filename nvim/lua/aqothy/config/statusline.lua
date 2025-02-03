@@ -213,10 +213,16 @@ end
 
 function M.filetype_component()
 	local buf_name = api.nvim_buf_get_name(0)
-
 	local icon, icon_hl = require("mini.icons").get("file", buf_name)
 
-	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, "%t")
+	-- Get path relative to current working directory
+	local relative_path = vim.fn.fnamemodify(buf_name, ":.")
+
+	if buf_name == "" then
+		relative_path = "[No Name]"
+	end
+
+	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, relative_path)
 end
 
 function M.file_info_component()
