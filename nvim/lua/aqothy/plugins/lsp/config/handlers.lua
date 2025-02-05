@@ -82,7 +82,7 @@ M.on_attach = function(client, bufnr)
 		-- local blink_window = require("blink.cmp.completion.windows.menu")
 		-- local blink = require("blink.cmp")
 		local cmp = require("cmp")
-		keymap({ "n", "i" }, "<C-k>", function()
+		keymap("i", "<C-k>", function()
 			-- if blink_window.win:is_open() then
 			-- 	blink.hide()
 			-- end

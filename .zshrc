@@ -2,6 +2,7 @@ setopt auto_cd  # Auto-cd if command is a directory
 unsetopt CASE_GLOB  # Case-insensitive filename matching
 unsetopt CASE_MATCH  # Case-insensitive case statements
 zstyle ':completion:*' menu select
+bindkey -v # Use vi mode, need to set before other keybindings
 
 # Aliases
 alias icat="kitten icat"
@@ -11,9 +12,6 @@ alias tm="tmux"
 alias lg="lazygit"
 alias clang="clang++ -std=c++20"
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='TERM=xterm-256color command ssh'
-
-export FZF_DEFAULT_OPTS="--layout=reverse"
-export FZF_DEFAULT_COMMAND='fd --type f --exclude .git'
 
 # Keybindings and Zsh Widgets
 fzf_append_dir_widget() {

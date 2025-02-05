@@ -1,9 +1,20 @@
-require("aqothy.config.options")
-require("aqothy.config.keymaps")
+local is_vscode = vim.g.vscode
+
+-- vscode or neovim
+if is_vscode then
+	require("aqothy.config.vscode")
+else
+	require("aqothy.config.options")
+	require("aqothy.config.keymaps")
+	require("aqothy.config.autocmds")
+end
+
 require("aqothy.config.lazy")
-require("aqothy.config.autocmds")
--- require("aqothy.config.winbar")
--- require("aqothy.config.term")
-require("aqothy.config.commands")
-require("aqothy.config.statusline")
-require("aqothy.config.colors")
+
+if not is_vscode then
+	require("aqothy.config.commands")
+	require("aqothy.config.statusline")
+	-- require("aqothy.config.winbar")
+
+	vim.keymap.set("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
+end

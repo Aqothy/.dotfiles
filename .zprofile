@@ -15,8 +15,10 @@ export PATH=$PATH:/usr/local/google-cloud-sdk/bin
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 
-# WHY DOES THIS MAKE MY TERMINAL VI MODE????? I mean I like it but I just want to know why.
 export EDITOR=nvim
 export VISUAL=nvim
+export FZF_DEFAULT_OPTS="--layout=reverse"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

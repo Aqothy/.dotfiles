@@ -139,6 +139,7 @@ return {
 				open = true,
 				git_hl = false,
 			},
+            refresh = 300,
 		},
 		scope = { enabled = false },
 		words = { enabled = false, modes = { "n" } },
@@ -273,11 +274,11 @@ return {
 			end,
 			desc = "Todo List",
 		},
-		{ "<C-space>", function() Snacks.picker.buffers({ on_show = function()
+		{ "<leader>;", function() Snacks.picker.buffers({ on_show = function()
               vim.cmd.stopinsert()
-            end,}) end, desc = "Buffers" },
+            end}) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },
-		{ "<C-p>", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
+		{ "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep({hidden = true}) end, desc = "Grep" },
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
@@ -286,7 +287,7 @@ return {
         { "<leader>gl", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit" },
 		{
-			"<leader>f/",
+			"<leader>/",
 			function()
 				Snacks.picker.lines({
 					layout = {
@@ -305,8 +306,27 @@ return {
         { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
 	},
 	config = function(_, opts)
+
 		require("snacks").setup(opts)
+
 		vim.g.snacks_animate = false
+
+		-- Lsp progress notif
+		vim.api.nvim_create_autocmd("LspProgress", {
+			group = vim.api.nvim_create_augroup("lsp_progress_notify", { clear = true }),
+			---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+			callback = function(ev)
+				local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+				vim.notify(vim.lsp.status(), "info", {
+					id = "lsp_progress",
+					title = "LSP Progress",
+					opts = function(notif)
+						notif.icon = ev.data.params.value.kind == "end" and " "
+							or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+					end,
+				})
+			end,
+		})
 
 		Snacks.toggle.dim():map("<leader>sd")
 		Snacks.toggle.zen():map("<leader>zz")

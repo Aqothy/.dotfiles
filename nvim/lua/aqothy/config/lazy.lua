@@ -23,10 +23,13 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
-		{ import = "aqothy.plugins" },
-		{ import = "aqothy.plugins.lsp" },
+		{ import = "aqothy.plugins", cond = not vim.g.vscode },
+		{ import = "aqothy.plugins.lsp", cond = not vim.g.vscode },
+		{ import = "aqothy.vscode", cond = vim.g.vscode },
 	},
-
+	ui = {
+		border = "rounded",
+	},
 	defaults = {
 		lazy = false,
 		version = false, -- always use the latest git commit

@@ -98,7 +98,7 @@ function M.os_component()
 		sysname = sysname == "Darwin" and "macos" or sysname:lower()
 		local icon, icon_hl = require("mini.icons").get("os", sysname)
 
-		M._os_cache = string.format(" %%#%s#%s", icon_hl, icon)
+		M._os_cache = string.format("%%#%s#%s", icon_hl, icon)
 	end
 	return M._os_cache
 end
@@ -233,7 +233,7 @@ function M.file_info_component()
 		return ""
 	end
 
-	return string.format("%%#StatuslineModeSeparatorOther# %s  Tab:%d", encoding, shiftwidth)
+	return string.format("%%#StatuslineModeSeparatorOther# %s Tab:%d", encoding, shiftwidth)
 end
 
 -- function M.file_info_component()
@@ -303,8 +303,9 @@ function M.render()
 	})
 
 	return table.concat({
+        " ",
 		concat_components(left_components),
-		"%#Statusline#%=",
+		"%#StatusLine#%=",
 		concat_components(right_components),
 		" ",
 	})

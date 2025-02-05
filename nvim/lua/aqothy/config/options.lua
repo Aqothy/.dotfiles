@@ -1,3 +1,10 @@
+-- Disable health checks for these providers.
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.markdown_recommended_style = 0
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -48,8 +55,9 @@ vim.opt.wildignore:append({ ".DS_Store" })
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " " }
-vim.opt.signcolumn = "yes" -- handled by snacks
+-- vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
+vim.opt.fillchars = { eob = " ", fold = " " }
+vim.opt.signcolumn = "yes"
 -- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"
@@ -58,7 +66,7 @@ vim.opt.fileencoding = "utf-8"
 vim.g.netrw_banner = 0
 vim.g.netrw_browse_split = 0
 vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 20
+vim.g.netrw_winsize = 25
 vim.g.netrw_browsex_viewer = "open -a safari"
 
 vim.opt.spelllang = "en_us"
@@ -79,20 +87,13 @@ vim.opt.showcmd = false
 vim.opt.showmode = false
 
 -- folds
-vim.opt.foldcolumn = "0" -- 0 since snacks handles it
-vim.o.foldenable = true
-vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldmethod = "expr"
-vim.o.foldtext = ""
-
--- Disable health checks for these providers.
-vim.g.loaded_python3_provider = 0
-vim.g.loaded_ruby_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_node_provider = 0
-vim.g.markdown_recommended_style = 0
+-- vim.opt.foldcolumn = "1"
+vim.opt.foldenable = true
+vim.opt.foldexpr = "v:lua.vim.lsp.foldexpr()"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldmethod = "expr"
+vim.opt.foldtext = ""
 
 vim.opt.formatoptions = "jcroqlnt"
 
