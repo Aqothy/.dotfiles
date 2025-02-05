@@ -4,7 +4,7 @@ local M = {}
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
-M["tailwindcss"] = {}
+-- M["tailwindcss"] = {}
 
 M["eslint"] = {
 	settings = {
@@ -77,63 +77,63 @@ M["lua_ls"] = {
 	},
 }
 
-M["clangd"] = {
-	cmd = {
-		"clangd",
-		"--background-index",
-		"--offset-encoding=utf-16",
-		"--clang-tidy",
-		"--header-insertion=iwyu",
-		"--completion-style=detailed",
-		"--function-arg-placeholders",
-		"--fallback-style=LLVM",
-	},
-	init_options = {
-		usePlaceholders = true,
-		completeUnimported = true,
-		clangdFileStatus = true,
-	},
-}
-
-M["gopls"] = {
-	settings = {
-		gopls = {
-			gofumpt = true,
-			hints = {
-				assignVariableTypes = true,
-				compositeLiteralFields = true,
-				compositeLiteralTypes = true,
-				constantValues = true,
-				functionTypeParameters = true,
-				parameterNames = true,
-				rangeVariableTypes = true,
-			},
-			analyses = {
-				nilness = true,
-				unusedparams = true,
-				unusedwrite = true,
-				useany = true,
-			},
-			usePlaceholders = true,
-			completeUnimported = true,
-			staticcheck = true,
-			directoryFilters = { "-.git", "-.vscode", "-node_modules" },
-		},
-	},
-}
-
-M["basedpyright"] = {
-	settings = {
-		basedpyright = {
-			analysis = {
-				-- TODO: It would be nice to understand this better and turn these back on someday.
-				reportMissingTypeStubs = false,
-				reportMissingSuperCall = false,
-				typeCheckingMode = "off",
-			},
-		},
-	},
-}
+-- M["clangd"] = {
+-- 	cmd = {
+-- 		"clangd",
+-- 		"--background-index",
+-- 		"--offset-encoding=utf-16",
+-- 		"--clang-tidy",
+-- 		"--header-insertion=iwyu",
+-- 		"--completion-style=detailed",
+-- 		"--function-arg-placeholders",
+-- 		"--fallback-style=LLVM",
+-- 	},
+-- 	init_options = {
+-- 		usePlaceholders = true,
+-- 		completeUnimported = true,
+-- 		clangdFileStatus = true,
+-- 	},
+-- }
+--
+-- M["gopls"] = {
+-- 	settings = {
+-- 		gopls = {
+-- 			gofumpt = true,
+-- 			hints = {
+-- 				assignVariableTypes = true,
+-- 				compositeLiteralFields = true,
+-- 				compositeLiteralTypes = true,
+-- 				constantValues = true,
+-- 				functionTypeParameters = true,
+-- 				parameterNames = true,
+-- 				rangeVariableTypes = true,
+-- 			},
+-- 			analyses = {
+-- 				nilness = true,
+-- 				unusedparams = true,
+-- 				unusedwrite = true,
+-- 				useany = true,
+-- 			},
+-- 			usePlaceholders = true,
+-- 			completeUnimported = true,
+-- 			staticcheck = true,
+-- 			directoryFilters = { "-.git", "-.vscode", "-node_modules" },
+-- 		},
+-- 	},
+-- }
+--
+-- M["basedpyright"] = {
+-- 	settings = {
+-- 		basedpyright = {
+-- 			analysis = {
+-- 				-- TODO: It would be nice to understand this better and turn these back on someday.
+-- 				reportMissingTypeStubs = false,
+-- 				reportMissingSuperCall = false,
+-- 				typeCheckingMode = "off",
+-- 			},
+-- 		},
+-- 	},
+-- }
 
 M["emmet_language_server"] = {
 	filetypes = {
@@ -160,8 +160,8 @@ M["emmet_language_server"] = {
 -- 	enable_import_completion = true,
 -- }
 
-M["cssls"] = {}
-
-M["texlab"] = {}
+-- M["cssls"] = {}
+--
+-- M["texlab"] = {}
 
 return M

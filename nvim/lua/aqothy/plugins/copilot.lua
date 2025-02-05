@@ -3,6 +3,7 @@ return {
 	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "BufReadPost",
+    enabled = false,
 	init = function()
 		vim.g.copilot_enabled = 1
 	end,
