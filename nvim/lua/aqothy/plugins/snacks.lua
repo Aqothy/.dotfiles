@@ -211,7 +211,7 @@ return {
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 			zen = {
-				width = 150,
+				width = 160,
 				backdrop = { transparent = false },
 				wo = {
 					number = false,
@@ -277,7 +277,7 @@ return {
               vim.cmd.stopinsert()
             end,}) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },
-		{ "<C-p>", function() Snacks.picker.files({hidden = true}) end, desc = "Find Files" },
+		{ "<C-p>", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep({hidden = true}) end, desc = "Grep" },
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },

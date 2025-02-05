@@ -13,7 +13,7 @@ return {
 		},
 	},
 	init = function()
-		vim.g.autoformat = true
+		-- vim.g.autoformat = true
 		vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 	end,
 	config = function()

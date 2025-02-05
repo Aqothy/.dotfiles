@@ -61,9 +61,15 @@ return {
 						cmp.mapping.complete()
 					end
 				end,
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				["<C-f>"] = cmp.mapping.scroll_docs(-4),
-				["<C-b>"] = cmp.mapping.scroll_docs(4),
+				["<C-y>"] = function(fallback)
+					if cmp.core.view:visible() then
+						cmp.confirm({ select = false })
+					else
+						fallback()
+					end
+				end,
+				["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+				["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
 			}),
 			formatting = {
 				expandable_indicator = false,

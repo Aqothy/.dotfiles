@@ -7,11 +7,9 @@ brew "ninja"                  # Build tool
 brew "ripgrep"                # Fast text searching
 brew "fzf"                    # Command-line fuzzy finder
 brew "lazygit"                # Terminal UI for git
-brew "yt-dlp"                 # YouTube downloader
 brew "starship"               # Cross-shell prompt
 
 # Development tools
-brew "nvm"                    # Node.js version manager
 brew "postgresql@16", restart_service: true # PostgreSQL database
 
 # Fonts

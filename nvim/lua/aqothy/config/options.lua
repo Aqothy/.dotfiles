@@ -22,7 +22,7 @@ vim.opt.splitright = true
 vim.opt.splitkeep = "screen"
 vim.opt.splitbelow = true
 vim.opt.splitkeep = "screen" -- no shift and screen stays stable when splitting
--- vim.opt.inccommand = "split"
+vim.opt.inccommand = "split"
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -39,11 +39,14 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.mouse = "a"
 
+-- completion
+vim.opt.pumheight = 10 -- Maximum number of entries in a popup
+vim.opt.completeopt = { "menu", "menuone", "noinsert" }
+vim.opt.wildignore:append({ ".DS_Store" })
+
 -- ui
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.opt.laststatus = 3
 vim.opt.fillchars = { eob = " " }
 vim.opt.signcolumn = "yes" -- handled by snacks
@@ -65,10 +68,10 @@ vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 
 vim.opt.confirm = true
-vim.opt.wildmode = "longest:full,full"
-vim.opt.backspace = { "start", "eol", "indent" }
+-- vim.opt.wildmode = "longest:full,full"
 vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
 vim.opt.ruler = false -- already handled by statusline
+vim.opt.jumpoptions = "view"
 
 -- command line
 vim.opt.cmdheight = 1
@@ -91,7 +94,7 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.markdown_recommended_style = 0
 
-vim.opt.formatoptions:remove({ "c", "r", "o" })
+vim.opt.formatoptions = "jcroqlnt"
 
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 

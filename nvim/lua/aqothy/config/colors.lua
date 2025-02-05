@@ -23,7 +23,9 @@ local groups = {
 	-- snacks picker
 	NormalFloat = { bg = colors.dark0_soft },
 	GruvboxBg2 = { fg = colors.gray },
+    -- sign colomn
 	SignColumn = { bg = colors.dark0_soft },
+    -- cmp menu
 	Pmenu = { bg = colors.dark0_soft },
 }
 
