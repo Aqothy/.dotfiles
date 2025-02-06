@@ -10,7 +10,7 @@ return {
 	"iguanacucumber/magazine.nvim",
 	event = { "InsertEnter", "CmdLineEnter" },
 	version = false,
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
 		"saadparwaiz1/cmp_luasnip",

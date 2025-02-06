@@ -70,6 +70,7 @@ end
 
 M.on_attach = function(client, bufnr)
 	local opts = { buffer = bufnr, silent = true }
+
 	local keymap = vim.keymap.set
 
 	-- inlay hints
@@ -79,16 +80,16 @@ M.on_attach = function(client, bufnr)
 	end
 
 	if client:supports_method("textDocument/signatureHelp") then
-		-- local blink_window = require("blink.cmp.completion.windows.menu")
-		-- local blink = require("blink.cmp")
-		local cmp = require("cmp")
+		local blink_window = require("blink.cmp.completion.windows.menu")
+		local blink = require("blink.cmp")
+		-- local cmp = require("cmp")
 		keymap("i", "<C-k>", function()
-			-- if blink_window.win:is_open() then
-			-- 	blink.hide()
-			-- end
-			if cmp.core.view:visible() then
-				cmp.close()
+			if blink_window.win:is_open() then
+				blink.hide()
 			end
+			-- if cmp.core.view:visible() then
+			-- 	cmp.close()
+			-- end
 			vim.lsp.buf.signature_help()
 		end, opts)
 	end

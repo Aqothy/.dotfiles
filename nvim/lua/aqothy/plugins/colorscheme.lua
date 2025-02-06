@@ -20,6 +20,9 @@ return {
 				},
 			})
 
+			vim.cmd("colorscheme gruvbox")
+
+            -- Make sure it loads after the colorscheme, why? I don't know
 			-- Extend the gruvbox hightlight groups
 			local mode_colors = {
 				Normal = "gray",
@@ -45,8 +48,6 @@ return {
 			for group, opts in pairs(groups) do
 				vim.api.nvim_set_hl(0, group, opts)
 			end
-
-			vim.cmd("colorscheme gruvbox")
 		end,
 	},
 }

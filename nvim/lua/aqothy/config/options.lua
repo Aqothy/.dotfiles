@@ -58,6 +58,7 @@ vim.opt.laststatus = 3
 -- vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.fillchars = { eob = " ", fold = " " }
 vim.opt.signcolumn = "yes"
+vim.opt.statuscolumn = "%l%s"
 -- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"
@@ -76,7 +77,7 @@ vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 
 vim.opt.confirm = true
--- vim.opt.wildmode = "longest:full,full"
+vim.opt.wildmode = "longest:full,full"
 vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
 vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = "view"

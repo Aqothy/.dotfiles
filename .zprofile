@@ -8,7 +8,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export GOBIN=$HOME/go/bin
 export PATH=$PATH:$GOBIN
-export PATH=$PATH:/usr/local/nvim-nightly/bin
 export PATH=$PATH:/usr/local/lua-5.4.7/src
 export PATH=$PATH:/usr/local/texlive/2024basic/bin/universal-darwin
 export PATH=$PATH:/usr/local/google-cloud-sdk/bin

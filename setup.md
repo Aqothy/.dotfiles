@@ -25,7 +25,7 @@
 
   > Now install dependencies using brew file before installing rest of the packages, might need to set up fonts
 
-- Neovim
+- Neovim (In external ssd, run make distclean before building, download prebuilt binary from neovim.io for stable)
 - vscode
 - kitty
 - app cleaner

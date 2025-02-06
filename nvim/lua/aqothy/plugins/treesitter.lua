@@ -14,13 +14,14 @@ return {
 			-- A list of parser names, or "all"
 			ensure_installed = {
                 -- built-in
-				"c",
-				"lua",
-				"vim",
-				"vimdoc",
-				"query",
-				"markdown",
-				"markdown_inline",
+				-- "c",
+				-- "lua",
+				-- "vim",
+				-- "vimdoc",
+				-- "query",
+				-- "markdown",
+				-- "markdown_inline",
+
                 -- extras
 				"javascript",
 				"typescript",

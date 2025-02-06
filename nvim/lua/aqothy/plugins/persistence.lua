@@ -1,6 +1,6 @@
 return {
 	"folke/persistence.nvim",
-	event = "BufReadPre",
+	lazy = false,
 	opts = {},
 	enabled = false,
 	keys = {
@@ -26,4 +26,14 @@ return {
 			desc = "Don't Save Current Session",
 		},
 	},
+	init = function()
+		vim.api.nvim_create_autocmd("VimEnter", {
+			group = vim.api.nvim_create_augroup("restore_session", { clear = true }),
+            once = true,
+			callback = function()
+				require("persistence").load()
+			end,
+			nested = true,
+		})
+	end,
 }

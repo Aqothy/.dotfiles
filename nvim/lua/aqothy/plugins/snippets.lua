@@ -62,21 +62,5 @@ return {
 				ls.change_choice(1)
 			end
 		end, { silent = true })
-
-		vim.api.nvim_create_autocmd("ModeChanged", {
-			group = vim.api.nvim_create_augroup("aqothy/unlink_snippet", { clear = true }),
-			desc = "Cancel the snippet session when leaving insert mode",
-			pattern = { "s:n", "i:*" },
-			callback = function(args)
-				if
-					ls.session
-					and ls.session.current_nodes[args.buf]
-					and not ls.session.jump_active
-					and not ls.choice_active()
-				then
-					ls.unlink_current()
-				end
-			end,
-		})
 	end,
 }
