@@ -12,9 +12,7 @@ end
 require("aqothy.config.lazy")
 
 if not is_vscode then
-	require("aqothy.config.commands")
 	require("aqothy.config.statusline")
-	-- require("aqothy.config.winbar")
 
 	vim.keymap.set("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
 end

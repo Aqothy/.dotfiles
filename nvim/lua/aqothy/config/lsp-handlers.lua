@@ -32,11 +32,28 @@ M.capabilities.textDocument.foldingRange = {
 	lineFoldingOnly = true,
 }
 
-vim.diagnostic.config({
+local s = vim.diagnostic.severity
+
+local signs = {
+	text = {
+		[s.ERROR] = "",
+		[s.WARN] = "",
+		[s.HINT] = "",
+		[s.INFO] = "",
+	},
+	numhl = {
+		[s.ERROR] = "DiagnosticSignError",
+		[s.WARN] = "DiagnosticSignWarn",
+		[s.HINT] = "DiagnosticSignHint",
+		[s.INFO] = "DiagnosticSignInfo",
+	},
+}
+
+local config = {
+	signs = signs,
 	virtual_text = true,
-	underline = true,
 	update_in_insert = false,
-	signs = false,
+	underline = true,
 	severity_sort = true,
 	float = {
 		focusable = true,
@@ -46,7 +63,9 @@ vim.diagnostic.config({
 		header = "",
 		prefix = "",
 	},
-})
+}
+
+vim.diagnostic.config(config)
 
 local hover = vim.lsp.buf.hover
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -68,62 +87,76 @@ vim.lsp.buf.signature_help = function()
 	})
 end
 
+local diagnostic_goto = function(next, severity)
+	severity = severity and vim.diagnostic.severity[severity] or nil
+
+	return function()
+		vim.diagnostic.jump({ count = next and 1 or -1, float = true, severity = severity })
+	end
+end
+
 M.on_attach = function(client, bufnr)
 	local opts = { buffer = bufnr, silent = true }
 
-	local keymap = vim.keymap.set
+	-- Custom function to wrap keymap setting
+	local function keymap(mode, lhs, rhs, extra_opts)
+		vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
+	end
 
-	-- inlay hints
+	-- Inlay hints
 	if client:supports_method("textDocument/inlayHint") then
 		-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
+	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
 		local blink_window = require("blink.cmp.completion.windows.menu")
 		local blink = require("blink.cmp")
-		-- local cmp = require("cmp")
+
+		-- if cmp.core.view:visible() then
+		-- 	cmp.close()
+		-- end
 		keymap("i", "<C-k>", function()
 			if blink_window.win:is_open() then
 				blink.hide()
 			end
-			-- if cmp.core.view:visible() then
-			-- 	cmp.close()
-			-- end
 			vim.lsp.buf.signature_help()
-		end, opts)
+		end)
 	end
 
 	-- Key mappings for LSP functions
-	keymap("n", "K", vim.lsp.buf.hover, opts)
-	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, opts)
-	keymap("n", "<leader>rn", vim.lsp.buf.rename, opts)
-	keymap("n", "gh", vim.diagnostic.open_float, opts)
-	keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
-	keymap("n", "]d", function()
-		vim.diagnostic.jump({ count = 1, float = true })
-	end, opts)
-	keymap("n", "[d", function()
-		vim.diagnostic.jump({ count = -1, float = true })
-	end, opts)
+	keymap("n", "K", vim.lsp.buf.hover)
+	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
+	keymap("n", "<leader>rn", vim.lsp.buf.rename)
+	keymap("n", "<leader>fl", vim.diagnostic.open_float)
+	keymap("n", "<leader>li", "<cmd>LspInfo<cr>")
+	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
+	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
+	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
+	keymap("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
+	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
+	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+
+	-- Snacks picker mappings
 	keymap("n", "gd", function()
 		Snacks.picker.lsp_definitions()
-	end, opts)
+	end)
 	keymap("n", "gr", function()
 		Snacks.picker.lsp_references()
-	end, vim.tbl_extend("force", opts, { nowait = true, desc = "References" }))
+	end, { nowait = true, desc = "References" })
 	keymap("n", "gi", function()
 		Snacks.picker.lsp_implementations()
-	end, opts)
+	end)
 	keymap("n", "<leader>lt", function()
 		Snacks.picker.lsp_type_definitions()
-	end, opts)
+	end)
 	keymap("n", "<leader>ls", function()
 		Snacks.picker.lsp_symbols()
-	end, opts)
+	end)
 	keymap("n", "<leader>lS", function()
 		Snacks.picker.lsp_workspace_symbols()
-	end, opts)
+	end)
 end
 
 return M

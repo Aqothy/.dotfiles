@@ -23,10 +23,20 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
-		{ import = "aqothy.plugins", cond = not vim.g.vscode },
-		{ import = "aqothy.plugins.lsp", cond = not vim.g.vscode },
-		{ import = "aqothy.vscode", cond = vim.g.vscode },
+		{
+			import = "aqothy.plugins",
+			cond = function()
+				return not vim.g.vscode
+			end,
+		},
+		{
+			import = "aqothy.vscode-plugins",
+			cond = function()
+				return vim.g.vscode
+			end,
+		},
 	},
+	install = { colorscheme = { "gruvbox" } },
 	ui = {
 		border = "rounded",
 	},
@@ -37,6 +47,10 @@ require("lazy").setup({
 	},
 	-- automatically check for plugin updates
 	checker = { enabled = false },
+	change_detection = { notify = false },
+	rocks = {
+		enabled = false,
+	},
 	performance = {
 		rtp = {
 			-- disable some rtp plugins

@@ -3,17 +3,6 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
--- Create an autogroup for autosave
---local autosave_augroup = vim.api.nvim_create_augroup("Autosave", { clear = true })
---
---vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
---	group = autosave_augroup,
---	pattern = "*",
---	callback = function()
---		vim.cmd("silent! write") -- Automatically save the current buffer
---	end,
---})
-
 -- Highlight on yank
 autocmd("TextYankPost", {
 	group = augroup("highlight_yank"),
@@ -47,12 +36,11 @@ autocmd("FileType", {
 	end,
 })
 
--- wrap and check for spell in text filetypes
+-- check for spell in text filetypes
 autocmd("FileType", {
-	group = augroup("wrap_spell"),
+	group = augroup("spell"),
 	pattern = { "text", "tex", "gitcommit", "markdown" },
 	callback = function()
-		vim.opt_local.wrap = true
 		vim.opt_local.spell = true
 	end,
 })

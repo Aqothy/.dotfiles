@@ -50,6 +50,10 @@
           "typescriptreact"
         ],
         "path": "./webdev/react-es7.json"
+      },
+      {
+        "language": "swift",
+        "path": "./swift.json"
       }
     ]
   }

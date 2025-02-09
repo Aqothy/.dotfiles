@@ -18,15 +18,11 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.undofile = true
-vim.opt.undolevels = 10000
-
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
-
+vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
+vim.opt.autowrite = true
 
 vim.opt.splitright = true
-vim.opt.splitkeep = "screen"
 vim.opt.splitbelow = true
 vim.opt.splitkeep = "screen" -- no shift and screen stays stable when splitting
 vim.opt.inccommand = "split"
@@ -50,16 +46,15 @@ vim.opt.mouse = "a"
 vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 vim.opt.wildignore:append({ ".DS_Store" })
+vim.opt.wildignorecase = true
+vim.opt.wildmode = "longest:full,full"
 
 -- ui
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
--- vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.fillchars = { eob = " ", fold = " " }
 vim.opt.signcolumn = "yes"
-vim.opt.statuscolumn = "%l%s"
--- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -77,7 +72,6 @@ vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 
 vim.opt.confirm = true
-vim.opt.wildmode = "longest:full,full"
 vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
 vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = "view"
@@ -95,8 +89,6 @@ vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
-
-vim.opt.formatoptions = "jcroqlnt"
 
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 

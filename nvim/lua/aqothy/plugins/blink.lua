@@ -38,39 +38,38 @@ return {
 			},
 		},
 
-		-- default list of enabled providers defined so that you can extend it
-		-- elsewhere in your config, without redefining it, via `opts_extend`
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			-- Dynamic sources based on treesitter nodes
+			default = function()
+				local success, node = pcall(vim.treesitter.get_node)
+				if
+					success
+					and node
+					and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
+				then
+					return { "buffer" }
+				else
+					return { "lsp", "path", "snippets", "buffer" }
+				end
+			end,
 
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies
 			-- compat = {},
 
-			-- providers = {
-			-- lsp = {
-			-- 	transform_items = function(_, items)
-			-- 		-- Remove the "Text" source from lsp autocomplete
-			-- 		return vim.tbl_filter(function(item)
-			-- 			return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
-			-- 		end, items)
-			-- 	end,
-			-- },
-			-- },
+			providers = {
+				lsp = {
+					transform_items = function(_, items)
+						-- Remove the "Text" source from lsp autocomplete
+						return vim.tbl_filter(function(item)
+							return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
+						end, items)
+					end,
+				},
+			},
 
 			-- disable cmdline by passing empty table
-			cmdline = function()
-				local type = vim.fn.getcmdtype()
-				-- Search forward and backward
-				if type == "/" or type == "?" then
-					return { "buffer" }
-				end
-				-- Commands
-				if type == ":" or type == "@" then
-					return { "cmdline" }
-				end
-				return {}
-			end,
+			-- cmdline = {},
 		},
 		completion = {
 			accept = {

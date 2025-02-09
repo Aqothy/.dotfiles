@@ -4,21 +4,22 @@ local M = {}
 local api = vim.api
 local fn = vim.fn
 local bo = vim.bo
-local diagnostic = vim.diagnostic
 local uv = vim.uv or vim.loop
 
 local user = require("aqothy.config.user")
+local mini_icons = require("mini.icons")
 
--- Constants
-local DIAGNOSTIC_SEVERITY = diagnostic.severity
-local SEVERITY_NAMES = {
-	[DIAGNOSTIC_SEVERITY.ERROR] = { name = "ERROR", hl = "DiagnosticError" },
-	[DIAGNOSTIC_SEVERITY.WARN] = { name = "WARN", hl = "DiagnosticWarn" },
-	[DIAGNOSTIC_SEVERITY.INFO] = { name = "INFO", hl = "DiagnosticInfo" },
-	[DIAGNOSTIC_SEVERITY.HINT] = { name = "HINT", hl = "DiagnosticHint" },
-}
+function M.os_component()
+	if not M._os_cache then
+		local uname_info = uv.os_uname() or {}
+		local sysname = uname_info.sysname or ""
+		sysname = (sysname == "Darwin") and "macos" or sysname:lower()
+		local icon, icon_hl = mini_icons.get("os", sysname)
+		M._os_cache = "%#" .. icon_hl .. "#" .. icon
+	end
+	return M._os_cache
+end
 
--- Cache mode strings to avoid table recreation
 local MODE_MAP = {
 	["n"] = "NORMAL",
 	["no"] = "OP-PENDING",
@@ -58,257 +59,239 @@ local MODE_MAP = {
 	["t"] = "TERMINAL",
 }
 
--- Cache mode highlight groups
-local MODE_HIGHLIGHTS = {
+-- Precomputed mapping from mode strings to highlight groups.
+local MODE_TO_HIGHLIGHT = {
 	NORMAL = "Normal",
-	PENDING = "Pending",
+	["OP-PENDING"] = "Pending",
 	VISUAL = "Visual",
-	INSERT = "Insert",
 	SELECT = "Insert",
+	INSERT = "Insert",
 	COMMAND = "Command",
-	TERMINAL = "Command",
 	EX = "Command",
+	TERMINAL = "Command",
 }
 
--- Utility functions
-local function get_mode_hl(mode)
-	for pattern, hl in pairs(MODE_HIGHLIGHTS) do
-		if mode:find(pattern) then
-			return hl
-		end
-	end
-	return "Other"
-end
+local mode_group = api.nvim_create_augroup("ModeUpdates", {})
 
--- local function format_size(size)
--- 	local suffixes = { "B", "KB", "MB", "GB" }
--- 	local i = 1
--- 	while size > 1024 and i < #suffixes do
--- 		size = size / 1024
--- 		i = i + 1
--- 	end
--- 	return string.format((i == 1) and "%d%s" or "%.1f%s", size, suffixes[i])
--- end
-
--- Component functions with caching where appropriate
-function M.os_component()
-	if not M._os_cache then
-		local uname_info = uv.os_uname() or {}
-		local sysname = uname_info.sysname
-		sysname = sysname == "Darwin" and "macos" or sysname:lower()
-		local icon, icon_hl = require("mini.icons").get("os", sysname)
-
-		M._os_cache = string.format("%%#%s#%s", icon_hl, icon)
-	end
-	return M._os_cache
-end
+-- Update the statusline on mode change, need this for op-pending to show
+api.nvim_create_autocmd("ModeChanged", {
+	pattern = "*",
+	callback = function()
+		vim.cmd("redrawstatus")
+	end,
+	group = mode_group,
+})
 
 function M.mode_component()
-	local current_mode = api.nvim_get_mode().mode
-	local mode_str = MODE_MAP[current_mode] or "UNKNOWN"
-	local hl = get_mode_hl(mode_str)
+	local mode = api.nvim_get_mode().mode
+	local mode_str = MODE_MAP[mode] or "UNKNOWN"
+	local hl = MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
-	return string.format(
-		"%%#StatuslineModeSeparator%s#%%#StatuslineMode%s#%s%%#StatuslineModeSeparator%s#",
-		hl,
-		hl,
-		mode_str,
-		hl
-	)
+	return "%#"
+		.. "StatuslineModeSeparator"
+		.. hl
+		.. "#"
+		.. ""
+		.. "%#"
+		.. "StatuslineMode"
+		.. hl
+		.. "#"
+		.. mode_str
+		.. "%#"
+		.. "StatuslineModeSeparator"
+		.. hl
+		.. "#"
+		.. ""
 end
 
-function M.git_component()
-	local head = vim.g.gitsigns_head
-	if not head or head == "" then
-		return ""
+function M.git_components()
+	local git_info = vim.b.gitsigns_status_dict
+	if not git_info or git_info.head == "" then
+		return "", ""
 	end
 
-	return string.format(" %s", head)
+	-- Head component: Concatenate the symbol and branch name.
+	local head = " " .. git_info.head
+
+	local status_parts = {}
+	if git_info.added and git_info.added > 0 then
+		status_parts[#status_parts + 1] = "%#GitSignsAdd#+" .. git_info.added
+	end
+	if git_info.changed and git_info.changed > 0 then
+		status_parts[#status_parts + 1] = "%#GitSignsChange#~" .. git_info.changed
+	end
+	if git_info.removed and git_info.removed > 0 then
+		status_parts[#status_parts + 1] = "%#GitSignsDelete#-" .. git_info.removed
+	end
+
+	local status = (#status_parts > 0) and table.concat(status_parts, " ") or ""
+	return head, status
 end
 
--- function M.git_components()
--- 	local git_info = vim.g.gitsigns_status_dict
--- 	if not git_info or git_info.head == "" then
--- 		return "", ""
--- 	end
---
--- 	-- Head component
--- 	local head = string.format(" %s", git_info.head)
---
--- 	-- Status component
--- 	local status_parts = {}
--- 	if git_info.added and git_info.added > 0 then
--- 		table.insert(status_parts, "%#GitSignsAdd#+" .. git_info.added)
--- 	end
--- 	if git_info.changed and git_info.changed > 0 then
--- 		table.insert(status_parts, "%#GitSignsChange#~" .. git_info.changed)
--- 	end
--- 	if git_info.removed and git_info.removed > 0 then
--- 		table.insert(status_parts, "%#GitSignsDelete#-" .. git_info.removed)
--- 	end
---
--- 	return head, #status_parts > 0 and table.concat(status_parts, " ") .. " " or ""
--- end
+M.diagnostic_levels = {
+	{ name = "ERROR", sign = user.signs.error, hl = "DiagnosticError" },
+	{ name = "WARN", sign = user.signs.warn, hl = "DiagnosticWarn" },
+	{ name = "INFO", sign = user.signs.info, hl = "DiagnosticInfo" },
+	{ name = "HINT", sign = user.signs.hint, hl = "DiagnosticHint" },
+}
 
--- function M.lsp_status()
--- 	local lsp_names = vim.tbl_filter(
--- 		function(name)
--- 			return name ~= nil
--- 		end,
--- 		vim.tbl_map(function(client)
--- 			if client.name:lower():match("copilot") then
--- 				return vim.g.copilot_enabled == 1 and user.kinds.Copilot or nil
--- 			end
--- 			return client.name:gsub("_language_server$", "_ls")
--- 		end, vim.lsp.get_clients({ bufnr = 0 }))
--- 	)
---
--- 	local ft = vim.bo.filetype
--- 	local formatters = ft ~= "" and require("conform").formatters_by_ft[ft] or {}
---
--- 	local parts = {}
--- 	if #lsp_names > 0 then
--- 		table.insert(parts, table.concat(lsp_names, ", "))
--- 	end
--- 	if #formatters > 0 and vim.g.autoformat then
--- 		table.insert(parts, table.concat(formatters, ", "))
--- 	end
---
--- 	return #parts > 0 and string.format("%%#StatuslineLsp#%s", table.concat(parts, ", ")) or ""
--- end
+M.diagnostic_counts = {}
 
--- Cached diagnostics component
-local last_diagnostic_component = ""
+local diag_group = api.nvim_create_augroup("Track_Diag", { clear = true })
+
+M.get_diagnostic_count = function(buf_id)
+	return vim.diagnostic.count(buf_id)
+end
+
+api.nvim_create_autocmd("DiagnosticChanged", {
+	group = diag_group,
+	pattern = "*",
+	callback = function(data)
+		if api.nvim_buf_is_valid(data.buf) then
+			M.diagnostic_counts[data.buf] = M.get_diagnostic_count(data.buf)
+		else
+			M.diagnostic_counts[data.buf] = nil
+		end
+	end,
+	desc = "Track diagnostics",
+})
 
 function M.diagnostics_component()
-	if bo.filetype == "lazy" or api.nvim_get_mode().mode:match("^i") then
-		return last_diagnostic_component
-	end
-
-	local diagnostics = diagnostic.get(0)
-	if #diagnostics == 0 then
-		last_diagnostic_component = ""
+	local buf = api.nvim_get_current_buf()
+	local count = M.diagnostic_counts[buf]
+	if not count then
 		return ""
 	end
 
-	local counts = { 0, 0, 0, 0 }
-	for _, diag in ipairs(diagnostics) do
-		counts[diag.severity] = counts[diag.severity] + 1
-	end
-
+	local severity = vim.diagnostic.severity
 	local parts = {}
-	for severity, count in ipairs(counts) do
-		if count > 0 then
-			local severity_info = SEVERITY_NAMES[severity]
-			table.insert(
-				parts,
-				string.format("%%#%s#%s %d", severity_info.hl, user.signs[severity_info.name:lower()], count)
-			)
+
+	-- Iterate through diagnostic levels
+	for i = 1, #M.diagnostic_levels do
+		local level = M.diagnostic_levels[i]
+		local n = count[severity[level.name]] or 0
+		if n > 0 then
+			-- Build the statusline segment by concatenation.
+			parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n
 		end
 	end
 
-	last_diagnostic_component = table.concat(parts, " ")
-	return last_diagnostic_component
+	return (#parts > 0) and table.concat(parts, " ") or ""
 end
+
+local function update_filetype_cache()
+	local full_path = api.nvim_buf_get_name(0)
+	local icon, icon_hl = mini_icons.get("file", full_path)
+	M.filetype_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
+end
+
+local filetype_group = api.nvim_create_augroup("FileTypeCache", { clear = true })
+
+api.nvim_create_autocmd({ "BufEnter", "BufFilePost" }, {
+	group = filetype_group,
+	callback = update_filetype_cache,
+})
 
 function M.filetype_component()
-	local buf_name = api.nvim_buf_get_name(0)
-	local icon, icon_hl = require("mini.icons").get("file", buf_name)
-
-	-- Get path relative to current working directory
-	local relative_path = vim.fn.fnamemodify(buf_name, ":.")
-
-	if buf_name == "" then
-		relative_path = "[No Name]"
+	if not M.filetype_cache then
+		update_filetype_cache()
 	end
-
-	return string.format("%%#%s#%s %%#StatuslineTitle#%s", icon_hl, icon, relative_path)
+	return M.filetype_cache
 end
+
+local function format_size()
+	local size = math.max(fn.line2byte(fn.line("$") + 1) - 1, 0)
+	if size < 1024 then
+		return size .. "B"
+	elseif size < 1048576 then
+		return ("%.2fKB"):format(size / 1024)
+	else
+		return ("%.2fMB"):format(size / 1048576)
+	end
+end
+
+local function update_file_info_cache()
+	local encoding = bo.fileencoding
+	local shiftwidth = bo.shiftwidth
+	local size_str = format_size()
+	M.file_info_cache = "%#StatuslineModeSeparatorOther# " .. encoding .. " Tab:" .. shiftwidth .. " " .. size_str
+end
+
+local file_info_group = api.nvim_create_augroup("FileInfoCache", { clear = true })
+
+-- Update on buffer enter and after saving.
+api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+	group = file_info_group,
+	callback = function()
+		update_file_info_cache()
+	end,
+})
+
+-- Update when 'fileencoding' or 'shiftwidth' options change.
+api.nvim_create_autocmd("OptionSet", {
+	group = file_info_group,
+	pattern = { "fileencoding", "shiftwidth" },
+	callback = function()
+		update_file_info_cache()
+	end,
+})
 
 function M.file_info_component()
-	local encoding = vim.bo.fileencoding
-	local shiftwidth = vim.bo.shiftwidth
-
-	if encoding == "" and shiftwidth == 0 then
-		return ""
-	end
-
-	return string.format("%%#StatuslineModeSeparatorOther# %s Tab:%d", encoding, shiftwidth)
+	return M.file_info_cache or ""
 end
-
--- function M.file_info_component()
--- 	local encoding = bo.fileencoding
--- 	local shiftwidth = bo.shiftwidth
--- 	local file_path = api.nvim_buf_get_name(0)
---
--- 	if file_path == "" and encoding == "" and shiftwidth == 0 then
--- 		return ""
--- 	end
---
--- 	local size_str = ""
--- 	if file_path ~= "" then
--- 		local file_size = fn.getfsize(file_path)
--- 		if file_size > 0 then
--- 			size_str = format_size(file_size)
--- 		end
--- 	end
---
--- 	return string.format("%%#StatuslineModeSeparatorOther# %s  Tab:%d  %s", encoding, shiftwidth, size_str)
--- end
 
 function M.position_component()
-	return string.format(
-		"%%#StatuslineItalic#Ln: %%#StatuslineTitle#%d%%#StatuslineItalic#/%d Col: %d",
-		fn.line("."),
-		api.nvim_buf_line_count(0),
-		fn.virtcol(".")
-	)
-end
-
--- function M.macro_recording_component()
--- 	local reg = fn.reg_recording()
--- 	return reg ~= "" and string.format("%%#StatuslineMacro#Recording @%s", reg) or ""
--- end
-
--- Efficient component concatenation
-local function concat_components(components)
-	return table.concat(components, "  ")
+	local line = fn.line(".")
+	local line_count = api.nvim_buf_line_count(0)
+	local col = fn.virtcol(".")
+	return "%#StatuslineItalic#Ln "
+		.. "%#StatuslineTitle#"
+		.. line
+		.. "%#StatuslineItalic#/"
+		.. line_count
+		.. " Col "
+		.. col
 end
 
 -- Main render function
 function M.render()
-	-- local git_head, git_status = M.git_components()
+	local git_head, git_status = M.git_components() -- assuming this exists
 
-	local left_components = vim.tbl_filter(function(component)
-		return #component > 0
-	end, {
+	-- Build left/right components using a simple loop to filter out empty strings.
+	local left_components = {}
+	local left_candidates = {
 		M.os_component(),
 		M.mode_component(),
-		M.git_component(),
+		git_head,
 		M.filetype_component(),
-		-- "%#StatuslineTitle#" .. "%t",
-		vim.bo.modified and "%m" or "", -- to make the spacing correct
-		-- git_head,
-		-- M.lsp_status(),
-		-- git_status,
-	})
+		git_status,
+	}
+	for i = 1, #left_candidates do
+		local comp = left_candidates[i]
+		if comp and comp ~= "" then
+			left_components[#left_components + 1] = comp
+		end
+	end
 
-	local right_components = vim.tbl_filter(function(component)
-		return #component > 0
-	end, {
-		-- M.macro_recording_component(),
+	local right_components = {}
+	local right_candidates = {
 		M.diagnostics_component(),
-		M.position_component(),
 		M.file_info_component(),
-	})
+		M.position_component(),
+	}
+	for i = 1, #right_candidates do
+		local comp = right_candidates[i]
+		if comp and comp ~= "" then
+			right_components[#right_components + 1] = comp
+		end
+	end
 
-	return table.concat({
-        " ",
-		concat_components(left_components),
-		"%#StatusLine#%=",
-		concat_components(right_components),
-		" ",
-	})
+	-- Concatenate all parts. "%=" creates the separation between left and right.
+	return " "
+		.. table.concat(left_components, "  ")
+		.. "%#StatusLine#%="
+		.. table.concat(right_components, "  ")
+		.. " "
 end
 
 -- Set up the statusline

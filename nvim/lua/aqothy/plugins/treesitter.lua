@@ -13,7 +13,7 @@ return {
 		require("nvim-treesitter.configs").setup({
 			-- A list of parser names, or "all"
 			ensure_installed = {
-                -- built-in
+				-- built-in
 				-- "c",
 				-- "lua",
 				-- "vim",
@@ -22,7 +22,7 @@ return {
 				-- "markdown",
 				-- "markdown_inline",
 
-                -- extras
+				-- extras
 				"javascript",
 				"typescript",
 				"cpp",
@@ -37,7 +37,6 @@ return {
 				"yaml",
 				"json",
 				"dockerfile",
-				"c_sharp",
 			},
 
 			incremental_selection = {

@@ -154,6 +154,10 @@ M["emmet_language_server"] = {
 	},
 }
 
+M["sourcekit"] = {
+	filetypes = { "swift", "objc", "objcpp" },
+}
+
 -- M["omnisharp"] = {
 -- 	enable_roslyn_analyzers = true,
 -- 	organize_imports_on_format = true,
