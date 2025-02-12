@@ -17,3 +17,9 @@
 
 [pull]
     rebase = true
+
+[merge]
+	conflictstyle = diff3
+
+[mergetool]
+    keepBackup = false

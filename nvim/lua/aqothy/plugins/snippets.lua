@@ -3,14 +3,14 @@ return {
 	version = "v2.*",
 	build = "make install_jsregexp",
 	-- enabled = false,
-	event = "InsertEnter",
+	lazy = true,
 	opts = {
 		keep_roots = true,
 		link_roots = true,
 		link_children = true,
 		delete_check_events = "TextChanged",
 		enable_autosnippets = true,
-		store_selection_keys = ".",
+		store_selection_keys = ",",
 	},
 	config = function(_, opts)
 		local ls = require("luasnip")

@@ -69,7 +69,7 @@ return {
 			function()
 				require("mini.files").open(vim.uv.cwd(), true)
 			end,
-			desc = "Open mini.files (cwd, hide dotfiles by default)",
+			desc = "Open mini.files (Hide hidden files by default)",
 		},
 	},
 	config = function(_, opts)

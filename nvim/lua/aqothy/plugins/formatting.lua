@@ -1,7 +1,7 @@
 return {
 	"stevearc/conform.nvim",
-	event = { "BufWritePre" },
-	cmd = { "ConformInfo" },
+	lazy = true,
+	cmd = "ConformInfo",
 	keys = {
 		{
 			"<leader>k",
@@ -12,9 +12,6 @@ return {
 			desc = "Format buffer",
 		},
 	},
-	init = function()
-		vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
-	end,
 	config = function()
 		local conform = require("conform")
 
@@ -39,12 +36,6 @@ return {
 				-- For filetypes without a formatter:
 				["_"] = { "trim_whitespace", "trim_newlines" },
 			},
-			-- format_on_save = function()
-			-- 	if not vim.g.autoformat then
-			-- 		return nil
-			-- 	end
-			-- 	return {}
-			-- end,
 			default_format_opts = {
 				lsp_format = "fallback",
 				timeout_ms = 500,

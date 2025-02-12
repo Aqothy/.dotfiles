@@ -4,7 +4,7 @@ return {
 	version = false,
 	event = { "LazyFile", "VeryLazy" },
 	lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
-	cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", "TSInfo" },
+	cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", "TSInstallInfo" },
 	init = function(plugin)
 		require("lazy.core.loader").add_to_rtp(plugin)
 		require("nvim-treesitter.query_predicates")

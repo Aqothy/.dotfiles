@@ -1,7 +1,10 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = { "LazyFile" },
+	event = "LazyFile",
 	cmd = { "LspInstall", "LspUninstall", "LspInfo" },
+	dependencies = {
+		"mason.nvim",
+	},
 	config = function()
 		local lspconfig = require("lspconfig")
 		local handlers = require("aqothy.config.lsp-handlers")

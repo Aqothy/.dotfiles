@@ -17,16 +17,6 @@ M.capabilities.workspace = {
 	},
 }
 
-M.capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-M.capabilities.textDocument.completion.completionItem.resolveSupport = {
-	properties = {
-		"documentation",
-		"detail",
-		"additionalTextEdits",
-	},
-}
-
 M.capabilities.textDocument.foldingRange = {
 	dynamicRegistration = false,
 	lineFoldingOnly = true,

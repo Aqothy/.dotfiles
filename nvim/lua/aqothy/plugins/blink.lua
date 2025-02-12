@@ -1,7 +1,7 @@
 local user = require("aqothy.config.user")
 return {
 	"saghen/blink.cmp",
-	version = "*",
+	build = "cargo build --release",
 	event = { "InsertEnter", "CmdLineEnter" },
 	-- enabled = false,
 	dependencies = {
@@ -40,12 +40,12 @@ return {
 
 		sources = {
 			-- Dynamic sources based on treesitter nodes
-			default = function()
+			default = function(ctx)
 				local success, node = pcall(vim.treesitter.get_node)
 				if
 					success
 					and node
-					and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
+					and vim.tbl_contains({ "comment", "comment_content", "line_comment", "block_comment" }, node:type())
 				then
 					return { "buffer" }
 				else
@@ -56,17 +56,6 @@ return {
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies
 			-- compat = {},
-
-			providers = {
-				lsp = {
-					transform_items = function(_, items)
-						-- Remove the "Text" source from lsp autocomplete
-						return vim.tbl_filter(function(item)
-							return item.kind ~= vim.lsp.protocol.CompletionItemKind.Text
-						end, items)
-					end,
-				},
-			},
 
 			-- disable cmdline by passing empty table
 			-- cmdline = {},

@@ -3,9 +3,6 @@ return {
 	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "BufReadPost",
-	init = function()
-		vim.g.copilot_enabled = 1
-	end,
 	config = function()
 		require("copilot").setup({
 			suggestion = {
@@ -22,5 +19,18 @@ return {
 				["*"] = true,
 			},
 		})
+		Snacks.toggle({
+			name = "Copilot",
+			get = function()
+				return not require("copilot.client").is_disabled()
+			end,
+			set = function(state)
+				if state then
+					require("copilot.command").enable()
+				else
+					require("copilot.command").disable()
+				end
+			end,
+		}):map("<leader>tc")
 	end,
 }

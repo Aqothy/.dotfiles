@@ -130,7 +130,7 @@ return {
 			},
 			level = vim.log.levels.INFO,
 		},
-		quickfile = { enabled = false },
+		quickfile = { enabled = true },
 		statuscolumn = {
 			enabled = false,
 			left = { "sign", "git" },
@@ -172,6 +172,9 @@ return {
 					winbar = "",
 				},
 			},
+		},
+		image = {
+			enabled = true,
 		},
 
 		styles = {
@@ -237,7 +240,7 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-		{ "<leader>sh", function() Snacks.notifier.show_history() end, desc = "Show Notifier History" },
+		{ "<leader>sh", function() Snacks.picker.notifications() end, desc = "Show Notifier History" },
 		{
 			"<leader>no",
 			function()
@@ -277,16 +280,44 @@ return {
         { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
         { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
 	},
+	init = function()
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "VeryLazy",
+			callback = function()
+				-- Setup some globals for debugging (lazy-loaded)
+				_G.dd = function(...)
+					Snacks.debug.inspect(...)
+				end
+				_G.bt = function()
+					Snacks.debug.backtrace()
+				end
+				vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+				-- Create some toggle mappings
+				Snacks.toggle
+					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+					:map("<leader>cl")
+
+				Snacks.toggle.dim():map("<leader>sd")
+				Snacks.toggle.zen():map("<leader>zz")
+				Snacks.toggle.profiler():map("<leader>pp")
+
+				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
+			end,
+		})
+	end,
 	config = function(_, opts)
 		require("snacks").setup(opts)
 
 		vim.g.snacks_animate = false
 
-		-- Lsp progress notif
-		---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
-		local progress = vim.defaulttable()
+		local progress_augroup = vim.api.nvim_create_augroup("lsp_progress_notifier", { clear = true })
+
+		local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+
 		vim.api.nvim_create_autocmd("LspProgress", {
-			group = vim.api.nvim_create_augroup("lsp_progress_notify", { clear = true }),
+			pattern = { "begin", "end" },
+			group = progress_augroup,
 			---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
 			callback = function(ev)
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -294,60 +325,18 @@ return {
 				if not client or type(value) ~= "table" then
 					return
 				end
-				local p = progress[client.id]
-
-				for i = 1, #p + 1 do
-					if i == #p + 1 or p[i].token == ev.data.params.token then
-						p[i] = {
-							token = ev.data.params.token,
-							msg = ("[%3d%%] %s%s"):format(
-								value.kind == "end" and 100 or value.percentage or 100,
-								value.title or "",
-								value.message and (" **%s**"):format(value.message) or ""
-							),
-							done = value.kind == "end",
-						}
-						break
-					end
-				end
-
-				local msg = {} ---@type string[]
-				progress[client.id] = vim.tbl_filter(function(v)
-					return table.insert(msg, v.msg) or not v.done
-				end, p)
-
-				local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-				vim.notify(table.concat(msg, "\n"), "info", {
-					id = "lsp_progress",
+				local msg = value.title or ""
+				local is_done = ev.data.params.value.kind == "end"
+				vim.notify(msg, "info", {
+					id = client.name .. client.id,
 					title = client.name,
-					opts = function(notif)
-						notif.icon = #progress[client.id] == 0 and " "
+                    opts = function(notif)
+                        notif.icon = is_done and " "
 							or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+						notif.timeout = is_done and 3000 or 0
 					end,
 				})
 			end,
 		})
-
-		Snacks.toggle.dim():map("<leader>sd")
-		Snacks.toggle.zen():map("<leader>zz")
-		Snacks.toggle.animate():map("<leader>ta")
-		Snacks.toggle.profiler():map("<leader>pp")
-
-		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-
-		Snacks.toggle({
-			name = "Copilot",
-			get = function()
-				return vim.g.copilot_enabled == 1
-			end,
-			set = function(state)
-				vim.g.copilot_enabled = state
-				if state then
-					vim.cmd("silent Copilot enable")
-				else
-					vim.cmd("silent Copilot disable")
-				end
-			end,
-		}):map("<leader>tc")
 	end,
 }

@@ -54,7 +54,7 @@ keymap("n", "<M-l>", "<cmd>cnext<CR>zz")
 keymap("n", "<M-h>", "<cmd>cprev<CR>zz")
 
 keymap("n", "<]b>", "<cmd>bnext<CR>zz")
-keymap("n", "<[b]>", "<cmd>bprev<CR>zz")
+keymap("n", "<[b>", "<cmd>bprev<CR>zz")
 
 keymap("n", "<leader>fo", "za")
 keymap({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
