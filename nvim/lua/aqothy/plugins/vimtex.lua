@@ -12,12 +12,12 @@ return {
 			vim.fn.system({ "open", "-a", "Kitty" })
 		end
 
-		vim.api.nvim_create_augroup("vimtex_event_focus", { clear = true })
+		local focus_group = vim.api.nvim_create_augroup("vimtex_event_focus", { clear = true })
 
 		-- Restoring focus to terminal after inverse search
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "VimtexEventViewReverse",
-			group = "vimtex_event_focus",
+			group = focus_group,
 			callback = focus_terminal,
 		})
 

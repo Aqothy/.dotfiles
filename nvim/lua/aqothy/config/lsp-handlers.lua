@@ -1,14 +1,14 @@
 local M = {}
 
-local cmp_cap = {}
+local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+local has_blink, blink = pcall(require, "blink.cmp")
 
-if pcall(require, "blink.cmp") then
-	cmp_cap = require("blink.cmp").get_lsp_capabilities()
-elseif pcall(require, "cmp_nvim_lsp") then
-	cmp_cap = require("cmp_nvim_lsp").default_capabilities()
-end
-
-M.capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), cmp_cap)
+M.capabilities = vim.tbl_deep_extend(
+	"force",
+	vim.lsp.protocol.make_client_capabilities(),
+	has_cmp and cmp_nvim_lsp.default_capabilities() or {},
+	has_blink and blink.get_lsp_capabilities() or {}
+)
 
 M.capabilities.workspace = {
 	fileOperations = {
@@ -17,9 +17,12 @@ M.capabilities.workspace = {
 	},
 }
 
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
+M.capabilities.textDocument.completion.completionItem.resolveSupport = {
+	properties = {
+		"documentation",
+		"detail",
+		"additionalTextEdits",
+	},
 }
 
 local s = vim.diagnostic.severity

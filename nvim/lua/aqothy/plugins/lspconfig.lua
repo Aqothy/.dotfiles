@@ -21,8 +21,7 @@ return {
 		end
 
 		vim.api.nvim_create_autocmd("LspAttach", {
-			-- dont clear the group
-			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+            group = vim.api.nvim_create_augroup("aqothy/lsp_attach", { clear = true }),
 			callback = function(ev)
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
 

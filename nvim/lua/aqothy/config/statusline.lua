@@ -1,10 +1,11 @@
 local M = {}
 
--- Cache frequently used vim functions and APIs
 local api = vim.api
-local fn = vim.fn
 local bo = vim.bo
 local uv = vim.uv or vim.loop
+
+local stl_group = vim.api.nvim_create_augroup("aqline", { clear = true })
+local autocmd = vim.api.nvim_create_autocmd
 
 local user = require("aqothy.config.user")
 local mini_icons = require("mini.icons")
@@ -20,12 +21,13 @@ function M.os_component()
 	return M._os_cache
 end
 
-local MODE_MAP = {
+M.MODE_MAP = {
 	["n"] = "NORMAL",
-	["no"] = "OP-PENDING",
-	["nov"] = "OP-PENDING",
-	["noV"] = "OP-PENDING",
-	["no\22"] = "OP-PENDING",
+	-- OP pending mode is buggy asf
+	-- ["no"] = "OP-PENDING",
+	-- ["nov"] = "OP-PENDING",
+	-- ["noV"] = "OP-PENDING",
+	-- ["no\22"] = "OP-PENDING",
 	["niI"] = "NORMAL",
 	["niR"] = "NORMAL",
 	["niV"] = "NORMAL",
@@ -33,10 +35,10 @@ local MODE_MAP = {
 	["ntT"] = "NORMAL",
 	["v"] = "VISUAL",
 	["vs"] = "VISUAL",
-	["V"] = "VISUAL",
-	["Vs"] = "VISUAL",
-	["\22"] = "VISUAL",
-	["\22s"] = "VISUAL",
+	["V"] = "V-LINE",
+	["Vs"] = "V-LINE",
+	["\22"] = "V-BLOCK",
+	["\22s"] = "V-BLOCK",
 	["s"] = "SELECT",
 	["S"] = "SELECT",
 	["\19"] = "SELECT",
@@ -46,24 +48,25 @@ local MODE_MAP = {
 	["R"] = "REPLACE",
 	["Rc"] = "REPLACE",
 	["Rx"] = "REPLACE",
-	["Rv"] = "VIRT REPLACE",
-	["Rvc"] = "VIRT REPLACE",
-	["Rvx"] = "VIRT REPLACE",
+	["Rv"] = "V-REPLACE",
+	["Rvc"] = "V-REPLACE",
+	["Rvx"] = "V-REPLACE",
 	["c"] = "COMMAND",
-	["cv"] = "VIM EX",
+	["cv"] = "EX",
 	["ce"] = "EX",
-	["r"] = "PROMPT",
+	["r"] = "REPLACE",
 	["rm"] = "MORE",
 	["r?"] = "CONFIRM",
 	["!"] = "SHELL",
 	["t"] = "TERMINAL",
 }
 
--- Precomputed mapping from mode strings to highlight groups.
-local MODE_TO_HIGHLIGHT = {
+M.MODE_TO_HIGHLIGHT = {
 	NORMAL = "Normal",
-	["OP-PENDING"] = "Pending",
+	-- ["OP-PENDING"] = "Pending",
 	VISUAL = "Visual",
+	["V-LINE"] = "Visual",
+	["V-BLOCK"] = "Visual",
 	SELECT = "Insert",
 	INSERT = "Insert",
 	COMMAND = "Command",
@@ -71,23 +74,12 @@ local MODE_TO_HIGHLIGHT = {
 	TERMINAL = "Command",
 }
 
-local mode_group = api.nvim_create_augroup("ModeUpdates", {})
-
--- Update the statusline on mode change, need this for op-pending to show
-api.nvim_create_autocmd("ModeChanged", {
-	pattern = "*",
-	callback = function()
-		vim.cmd("redrawstatus")
-	end,
-	group = mode_group,
-})
-
-function M.mode_component()
+M.get_mode = function()
 	local mode = api.nvim_get_mode().mode
-	local mode_str = MODE_MAP[mode] or "UNKNOWN"
-	local hl = MODE_TO_HIGHLIGHT[mode_str] or "Other"
+	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
+	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
-	return "%#"
+	M.mode_cache = "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
 		.. "#"
@@ -102,6 +94,19 @@ function M.mode_component()
 		.. hl
 		.. "#"
 		.. ""
+end
+
+autocmd("ModeChanged", {
+	group = stl_group,
+	callback = M.get_mode,
+})
+
+function M.mode_component()
+	if not M.mode_cache then
+		M.get_mode()
+	end
+
+	return M.mode_cache
 end
 
 function M.git_components()
@@ -137,14 +142,12 @@ M.diagnostic_levels = {
 
 M.diagnostic_counts = {}
 
-local diag_group = api.nvim_create_augroup("Track_Diag", { clear = true })
-
 M.get_diagnostic_count = function(buf_id)
 	return vim.diagnostic.count(buf_id)
 end
 
-api.nvim_create_autocmd("DiagnosticChanged", {
-	group = diag_group,
+autocmd("DiagnosticChanged", {
+	group = stl_group,
 	pattern = "*",
 	callback = function(data)
 		if api.nvim_buf_is_valid(data.buf) then
@@ -166,12 +169,10 @@ function M.diagnostics_component()
 	local severity = vim.diagnostic.severity
 	local parts = {}
 
-	-- Iterate through diagnostic levels
 	for i = 1, #M.diagnostic_levels do
 		local level = M.diagnostic_levels[i]
 		local n = count[severity[level.name]] or 0
 		if n > 0 then
-			-- Build the statusline segment by concatenation.
 			parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n
 		end
 	end
@@ -179,85 +180,58 @@ function M.diagnostics_component()
 	return (#parts > 0) and table.concat(parts, " ") or ""
 end
 
-local function update_filetype_cache()
+function M.update_filetype_cache()
+	-- For file info but putting it here to take advantage of bufenter and buffilepost
+	M.encoding_cache = bo.fileencoding
+	M.shiftwidth_cache = bo.shiftwidth
+
+	-- For filetype
 	local full_path = api.nvim_buf_get_name(0)
 	local icon, icon_hl = mini_icons.get("file", full_path)
 	M.filetype_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
 end
 
-local filetype_group = api.nvim_create_augroup("FileTypeCache", { clear = true })
-
-api.nvim_create_autocmd({ "BufEnter", "BufFilePost" }, {
-	group = filetype_group,
-	callback = update_filetype_cache,
+autocmd({ "BufEnter", "BufFilePost" }, {
+	group = stl_group,
+	callback = M.update_filetype_cache,
 })
 
 function M.filetype_component()
 	if not M.filetype_cache then
-		update_filetype_cache()
+		M.update_filetype_cache()
 	end
 	return M.filetype_cache
 end
 
-local function format_size()
-	local size = math.max(fn.line2byte(fn.line("$") + 1) - 1, 0)
-	if size < 1024 then
-		return size .. "B"
-	elseif size < 1048576 then
-		return ("%.2fKB"):format(size / 1024)
-	else
-		return ("%.2fMB"):format(size / 1048576)
-	end
-end
-
-local function update_file_info_cache()
-	local encoding = bo.fileencoding
-	local shiftwidth = bo.shiftwidth
-	local size_str = format_size()
-	M.file_info_cache = "%#StatuslineModeSeparatorOther# " .. encoding .. " Tab:" .. shiftwidth .. " " .. size_str
-end
-
-local file_info_group = api.nvim_create_augroup("FileInfoCache", { clear = true })
-
--- Update on buffer enter and after saving.
-api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
-	group = file_info_group,
-	callback = function()
-		update_file_info_cache()
-	end,
-})
-
--- Update when 'fileencoding' or 'shiftwidth' options change.
-api.nvim_create_autocmd("OptionSet", {
-	group = file_info_group,
+-- Update when 'fileencoding' or 'shiftwidth' options change or after buffer enter
+autocmd("OptionSet", {
+	group = stl_group,
 	pattern = { "fileencoding", "shiftwidth" },
 	callback = function()
-		update_file_info_cache()
+		M.encoding_cache = bo.fileencoding
+		M.shiftwidth_cache = bo.shiftwidth
 	end,
 })
 
 function M.file_info_component()
-	return M.file_info_cache or ""
+	if not M.encoding_cache then
+		M.encoding_cache = bo.fileencoding
+	end
+
+	if not M.shiftwidth_cache then
+		M.shiftwidth_cache = bo.shiftwidth
+	end
+	return "%#StatuslineModeSeparatorOther# " .. M.encoding_cache .. " Tab:" .. M.shiftwidth_cache
 end
 
 function M.position_component()
-	local line = fn.line(".")
 	local line_count = api.nvim_buf_line_count(0)
-	local col = fn.virtcol(".")
-	return "%#StatuslineItalic#Ln "
-		.. "%#StatuslineTitle#"
-		.. line
-		.. "%#StatuslineItalic#/"
-		.. line_count
-		.. " Col "
-		.. col
+	return "%#StatuslineItalic#Ln " .. "%#StatuslineTitle#%l" .. "%#StatuslineItalic#/" .. line_count .. " Col %c"
 end
 
--- Main render function
 function M.render()
-	local git_head, git_status = M.git_components() -- assuming this exists
+	local git_head, git_status = M.git_components()
 
-	-- Build left/right components using a simple loop to filter out empty strings.
 	local left_components = {}
 	local left_candidates = {
 		M.os_component(),
@@ -286,7 +260,6 @@ function M.render()
 		end
 	end
 
-	-- Concatenate all parts. "%=" creates the separation between left and right.
 	return " "
 		.. table.concat(left_components, "  ")
 		.. "%#StatusLine#%="
@@ -294,7 +267,6 @@ function M.render()
 		.. " "
 end
 
--- Set up the statusline
 vim.opt.statusline = "%!v:lua.require'aqothy.config.statusline'.render()"
 
 return M

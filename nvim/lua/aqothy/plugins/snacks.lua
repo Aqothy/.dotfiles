@@ -1,4 +1,22 @@
 local user = require("aqothy.config.user")
+
+local function get_projects()
+	local directories = {}
+	local home = os.getenv("HOME")
+	local proj = home .. "/Code/Personal"
+
+	local cmd = 'fd --type d --max-depth 1 --min-depth 1 . ' .. proj
+	local handle = io.popen(cmd)
+	if handle then
+		for line in handle:lines() do
+			table.insert(directories, line)
+		end
+		handle:close()
+	end
+
+	return directories
+end
+
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
@@ -230,7 +248,7 @@ return {
             })
         end, { desc = "Grep TODOs", nargs = 0 }},
 		{
-			"<c-j>",
+			"<leader>tt",
 			function()
                 Snacks.terminal()
 			end,
@@ -240,7 +258,9 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-		{ "<leader>sh", function() Snacks.picker.notifications() end, desc = "Show Notifier History" },
+		{ "<leader>sh", function() Snacks.picker.notifications({ on_show = function ()
+		    vim.cmd.stopinsert()
+		end }) end, desc = "Show Notifier History" },
 		{
 			"<leader>no",
 			function()
@@ -250,7 +270,7 @@ return {
 		},
 		{ "<leader>;", function() Snacks.picker.buffers({ on_show = function()
               vim.cmd.stopinsert()
-            end}) end, desc = "Buffers" },
+            end }) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },
 		{ "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
@@ -277,13 +297,36 @@ return {
             end,}) end, desc = "undo tree" },
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
-        { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+        { "<leader>fp", function()
+            local projects = get_projects()
+
+            return Snacks.picker("Projects", {
+                finder = function()
+                    local dirs = {}
+                    for _, dir in ipairs(projects) do
+                        table.insert(dirs, {
+                            text = dir,
+                            file = dir,
+                            dir = true,
+                        })
+                    end
+                    return dirs
+                end,
+                format = "file",
+                win = {
+                    preview = { minimal = true },
+                },
+                confirm = "load_session"
+            })
+        end, desc = "Custom projects picker" },
         { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
 	},
 	init = function()
 		vim.api.nvim_create_autocmd("User", {
+			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
 			pattern = "VeryLazy",
 			callback = function()
+				vim.g.snacks_animate = false
 				-- Setup some globals for debugging (lazy-loaded)
 				_G.dd = function(...)
 					Snacks.debug.inspect(...)
@@ -303,39 +346,6 @@ return {
 				Snacks.toggle.profiler():map("<leader>pp")
 
 				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-			end,
-		})
-	end,
-	config = function(_, opts)
-		require("snacks").setup(opts)
-
-		vim.g.snacks_animate = false
-
-		local progress_augroup = vim.api.nvim_create_augroup("lsp_progress_notifier", { clear = true })
-
-		local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-
-		vim.api.nvim_create_autocmd("LspProgress", {
-			pattern = { "begin", "end" },
-			group = progress_augroup,
-			---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-			callback = function(ev)
-				local client = vim.lsp.get_client_by_id(ev.data.client_id)
-				local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-				if not client or type(value) ~= "table" then
-					return
-				end
-				local msg = value.title or ""
-				local is_done = ev.data.params.value.kind == "end"
-				vim.notify(msg, "info", {
-					id = client.name .. client.id,
-					title = client.name,
-                    opts = function(notif)
-                        notif.icon = is_done and " "
-							or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-						notif.timeout = is_done and 3000 or 0
-					end,
-				})
 			end,
 		})
 	end,

@@ -4,7 +4,15 @@ local M = {}
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
-M["tailwindcss"] = {}
+M["tailwindcss"] = {
+	filetypes = {
+		"html",
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+	},
+}
 
 M["eslint"] = {
 	settings = {
@@ -150,17 +158,12 @@ M["basedpyright"] = {
 
 M["emmet_language_server"] = {
 	filetypes = {
-		"astro",
 		"css",
-		"heex",
 		"html",
-		"html-eex",
 		"javascript",
 		"javascriptreact",
-		"svelte",
 		"typescript",
 		"typescriptreact",
-		"vue",
 	},
 	init_options = {
 		showSuggestionsAsSnippets = true,

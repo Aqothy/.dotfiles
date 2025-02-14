@@ -68,6 +68,32 @@ autocmd("BufReadPost", {
 		local lcount = vim.api.nvim_buf_line_count(buf)
 		if mark[1] > 0 and mark[1] <= lcount then
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
+			vim.cmd("normal! zz")
 		end
+	end,
+})
+
+local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+
+vim.api.nvim_create_autocmd("LspProgress", {
+	pattern = { "begin", "end" },
+	group = augroup("lsp_progress_notify"),
+	---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+		if not client or type(value) ~= "table" then
+			return
+		end
+		local msg = value.title or ""
+		local is_done = ev.data.params.value.kind == "end"
+		vim.notify(msg, "info", {
+			id = client.name .. client.id,
+			title = client.name,
+			opts = function(notif)
+				notif.icon = is_done and " " or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+				notif.timeout = is_done and 3000 or 0
+			end,
+		})
 	end,
 })

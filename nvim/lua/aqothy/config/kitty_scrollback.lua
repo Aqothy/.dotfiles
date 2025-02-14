@@ -13,14 +13,14 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 	vim.o.cmdheight = 0
 	vim.opt.showcmd = false
 	vim.opt.scrollback = INPUT_LINE_NUMBER + CURSOR_LINE
-	vim.api.nvim_set_hl(0, "Normal", { bg = "#32302f" }) -- make bg color gruvbox so no sudden color change
+	vim.api.nvim_set_hl(0, "Normal", { bg = "#32302f" }) -- make bg color gruvbox
 
 	local term_buf = vim.api.nvim_create_buf(true, false)
 	local term_io = vim.api.nvim_open_term(term_buf, {})
 
 	vim.api.nvim_buf_set_keymap(term_buf, "n", "q", "<cmd>q<CR>", {})
 
-	local group = vim.api.nvim_create_augroup("aqothy/kitty_scrollback", {})
+	local group = vim.api.nvim_create_augroup("aqothy/kitty_scrollback", { clear = true })
 
 	local set_cursor = function()
 		vim.api.nvim_feedkeys(tostring(INPUT_LINE_NUMBER) .. [[ggzt]], "n", true)

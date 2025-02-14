@@ -10,6 +10,8 @@ brew "lazygit"                # Terminal UI for git
 brew "starship"               # Cross-shell prompt
 brew "gettext"                # Internationalization library
 brew "fd"                     # Simple, fast and user-friendly alternative to find
+brew "imagemagick"            # Image processing library
+brew "pyenv"                  # Python version manager
 
 # Development tools
 brew "postgresql@16", restart_service: true # PostgreSQL database

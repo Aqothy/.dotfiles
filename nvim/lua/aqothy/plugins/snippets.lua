@@ -2,7 +2,6 @@ return {
 	"L3MON4D3/LuaSnip",
 	version = "v2.*",
 	build = "make install_jsregexp",
-	-- enabled = false,
 	lazy = true,
 	opts = {
 		keep_roots = true,
@@ -12,55 +11,50 @@ return {
 		enable_autosnippets = true,
 		store_selection_keys = ",",
 	},
+	keys = {
+		{
+			"<C-l>",
+			function()
+				require("luasnip").jump(1)
+			end,
+			mode = { "i", "s" },
+			silent = true,
+		},
+		{
+			"<C-j>",
+			function()
+				require("luasnip").jump(-1)
+			end,
+			mode = { "i", "s" },
+			silent = true,
+		},
+		{
+			"<C-g>",
+			function()
+				if require("luasnip").choice_active() then
+					require("luasnip").change_choice(1)
+				end
+			end,
+			mode = { "i", "s" },
+			silent = true,
+		},
+		{
+			"<C-r>y",
+			function()
+				require("luasnip.extras.otf").on_the_fly("s")
+			end,
+			desc = "Insert on-the-fly snippet",
+			mode = "i",
+		},
+		{
+			",",
+			mode = "v",
+		},
+	},
 	config = function(_, opts)
-		local ls = require("luasnip")
-
-		ls.setup(opts)
+		require("luasnip").setup(opts)
 
 		-- maybe lua based snippets in the future
 		require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
-
-		--testing if snippets work
-		local s = ls.snippet
-		local t = ls.text_node
-		local i = ls.insert_node
-		local c = ls.choice_node
-
-		ls.add_snippets("lua", {
-			-- Function snippet
-			s("func", {
-				t("function "),
-				i(1, "function_name"),
-				t("("),
-				i(2, "args"),
-				t(")"),
-				t({ "", "    " }),
-				i(3, "-- body"),
-				t({ "", "end" }),
-			}),
-
-			-- Choice node snippet
-			s("choice", {
-				t("Choose: "),
-				c(1, {
-					t("Option 1"),
-					t("Option 2"),
-					t("Option 3"),
-				}),
-			}),
-		})
-
-		vim.keymap.set({ "i", "s" }, "<C-l>", function()
-			ls.jump(1)
-		end, { silent = true })
-		vim.keymap.set({ "i", "s" }, "<C-j>", function()
-			ls.jump(-1)
-		end, { silent = true })
-
-		vim.keymap.set({ "i", "s" }, "<C-g>", function()
-			if ls.choice_active() then
-				ls.change_choice(1)
-			end
-		end, { silent = true })
 	end,
 }

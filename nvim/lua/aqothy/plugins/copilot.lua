@@ -3,22 +3,26 @@ return {
 	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "BufReadPost",
-	config = function()
-		require("copilot").setup({
-			suggestion = {
-				enabled = true,
-				auto_trigger = true,
-				keymap = {
-					accept = "<M-l>",
-					next = "<M-]>",
-					prev = "<M-[>",
-					dismiss = "<C-]>",
-				},
+	opts = {
+		panel = {
+			enabled = false,
+		},
+		suggestion = {
+			enabled = true,
+			auto_trigger = true,
+			keymap = {
+				accept = "<M-l>",
+				next = "<M-]>",
+				prev = "<M-[>",
+				dismiss = "<C-]>",
 			},
-			filetypes = {
-				["*"] = true,
-			},
-		})
+		},
+		filetypes = {
+			["*"] = true,
+		},
+	},
+	config = function(_, opts)
+		require("copilot").setup(opts)
 		Snacks.toggle({
 			name = "Copilot",
 			get = function()

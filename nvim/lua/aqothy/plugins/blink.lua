@@ -104,7 +104,4 @@ return {
 			enabled = false,
 		},
 	},
-	config = function(_, opts)
-		require("blink.cmp").setup(opts)
-	end,
 }

@@ -22,18 +22,12 @@ M.plugin = {
 			tailwind = {
 				enabled = true,
 				ft = {
-					"astro",
 					"css",
-					"heex",
 					"html",
-					"html-eex",
 					"javascript",
 					"javascriptreact",
-					"rust",
-					"svelte",
 					"typescript",
 					"typescriptreact",
-					"vue",
 				},
 				-- full: the whole css class will be highlighted
 				-- compact: only the color will be highlighted
@@ -64,9 +58,8 @@ M.plugin = {
 	config = function(_, opts)
 		if type(opts.tailwind) == "table" and opts.tailwind.enabled then
 			-- reset hl groups when colorscheme changes
-			vim.api.nvim_create_augroup("my_color_scheme", { clear = true })
 			vim.api.nvim_create_autocmd("ColorScheme", {
-				group = "my_color_scheme",
+				group = vim.api.nvim_create_augroup("color_reload", { clear = true }),
 				callback = function()
 					M.hl = {}
 				end,

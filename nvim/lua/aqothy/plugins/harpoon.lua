@@ -33,6 +33,7 @@ return {
 				"<leader>" .. i,
 				function()
 					require("harpoon"):list():select(i)
+                    vim.cmd("normal! zz")
 				end,
 				desc = "Harpoon to File " .. i,
 			})
