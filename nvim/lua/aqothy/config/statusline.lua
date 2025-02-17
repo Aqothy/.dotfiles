@@ -74,12 +74,11 @@ M.MODE_TO_HIGHLIGHT = {
 	TERMINAL = "Command",
 }
 
-M.get_mode = function()
-	local mode = api.nvim_get_mode().mode
-	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
+function M.mode_component()
+	local mode_str = M.MODE_MAP[api.nvim_get_mode().mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
-	M.mode_cache = "%#"
+	return "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
 		.. "#"
@@ -94,19 +93,6 @@ M.get_mode = function()
 		.. hl
 		.. "#"
 		.. ""
-end
-
-autocmd("ModeChanged", {
-	group = stl_group,
-	callback = M.get_mode,
-})
-
-function M.mode_component()
-	if not M.mode_cache then
-		M.get_mode()
-	end
-
-	return M.mode_cache
 end
 
 function M.git_components()
@@ -180,48 +166,77 @@ function M.diagnostics_component()
 	return (#parts > 0) and table.concat(parts, " ") or ""
 end
 
-function M.update_filetype_cache()
-	-- For file info but putting it here to take advantage of bufenter and buffilepost
-	M.encoding_cache = bo.fileencoding
-	M.shiftwidth_cache = bo.shiftwidth
+---@type table<number, {client: string, kind: string, title: string?}>
+M.progress_statuses = {}
 
-	-- For filetype
-	local full_path = api.nvim_buf_get_name(0)
-	local icon, icon_hl = mini_icons.get("file", full_path)
-	M.filetype_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
-end
-
-autocmd({ "BufEnter", "BufFilePost" }, {
+autocmd("LspProgress", {
 	group = stl_group,
-	callback = M.update_filetype_cache,
-})
+	desc = "Update LSP progress in statusline",
+	pattern = { "begin", "end" },
+	callback = function(args)
+		if not args.data then
+			return
+		end
 
-function M.filetype_component()
-	if not M.filetype_cache then
-		M.update_filetype_cache()
-	end
-	return M.filetype_cache
-end
+		local client_id = args.data.client_id
+		local client = vim.lsp.get_client_by_id(client_id)
+		local value = args.data.params.value
 
--- Update when 'fileencoding' or 'shiftwidth' options change or after buffer enter
-autocmd("OptionSet", {
-	group = stl_group,
-	pattern = { "fileencoding", "shiftwidth" },
-	callback = function()
-		M.encoding_cache = bo.fileencoding
-		M.shiftwidth_cache = bo.shiftwidth
+		if not client or type(value) ~= "table" then
+			return
+		end
+
+		-- Update or create progress entry for this client
+		M.progress_statuses[client_id] = {
+			client = client.name,
+			kind = value.kind,
+			title = value.title,
+		}
+
+		if value.kind == "end" then
+			-- Remove the entry after delay while keeping completion checkmark
+			vim.defer_fn(function()
+				M.progress_statuses[client_id] = nil
+				vim.cmd.redrawstatus()
+			end, 3000)
+		end
+
+		vim.cmd.redrawstatus()
 	end,
 })
 
-function M.file_info_component()
-	if not M.encoding_cache then
-		M.encoding_cache = bo.fileencoding
+function M.lsp_progress_component()
+	if vim.startswith(vim.api.nvim_get_mode().mode, "i") then
+		return ""
 	end
 
-	if not M.shiftwidth_cache then
-		M.shiftwidth_cache = bo.shiftwidth
+	local progress_parts = {}
+	for _, status in pairs(M.progress_statuses) do
+		if status.title then
+			local is_done = status.kind == "end"
+			local symbol = is_done and " " or "󱥸 "
+			local title = is_done and "" or status.title
+			table.insert(
+				progress_parts,
+				table.concat({
+					"%#StatuslineTitle#" .. symbol .. status.client .. " ",
+					"%#StatuslineItalic#" .. title,
+				})
+			)
+		end
 	end
-	return "%#StatuslineModeSeparatorOther# " .. M.encoding_cache .. " Tab:" .. M.shiftwidth_cache
+
+	return table.concat(progress_parts, " ")
+end
+
+function M.filetype_component()
+	local full_path = api.nvim_buf_get_name(0)
+	local icon, icon_hl = mini_icons.get("file", full_path)
+	return "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
+end
+
+function M.file_info_component()
+	return "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
 end
 
 function M.position_component()
@@ -250,6 +265,7 @@ function M.render()
 	local right_components = {}
 	local right_candidates = {
 		M.diagnostics_component(),
+		M.lsp_progress_component(),
 		M.file_info_component(),
 		M.position_component(),
 	}

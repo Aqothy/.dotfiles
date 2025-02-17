@@ -26,16 +26,6 @@ return {
 			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-p>"] = { "select_prev", "fallback" },
 			["<C-n>"] = { "select_next", "fallback" },
-			cmdline = {
-				preset = "none",
-				["<C-y>"] = { "select_and_accept" },
-				["<C-b>"] = { "scroll_documentation_up", "fallback" },
-				["<C-f>"] = { "scroll_documentation_down", "fallback" },
-				["<C-e>"] = { "hide", "fallback" },
-				["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-				["<C-p>"] = { "select_prev", "fallback" },
-				["<C-n>"] = { "select_next", "fallback" },
-			},
 		},
 
 		sources = {
@@ -56,9 +46,12 @@ return {
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies
 			-- compat = {},
-
-			-- disable cmdline by passing empty table
-			-- cmdline = {},
+		},
+		cmdline = {
+			enabled = true,
+		},
+		term = {
+			enabled = true,
 		},
 		completion = {
 			accept = {
@@ -79,7 +72,7 @@ return {
 			},
 			list = {
 				selection = { auto_insert = false },
-				max_items = 10,
+				max_items = 15,
 			},
 			documentation = {
 				window = { border = "rounded" },

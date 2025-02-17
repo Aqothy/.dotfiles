@@ -19,8 +19,6 @@ keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and cent
 keymap({ "n", "v" }, "<leader>d", [["_d]])
 keymap({ "n", "v" }, "<leader>c", [["_c]])
 
-keymap("n", "<leader>a", "<cmd>normal ggVG<cr>", { silent = true, desc = "Select all text in the file" })
-
 -- Move Lines
 keymap("n", "<M-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
 keymap("n", "<M-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })

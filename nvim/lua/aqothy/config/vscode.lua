@@ -71,35 +71,31 @@ keymap({ "n", "v" }, "K", function()
 end, { desc = "Show Hover" })
 
 -- vscode-harpoon keymaps
-keymap({ "n", "v" }, "<leader>ha", function()
+keymap({ "n", "v" }, "'s", function()
 	vscode.action("vscode-harpoon.addEditor")
 end, { desc = "Harpoon: Add Editor" })
 
-keymap({ "n", "v" }, "<leader>hh", function()
-	vscode.action("vscode-harpoon.editorQuickPick")
-end, { desc = "Harpoon: Editor Quick Pick" })
-
-keymap({ "n", "v" }, "<leader>he", function()
+keymap({ "n", "v" }, "'e", function()
 	vscode.action("vscode-harpoon.editEditors")
 end, { desc = "Harpoon: Edit Editors" })
 
-keymap({ "n", "v" }, "<leader>1", function()
+keymap({ "n", "v" }, "'1", function()
 	vscode.action("vscode-harpoon.gotoEditor1")
 end, { desc = "Harpoon: Goto Editor 1" })
 
-keymap({ "n", "v" }, "<leader>2", function()
+keymap({ "n", "v" }, "'2", function()
 	vscode.action("vscode-harpoon.gotoEditor2")
 end, { desc = "Harpoon: Goto Editor 2" })
 
-keymap({ "n", "v" }, "<leader>3", function()
+keymap({ "n", "v" }, "'3", function()
 	vscode.action("vscode-harpoon.gotoEditor3")
 end, { desc = "Harpoon: Goto Editor 3" })
 
-keymap({ "n", "v" }, "<leader>4", function()
+keymap({ "n", "v" }, "'4", function()
 	vscode.action("vscode-harpoon.gotoEditor4")
 end, { desc = "Harpoon: Goto Editor 4" })
 
-keymap({ "n", "v" }, "<leader>5", function()
+keymap({ "n", "v" }, "'5", function()
 	vscode.action("vscode-harpoon.gotoEditor5")
 end, { desc = "Harpoon: Goto Editor 5" })
 

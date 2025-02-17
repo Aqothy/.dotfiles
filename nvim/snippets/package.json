@@ -54,6 +54,13 @@
       {
         "language": "swift",
         "path": "./swift.json"
+      },
+      {
+        "language": [
+          "plaintex",
+          "tex"
+        ],
+        "path": "./tex.json"
       }
     ]
   }

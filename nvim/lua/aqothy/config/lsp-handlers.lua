@@ -105,7 +105,6 @@ M.on_attach = function(client, bufnr)
 	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
 		local blink_window = require("blink.cmp.completion.windows.menu")
-		local blink = require("blink.cmp")
 
 		-- if cmp.core.view:visible() then
 		-- 	cmp.close()
@@ -123,7 +122,9 @@ M.on_attach = function(client, bufnr)
 	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
 	keymap("n", "<leader>rn", vim.lsp.buf.rename)
 	keymap("n", "<leader>fl", vim.diagnostic.open_float)
-	keymap("n", "<leader>li", "<cmd>LspInfo<cr>")
+	keymap("n", "<leader>li", function()
+		Snacks.picker.lsp_config()
+	end, { desc = "Lsp Info" })
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })

@@ -22,6 +22,17 @@ return {
 			"prettier",
 			"gofumpt",
 		},
+
+		ui = {
+			border = "rounded",
+			icons = {
+				package_installed = "",
+				package_pending = "",
+				package_uninstalled = "",
+			},
+			log_level = vim.log.levels.INFO,
+			max_concurrent_installers = 3,
+		},
 	},
 	config = function(_, opts)
 		require("mason").setup(opts)

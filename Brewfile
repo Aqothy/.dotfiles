@@ -17,5 +17,6 @@ brew "pyenv"                  # Python version manager
 brew "postgresql@16", restart_service: true # PostgreSQL database
 brew "deno" # Deno
 
-# Fonts
+# Casks
 cask "font-hack-nerd-font"
+cask "nikitabobko/tap/aerospace"

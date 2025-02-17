@@ -43,7 +43,7 @@ vim.opt.isfname:append("@-@")
 vim.opt.mouse = "a"
 
 -- completion
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
+vim.opt.pumheight = 15 -- Maximum number of entries in a popup
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 vim.opt.wildignore:append({ ".DS_Store" })
 vim.opt.wildignorecase = true
@@ -55,6 +55,7 @@ vim.opt.wildmode = "longest:full,full"
 vim.opt.laststatus = 3
 vim.opt.fillchars = { eob = " ", fold = " " }
 vim.opt.signcolumn = "yes"
+vim.opt.showbreak = "↪ "
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"

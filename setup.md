@@ -21,6 +21,8 @@
 
 ### Install these first manually from the source
 
+- xcode and developer tools
+
 - Homebrew
 
   > Now install dependencies using brew file before installing rest of the packages, might need to set up fonts
@@ -36,7 +38,6 @@
 - wblock
 - imageoptim
 - docker
-- xcode and developer tools
 - karabiner element
 - ollama (already in external ssd)
 - vmware (already in external ssd)

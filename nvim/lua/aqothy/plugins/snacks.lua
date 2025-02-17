@@ -5,7 +5,7 @@ local function get_projects()
 	local home = os.getenv("HOME")
 	local proj = home .. "/Code/Personal"
 
-	local cmd = 'fd --type d --max-depth 1 --min-depth 1 . ' .. proj
+	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. proj
 	local handle = io.popen(cmd)
 	if handle then
 		for line in handle:lines() do
@@ -124,8 +124,8 @@ return {
 			},
 		},
 		indent = {
+			enabled = false,
 			indent = {
-				enabled = false,
 				char = "▏",
 			},
 			-- chunk = {
@@ -138,7 +138,7 @@ return {
 		},
 		input = { enabled = false },
 		notifier = {
-			enabled = true,
+			enabled = false,
 			icons = {
 				error = user.signs.error,
 				warn = user.signs.warn,
@@ -154,7 +154,7 @@ return {
 			left = { "sign", "git" },
 			right = { "mark", "fold" },
 			folds = {
-				open = true,
+				open = false,
 				git_hl = false,
 			},
 			refresh = 300,
@@ -193,12 +193,16 @@ return {
 		},
 		image = {
 			enabled = true,
+			doc = {
+				enabled = true,
+				inline = false,
+				float = true,
+				max_width = 80,
+				max_height = 40,
+			},
 		},
 
 		styles = {
-			-- your styles configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
 			zen = {
 				width = 160,
 				backdrop = { transparent = false },
@@ -233,7 +237,7 @@ return {
 	},
     -- stylua: ignore
 	keys = {
-		{ "<leader>nn", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+		-- { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git Browse", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
@@ -258,9 +262,9 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-		{ "<leader>sh", function() Snacks.picker.notifications({ on_show = function ()
-		    vim.cmd.stopinsert()
-		end }) end, desc = "Show Notifier History" },
+		-- { "<leader>sh", function() Snacks.picker.notifications({ on_show = function ()
+		--     vim.cmd.stopinsert()
+		-- end }) end, desc = "Show Notifier History" },
 		{
 			"<leader>no",
 			function()
