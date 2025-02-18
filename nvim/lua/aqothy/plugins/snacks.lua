@@ -237,13 +237,6 @@ return {
 					signcolumn = "no",
 				},
 			},
-			notification = {
-				wo = { wrap = true }, -- Wrap notifications
-			},
-			notification_history = {
-				minimal = true,
-				keys = { q = "close", ["<esc>"] = "close" },
-			},
 			terminal = {
 				keys = {
 					term_normal = {
@@ -261,7 +254,6 @@ return {
 	},
     -- stylua: ignore
 	keys = {
-		-- { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git Browse", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
@@ -286,9 +278,22 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-		-- { "<leader>sh", function() Snacks.picker.notifications({ on_show = function ()
-		--     vim.cmd.stopinsert()
-		-- end }) end, desc = "Show Notifier History" },
+		{ "<leader>sh", function() Snacks.win({
+            border = "rounded",
+            zindex = 100,
+            width = 0.6,
+            height = 0.6,
+            title = " Notification History ",
+            title_pos = "center",
+            ft = "vim",
+            bo = { buflisted = false, bufhidden = "wipe", swapfile = false, modifiable = false },
+            wo = { winhighlight = "NormalFloat:Normal", wrap = true },
+            minimal = true,
+            keys = { q = "close", ["<esc>"] = "close" },
+            text = function ()
+                return vim.split(vim.fn.execute("messages", "silent"), "\n")
+            end
+        }) end, desc = "Show Notifier History" },
 		{
 			"<leader>no",
 			function()

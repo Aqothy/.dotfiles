@@ -13,6 +13,9 @@ return {
 			lines = 7,
 			zindex = 20,
 		},
+		mappings = {
+			open_vertical = "\\",
+		},
 		buffer_leader_key = "\\",
 		show_icons = true,
 		leader_key = "'", -- Recommended to be a single key

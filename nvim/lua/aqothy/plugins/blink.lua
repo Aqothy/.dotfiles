@@ -1,9 +1,10 @@
 local user = require("aqothy.config.user")
 return {
 	"saghen/blink.cmp",
-	build = "cargo build --release",
+	-- build = "cargo build --release",
+    version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {

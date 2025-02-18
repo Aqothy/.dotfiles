@@ -6,21 +6,21 @@ return {
 	opts = {
 		ensure_installed = {
 			-- LSP servers
-			"css-lsp",
-			"tailwindcss-language-server",
+			-- "css-lsp",
+			-- "tailwindcss-language-server",
 			"lua-language-server",
-			"basedpyright",
-			"clangd",
-			"gopls",
+			-- "basedpyright",
+			-- "clangd",
+			-- "gopls",
 			"eslint-lsp",
-			"texlab",
+			-- "texlab",
 			"vtsls",
 			"emmet-language-server",
 
 			-- Tools (formatters, linters, etc.)
 			"stylua",
 			"prettier",
-			"gofumpt",
+			-- "gofumpt",
 		},
 
 		ui = {

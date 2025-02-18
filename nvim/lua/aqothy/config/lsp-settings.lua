@@ -5,6 +5,7 @@ local M = {}
 -- since were not using mason-lspconfig it will not be initialized by default
 
 M["tailwindcss"] = {
+	enabled = false,
 	filetypes = {
 		"html",
 		"javascript",
@@ -99,6 +100,7 @@ M["lua_ls"] = {
 }
 
 M["clangd"] = {
+	enabled = false,
 	cmd = {
 		"clangd",
 		"--background-index",
@@ -117,6 +119,7 @@ M["clangd"] = {
 }
 
 M["gopls"] = {
+	enabled = false,
 	settings = {
 		gopls = {
 			gofumpt = true,
@@ -144,6 +147,7 @@ M["gopls"] = {
 }
 
 M["basedpyright"] = {
+	enabled = false,
 	settings = {
 		basedpyright = {
 			analysis = {
@@ -171,17 +175,22 @@ M["emmet_language_server"] = {
 }
 
 M["sourcekit"] = {
+	enabled = false,
 	filetypes = { "swift", "objc", "objcpp" },
 }
 
--- M["omnisharp"] = {
--- 	enable_roslyn_analyzers = true,
--- 	organize_imports_on_format = true,
--- 	enable_import_completion = true,
--- }
+M["omnisharp"] = {
+	enable_roslyn_analyzers = true,
+	organize_imports_on_format = true,
+	enable_import_completion = true,
+}
 
-M["cssls"] = {}
+M["cssls"] = {
+	enabled = false,
+}
 
-M["texlab"] = {}
+M["texlab"] = {
+	enabled = false,
+}
 
 return M

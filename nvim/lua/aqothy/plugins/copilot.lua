@@ -3,6 +3,7 @@ return {
 	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "BufReadPost",
+    enabled = false,
 	opts = {
 		panel = {
 			enabled = false,
