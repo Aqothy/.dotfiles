@@ -51,7 +51,6 @@ keymap({ "n", "v" }, "<leader>tt", function()
 end, { desc = "Toggle Terminal" })
 
 keymap({ "n", "v" }, "<leader>d", [["_d]])
-keymap({ "n", "v" }, "<leader>c", [["_c]])
 
 -- Updated keymaps using the `vscode` variable directly
 keymap({ "n", "v" }, "<leader>la", function()

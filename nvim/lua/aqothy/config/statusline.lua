@@ -206,10 +206,6 @@ autocmd("LspProgress", {
 })
 
 function M.lsp_progress_component()
-	if vim.startswith(vim.api.nvim_get_mode().mode, "i") then
-		return ""
-	end
-
 	local progress_parts = {}
 	for _, status in pairs(M.progress_statuses) do
 		if status.title then

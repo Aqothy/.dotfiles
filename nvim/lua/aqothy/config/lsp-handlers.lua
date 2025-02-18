@@ -109,7 +109,7 @@ M.on_attach = function(client, bufnr)
 		-- if cmp.core.view:visible() then
 		-- 	cmp.close()
 		-- end
-		keymap("i", "<C-k>", function()
+		keymap("i", "<C-b>", function()
 			if blink_window.win:is_open() then
 				blink.hide()
 			end

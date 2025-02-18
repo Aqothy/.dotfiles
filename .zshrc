@@ -2,7 +2,6 @@ setopt auto_cd  # Auto-cd if command is a directory
 unsetopt CASE_GLOB  # Case-insensitive filename matching
 unsetopt CASE_MATCH  # Case-insensitive case statements
 zstyle ':completion:*' menu select
-bindkey -v # Use vi mode, need to set before other keybindings
 
 # Aliases
 alias icat="kitten icat"

@@ -178,6 +178,30 @@ return {
 		picker = {
 			enabled = true,
 			icons = user.kinds,
+			win = {
+				input = {
+					keys = {
+						["<C-a-d>"] = { "inspect", mode = { "n", "i" } },
+						["<C-a-f>"] = { "toggle_follow", mode = { "i", "n" } },
+						["<C-a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+						["<C-a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+						["<C-a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+						["<C-a-p>"] = { "toggle_preview", mode = { "i", "n" } },
+						["<C-a-w>"] = { "cycle_win", mode = { "i", "n" } },
+					},
+				},
+			},
+			list = {
+				keys = {
+					["<C-a-d>"] = { "inspect", mode = { "n", "i" } },
+					["<C-a-f>"] = { "toggle_follow", mode = { "i", "n" } },
+					["<C-a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+					["<C-a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+					["<C-a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+					["<C-a-p>"] = { "toggle_preview", mode = { "i", "n" } },
+					["<C-a-w>"] = { "cycle_win", mode = { "i", "n" } },
+				},
+			},
 		},
 
 		lazygit = {
@@ -192,13 +216,13 @@ return {
 			},
 		},
 		image = {
-			enabled = true,
+			enabled = false,
 			doc = {
 				enabled = true,
 				inline = false,
-				float = true,
-				max_width = 80,
-				max_height = 40,
+				float = false,
+				max_width = 30,
+				max_height = 15,
 			},
 		},
 
@@ -275,7 +299,7 @@ return {
 		{ "<leader>;", function() Snacks.picker.buffers({ on_show = function()
               vim.cmd.stopinsert()
             end }) end, desc = "Buffers" },
-		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true}) end, desc = "Find Config File" },
+		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true }) end, desc = "Find Config File" },
 		{ "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep({hidden = true}) end, desc = "Grep" },

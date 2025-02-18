@@ -2,6 +2,8 @@
 
 add_newline = false
 
+command_timeout = 3000
+
 format = """
 [](color_orange)\
 $os\
@@ -178,5 +180,3 @@ vimcmd_symbol = '[](bold fg:color_green)'
 vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
 vimcmd_replace_symbol = '[](bold fg:color_purple)'
 vimcmd_visual_symbol = '[](bold fg:color_yellow)'
-
-command_timeout = 3000

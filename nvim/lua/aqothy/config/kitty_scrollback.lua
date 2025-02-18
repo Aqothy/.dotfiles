@@ -15,6 +15,14 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 	vim.opt.scrollback = INPUT_LINE_NUMBER + CURSOR_LINE
 	vim.api.nvim_set_hl(0, "Normal", { bg = "#32302f" }) -- make bg color gruvbox
 
+	-- Highlight on yank
+	vim.api.nvim_create_autocmd("TextYankPost", {
+		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+		callback = function()
+			(vim.hl or vim.highlight).on_yank({ timeout = 60 })
+		end,
+	})
+
 	local term_buf = vim.api.nvim_create_buf(true, false)
 	local term_io = vim.api.nvim_open_term(term_buf, {})
 
