@@ -98,3 +98,5 @@ vim.opt.wrap = true
 vim.opt.breakindent = true
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+
+vim.o.background = "light"
