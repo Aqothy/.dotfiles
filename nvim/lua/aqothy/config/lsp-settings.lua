@@ -5,6 +5,7 @@ local M = {}
 -- since were not using mason-lspconfig it will not be initialized by default
 
 M["tailwindcss"] = {
+	enabled = false,
 	filetypes = {
 		"html",
 		"javascript",
@@ -15,6 +16,7 @@ M["tailwindcss"] = {
 }
 
 M["eslint"] = {
+	enabled = true,
 	settings = {
 		-- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
 		workingDirectories = { mode = "auto" },
@@ -23,6 +25,7 @@ M["eslint"] = {
 }
 
 M["vtsls"] = {
+	enabled = true,
 	settings = {
 		complete_function_calls = true,
 		vtsls = {
@@ -157,6 +160,7 @@ M["basedpyright"] = {
 }
 
 M["emmet_language_server"] = {
+	enabled = false,
 	filetypes = {
 		"css",
 		"html",
