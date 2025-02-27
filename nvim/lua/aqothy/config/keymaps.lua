@@ -18,8 +18,8 @@ keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and cent
 
 keymap({ "n", "v" }, "<leader>d", [["_d]])
 
-keymap("n", "<M-left>", "<cmd>vertical resize +2<cr>") -- make the window biger vertically
-keymap("n", "<M-right>", "<cmd>vertical resize -2<cr>") -- make the window smaller vertically
+keymap("n", "<M-right>", "<cmd>vertical resize +2<cr>") -- make the window biger vertically
+keymap("n", "<M-left>", "<cmd>vertical resize -2<cr>") -- make the window smaller vertically
 keymap("n", "<M-down>", "<cmd>horizontal resize +2<cr>") -- make the window bigger horizontally
 keymap("n", "<M-up>", "<cmd>horizontal resize -2<cr>") -- make the window smaller horizontally
 
@@ -29,8 +29,8 @@ keymap({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", exp
 keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
-keymap("v", "<Tab>", ">gv")
-keymap("v", "<S-Tab>", "<gv")
+keymap("v", ">", ">gv")
+keymap("v", "<", "<gv")
 
 keymap("n", "<C-j>", "<cmd>cnext<CR>zz")
 keymap("n", "<C-k>", "<cmd>cprev<CR>zz")

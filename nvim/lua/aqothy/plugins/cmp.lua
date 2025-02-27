@@ -96,7 +96,7 @@ return {
 				fetching_timeout = 10000,
 				confirm_resolve_timeout = 6,
 				async_budget = 1,
-				max_view_entries = 10,
+				max_view_entries = 15,
 			},
 
 			-- sources for autocompletion

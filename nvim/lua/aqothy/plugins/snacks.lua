@@ -2,10 +2,8 @@ local user = require("aqothy.config.user")
 
 local function get_projects()
 	local directories = {}
-	local home = os.getenv("HOME")
-	local proj = home .. "/Code/Personal"
 
-	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. proj
+	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
 	local handle = io.popen(cmd)
 	if handle then
 		for line in handle:lines() do
@@ -154,7 +152,7 @@ return {
 			left = { "sign", "git" },
 			right = { "mark", "fold" },
 			folds = {
-				open = false,
+				open = true,
 				git_hl = false,
 			},
 			refresh = 300,
@@ -202,6 +200,13 @@ return {
 					["<C-a-w>"] = { "cycle_win", mode = { "i", "n" } },
 				},
 			},
+			layouts = {
+				vscode = {
+					layout = {
+						border = "rounded",
+					},
+				},
+			},
 		},
 
 		lazygit = {
@@ -224,6 +229,9 @@ return {
 				max_width = 30,
 				max_height = 15,
 			},
+			convert = {
+				notify = false,
+			},
 		},
 
 		styles = {
@@ -242,7 +250,7 @@ return {
 					term_normal = {
 						"<esc>",
 						function()
-							vim.cmd("stopinsert")
+							vim.cmd.stopinsert()
 						end,
 						mode = "t",
 						expr = true,
@@ -278,6 +286,7 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
+        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
 		{ "<leader>sh", function() Snacks.win({
             border = "rounded",
             zindex = 100,
@@ -307,7 +316,7 @@ return {
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true }) end, desc = "Find Config File" },
 		{ "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
-		{ "<leader>fs", function() Snacks.picker.grep({hidden = true}) end, desc = "Grep" },
+		{ "<leader>fs", function() Snacks.picker.grep({ hidden = true }) end, desc = "Grep" },
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
 		{ "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 		{ "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
@@ -333,15 +342,15 @@ return {
         { "<leader>fp", function()
             local projects = get_projects()
 
-            return Snacks.picker("Projects", {
+            return Snacks.picker.pick("Projects", {
                 finder = function()
                     local dirs = {}
                     for _, dir in ipairs(projects) do
-                        table.insert(dirs, {
+                        dirs[#dirs + 1] = {
                             text = dir,
                             file = dir,
                             dir = true,
-                        })
+                        }
                     end
                     return dirs
                 end,

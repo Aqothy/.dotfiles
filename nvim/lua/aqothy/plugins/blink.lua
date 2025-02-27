@@ -49,6 +49,14 @@ return {
 		},
 		cmdline = {
 			enabled = true,
+			completion = {
+				menu = { auto_show = true },
+				list = {
+					selection = {
+						auto_insert = false,
+					},
+				},
+			},
 		},
 		term = {
 			enabled = true,

@@ -23,11 +23,10 @@ end
 
 M.MODE_MAP = {
 	["n"] = "NORMAL",
-	-- OP pending mode is buggy asf
-	-- ["no"] = "OP-PENDING",
-	-- ["nov"] = "OP-PENDING",
-	-- ["noV"] = "OP-PENDING",
-	-- ["no\22"] = "OP-PENDING",
+	["no"] = "OP-PENDING",
+	["nov"] = "OP-PENDING",
+	["noV"] = "OP-PENDING",
+	["no\22"] = "OP-PENDING",
 	["niI"] = "NORMAL",
 	["niR"] = "NORMAL",
 	["niV"] = "NORMAL",
@@ -63,7 +62,7 @@ M.MODE_MAP = {
 
 M.MODE_TO_HIGHLIGHT = {
 	NORMAL = "Normal",
-	-- ["OP-PENDING"] = "Pending",
+	["OP-PENDING"] = "Pending",
 	VISUAL = "Visual",
 	["V-LINE"] = "Visual",
 	["V-BLOCK"] = "Visual",
@@ -74,11 +73,11 @@ M.MODE_TO_HIGHLIGHT = {
 	TERMINAL = "Command",
 }
 
-function M.mode_component()
+function M.update_mode_cache()
 	local mode_str = M.MODE_MAP[api.nvim_get_mode().mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
-	return "%#"
+	M.mode_cache = "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
 		.. "#"
@@ -93,6 +92,22 @@ function M.mode_component()
 		.. hl
 		.. "#"
 		.. ""
+
+	-- For operator mode to show
+	vim.cmd.redrawstatus()
+end
+
+autocmd("ModeChanged", {
+	group = stl_group,
+	pattern = "*",
+	callback = M.update_mode_cache,
+})
+
+function M.mode_component()
+	if not M.mode_cache then
+		M.update_mode_cache()
+	end
+	return M.mode_cache or ""
 end
 
 function M.git_components()
@@ -207,6 +222,9 @@ autocmd("LspProgress", {
 
 function M.lsp_progress_component()
 	local progress_parts = {}
+	if next(M.progress_statuses) == nil then
+		return ""
+	end
 	for _, status in pairs(M.progress_statuses) do
 		if status.title then
 			local is_done = status.kind == "end"
@@ -225,14 +243,48 @@ function M.lsp_progress_component()
 	return table.concat(progress_parts, " ")
 end
 
-function M.filetype_component()
+function M.update_file_type()
+	-- Don't update file type for cmp menu
+	if vim.bo.filetype == "blink-cmp-menu" then
+		return
+	end
+
+	M.update_file_info_cache()
+
 	local full_path = api.nvim_buf_get_name(0)
 	local icon, icon_hl = mini_icons.get("file", full_path)
-	return "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
+	M.file_type_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
 end
 
+-- TermLeave for updating icon after lazygit closes
+autocmd({ "BufEnter", "TermLeave", "FileType" }, {
+	pattern = "*",
+	group = stl_group,
+	callback = M.update_file_type,
+})
+
+function M.filetype_component()
+	if not M.file_type_cache then
+		M.update_file_type()
+	end
+	return M.file_type_cache or ""
+end
+
+function M.update_file_info_cache()
+	M.file_info_cache = "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
+end
+
+autocmd("OptionSet", {
+	group = stl_group,
+	pattern = { "fileencoding", "shiftwidth" },
+	callback = M.update_file_info_cache,
+})
+
 function M.file_info_component()
-	return "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
+	if not M.file_info_cache then
+		M.update_file_info_cache()
+	end
+	return M.file_info_cache or ""
 end
 
 function M.position_component()
@@ -241,6 +293,11 @@ function M.position_component()
 end
 
 function M.render()
+	-- Don't render statusline if it's in floating window
+	if vim.api.nvim_win_get_config(0).zindex then
+		return ""
+	end
+
 	local git_head, git_status = M.git_components()
 
 	local left_components = {}
