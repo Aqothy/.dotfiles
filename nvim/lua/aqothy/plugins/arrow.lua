@@ -2,7 +2,7 @@ return {
 	"otavioschwanck/arrow.nvim",
 	keys = { { "'" }, { "\\" } },
 	opts = {
-		separate_by_branch = false,
+		separate_by_branch = true,
 		per_buffer_config = {
 			sort_automatically = true,
 			satellite = {

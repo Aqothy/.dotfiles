@@ -3,19 +3,12 @@ return {
 	event = "LazyFile",
 	opts = {
 		signs = {
-			add = { text = " ▎" },
-			change = { text = " ▎" },
-			delete = { text = " " },
-			topdelete = { text = " " },
-			changedelete = { text = " ▎" },
-			untracked = { text = " ┆" },
+			delete = { text = "" },
+			topdelete = { text = "" },
 		},
 		signs_staged = {
-			add = { text = " ▎" },
-			change = { text = " ▎" },
-			delete = { text = " " },
-			topdelete = { text = " " },
-			changedelete = { text = " ▎" },
+			delete = { text = "" },
+			topdelete = { text = "" },
 		},
 		update_debounce = 300,
 		attach_to_untracked = true,

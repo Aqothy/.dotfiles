@@ -5,6 +5,9 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.markdown_recommended_style = 0
 
+vim.g.projects_dir = vim.env.HOME .. "/Code"
+vim.g.dotfiles = vim.env.HOME .. "/.config"
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -47,13 +50,13 @@ vim.opt.pumheight = 15 -- Maximum number of entries in a popup
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 vim.opt.wildignore:append({ ".DS_Store" })
 vim.opt.wildignorecase = true
-vim.opt.wildmode = "longest:full,full"
+vim.opt.wildmode = { "longest:full", "full" }
 
 -- ui
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " ", fold = " " }
+vim.opt.fillchars = { eob = " ", fold = " ", diff = "╱" }
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
 
@@ -75,7 +78,7 @@ vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.confirm = true
 vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
 vim.opt.ruler = false -- already handled by statusline
-vim.opt.jumpoptions = "view"
+vim.opt.jumpoptions = { "stack", "view", "clean" }
 
 -- command line
 vim.opt.cmdheight = 1
@@ -85,13 +88,12 @@ vim.opt.showmode = false
 -- folds
 -- vim.opt.foldcolumn = "1"
 vim.opt.foldenable = true
-vim.opt.foldexpr = "v:lua.vim.lsp.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
-vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
+vim.opt.foldmethod = "manual"
 
-vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "resize", "terminal" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true

@@ -10,7 +10,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.virtualedit = "block"
-vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
+vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 

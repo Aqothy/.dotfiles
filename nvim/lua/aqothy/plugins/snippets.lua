@@ -1,7 +1,6 @@
 return {
 	"L3MON4D3/LuaSnip",
 	version = "v2.*",
-	-- build = "make install_jsregexp",
 	lazy = true,
 	opts = {
 		keep_roots = true,
@@ -9,7 +8,7 @@ return {
 		link_children = true,
 		delete_check_events = "TextChanged",
 		enable_autosnippets = true,
-		store_selection_keys = ",",
+		store_selection_keys = "<Tab>",
 	},
 	keys = {
 		{
@@ -47,7 +46,7 @@ return {
 			mode = "i",
 		},
 		{
-			",",
+			"<Tab>",
 			mode = "v",
 		},
 	},

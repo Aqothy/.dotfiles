@@ -6,9 +6,17 @@
 #	name = Anthony Qiu
 #	email = aq0335@gmail.com
 
+[column]
+    ui = auto
+
+[branch]
+    sort = -committerdate
+
 [credential]
+
 [core]
-	excludesfile = /Users/aqothy/.gitignore
+	excludesfile = ~/.gitignore
+
 [alias]
 	tree = log --graph --oneline --decorate --all
 
@@ -21,5 +29,9 @@
 [merge]
 	conflictstyle = diff3
 
-[mergetool]
-    keepBackup = false
+[help]
+    autocorrect = prompt
+
+[diff]
+    algorithm = histogram
+    renames = true
