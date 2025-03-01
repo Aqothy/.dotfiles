@@ -176,30 +176,6 @@ return {
 		picker = {
 			enabled = true,
 			icons = user.kinds,
-			win = {
-				input = {
-					keys = {
-						["<C-a-d>"] = { "inspect", mode = { "n", "i" } },
-						["<C-a-f>"] = { "toggle_follow", mode = { "i", "n" } },
-						["<C-a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-						["<C-a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-						["<C-a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-						["<C-a-p>"] = { "toggle_preview", mode = { "i", "n" } },
-						["<C-a-w>"] = { "cycle_win", mode = { "i", "n" } },
-					},
-				},
-			},
-			list = {
-				keys = {
-					["<C-a-d>"] = { "inspect", mode = { "n", "i" } },
-					["<C-a-f>"] = { "toggle_follow", mode = { "i", "n" } },
-					["<C-a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-					["<C-a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-					["<C-a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-					["<C-a-p>"] = { "toggle_preview", mode = { "i", "n" } },
-					["<C-a-w>"] = { "cycle_win", mode = { "i", "n" } },
-				},
-			},
 			layouts = {
 				vscode = {
 					layout = {
@@ -236,12 +212,11 @@ return {
 
 		styles = {
 			zen = {
-				width = 160,
+				width = 180,
 				backdrop = { transparent = false },
 				wo = {
-					number = false,
-					cursorcolumn = false,
-					relativenumber = false,
+					number = true,
+					relativenumber = true,
 					signcolumn = "no",
 				},
 			},
@@ -362,6 +337,7 @@ return {
             })
         end, desc = "Custom projects picker" },
         { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
+        { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
 	init = function()
 		vim.api.nvim_create_autocmd("User", {

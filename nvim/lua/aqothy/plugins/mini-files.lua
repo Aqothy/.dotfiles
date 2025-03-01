@@ -6,11 +6,13 @@ local filter_hide = function(entry)
 	return filter_show(entry) and not vim.startswith(entry.name, ".")
 end
 
+local autocmd = vim.api.nvim_create_autocmd
+
 return {
 	"echasnovski/mini.files",
 	-- custom lazy load for mini files
 	init = function()
-		vim.api.nvim_create_autocmd("BufEnter", {
+		autocmd("BufEnter", {
 			group = vim.api.nvim_create_augroup("mini_files_start", { clear = true }),
 			desc = "Start mini files with a directory",
 			once = true,
@@ -100,9 +102,31 @@ return {
 			vim.ui.open(mf.get_fs_entry().path)
 		end
 
+		local map_split = function(buf_id, lhs, direction, close_on_file)
+			local rhs = function()
+				local new_target_window
+				local cur_target_window = require("mini.files").get_explorer_state().target_window
+				if cur_target_window ~= nil then
+					vim.api.nvim_win_call(cur_target_window, function()
+						vim.cmd("belowright " .. direction .. " split")
+						new_target_window = vim.api.nvim_get_current_win()
+					end)
+
+					require("mini.files").set_target_window(new_target_window)
+					require("mini.files").go_in({ close_on_file = close_on_file })
+				end
+			end
+
+			local desc = "Open in " .. direction .. " split"
+			if close_on_file then
+				desc = desc .. " and close"
+			end
+			vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+		end
+
 		local group = vim.api.nvim_create_augroup("aqothy/mini_files", { clear = true })
 
-		vim.api.nvim_create_autocmd("User", {
+		autocmd("User", {
 			group = group,
 			pattern = "MiniFilesBufferCreate",
 			callback = function(args)
@@ -112,10 +136,24 @@ return {
 				vim.keymap.set("n", "gc", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
 				vim.keymap.set("n", "gx", ui_open, { buffer = buf_id, desc = "OS open" })
 				vim.keymap.set("n", "gy", yank_path, { buffer = buf_id, desc = "Yank path" })
+
+				map_split(buf_id, "<C-w>s", "horizontal", false)
+				map_split(buf_id, "<C-w>v", "vertical", false)
+				map_split(buf_id, "<C-w>S", "horizontal", true)
+				map_split(buf_id, "<C-w>V", "vertical", true)
 			end,
 		})
 
-		vim.api.nvim_create_autocmd("User", {
+		autocmd("User", {
+			desc = "Add rounded corners to minifiles window",
+			group = group,
+			pattern = "MiniFilesWindowOpen",
+			callback = function(args)
+				vim.api.nvim_win_set_config(args.data.win_id, { border = "rounded" })
+			end,
+		})
+
+		autocmd("User", {
 			group = group,
 			pattern = "MiniFilesActionRename",
 			callback = function(event)

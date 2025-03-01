@@ -24,6 +24,11 @@ return {
 		"folke/flash.nvim",
 		event = "VeryLazy",
 		opts = {
+			modes = {
+				char = {
+					enabled = false,
+				},
+			},
 			jump = { nohlsearch = true },
 			search = {
 				exclude = {

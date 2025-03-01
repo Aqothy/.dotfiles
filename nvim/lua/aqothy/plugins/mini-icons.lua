@@ -15,6 +15,8 @@ return {
 			["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" },
 			["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" },
 			["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
+			[".env"] = { glyph = "", hl = "MiniIconsYellow" },
+			[".env.local"] = { glyph = "", hl = "MiniIconsYellow" },
 		},
 		filetype = {
 			dotenv = { glyph = "", hl = "MiniIconsYellow" },

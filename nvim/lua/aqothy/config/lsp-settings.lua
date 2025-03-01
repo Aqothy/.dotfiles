@@ -178,12 +178,6 @@ M["sourcekit"] = {
 	filetypes = { "swift", "objc", "objcpp" },
 }
 
--- M["omnisharp"] = {
--- 	enable_roslyn_analyzers = true,
--- 	organize_imports_on_format = true,
--- 	enable_import_completion = true,
--- }
-
 M["cssls"] = {}
 
 M["texlab"] = {}

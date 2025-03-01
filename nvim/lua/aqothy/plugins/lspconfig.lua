@@ -2,6 +2,7 @@ return {
 	"neovim/nvim-lspconfig",
 	event = "LazyFile",
 	cmd = { "LspInstall", "LspUninstall", "LspInfo" },
+    -- Mason has to load before lspconfig
 	dependencies = {
 		"mason.nvim",
 	},

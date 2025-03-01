@@ -22,7 +22,7 @@ fzf_append_dir_widget() {
 }
 zle -N fzf_append_dir_widget
 bindkey '^f' fzf_append_dir_widget
-bindkey -s '^\\' 'ts\n'
+bindkey -s '\ef' 'ts\n' # alt-f
 
 # Fix backspace key in vi mode
 bindkey "^H" backward-delete-char
