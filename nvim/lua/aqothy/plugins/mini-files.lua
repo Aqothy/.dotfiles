@@ -10,29 +10,10 @@ local autocmd = vim.api.nvim_create_autocmd
 
 return {
 	"echasnovski/mini.files",
-	-- custom lazy load for mini files
-	init = function()
-		autocmd("BufEnter", {
-			group = vim.api.nvim_create_augroup("mini_files_start", { clear = true }),
-			desc = "Start mini files with a directory",
-			once = true,
-			callback = function()
-				if package.loaded["mini.files"] then
-					return
-				else
-					local stats = vim.uv.fs_stat(vim.fn.argv(0))
-					if stats and stats.type == "directory" then
-						require("mini.files")
-						require("mini.files").open()
-					end
-				end
-			end,
-		})
-	end,
 	opts = function()
 		return {
 			options = {
-				use_as_default_explorer = true,
+				use_as_default_explorer = false,
 				permanent_delete = false,
 			},
 			mappings = {
@@ -80,6 +61,7 @@ return {
 			show_dotfiles = not show_dotfiles
 			local new_filter = show_dotfiles and filter_show or filter_hide
 			mf.refresh({ content = { filter = new_filter } })
+			vim.notify("Dotfiles " .. (show_dotfiles and "shown" or "hidden"))
 		end
 
 		local files_set_cwd = function()
@@ -88,6 +70,7 @@ return {
 			if cur_directory ~= nil then
 				vim.fn.chdir(cur_directory)
 			end
+			vim.notify("CWD set to " .. cur_directory)
 		end
 
 		local yank_path = function()
@@ -96,6 +79,7 @@ return {
 				return vim.notify("Cursor is not on valid entry")
 			end
 			vim.fn.setreg(vim.v.register, path)
+			vim.notify("Yanked path: " .. path)
 		end
 
 		local ui_open = function()
@@ -133,7 +117,7 @@ return {
 				local buf_id = args.data.buf_id
 
 				vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = buf_id, desc = "Toggle hidden files" })
-				vim.keymap.set("n", "gc", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
+				vim.keymap.set("n", "cd", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
 				vim.keymap.set("n", "gx", ui_open, { buffer = buf_id, desc = "OS open" })
 				vim.keymap.set("n", "gy", yank_path, { buffer = buf_id, desc = "Yank path" })
 

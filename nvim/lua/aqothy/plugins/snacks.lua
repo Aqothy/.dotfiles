@@ -270,14 +270,14 @@ return {
             title = " Notification History ",
             title_pos = "center",
             ft = "vim",
-            bo = { buflisted = false, bufhidden = "wipe", swapfile = false, modifiable = false },
+            bo = { buflisted = false, bufhidden = "wipe", swapfile = false, modifiable = false, buftype = "nofile" },
             wo = { winhighlight = "NormalFloat:Normal", wrap = true },
             minimal = true,
             keys = { q = "close", ["<esc>"] = "close" },
             text = function ()
                 return vim.split(vim.fn.execute("messages", "silent"), "\n")
             end
-        }) end, desc = "Show Notifier History" },
+        }) end, desc = "Show Messages History" },
 		{
 			"<leader>no",
 			function()
@@ -359,7 +359,7 @@ return {
 					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
 					:map("<leader>cl")
 
-				Snacks.toggle.dim():map("<leader>sd")
+				Snacks.toggle.dim():map("<leader>td")
 				Snacks.toggle.zen():map("<leader>zz")
 				Snacks.toggle.profiler():map("<leader>pp")
 
