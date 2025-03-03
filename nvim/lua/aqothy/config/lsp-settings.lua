@@ -160,7 +160,7 @@ M["basedpyright"] = {
 }
 
 M["emmet_language_server"] = {
-	enabled = false,
+	enabled = true,
 	filetypes = {
 		"css",
 		"html",

@@ -2,9 +2,9 @@ return {
 	"neovim/nvim-lspconfig",
 	event = "LazyFile",
 	cmd = { "LspInstall", "LspUninstall", "LspInfo" },
-    -- Mason has to load before lspconfig
+	-- Mason has to load before lspconfig
 	dependencies = {
-		"mason.nvim",
+		"williamboman/mason.nvim",
 	},
 	config = function()
 		local lspconfig = require("lspconfig")
@@ -22,7 +22,7 @@ return {
 		end
 
 		vim.api.nvim_create_autocmd("LspAttach", {
-            group = vim.api.nvim_create_augroup("aqothy/lsp_attach", { clear = true }),
+			group = vim.api.nvim_create_augroup("aqothy/lsp_attach", { clear = true }),
 			callback = function(ev)
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
 

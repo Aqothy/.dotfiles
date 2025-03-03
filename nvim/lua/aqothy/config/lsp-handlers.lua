@@ -104,16 +104,16 @@ M.on_attach = function(client, bufnr)
 
 	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
-		local blink_window = require("blink.cmp.completion.windows.menu")
-		-- local cmp = require("cmp")
+		-- local blink_window = require("blink.cmp.completion.windows.menu")
+		local cmp = require("cmp")
 
-		keymap("i", "<C-b>", function()
-			if blink_window.win:is_open() then
-				blink.hide()
-			end
-			-- if cmp.core.view:visible() then
-			-- 	cmp.close()
+		keymap({ "i", "s" }, "<C-s>", function()
+			-- if blink_window.win:is_open() then
+			-- 	blink.hide()
 			-- end
+			if cmp.core.view:visible() then
+				cmp.close()
+			end
 			vim.lsp.buf.signature_help()
 		end)
 	end

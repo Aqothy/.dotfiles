@@ -6,7 +6,6 @@ keymap("n", "<leader>\\", "<C-w>v", { desc = "Split window vertically" }) -- spl
 keymap("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
 keymap("n", "<leader>=", "<C-w>=", { desc = "Make window size equal" }) -- make window equal size
 
-keymap("n", "<leader>pv", vim.cmd.Ex)
 keymap("n", "J", "mzJ`z")
 keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true }) -- exit terminal mode
 

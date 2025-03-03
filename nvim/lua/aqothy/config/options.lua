@@ -82,7 +82,7 @@ vim.opt.jumpoptions = { "stack", "view", "clean" }
 
 -- command line
 vim.opt.cmdheight = 1
-vim.opt.showcmd = true
+vim.opt.showcmd = false
 vim.opt.showmode = false
 
 -- folds

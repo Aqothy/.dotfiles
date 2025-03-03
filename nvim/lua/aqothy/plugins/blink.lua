@@ -3,7 +3,7 @@ return {
 	"saghen/blink.cmp",
 	build = "cargo build --release",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -20,8 +20,8 @@ return {
 		keymap = {
 			preset = "none",
 			["<C-y>"] = { "select_and_accept" },
-			["<C-b>"] = { "scroll_documentation_up", "fallback" },
-			["<C-f>"] = { "scroll_documentation_down", "fallback" },
+			["<C-d>"] = { "scroll_documentation_up", "fallback" },
+			["<C-u>"] = { "scroll_documentation_down", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },
 			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-p>"] = { "select_prev", "fallback" },
@@ -93,7 +93,7 @@ return {
 			-- Sets the fallback highlight groups to nvim-cmp's highlight groups
 			-- Useful for when your theme doesn't support blink.cmp
 			-- will be removed in a future release
-			use_nvim_cmp_as_default = false,
+			use_nvim_cmp_as_default = true,
 			-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 			-- Adjusts spacing to ensure icons are aligned
 			nerd_font_variant = "mono",

@@ -1,16 +1,16 @@
 local function truncateString(str, maxLen)
-	if #str > maxLen then
-		return str:sub(1, maxLen - 1) .. "…"
+	if vim.fn.strchars(str) > maxLen then
+		return vim.fn.strcharpart(str, 0, maxLen - 1) .. "…"
 	else
 		return str
 	end
 end
 
 return {
-	"iguanacucumber/magazine.nvim",
-	event = { "InsertEnter", "CmdLineEnter" },
+	"hrsh7th/nvim-cmp",
 	version = false,
-	enabled = false,
+	event = { "InsertEnter", "CmdLineEnter" },
+	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path", -- source for file system paths
 		"saadparwaiz1/cmp_luasnip",
@@ -31,12 +31,8 @@ return {
 				completeopt = "menu,menuone,noinsert",
 			},
 			window = {
-				completion = {
-					border = "rounded",
-				},
-				documentation = {
-					border = "rounded",
-				},
+				completion = cmp.config.window.bordered(),
+				documentation = cmp.config.window.bordered(),
 			},
 			snippet = {
 				expand = function(args)
@@ -63,22 +59,32 @@ return {
 				end,
 				["<C-y>"] = function(fallback)
 					if cmp.core.view:visible() then
-						cmp.confirm({ select = false })
+						cmp.confirm({ select = true })
 					else
 						fallback()
 					end
 				end,
-				["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-				["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+				["<C-u>"] = cmp.mapping.scroll_docs(-3),
+				["<C-d>"] = cmp.mapping.scroll_docs(3),
 			}),
 			formatting = {
-				expandable_indicator = false,
 				fields = { "kind", "abbr", "menu" },
-				format = function(_, item)
-					item.menu = item.kind
-					item.menu_hl_group = "CmpItemKind" .. (item.kind or "")
-					item.kind = user.kinds[item.kind]
-					item.abbr = truncateString(item.abbr, 50)
+				format = function(entry, item)
+					local completion_item = entry.completion_item
+
+					local label_description = completion_item.labelDetails and completion_item.labelDetails.description
+						or ""
+
+					local label_detail = completion_item.detail or ""
+
+					-- Use label_detail if label_description is empty
+					local menu_text = label_description ~= "" and label_description or label_detail
+
+					item.menu = truncateString(menu_text, 33)
+
+					item.kind = user.kinds[item.kind or ""]
+
+					item.abbr = truncateString(completion_item.label, 33)
 
 					return item
 				end,
@@ -91,10 +97,10 @@ return {
 			},
 
 			performance = {
-				debounce = 5,
-				throttle = 6,
-				fetching_timeout = 10000,
-				confirm_resolve_timeout = 6,
+				debounce = 30,
+				throttle = 15,
+				fetching_timeout = 300,
+				confirm_resolve_timeout = 35,
 				async_budget = 1,
 				max_view_entries = 15,
 			},
@@ -103,14 +109,14 @@ return {
 			sources = cmp.config.sources({
 				{
 					name = "nvim_lsp",
-					-- entry_filter = function(entry)
-					-- 	return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-					-- end,
+					entry_filter = function(entry)
+						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+					end,
 				},
 				{ name = "luasnip" },
+				{ name = "path" },
 			}, {
 				{ name = "buffer" },
-				{ name = "path" },
 			}),
 
 			sorting = {
@@ -131,18 +137,69 @@ return {
 		})
 
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = cmp.mapping.preset.cmdline(),
+			mapping = cmp.mapping.preset.cmdline({
+				["<C-n>"] = {
+					c = function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item(cmp_select)
+						else
+							fallback()
+						end
+					end,
+				},
+				["<C-p>"] = {
+					c = function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item(cmp_select)
+						else
+							fallback()
+						end
+					end,
+				},
+				["<C-e>"] = {
+					c = function()
+						if cmp.visible() then
+							cmp.close()
+						end
+					end,
+				},
+			}),
 			sources = {
 				{ name = "buffer" },
 			},
 		})
 
 		cmp.setup.cmdline(":", {
-			mapping = cmp.mapping.preset.cmdline(),
+			mapping = cmp.mapping.preset.cmdline({
+				["<C-n>"] = {
+					c = function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item(cmp_select)
+						else
+							fallback()
+						end
+					end,
+				},
+				["<C-p>"] = {
+					c = function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item(cmp_select)
+						else
+							fallback()
+						end
+					end,
+				},
+				["<C-e>"] = {
+					c = function()
+						if cmp.visible() then
+							cmp.close()
+						end
+					end,
+				},
+			}),
 			sources = cmp.config.sources({
-				{ name = "path" },
-			}, {
 				{ name = "cmdline" },
+				{ name = "path" },
 			}),
 		})
 	end,
