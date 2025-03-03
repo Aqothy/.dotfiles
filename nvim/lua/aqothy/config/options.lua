@@ -46,7 +46,7 @@ vim.opt.isfname:append("@-@")
 vim.opt.mouse = "a"
 
 -- completion
-vim.opt.pumheight = 15 -- Maximum number of entries in a popup
+vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 vim.opt.wildignore:append({ ".DS_Store" })
 vim.opt.wildignorecase = true
@@ -93,7 +93,7 @@ vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
 vim.opt.foldmethod = "manual"
 
-vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "resize", "terminal" }
+vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "resize", "terminal" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true

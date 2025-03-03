@@ -3,6 +3,7 @@ local M = {}
 local api = vim.api
 local bo = vim.bo
 local uv = vim.uv or vim.loop
+local fn = vim.fn
 
 local stl_group = vim.api.nvim_create_augroup("aqline", { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
@@ -74,9 +75,9 @@ M.MODE_TO_HIGHLIGHT = {
 }
 
 function M.update_mode_cache()
-	local mode_str = M.MODE_MAP[api.nvim_get_mode().mode] or "UNKNOWN"
+	local mode = api.nvim_get_mode().mode
+	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
-
 	M.mode_cache = "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
@@ -92,11 +93,11 @@ function M.update_mode_cache()
 		.. hl
 		.. "#"
 		.. ""
-
 	-- For operator mode to show
 	vim.cmd.redrawstatus()
 end
 
+-- Only update mode cache when mode changes
 autocmd("ModeChanged", {
 	group = stl_group,
 	pattern = "*",
@@ -107,7 +108,7 @@ function M.mode_component()
 	if not M.mode_cache then
 		M.update_mode_cache()
 	end
-	return M.mode_cache or ""
+	return M.mode_cache
 end
 
 function M.git_components()
@@ -140,21 +141,26 @@ M.diagnostic_levels = {
 	{ name = "INFO", sign = user.signs.info, hl = "DiagnosticInfo" },
 	{ name = "HINT", sign = user.signs.hint, hl = "DiagnosticHint" },
 }
-
 M.diagnostic_counts = {}
+M.diagnostic_str_cache = {}
 
+-- Only get counts when needed instead of on every change
 M.get_diagnostic_count = function(buf_id)
 	return vim.diagnostic.count(buf_id)
 end
 
+-- Clear diagnostic cache when diagnostics change
 autocmd("DiagnosticChanged", {
 	group = stl_group,
 	pattern = "*",
 	callback = function(data)
 		if api.nvim_buf_is_valid(data.buf) then
 			M.diagnostic_counts[data.buf] = M.get_diagnostic_count(data.buf)
+			-- Invalidate string cache for this buffer
+			M.diagnostic_str_cache[data.buf] = nil
 		else
 			M.diagnostic_counts[data.buf] = nil
+			M.diagnostic_str_cache[data.buf] = nil
 		end
 	end,
 	desc = "Track diagnostics",
@@ -162,8 +168,15 @@ autocmd("DiagnosticChanged", {
 
 function M.diagnostics_component()
 	local buf = api.nvim_get_current_buf()
+
+	-- Return cached string if available
+	if M.diagnostic_str_cache[buf] then
+		return M.diagnostic_str_cache[buf]
+	end
+
 	local count = M.diagnostic_counts[buf]
 	if not count then
+		M.diagnostic_str_cache[buf] = ""
 		return ""
 	end
 
@@ -178,11 +191,16 @@ function M.diagnostics_component()
 		end
 	end
 
-	return (#parts > 0) and table.concat(parts, " ") or ""
+	local result = (#parts > 0) and table.concat(parts, " ") or ""
+	M.diagnostic_str_cache[buf] = result
+	return result
 end
 
+-- LSP Progress component optimization
 ---@type table<number, {client: string, kind: string, title: string?}>
 M.progress_statuses = {}
+M.progress_cache = nil
+M.progress_dirty = true
 
 autocmd("LspProgress", {
 	group = stl_group,
@@ -192,14 +210,15 @@ autocmd("LspProgress", {
 		if not args.data then
 			return
 		end
-
 		local client_id = args.data.client_id
 		local client = vim.lsp.get_client_by_id(client_id)
 		local value = args.data.params.value
-
 		if not client or type(value) ~= "table" then
 			return
 		end
+
+		-- Mark cache as dirty
+		M.progress_dirty = true
 
 		-- Update or create progress entry for this client
 		M.progress_statuses[client_id] = {
@@ -212,52 +231,60 @@ autocmd("LspProgress", {
 			-- Remove the entry after delay while keeping completion checkmark
 			vim.defer_fn(function()
 				M.progress_statuses[client_id] = nil
+				M.progress_dirty = true
 				vim.cmd.redrawstatus()
 			end, 3000)
 		end
-
 		vim.cmd.redrawstatus()
 	end,
 })
 
 function M.lsp_progress_component()
-	local progress_parts = {}
-	if next(M.progress_statuses) == nil then
-		return ""
+	-- Return cached result if not dirty
+	if not M.progress_dirty and M.progress_cache then
+		return M.progress_cache
 	end
+
+	local progress_parts = {}
 	for _, status in pairs(M.progress_statuses) do
 		if status.title then
 			local is_done = status.kind == "end"
 			local symbol = is_done and " " or "󱥸 "
-			local title = is_done and "" or status.title
+			local title = is_done and "" or " %#StatuslineItalic#" .. status.title
 			table.insert(
 				progress_parts,
 				table.concat({
-					"%#StatuslineTitle#" .. symbol .. status.client .. " ",
-					"%#StatuslineItalic#" .. title,
+					"%#StatuslineTitle#" .. symbol .. status.client,
+					title,
 				})
 			)
 		end
 	end
 
-	return table.concat(progress_parts, " ")
+	local result = table.concat(progress_parts, " ")
+	M.progress_cache = result
+	M.progress_dirty = false
+	return result
 end
 
 function M.update_file_type()
-	-- Don't update file type for cmp menu
-	if vim.bo.filetype == "blink-cmp-menu" then
-		return
-	end
-
 	M.update_file_info_cache()
 
-	local full_path = api.nvim_buf_get_name(0)
-	local icon, icon_hl = mini_icons.get("file", full_path)
-	M.file_type_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. "%f%m%r"
+	local file_name = fn.expand("%:t")
+	local icon, icon_hl = mini_icons.get("file", file_name)
+	local relative_path = fn.expand("%:.")
+	local floating = api.nvim_win_get_config(0).zindex
+	M.file_type_cache = "%#"
+		.. icon_hl
+		.. "#"
+		.. icon
+		.. " %#StatuslineTitle#"
+		.. (floating and "%t" or relative_path)
+		.. "%m%r"
 end
 
--- TermLeave for updating icon after lazygit closes
-autocmd({ "BufEnter", "TermLeave", "FileType" }, {
+-- TermLeave for updating icon after lazygit closes, also accounts for file changes from terminal
+autocmd({ "BufEnter", "TermLeave" }, {
 	pattern = "*",
 	group = stl_group,
 	callback = M.update_file_type,
@@ -276,7 +303,7 @@ end
 
 autocmd("OptionSet", {
 	group = stl_group,
-	pattern = { "fileencoding", "shiftwidth" },
+	pattern = { "fileencoding", "shiftwidth", "filetype" },
 	callback = M.update_file_info_cache,
 })
 
@@ -293,11 +320,6 @@ function M.position_component()
 end
 
 function M.render()
-	-- Don't render statusline if it's in floating window
-	if vim.api.nvim_win_get_config(0).zindex then
-		return ""
-	end
-
 	local git_head, git_status = M.git_components()
 
 	local left_components = {}

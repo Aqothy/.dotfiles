@@ -1,5 +1,31 @@
 local session_state = vim.fn.stdpath("state") .. "/sessions/"
 
+local is_file = true
+local load = false
+local cwd = vim.fn.getcwd()
+local arg_count = vim.fn.argc()
+
+if arg_count == 0 then
+	load = true
+	is_file = false
+elseif arg_count == 1 then
+	local arg = vim.fn.expand(vim.fn.argv(0))
+
+	-- Handle current directory case
+	if arg == "." then
+		load = true
+		is_file = false
+	-- Handle directory case
+	elseif vim.fn.isdirectory(arg) ~= 0 then
+		-- Convert to absolute path if it's relative
+		local abs_path = vim.fn.fnamemodify(arg, ":p:h")
+		vim.fn.chdir(abs_path)
+		cwd = abs_path
+		load = true
+		is_file = false
+	end
+end
+
 -- Ref: persisted nvim
 local function make_fs_safe(text)
 	return text:gsub("[\\/:]+", "%%")
@@ -99,7 +125,9 @@ end
 
 return {
 	"folke/persistence.nvim",
-	lazy = false,
+	lazy = is_file,
+	event = "BufReadPre",
+	enabled = true,
 	opts = {
 		dir = session_state,
 	},
@@ -122,8 +150,17 @@ return {
 			"<leader>qs",
 			function()
 				require("persistence").stop()
+				vim.notify("Session stopped")
 			end,
 			desc = "Don't Save Current Session",
+		},
+		{
+			"<leader>bs",
+			function()
+				require("persistence").start()
+				vim.notify("Session started")
+			end,
+			desc = "Begin Session",
 		},
 	},
 	config = function(_, opts)
@@ -135,34 +172,51 @@ return {
 			vim.g.dotfiles,
 		}
 
-		-- If not in allow dir then stop session and don't load session either
-		if not dirs_match(vim.fn.getcwd(), allowed_dirs) then
+		-- If not in allow dir or is file
+		if not dirs_match(cwd, allowed_dirs) or is_file then
 			persistence.stop()
 			return
 		end
 
+		local group = vim.api.nvim_create_augroup("restore_session", { clear = true })
+
 		vim.api.nvim_create_autocmd("VimEnter", {
-			group = vim.api.nvim_create_augroup("restore_session", { clear = true }),
-			once = true,
+			group = group,
 			nested = true,
+			once = true,
 			callback = function()
-				local load = false
-				-- If no args
-				if vim.fn.argc() == 0 then
-					load = true
-				-- If args is dir
-				elseif vim.fn.argc() == 1 then
-					local dir = vim.fn.expand(vim.fn.argv(0))
-					if dir == "." then
-						dir = vim.fn.getcwd()
-					end
-					if vim.fn.isdirectory(dir) ~= 0 then
-						load = true
-					end
+				if not load then
+					return
 				end
 
-				if load then
+				local ok, lazy_view = pcall(require, "lazy.view")
+
+				-- If the Lazy window is visible, hold onto it for later.
+				if ok and not lazy_view.visible() then
 					persistence.load()
+					return
+				end
+
+				-- Track the lazy view window
+				local lazy_view_win = lazy_view.view.win
+
+				if lazy_view_win then
+					-- Make sure don't load session til lazy view is closed (for when lazy is downloading plugins)
+					vim.api.nvim_create_autocmd("WinClosed", {
+						group = group,
+						callback = function(event)
+							if event.match ~= tostring(lazy_view_win) then
+								return
+							end
+
+							pcall(vim.api.nvim_del_augroup_by_name, "restore_session")
+
+							-- Schedule restoration for after window close completes
+							vim.schedule(function()
+								persistence.load()
+							end)
+						end,
+					})
 				end
 			end,
 		})

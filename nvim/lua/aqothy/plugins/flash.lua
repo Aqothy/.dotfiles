@@ -2,6 +2,12 @@ return {
 	"folke/flash.nvim",
 	event = "VeryLazy",
 	opts = {
+        -- Disable enhanced f and t
+		modes = {
+			char = {
+				enabled = false,
+			},
+		},
 		jump = { nohlsearch = true },
 		search = {
 			exclude = {

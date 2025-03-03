@@ -14,6 +14,9 @@ vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+keymap("v", ">", ">gv")
+keymap("v", "<", "<gv")
+
 keymap("n", "<leader>nf", function()
 	vscode.call("workbench.action.files.newUntitledFile")
 end, {

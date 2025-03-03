@@ -22,11 +22,9 @@ return {
 			go = { glyph = "", hl = "MiniIconsAzure" },
 		},
 	},
-	init = function()
-		-- lazy load mini icons and also mock nvim-web-devicons, black magic from lazyvim docs
-		package.preload["nvim-web-devicons"] = function()
-			require("mini.icons").mock_nvim_web_devicons()
-			return package.loaded["nvim-web-devicons"]
-		end
+	config = function(_, opts)
+		local mi = require("mini.icons")
+		mi.setup(opts)
+		mi.mock_nvim_web_devicons()
 	end,
 }
