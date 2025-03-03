@@ -64,8 +64,8 @@ return {
 						fallback()
 					end
 				end,
-				["<C-u>"] = cmp.mapping.scroll_docs(-3),
-				["<C-d>"] = cmp.mapping.scroll_docs(3),
+				["<C-b>"] = cmp.mapping.scroll_docs(-3),
+				["<C-f>"] = cmp.mapping.scroll_docs(3),
 			}),
 			formatting = {
 				fields = { "kind", "abbr", "menu" },
@@ -80,11 +80,11 @@ return {
 					-- Use label_detail if label_description is empty
 					local menu_text = label_description ~= "" and label_description or label_detail
 
-					item.menu = truncateString(menu_text, 33)
+					item.abbr = truncateString(completion_item.label, 30) .. (item.kind == "Snippet" and "~" or "")
 
-					item.kind = user.kinds[item.kind or ""]
+					item.kind = user.kinds[item.kind]
 
-					item.abbr = truncateString(completion_item.label, 33)
+					item.menu = truncateString(menu_text, 30)
 
 					return item
 				end,

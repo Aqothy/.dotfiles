@@ -20,8 +20,8 @@ return {
 		keymap = {
 			preset = "none",
 			["<C-y>"] = { "select_and_accept" },
-			["<C-d>"] = { "scroll_documentation_up", "fallback" },
-			["<C-u>"] = { "scroll_documentation_down", "fallback" },
+			["<C-b>"] = { "scroll_documentation_up", "fallback" },
+			["<C-f>"] = { "scroll_documentation_down", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },
 			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-p>"] = { "select_prev", "fallback" },
@@ -71,10 +71,6 @@ return {
 			menu = {
 				draw = {
 					treesitter = { "lsp" },
-					columns = {
-						{ "label", "label_description", gap = 1 },
-						{ "kind_icon", "kind", gap = 1 },
-					},
 				},
 				border = "rounded",
 			},
