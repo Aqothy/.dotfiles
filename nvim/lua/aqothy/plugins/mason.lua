@@ -16,6 +16,7 @@ return {
 			-- "texlab",
 			"vtsls",
 			"emmet-language-server",
+            "omnisharp",
 
 			-- Tools (formatters, linters, etc.)
 			"stylua",

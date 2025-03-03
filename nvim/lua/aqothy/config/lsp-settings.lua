@@ -183,9 +183,24 @@ M["sourcekit"] = {
 }
 
 M["omnisharp"] = {
-	enable_roslyn_analyzers = true,
-	organize_imports_on_format = true,
-	enable_import_completion = true,
+	cmd = { vim.fn.stdpath("data") .. "/mason/bin/omnisharp.cmd" },
+	settings = {
+		FormattingOptions = {
+			EnableEditorConfigSupport = true,
+			OrganizeImports = true,
+		},
+		MsBuild = {
+			LoadProjectsOnDemand = true,
+		},
+		RoslynExtensionsOptions = {
+			EnableAnalyzersSupport = nil,
+			EnableImportCompletion = true,
+			AnalyzeOpenDocumentsOnly = nil,
+		},
+		Sdk = {
+			IncludePrereleases = true,
+		},
+	},
 }
 
 M["cssls"] = {

@@ -32,6 +32,7 @@ return {
 			"tsx",
 			-- "yaml",
 			"json",
+			"c_sharp",
 			-- "dockerfile",
 		},
 

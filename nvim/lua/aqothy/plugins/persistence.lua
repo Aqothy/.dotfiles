@@ -167,13 +167,13 @@ return {
 		local persistence = require("persistence")
 		persistence.setup(opts)
 
-		local allowed_dirs = {
-			vim.g.projects_dir .. "/Personal",
-			vim.g.dotfiles,
-		}
+		-- local allowed_dirs = {
+		-- 	vim.g.projects_dir .. "/Personal",
+		-- 	vim.g.dotfiles,
+		-- }
 
 		-- If not in allow dir or is file
-		if not dirs_match(cwd, allowed_dirs) or is_file then
+		if is_file then
 			persistence.stop()
 			return
 		end

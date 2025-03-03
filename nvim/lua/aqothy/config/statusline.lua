@@ -16,7 +16,7 @@ function M.os_component()
 		local uname_info = uv.os_uname() or {}
 		local sysname = uname_info.sysname or ""
 		sysname = (sysname == "Darwin") and "macos" or sysname:lower()
-		local icon, icon_hl = mini_icons.get("os", sysname)
+		local icon, icon_hl = mini_icons.get("os", "Windows")
 		M._os_cache = "%#" .. icon_hl .. "#" .. icon
 	end
 	return M._os_cache
