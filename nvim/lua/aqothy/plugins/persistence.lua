@@ -68,7 +68,7 @@ return {
 	config = function(_, opts)
 		local persistence = require("persistence")
 
-		local utils = require("aqothy.config.utils")
+		-- local utils = require("aqothy.config.utils")
 
 		persistence.setup(opts)
 
@@ -78,10 +78,10 @@ return {
 		-- }
 
 		-- If not in allow dir or is file
-		if not utils.dirs_match(cwd, allowed_dirs) then
-			persistence.stop()
-			return
-		end
+		-- if not utils.dirs_match(cwd, allowed_dirs) then
+		-- 	persistence.stop()
+		-- 	return
+		-- end
 
 		local group = vim.api.nvim_create_augroup("restore_session", { clear = true })
 
