@@ -13,9 +13,10 @@ vim.opt.virtualedit = "block"
 vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 
-keymap("v", ">", ">gv")
-keymap("v", "<", "<gv")
+keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
+keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
 keymap("n", "<leader>nf", function()
 	vscode.call("workbench.action.files.newUntitledFile")
@@ -24,6 +25,14 @@ end, {
 })
 
 keymap({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+
+keymap("n", "<leader>\\", function()
+	vscode.call("workbench.action.splitEditor")
+end, { desc = "Split editor" })
+
+keymap("n", "<leader>-", function()
+	vscode.call("workbench.action.splitEditorDown")
+end, { desc = "Split editor down" })
 
 keymap("n", "<leader>ff", function()
 	vscode.call("workbench.action.quickOpen")

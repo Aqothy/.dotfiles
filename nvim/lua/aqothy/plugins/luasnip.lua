@@ -1,16 +1,25 @@
 return {
 	"L3MON4D3/LuaSnip",
 	version = "v2.*",
-	lazy = true,
+	event = "InsertEnter",
+	enabled = false,
 	opts = {
 		keep_roots = true,
 		link_roots = true,
 		link_children = true,
 		delete_check_events = "TextChanged",
 		enable_autosnippets = true,
-		store_selection_keys = "<Tab>",
+		store_selection_keys = "<C-x>",
 	},
 	keys = {
+		{
+			"<C-j>",
+			function()
+				require("luasnip").expand()
+			end,
+			mode = { "i" },
+			silent = true,
+		},
 		{
 			"<C-l>",
 			function()
@@ -20,7 +29,7 @@ return {
 			silent = true,
 		},
 		{
-			"<C-j>",
+			"<C-h>",
 			function()
 				require("luasnip").jump(-1)
 			end,
@@ -28,7 +37,7 @@ return {
 			silent = true,
 		},
 		{
-			"<C-g>",
+			"<C-f>",
 			function()
 				if require("luasnip").choice_active() then
 					require("luasnip").change_choice(1)
@@ -46,7 +55,7 @@ return {
 			mode = "i",
 		},
 		{
-			"<Tab>",
+			"<C-x>",
 			mode = "v",
 		},
 	},

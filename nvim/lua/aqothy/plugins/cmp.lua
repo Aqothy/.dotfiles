@@ -1,30 +1,52 @@
-local function truncateString(str, maxLen)
-	if vim.fn.strchars(str) > maxLen then
-		return vim.fn.strcharpart(str, 0, maxLen - 1) .. "…"
-	else
-		return str
-	end
-end
-
 return {
 	"hrsh7th/nvim-cmp",
 	version = false,
 	event = { "InsertEnter", "CmdLineEnter" },
 	-- enabled = false,
 	dependencies = {
-		"hrsh7th/cmp-path", -- source for file system paths
+		"hrsh7th/cmp-path",
 		"saadparwaiz1/cmp_luasnip",
-		"hrsh7th/cmp-buffer", -- source for text in buffer
+		"abeldekat/cmp-mini-snippets",
+		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
 	},
 	config = function()
 		local user = require("aqothy.config.user")
+		local utils = require("aqothy.config.utils")
 		local cmp = require("cmp")
 
-		local luasnip = require("luasnip")
+		local has_luasnip, luasnip = pcall(require, "luasnip")
+		local has_mini_snippets, mini_snippets = pcall(require, "mini.snippets")
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
+
+		local snippet_sources = {}
+		if has_luasnip then
+			table.insert(snippet_sources, { name = "luasnip" })
+		end
+		if has_mini_snippets then
+			table.insert(snippet_sources, { name = "mini_snippets" })
+		end
+
+		-- Configure snippet expansion based on available plugins
+		local snippet_config = {}
+		if has_luasnip then
+			snippet_config = {
+				expand = function(args)
+					luasnip.lsp_expand(args.body)
+				end,
+			}
+		elseif has_mini_snippets then
+			snippet_config = {
+				expand = function(args)
+					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
+					insert({ body = args.body }) -- Insert at cursor
+					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+					require("cmp.config").set_onetime({ sources = {} })
+				end,
+			}
+		end
 
 		cmp.setup({
 			completion = {
@@ -34,18 +56,14 @@ return {
 				completion = cmp.config.window.bordered(),
 				documentation = cmp.config.window.bordered(),
 			},
-			snippet = {
-				expand = function(args)
-					luasnip.lsp_expand(args.body)
-				end,
-			},
+			snippet = snippet_config,
 			experimental = {
 				ghost_text = false,
 			},
 			mapping = cmp.mapping.preset.insert({
 				["<C-e>"] = cmp.mapping.abort(),
-				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select), -- previous suggestion
-				["<C-n>"] = cmp.mapping.select_next_item(cmp_select), -- next suggestion
+				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
 				["<C-space>"] = function()
 					if cmp.core.view:visible() then
 						if cmp.visible_docs() then
@@ -54,7 +72,7 @@ return {
 							cmp.open_docs()
 						end
 					else
-						cmp.mapping.complete()
+						cmp.complete()
 					end
 				end,
 				["<C-y>"] = function(fallback)
@@ -80,11 +98,12 @@ return {
 					-- Use label_detail if label_description is empty
 					local menu_text = label_description ~= "" and label_description or label_detail
 
-					item.abbr = truncateString(completion_item.label, 30) .. (item.kind == "Snippet" and "~" or "")
+					item.abbr = utils.truncateString(completion_item.label, 30)
+						.. (item.kind == "Snippet" and "~" or "")
 
 					item.kind = user.kinds[item.kind]
 
-					item.menu = truncateString(menu_text, 30)
+					item.menu = utils.truncateString(menu_text, 30)
 
 					return item
 				end,
@@ -105,19 +124,21 @@ return {
 				max_view_entries = 15,
 			},
 
-			-- sources for autocompletion
-			sources = cmp.config.sources({
+			-- sources for autocompletion with dynamic snippet provider selection
+			sources = cmp.config.sources(
+				vim.list_extend({
+					{
+						name = "nvim_lsp",
+						entry_filter = function(entry)
+							return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+						end,
+					},
+				}, snippet_sources),
 				{
-					name = "nvim_lsp",
-					entry_filter = function(entry)
-						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-					end,
-				},
-				{ name = "luasnip" },
-				{ name = "path" },
-			}, {
-				{ name = "buffer" },
-			}),
+					{ name = "path" },
+					{ name = "buffer" },
+				}
+			),
 
 			sorting = {
 				priority_weight = 2,
@@ -156,13 +177,6 @@ return {
 						end
 					end,
 				},
-				["<C-e>"] = {
-					c = function()
-						if cmp.visible() then
-							cmp.close()
-						end
-					end,
-				},
 			}),
 			sources = {
 				{ name = "buffer" },
@@ -186,13 +200,6 @@ return {
 							cmp.select_prev_item(cmp_select)
 						else
 							fallback()
-						end
-					end,
-				},
-				["<C-e>"] = {
-					c = function()
-						if cmp.visible() then
-							cmp.close()
 						end
 					end,
 				},
