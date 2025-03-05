@@ -24,15 +24,15 @@ end
 
 M.MODE_MAP = {
 	["n"] = "NORMAL",
-	["no"] = "OP-PENDING",
-	["nov"] = "OP-PENDING",
-	["noV"] = "OP-PENDING",
-	["no\22"] = "OP-PENDING",
 	["niI"] = "NORMAL",
 	["niR"] = "NORMAL",
 	["niV"] = "NORMAL",
 	["nt"] = "NORMAL",
 	["ntT"] = "NORMAL",
+	["no"] = "OP-PENDING",
+	["nov"] = "OP-PENDING",
+	["noV"] = "OP-PENDING",
+	["no\22"] = "OP-PENDING",
 	["v"] = "VISUAL",
 	["vs"] = "VISUAL",
 	["V"] = "V-LINE",
@@ -63,10 +63,12 @@ M.MODE_MAP = {
 
 M.MODE_TO_HIGHLIGHT = {
 	NORMAL = "Normal",
-	["OP-PENDING"] = "Pending",
 	VISUAL = "Visual",
+	["OP-PENDING"] = "Pending",
 	["V-LINE"] = "Visual",
 	["V-BLOCK"] = "Visual",
+	["V-REPLACE"] = "Replace",
+	REPLACE = "Replace",
 	SELECT = "Insert",
 	INSERT = "Insert",
 	COMMAND = "Command",
@@ -93,15 +95,17 @@ function M.update_mode_cache()
 		.. hl
 		.. "#"
 		.. ""
-	-- For operator mode to show
+
+	-- For op-pending mode to show
 	vim.cmd.redrawstatus()
 end
 
 -- Only update mode cache when mode changes
 autocmd("ModeChanged", {
 	group = stl_group,
-	pattern = "*",
-	callback = M.update_mode_cache,
+	callback = vim.schedule_wrap(function()
+		M.update_mode_cache()
+	end),
 })
 
 function M.mode_component()
@@ -152,7 +156,6 @@ end
 -- Clear diagnostic cache when diagnostics change
 autocmd("DiagnosticChanged", {
 	group = stl_group,
-	pattern = "*",
 	callback = function(data)
 		if api.nvim_buf_is_valid(data.buf) then
 			M.diagnostic_counts[data.buf] = M.get_diagnostic_count(data.buf)
@@ -270,9 +273,8 @@ end
 function M.update_file_type()
 	M.update_file_info_cache()
 
-	local file_name = fn.expand("%:t")
-	local icon, icon_hl = mini_icons.get("file", file_name)
 	local relative_path = fn.expand("%:.")
+	local icon, icon_hl = mini_icons.get("file", relative_path)
 	local floating = api.nvim_win_get_config(0).zindex
 	M.file_type_cache = "%#"
 		.. icon_hl
@@ -284,8 +286,7 @@ function M.update_file_type()
 end
 
 -- TermLeave for updating icon after lazygit closes, also accounts for file changes from terminal
-autocmd({ "BufEnter", "TermLeave" }, {
-	pattern = "*",
+autocmd({ "BufEnter", "TermLeave", "WinLeave" }, {
 	group = stl_group,
 	callback = M.update_file_type,
 })

@@ -1,19 +1,5 @@
 local user = require("aqothy.config.user")
-
-local function get_projects()
-	local directories = {}
-
-	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
-	local handle = io.popen(cmd)
-	if handle then
-		for line in handle:lines() do
-			table.insert(directories, line)
-		end
-		handle:close()
-	end
-
-	return directories
-end
+local utils = require("aqothy.config.utils")
 
 return {
 	"folke/snacks.nvim",
@@ -152,7 +138,7 @@ return {
 			left = { "sign", "git" },
 			right = { "mark", "fold" },
 			folds = {
-				open = true,
+				open = false,
 				git_hl = false,
 			},
 			refresh = 300,
@@ -163,7 +149,6 @@ return {
 		zen = {
 			toggles = {
 				dim = false,
-				git_signs = true,
 			},
 		},
 
@@ -214,11 +199,6 @@ return {
 			zen = {
 				width = 180,
 				backdrop = { transparent = false },
-				wo = {
-					number = true,
-					relativenumber = true,
-					signcolumn = "no",
-				},
 			},
 			terminal = {
 				keys = {
@@ -314,28 +294,7 @@ return {
             end,}) end, desc = "undo tree" },
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
-        { "<leader>fp", function()
-            local projects = get_projects()
-
-            return Snacks.picker.pick("Projects", {
-                finder = function()
-                    local dirs = {}
-                    for _, dir in ipairs(projects) do
-                        dirs[#dirs + 1] = {
-                            text = dir,
-                            file = dir,
-                            dir = true,
-                        }
-                    end
-                    return dirs
-                end,
-                format = "file",
-                win = {
-                    preview = { minimal = true },
-                },
-                confirm = "load_session"
-            })
-        end, desc = "Custom projects picker" },
+        { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
         { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},

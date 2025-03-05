@@ -90,10 +90,11 @@ vim.opt.showmode = false
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
+vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
-vim.opt.foldmethod = "manual"
 
-vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "resize", "terminal" }
+vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal", "localoptions" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true

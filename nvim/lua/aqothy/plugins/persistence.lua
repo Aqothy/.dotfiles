@@ -26,108 +26,11 @@ elseif arg_count == 1 then
 	end
 end
 
--- Ref: persisted nvim
-local function make_fs_safe(text)
-	return text:gsub("[\\/:]+", "%%")
-end
-
-local function is_subdirectory(parent, child)
-	return vim.startswith(child, parent)
-end
-
-local function dirs_match(dir, dirs)
-	dir = make_fs_safe(vim.fn.expand(dir))
-
-	for _, search in ipairs(dirs) do
-		if type(search) == "string" then
-			search = make_fs_safe(vim.fn.expand(search))
-			if is_subdirectory(search, dir) then
-				return true
-			end
-		elseif type(search) == "table" then
-			if search.exact then
-				search = make_fs_safe(vim.fn.expand(search[1]))
-				if dir == search then
-					return true
-				end
-			end
-		end
-	end
-
-	return false
-end
-
--- Custom snacks picker to select and delete sessions
-local function select_sessions()
-	local ok, persistence = pcall(require, "persistence")
-	if not ok then
-		return
-	end
-	Snacks.picker.pick("Sessions", {
-		finder = function()
-			local items = {} ---@type snacks.picker.finder.Item[]
-			local have = {}
-			-- Ref: persistence nvim select function
-			for _, session in ipairs(persistence.list()) do
-				if vim.uv.fs_stat(session) then
-					local session_name = session:sub(#session_state + 1, -5)
-					local dirPath = unpack(vim.split(session_name, "%%", { plain = true }))
-					dirPath = dirPath:gsub("%%", "/")
-					if jit.os:find("Windows") then
-						dirPath = dirPath:gsub("^(%w)/", "%1:/")
-					end
-					if not have[dirPath] then
-						have[dirPath] = true
-						items[#items + 1] = { file = dirPath, text = session, dir = true }
-					end
-				end
-			end
-			return items
-		end,
-		win = {
-			preview = { minimal = true },
-			input = {
-				keys = {
-					["<C-x>"] = { "delete_session", mode = { "i", "n" } },
-				},
-			},
-		},
-		layout = {
-			preset = "vscode",
-		},
-		format = "file",
-		actions = {
-			["delete_session"] = {
-				-- Basically snacks picker buf_del action
-				function(picker)
-					picker.preview:reset()
-					for _, item in ipairs(picker:selected({ fallback = true })) do
-						if item.text then
-							vim.fn.delete(item.text)
-						else
-							vim.notify("No session found")
-						end
-					end
-					picker.list:set_selected()
-					picker.list:set_target()
-					picker:find()
-				end,
-			},
-		},
-		confirm = function(_, item)
-			if item._path then
-				vim.fn.chdir(item._path)
-				persistence.load()
-			end
-		end,
-	})
-end
-
+-- Don't lazy when is file so don't load, keymap will auto setup plugin so no need to call it, can just notify
 return {
 	"folke/persistence.nvim",
 	lazy = is_file,
-	event = "BufReadPre",
-	enabled = true,
+	-- enabled = false,
 	opts = {
 		dir = session_state,
 	},
@@ -142,7 +45,7 @@ return {
 		{
 			"<leader>ss",
 			function()
-				select_sessions()
+				require("aqothy.config.utils").select_sessions(session_state)
 			end,
 			desc = "Select Session",
 		},
@@ -157,7 +60,6 @@ return {
 		{
 			"<leader>bs",
 			function()
-				require("persistence").start()
 				vim.notify("Session started")
 			end,
 			desc = "Begin Session",
@@ -165,6 +67,9 @@ return {
 	},
 	config = function(_, opts)
 		local persistence = require("persistence")
+
+		local utils = require("aqothy.config.utils")
+
 		persistence.setup(opts)
 
 		local allowed_dirs = {
@@ -173,7 +78,7 @@ return {
 		}
 
 		-- If not in allow dir or is file
-		if not dirs_match(cwd, allowed_dirs) or is_file then
+		if not utils.dirs_match(cwd, allowed_dirs) then
 			persistence.stop()
 			return
 		end
@@ -209,7 +114,7 @@ return {
 								return
 							end
 
-							pcall(vim.api.nvim_del_augroup_by_name, "restore_session")
+							vim.api.nvim_clear_autocmds({ group = group })
 
 							-- Schedule restoration for after window close completes
 							vim.schedule(function()

@@ -2,6 +2,7 @@ return {
 	"williamboman/mason.nvim",
 	build = ":MasonUpdate",
 	cmd = "Mason",
+	keys = { { "<leader>tm", "<cmd>Mason<cr>", desc = "Mason" } },
 	opts_extend = { "ensure_installed" },
 	opts = {
 		ensure_installed = {
@@ -30,8 +31,6 @@ return {
 				package_pending = "",
 				package_uninstalled = "",
 			},
-			log_level = vim.log.levels.INFO,
-			max_concurrent_installers = 3,
 		},
 	},
 	config = function(_, opts)
