@@ -15,7 +15,11 @@ function M.os_component()
 	if not M._os_cache then
 		local uname_info = uv.os_uname() or {}
 		local sysname = uname_info.sysname or ""
-		sysname = (sysname == "Darwin") and "macos" or sysname:lower()
+		if vim.fn.has("win32") == 1 then
+			sysname = "windows"
+		else
+			sysname = (sysname == "Darwin") and "macos" or sysname:lower()
+		end
 		local icon, icon_hl = mini_icons.get("os", sysname)
 		M._os_cache = "%#" .. icon_hl .. "#" .. icon
 	end
