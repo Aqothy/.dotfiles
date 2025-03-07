@@ -41,7 +41,7 @@
 - karabiner element
 - ollama (already in external ssd)
 - vmware (already in external ssd)
-- go, lua, nvm, yt-dlp, cargo, basictex
+- go, lua, nvm, yt-dlp, basictex
 
 Then run the chmod the link.sh file and run it, also symlink stdc++, ollama, neovim manually
 

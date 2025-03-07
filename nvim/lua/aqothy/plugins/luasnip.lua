@@ -37,7 +37,7 @@ return {
 			silent = true,
 		},
 		{
-			"<C-f>",
+			"<C-m>",
 			function()
 				if require("luasnip").choice_active() then
 					require("luasnip").change_choice(1)

@@ -30,7 +30,7 @@ require("lazy").setup({
 			end,
 		},
 		{
-			import = "aqothy.vscode-plugins",
+			import = "aqothy.vscode",
 			cond = function()
 				return vim.g.vscode
 			end,
@@ -55,14 +55,14 @@ require("lazy").setup({
 		rtp = {
 			-- disable some rtp plugins
 			disabled_plugins = {
-				-- "gzip",
+				"gzip",
 				-- "matchit",
 				-- "matchparen",
 				"netrwPlugin",
-				-- "tarPlugin",
-				-- "tohtml",
+				"tarPlugin",
+				"tohtml",
 				"tutor",
-				-- "zipPlugin",
+				"zipPlugin",
 			},
 		},
 	},

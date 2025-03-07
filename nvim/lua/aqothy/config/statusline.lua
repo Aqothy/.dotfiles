@@ -174,6 +174,10 @@ autocmd("DiagnosticChanged", {
 })
 
 function M.diagnostics_component()
+	if vim.bo.filetype == "lazy" then
+		return ""
+	end
+
 	local buf = api.nvim_get_current_buf()
 
 	-- Return cached string if available
@@ -279,13 +283,12 @@ function M.update_file_type()
 
 	local relative_path = fn.expand("%:.")
 	local icon, icon_hl = mini_icons.get("file", relative_path)
-	local floating = api.nvim_win_get_config(0).zindex
 	M.file_type_cache = "%#"
 		.. icon_hl
 		.. "#"
 		.. icon
 		.. " %#StatuslineTitle#"
-		.. (floating and "%t" or relative_path)
+		.. (relative_path ~= "" and relative_path or "%t")
 		.. "%m%r"
 end
 

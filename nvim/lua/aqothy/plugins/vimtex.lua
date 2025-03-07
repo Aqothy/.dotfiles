@@ -1,6 +1,7 @@
 return {
 	"lervag/vimtex",
 	lazy = false, -- no lazy load for vimtex for inverse search function
+	enabled = false,
 	config = function()
 		vim.g.vimtex_view_method = "skim" -- PDF viewer
 		vim.g.vimtex_compiler_method = "latexmk" -- Auto compile with latexmk

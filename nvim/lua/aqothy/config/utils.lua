@@ -45,6 +45,13 @@ function M.pick_projects()
 	local projects = {}
 	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
 
+	-- For windows
+	-- local projects = {}
+	-- local projects_dir = vim.g.projects_dir .. "/Personal"
+	-- local cmd = "powershell -Command \"Get-ChildItem -Path '"
+	-- 	.. projects_dir
+	-- 	.. "' -Directory | Select-Object -ExpandProperty FullName\""
+
 	local output = vim.fn.system(cmd)
 	local exit_code = vim.v.shell_error
 
@@ -131,15 +138,7 @@ function M.select_sessions(session_state)
 				end,
 			},
 		},
-		confirm = function(picker, item)
-			if item._path then
-				picker:close()
-				vim.schedule(function()
-					vim.fn.chdir(item._path)
-					persistence.load()
-				end)
-			end
-		end,
+		confirm = "load_session",
 	})
 end
 

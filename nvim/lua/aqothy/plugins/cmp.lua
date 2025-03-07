@@ -1,11 +1,10 @@
 return {
 	"hrsh7th/nvim-cmp",
-	version = false,
 	event = { "InsertEnter", "CmdLineEnter" },
 	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
-		"saadparwaiz1/cmp_luasnip",
+		-- "saadparwaiz1/cmp_luasnip",
 		"abeldekat/cmp-mini-snippets",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-nvim-lsp",
