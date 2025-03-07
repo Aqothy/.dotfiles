@@ -11,6 +11,7 @@ return {
 		suggestion = {
 			enabled = true,
 			auto_trigger = true,
+			debounce = 30,
 			keymap = {
 				accept = false,
 				next = "<M-]>",

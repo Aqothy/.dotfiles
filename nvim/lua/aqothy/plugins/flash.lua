@@ -1,8 +1,8 @@
 return {
 	"folke/flash.nvim",
-	event = "VeryLazy",
+	enabled = false,
 	opts = {
-        -- Disable enhanced f and t
+		-- Disable enhanced f and t
 		modes = {
 			char = {
 				enabled = false,

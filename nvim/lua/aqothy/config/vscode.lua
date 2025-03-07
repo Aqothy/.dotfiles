@@ -6,7 +6,10 @@ local keymap = vim.keymap.set
 
 vim.notify = vscode.notify
 
-vim.opt.clipboard = "unnamedplus"
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+vim.schedule(function()
+	vim.opt.clipboard = "unnamedplus"
+end)
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.virtualedit = "block"
@@ -14,6 +17,9 @@ vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
 
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
@@ -24,7 +30,7 @@ end, {
 	desc = "New file",
 })
 
-keymap({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 keymap("n", "<leader>\\", function()
 	vscode.call("workbench.action.splitEditor")

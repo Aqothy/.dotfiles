@@ -1,6 +1,5 @@
 return {
 	"echasnovski/mini.snippets",
-	version = false,
 	event = "InsertEnter",
 	-- enabled = false,
 	opts = function()
@@ -9,6 +8,10 @@ return {
 
 		local autocmd = vim.api.nvim_create_autocmd
 		local group = vim.api.nvim_create_augroup("stop_session", { clear = true })
+
+		local my_m = function(snippets)
+			return mini_snippets.default_match(snippets, { pattern_fuzzy = "%w*" })
+		end
 
 		autocmd("User", {
 			pattern = "MiniSnippetsSessionStart",
@@ -49,6 +52,10 @@ return {
 				jump_next = "<C-l>",
 				jump_prev = "<C-h>",
 				stop = "",
+			},
+
+			expand = {
+				match = my_m,
 			},
 		}
 	end,

@@ -131,6 +131,7 @@ return {
 				trace = user.signs.trace,
 			},
 			level = vim.log.levels.INFO,
+			style = "minimal",
 		},
 		quickfile = { enabled = true },
 		statuscolumn = {
@@ -184,7 +185,7 @@ return {
 		image = {
 			enabled = false,
 			doc = {
-				enabled = true,
+				enabled = false,
 				inline = false,
 				float = false,
 				max_width = 30,
@@ -192,6 +193,9 @@ return {
 			},
 			convert = {
 				notify = false,
+			},
+			math = {
+				enabled = false,
 			},
 		},
 
@@ -261,7 +265,7 @@ return {
 		{
 			"<leader>no",
 			function()
-				Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = "~/.config/TODO.md" })
+				Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = vim.fn.stdpath("state") .. "/TODO.md" })
 			end,
 			desc = "Todo List",
 		},

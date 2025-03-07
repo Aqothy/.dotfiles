@@ -22,7 +22,7 @@ return {
 	},
 	{
 		"folke/flash.nvim",
-		event = "VeryLazy",
+		enabled = false,
 		opts = {
 			modes = {
 				char = {
@@ -57,6 +57,23 @@ return {
 					require("flash").remote()
 				end,
 				desc = "Remote Flash",
+			},
+		},
+	},
+	{
+		"echasnovski/mini.splitjoin",
+		keys = {
+			{
+				"<leader>j",
+				desc = "Join/split code block",
+				mode = { "n", "x" },
+			},
+		},
+		opts = {
+			mappings = {
+				toggle = "<leader>j",
+				split = "",
+				join = "",
 			},
 		},
 	},

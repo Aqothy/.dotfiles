@@ -1,5 +1,3 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
 local keymap = vim.keymap.set
 
 -- Window management
@@ -41,7 +39,7 @@ keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Exi
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
-keymap({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 -- Commenting
 keymap("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
@@ -56,3 +54,5 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 	silent = false,
 	desc = "Open a new file in the same directory",
 })
+
+keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
