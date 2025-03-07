@@ -204,25 +204,13 @@ return {
 				width = 180,
 				backdrop = { transparent = false },
 			},
-			terminal = {
-				keys = {
-					term_normal = {
-						"<esc>",
-						function()
-							vim.cmd.stopinsert()
-						end,
-						mode = "t",
-						expr = true,
-						desc = "Single escape to normal mode",
-					},
-				},
-			},
 		},
 	},
+
     -- stylua: ignore
 	keys = {
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
-		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git Browse", mode = { "n", "v" } },
+		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame line", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
         { "<leader>to", function()
             require("snacks").picker.grep({
@@ -234,17 +222,31 @@ return {
                 end,
             })
         end, { desc = "Grep TODOs", nargs = 0 }},
-		{
-			"<leader>tt",
-			function()
-                Snacks.terminal()
-			end,
-			desc = "Terminal",
-		},
 		{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
+        {
+            "<leader>tt",
+            function()
+                Snacks.terminal(nil, {
+                    win = {
+                        keys = {
+                            term_normal = {
+                                "<esc>",
+                                function()
+                                    vim.cmd.stopinsert()
+                                end,
+                                mode = "t",
+                                expr = true,
+                                desc = "Single escape to normal mode",
+                            },
+                        },
+                    },
+                })
+            end,
+            desc = "Terminal",
+	    },
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
 		{ "<leader>sh", function() Snacks.win({
             border = "rounded",
@@ -265,6 +267,7 @@ return {
 		{
 			"<leader>no",
 			function()
+                ---@diagnostic disable-next-line: missing-fields
 				Snacks.scratch({ icon = " ", name = "Todo", ft = "markdown", file = vim.fn.stdpath("state") .. "/TODO.md" })
 			end,
 			desc = "Todo List",
@@ -299,7 +302,6 @@ return {
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
         { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
-        { "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
 	init = function()

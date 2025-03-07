@@ -12,6 +12,12 @@ alias lg="lazygit"
 alias clang="clang++ -std=c++20"
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='TERM=xterm-256color command ssh'
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+export FZF_DEFAULT_OPTS="--layout=reverse"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 # Keybindings and Zsh Widgets
 fzf_append_dir_widget() {
     local dir
@@ -22,11 +28,7 @@ fzf_append_dir_widget() {
 }
 zle -N fzf_append_dir_widget
 bindkey '^f' fzf_append_dir_widget
-bindkey -s '^\\' 'ts\n'
-
-# Fix backspace key in vi mode
-bindkey "^H" backward-delete-char
-bindkey "^?" backward-delete-char
+bindkey -s '^h' 'ts\n'
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
