@@ -33,7 +33,7 @@ keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = tru
 keymap({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
 -- Terminal mode
-keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Exit terminal mode" })
+keymap("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Exit terminal mode" })
 
 -- Editing and text manipulation
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
@@ -47,9 +47,8 @@ keymap("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Com
 
 -- Utility functions
 keymap("n", "<leader>ip", vim.show_pos, { desc = "Inspect Pos" })
-keymap("n", "<leader>fo", "za", { desc = "Toggle fold under cursor" })
 keymap("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
-keymap("n", "<C-\\>", "<cmd>silent !tmux neww ts<cr>", { desc = "New tmux session" }) -- need to be in tmux already for this to work
+keymap({ "n", "t" }, "<C-h>", "<cmd>silent !tmux neww ts<cr>", { desc = "New tmux session" }) -- need to be in tmux already for this to work
 keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 	silent = false,
 	desc = "Open a new file in the same directory",

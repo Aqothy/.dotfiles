@@ -43,7 +43,7 @@ return {
 		},
 		keys = {
 			{
-				"<C-h>",
+				"<C-l>",
 				mode = { "n", "x", "o" },
 				function()
 					require("flash").jump()
