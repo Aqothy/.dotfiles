@@ -22,10 +22,10 @@ return {
 
 		local snippet_sources = {}
 		if has_luasnip then
-			table.insert(snippet_sources, { name = "luasnip" })
+			snippet_sources = { name = "luasnip" }
 		end
 		if has_mini_snippets then
-			table.insert(snippet_sources, { name = "mini_snippets" })
+			snippet_sources = { name = "mini_snippets" }
 		end
 
 		-- Configure snippet expansion based on available plugins
@@ -124,20 +124,18 @@ return {
 			},
 
 			-- sources for autocompletion with dynamic snippet provider selection
-			sources = cmp.config.sources(
-				vim.list_extend({
-					{
-						name = "nvim_lsp",
-						entry_filter = function(entry)
-							return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-						end,
-					},
-				}, snippet_sources),
+			sources = cmp.config.sources({
 				{
-					{ name = "path" },
-					{ name = "buffer" },
-				}
-			),
+					name = "nvim_lsp",
+					entry_filter = function(entry)
+						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+					end,
+				},
+				snippet_sources,
+				{ name = "path" },
+			}, {
+				{ name = "buffer" },
+			}),
 
 			sorting = {
 				priority_weight = 2,
@@ -153,6 +151,14 @@ return {
 					cmp.config.compare.order,
 					cmp.config.compare.kind,
 				},
+			},
+			matching = {
+				disallow_fuzzy_matching = false,
+				disallow_fullfuzzy_matching = false,
+				disallow_partial_fuzzy_matching = false,
+				disallow_partial_matching = false,
+				disallow_prefix_unmatching = false,
+				disallow_symbol_nonprefix_matching = true,
 			},
 		})
 

@@ -46,7 +46,6 @@ function M.pick_projects()
 	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
 
 	-- For windows
-	-- local projects = {}
 	-- local projects_dir = vim.g.projects_dir .. "/Personal"
 	-- local cmd = "powershell -Command \"Get-ChildItem -Path '"
 	-- 	.. projects_dir

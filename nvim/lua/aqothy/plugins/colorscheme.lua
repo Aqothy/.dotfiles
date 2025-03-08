@@ -52,7 +52,7 @@ return {
 			local mode_colors = {
 				Normal = "gray",
 				Pending = "neutral_blue",
-				Replace = "light_red_soft",
+				Replace = "neutral_aqua",
 				Visual = "neutral_orange",
 				Insert = "bright_green",
 				Command = "neutral_yellow",

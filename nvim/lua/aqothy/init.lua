@@ -3,8 +3,8 @@ local lazy_autocmds = vim.fn.argc(-1) == 0
 
 require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
--- Load autocmds immediately if there are arguments
 if not is_vscode then
+	-- Load autocmds immediately if there are arguments
 	if not lazy_autocmds then
 		require("aqothy.config.autocmds")
 	end

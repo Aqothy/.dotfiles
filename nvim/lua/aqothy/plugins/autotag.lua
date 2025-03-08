@@ -7,5 +7,6 @@ return {
 		"typescript",
 		"typescriptreact",
 	},
+    enabled = false,
 	opts = {},
 }

@@ -278,12 +278,10 @@ function M.lsp_progress_component()
 	return result
 end
 
-function M.update_file_type()
-	M.update_file_info_cache()
-
+function M.filetype_component()
 	local relative_path = fn.expand("%:.")
 	local icon, icon_hl = mini_icons.get("file", relative_path)
-	M.file_type_cache = "%#"
+	return "%#"
 		.. icon_hl
 		.. "#"
 		.. icon
@@ -292,34 +290,8 @@ function M.update_file_type()
 		.. "%m%r"
 end
 
--- TermLeave for updating icon after lazygit closes, also accounts for file changes from terminal
-autocmd({ "BufEnter", "TermLeave", "WinLeave" }, {
-	group = stl_group,
-	callback = M.update_file_type,
-})
-
-function M.filetype_component()
-	if not M.file_type_cache then
-		M.update_file_type()
-	end
-	return M.file_type_cache or ""
-end
-
-function M.update_file_info_cache()
-	M.file_info_cache = "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
-end
-
-autocmd("OptionSet", {
-	group = stl_group,
-	pattern = { "fileencoding", "shiftwidth", "filetype" },
-	callback = M.update_file_info_cache,
-})
-
 function M.file_info_component()
-	if not M.file_info_cache then
-		M.update_file_info_cache()
-	end
-	return M.file_info_cache or ""
+	return "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
 end
 
 function M.position_component()
