@@ -105,6 +105,7 @@ M["lua_ls"] = {
 }
 
 M["clangd"] = {
+	enabled = false,
 	capabilities = {
 		offsetEncoding = { "utf-16" },
 	},

@@ -18,6 +18,7 @@ return {
 			"vtsls",
 			"emmet-language-server",
 			"omnisharp",
+			-- "ruff",
 
 			-- Tools (formatters, linters, etc.)
 			"stylua",
