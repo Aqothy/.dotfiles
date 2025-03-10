@@ -18,9 +18,6 @@ return {
 	},
 	opts_extend = { "sources.default" },
 	opts = function()
-		local has_luasnip, _ = pcall(require, "luasnip")
-		local has_mini, _ = pcall(require, "mini.snippets")
-
 		return {
 			keymap = {
 				preset = "none",
@@ -54,6 +51,20 @@ return {
 				-- adding any nvim-cmp sources here will enable them
 				-- with blink.compat, need to uncomment compat in dependencies
 				-- compat = {},
+			},
+			fuzzy = {
+				sorts = {
+					function(a, b)
+						if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+							return
+						end
+						return b.client_name == "emmet_language_server"
+					end,
+					"exact",
+					-- default sorts
+					"score",
+					"sort_text",
+				},
 			},
 			cmdline = {
 				enabled = true,
@@ -92,7 +103,7 @@ return {
 			},
 
 			snippets = {
-				preset = has_luasnip and "luasnip" or has_mini and "mini_snippets" or "default",
+				preset = "mini_snippets",
 			},
 
 			appearance = {

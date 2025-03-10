@@ -17,6 +17,7 @@ return {
 			"texlab",
 			"vtsls",
 			"emmet-language-server",
+			"ruff",
 
 			-- Tools (formatters, linters, etc.)
 			"stylua",

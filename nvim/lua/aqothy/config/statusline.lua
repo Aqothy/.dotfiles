@@ -152,23 +152,21 @@ M.diagnostic_levels = {
 M.diagnostic_counts = {}
 M.diagnostic_str_cache = {}
 
--- Only get counts when needed instead of on every change
 M.get_diagnostic_count = function(buf_id)
 	return vim.diagnostic.count(buf_id)
 end
 
--- Clear diagnostic cache when diagnostics change
+-- Only get counts when needed instead of on every change
 autocmd("DiagnosticChanged", {
 	group = stl_group,
 	callback = function(data)
 		if api.nvim_buf_is_valid(data.buf) then
 			M.diagnostic_counts[data.buf] = M.get_diagnostic_count(data.buf)
-			-- Invalidate string cache for this buffer
-			M.diagnostic_str_cache[data.buf] = nil
 		else
 			M.diagnostic_counts[data.buf] = nil
-			M.diagnostic_str_cache[data.buf] = nil
 		end
+		-- Invalidate string cache for this buffer
+		M.diagnostic_str_cache[data.buf] = nil
 	end,
 	desc = "Track diagnostics",
 })
@@ -286,12 +284,13 @@ function M.filetype_component()
 		.. "#"
 		.. icon
 		.. " %#StatuslineTitle#"
-		.. (relative_path ~= "" and relative_path or "%t")
+		-- Show relative path if not empty and not a terminal buffer
+		.. ((relative_path ~= "" and vim.bo.buftype ~= "terminal") and relative_path or "%t")
 		.. "%m%r"
 end
 
 function M.file_info_component()
-	return "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
+	return "%#StatuslineModeSeparatorOther# " .. (bo.fileencoding or bo.encoding) .. " Tab:" .. bo.shiftwidth
 end
 
 function M.position_component()
