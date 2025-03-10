@@ -62,10 +62,6 @@ return {
 				end,
 				insert = my_insert,
 			},
-
-			expand = {
-				match = my_m,
-			},
 		}
 	end,
 }
