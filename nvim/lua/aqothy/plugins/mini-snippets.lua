@@ -6,29 +6,29 @@ return {
 		local mini_snippets = require("mini.snippets")
 		local gen_loader = mini_snippets.gen_loader
 
-		local autocmd = vim.api.nvim_create_autocmd
-		local group = vim.api.nvim_create_augroup("stop_session", { clear = true })
+		local has_cmp, cmp = pcall(require, "nvim-cmp")
+		local has_blink, blink = pcall(require, "blink.cmp")
 
-		local my_m = function(snippets)
-			return mini_snippets.default_match(snippets, { pattern_fuzzy = "%w*" })
+		local expand_select_override = nil
+
+		if has_cmp then
+			expand_select_override = function(snippets, insert)
+				if cmp.visible() then
+					cmp.close()
+				end
+				mini_snippets.default_select(snippets, insert)
+			end
+		elseif has_blink then
+			expand_select_override = function(snippets, insert)
+				blink.cancel()
+				mini_snippets.default_select(snippets, insert)
+			end
 		end
 
-		autocmd("User", {
-			pattern = "MiniSnippetsSessionStart",
-			group = group,
-			callback = function()
-				autocmd("ModeChanged", {
-					pattern = "*:n",
-					once = true,
-					group = group,
-					callback = function()
-						while mini_snippets.session.get() do
-							mini_snippets.session.stop()
-						end
-					end,
-				})
-			end,
-		})
+		local my_insert = function(snippet)
+			-- Empty tabstop chars
+			return mini_snippets.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
+		end
 
 		local jsx_patterns = { "javascript.json", "react-es7.json" }
 		local tsx_patterns = { "typescript.json", "react-es7.json" }
@@ -51,7 +51,16 @@ return {
 				-- Created for the duration of active session(s)
 				jump_next = "<C-l>",
 				jump_prev = "<C-h>",
-				stop = "",
+				stop = "<C-c>",
+			},
+			expand = {
+				select = function(snippets, insert)
+					-- Close completion window on snippet select - vim.ui.select
+					-- Needed to remove virtual text for fzf-lua and telescope, but not for mini.pick...
+					local select = expand_select_override or mini_snippets.default_select
+					select(snippets, insert)
+				end,
+				insert = my_insert,
 			},
 
 			expand = {

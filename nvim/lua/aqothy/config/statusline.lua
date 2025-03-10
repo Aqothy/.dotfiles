@@ -152,23 +152,21 @@ M.diagnostic_levels = {
 M.diagnostic_counts = {}
 M.diagnostic_str_cache = {}
 
--- Only get counts when needed instead of on every change
 M.get_diagnostic_count = function(buf_id)
 	return vim.diagnostic.count(buf_id)
 end
 
--- Clear diagnostic cache when diagnostics change
+-- Only get counts when needed instead of on every change
 autocmd("DiagnosticChanged", {
 	group = stl_group,
 	callback = function(data)
 		if api.nvim_buf_is_valid(data.buf) then
 			M.diagnostic_counts[data.buf] = M.get_diagnostic_count(data.buf)
-			-- Invalidate string cache for this buffer
-			M.diagnostic_str_cache[data.buf] = nil
 		else
 			M.diagnostic_counts[data.buf] = nil
-			M.diagnostic_str_cache[data.buf] = nil
 		end
+		-- Invalidate string cache for this buffer
+		M.diagnostic_str_cache[data.buf] = nil
 	end,
 	desc = "Track diagnostics",
 })
@@ -278,48 +276,21 @@ function M.lsp_progress_component()
 	return result
 end
 
-function M.update_file_type()
-	M.update_file_info_cache()
-
+function M.filetype_component()
 	local relative_path = fn.expand("%:.")
 	local icon, icon_hl = mini_icons.get("file", relative_path)
-	M.file_type_cache = "%#"
+	return "%#"
 		.. icon_hl
 		.. "#"
 		.. icon
 		.. " %#StatuslineTitle#"
-		.. (relative_path ~= "" and relative_path or "%t")
+		-- Show relative path if not empty and not a terminal buffer
+		.. ((relative_path ~= "" and vim.bo.buftype ~= "terminal") and relative_path or "%t")
 		.. "%m%r"
 end
 
--- TermLeave for updating icon after lazygit closes, also accounts for file changes from terminal
-autocmd({ "BufEnter", "TermLeave", "WinLeave" }, {
-	group = stl_group,
-	callback = M.update_file_type,
-})
-
-function M.filetype_component()
-	if not M.file_type_cache then
-		M.update_file_type()
-	end
-	return M.file_type_cache or ""
-end
-
-function M.update_file_info_cache()
-	M.file_info_cache = "%#StatuslineModeSeparatorOther# " .. bo.fileencoding .. " Tab:" .. bo.shiftwidth
-end
-
-autocmd("OptionSet", {
-	group = stl_group,
-	pattern = { "fileencoding", "shiftwidth", "filetype" },
-	callback = M.update_file_info_cache,
-})
-
 function M.file_info_component()
-	if not M.file_info_cache then
-		M.update_file_info_cache()
-	end
-	return M.file_info_cache or ""
+	return "%#StatuslineModeSeparatorOther# " .. (bo.fileencoding or bo.encoding) .. " Tab:" .. bo.shiftwidth
 end
 
 function M.position_component()

@@ -108,14 +108,14 @@ return {
 			},
 		},
 		indent = {
-			enabled = false,
+			enabled = true,
 			indent = {
 				char = "▏",
 			},
 			-- chunk = {
 			-- 	enabled = true,
 			-- },
-			scope = { enabled = false, char = "▏" },
+			scope = { enabled = false },
 		},
 		scroll = {
 			enabled = false,
@@ -139,7 +139,7 @@ return {
 			left = { "sign", "git" },
 			right = { "mark", "fold" },
 			folds = {
-				open = false,
+				open = true,
 				git_hl = false,
 			},
 			refresh = 300,
@@ -226,6 +226,7 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
+        { "<leader>rp", function() Snacks.picker.resume() end, desc = "Resume" },
         {
             "<leader>tt",
             function()
@@ -289,7 +290,7 @@ return {
 			function()
 				Snacks.picker.lines({
 					layout = {
-						preset = "default",
+						preset = "ivy",
 						preview = "preview",
 					},
 				})
@@ -305,11 +306,11 @@ return {
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
 	init = function()
+		vim.g.snacks_animate = false
 		vim.api.nvim_create_autocmd("User", {
 			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
 			pattern = "VeryLazy",
 			callback = function()
-				vim.g.snacks_animate = false
 				-- Setup some globals for debugging (lazy-loaded)
 				_G.dd = function(...)
 					Snacks.debug.inspect(...)
@@ -324,7 +325,8 @@ return {
 					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
 					:map("<leader>cl")
 
-				Snacks.toggle.dim():map("<leader>td")
+				Snacks.toggle.dim():map("<leader>sd")
+				Snacks.toggle.diagnostics():map("<leader>td")
 				Snacks.toggle.zen():map("<leader>zz")
 				Snacks.toggle.profiler():map("<leader>pp")
 

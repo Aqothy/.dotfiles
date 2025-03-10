@@ -25,6 +25,11 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
+M.capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
+}
+
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -119,17 +124,22 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
+	if client:supports_method("textDocument/foldingRange") then
+		local win = vim.api.nvim_get_current_win()
+		vim.wo[win][0].foldmethod = "expr"
+		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+	end
+
 	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
-		local has_blink_window, blink_window = pcall(require, "blink.cmp.completion.windows.menu")
 		local has_cmp, cmp = pcall(require, "cmp")
 
 		keymap({ "i", "s" }, "<C-s>", function()
-			if has_blink_window and blink_window.win and blink_window.win:is_open() then
-				blink.hide()
+			if has_blink then
+				blink.cancel()
 			end
 
-			if has_cmp and cmp.core and cmp.core.view and cmp.core.view:visible() then
+			if has_cmp and cmp.visible() then
 				cmp.close()
 			end
 

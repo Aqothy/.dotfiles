@@ -46,7 +46,6 @@ function M.pick_projects()
 	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
 
 	-- For windows
-	-- local projects = {}
 	-- local projects_dir = vim.g.projects_dir .. "/Personal"
 	-- local cmd = "powershell -Command \"Get-ChildItem -Path '"
 	-- 	.. projects_dir
@@ -125,9 +124,7 @@ function M.select_sessions(session_state)
 					picker.preview:reset()
 					for _, item in ipairs(picker:selected({ fallback = true })) do
 						if item.text then
-							vim.schedule(function()
-								vim.fn.delete(item.text)
-							end)
+							vim.fn.delete(item.text)
 						else
 							vim.notify("No session found")
 						end
@@ -140,20 +137,6 @@ function M.select_sessions(session_state)
 		},
 		confirm = "load_session",
 	})
-end
-
-function M.foldexpr()
-	local buf = vim.api.nvim_get_current_buf()
-	if vim.b[buf].ts_folds == nil then
-		-- as long as we don't have a filetype, don't bother
-		-- checking if treesitter is available (it won't)
-		if vim.bo[buf].filetype == "" then
-			return "0"
-		end
-
-		vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
-	end
-	return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or "0"
 end
 
 return M

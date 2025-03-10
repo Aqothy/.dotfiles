@@ -4,48 +4,19 @@ return {
 	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
-		-- "saadparwaiz1/cmp_luasnip",
-		"abeldekat/cmp-mini-snippets",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
+		"xzbdmw/cmp-mini-snippets",
 	},
 	config = function()
 		local user = require("aqothy.config.user")
 		local utils = require("aqothy.config.utils")
 		local cmp = require("cmp")
 
-		local has_luasnip, luasnip = pcall(require, "luasnip")
-		local has_mini_snippets, mini_snippets = pcall(require, "mini.snippets")
-
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-		local snippet_sources = {}
-		if has_luasnip then
-			table.insert(snippet_sources, { name = "luasnip" })
-		end
-		if has_mini_snippets then
-			table.insert(snippet_sources, { name = "mini_snippets" })
-		end
-
-		-- Configure snippet expansion based on available plugins
-		local snippet_config = {}
-		if has_luasnip then
-			snippet_config = {
-				expand = function(args)
-					luasnip.lsp_expand(args.body)
-				end,
-			}
-		elseif has_mini_snippets then
-			snippet_config = {
-				expand = function(args)
-					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
-					insert({ body = args.body }) -- Insert at cursor
-					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
-					require("cmp.config").set_onetime({ sources = {} })
-				end,
-			}
-		end
+		local mini_snippets = require("mini.snippets")
 
 		cmp.setup({
 			completion = {
@@ -55,7 +26,15 @@ return {
 				completion = cmp.config.window.bordered(),
 				documentation = cmp.config.window.bordered(),
 			},
-			snippet = snippet_config,
+			snippet = {
+				expand = function(args)
+					while mini_snippets.session.get() do
+						mini_snippets.session.stop()
+					end
+					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
+					insert({ body = args.body }) -- Insert at cursor
+				end,
+			},
 			experimental = {
 				ghost_text = false,
 			},
@@ -124,20 +103,24 @@ return {
 			},
 
 			-- sources for autocompletion with dynamic snippet provider selection
-			sources = cmp.config.sources(
-				vim.list_extend({
-					{
-						name = "nvim_lsp",
-						entry_filter = function(entry)
-							return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-						end,
-					},
-				}, snippet_sources),
+			sources = cmp.config.sources({
 				{
-					{ name = "path" },
-					{ name = "buffer" },
-				}
-			),
+					name = "nvim_lsp",
+					entry_filter = function(entry)
+						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+					end,
+				},
+				{
+					name = "mini.snippets",
+					option = {
+						use_minisnippets_match_rule = false,
+						only_show_in_line_start = true,
+					},
+				},
+				{ name = "path" },
+			}, {
+				{ name = "buffer" },
+			}),
 
 			sorting = {
 				priority_weight = 2,
@@ -153,6 +136,14 @@ return {
 					cmp.config.compare.order,
 					cmp.config.compare.kind,
 				},
+			},
+			matching = {
+				disallow_fuzzy_matching = false,
+				disallow_fullfuzzy_matching = false,
+				disallow_partial_fuzzy_matching = false,
+				disallow_partial_matching = false,
+				disallow_prefix_unmatching = false,
+				disallow_symbol_nonprefix_matching = true,
 			},
 		})
 

@@ -22,7 +22,6 @@ vim.opt.autoindent = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
@@ -59,7 +58,7 @@ vim.opt.wildmode = { "longest:full", "full" }
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " ", fold = " ", diff = "╱" }
+vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
 
@@ -70,7 +69,6 @@ vim.g.netrw_banner = 0
 vim.g.netrw_browse_split = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 25
-vim.g.netrw_browsex_viewer = "open -a safari"
 
 vim.opt.spelllang = "en_us"
 --vim.opt.spell = true
@@ -89,15 +87,13 @@ vim.opt.showcmd = false
 vim.opt.showmode = false
 
 -- folds
--- vim.opt.foldcolumn = "1"
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
-vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
-vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
+vim.opt.foldmethod = "manual"
 
-vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal", "localoptions" }
+vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true
@@ -105,4 +101,4 @@ vim.opt.breakindent = true
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
-vim.o.background = "light"
+vim.opt.background = "light"

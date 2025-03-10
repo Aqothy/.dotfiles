@@ -98,15 +98,19 @@ M["lua_ls"] = {
 				callSnippet = "Replace",
 			},
 		},
+		telemetry = {
+			enable = false,
+		},
 	},
 }
 
 M["clangd"] = {
-	enabled = false,
+	capabilities = {
+		offsetEncoding = { "utf-16" },
+	},
 	cmd = {
 		"clangd",
 		"--background-index",
-		"--offset-encoding=utf-16",
 		"--clang-tidy",
 		"--header-insertion=iwyu",
 		"--completion-style=detailed",
@@ -153,10 +157,7 @@ M["basedpyright"] = {
 	settings = {
 		basedpyright = {
 			analysis = {
-				-- TODO: It would be nice to understand this better and turn these back on someday.
-				reportMissingTypeStubs = false,
-				reportMissingSuperCall = false,
-				typeCheckingMode = "off",
+				typeCheckingMode = "standard",
 			},
 		},
 	},
@@ -210,5 +211,7 @@ M["cssls"] = {
 M["texlab"] = {
 	enabled = false,
 }
+
+M["ruff"] = {}
 
 return M
