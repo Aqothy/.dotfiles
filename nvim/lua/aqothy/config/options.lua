@@ -19,6 +19,7 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.smartindent = true
 vim.opt.autoindent = true
+vim.opt.breakindent = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -82,7 +83,6 @@ vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 
 -- command line
-vim.opt.cmdheight = 1
 vim.opt.showcmd = false
 vim.opt.showmode = false
 
@@ -97,7 +97,6 @@ vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "term
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true
-vim.opt.breakindent = true
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 

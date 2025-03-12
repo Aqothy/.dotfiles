@@ -20,6 +20,7 @@ vim.opt.smartcase = true
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.showcmd = false
 
 local function vscode_action(cmd)
 	return function()
@@ -29,6 +30,8 @@ end
 
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
+
+keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
@@ -83,3 +86,11 @@ keymap({ "n", "v" }, "'3", vscode_action("vscode-harpoon.gotoEditor3"), { desc =
 keymap({ "n", "v" }, "'4", vscode_action("vscode-harpoon.gotoEditor4"), { desc = "Harpoon: Goto Editor 4" })
 
 keymap({ "n", "v" }, "'5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+	callback = function()
+		(vim.hl or vim.highlight).on_yank({ timeout = 60 })
+	end,
+})
