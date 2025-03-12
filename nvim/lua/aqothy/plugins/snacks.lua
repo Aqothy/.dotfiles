@@ -132,8 +132,8 @@ return {
 		quickfile = { enabled = true },
 		statuscolumn = {
 			enabled = false,
-			left = { "sign", "git" },
-			right = { "mark", "fold" },
+			left = { "git" },
+			right = { "fold" },
 			folds = {
 				open = true,
 				git_hl = false,
@@ -301,7 +301,6 @@ return {
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
 	init = function()
-		vim.g.snacks_animate = false
 		vim.api.nvim_create_autocmd("User", {
 			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
 			pattern = "VeryLazy",

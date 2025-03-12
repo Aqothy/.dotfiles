@@ -43,8 +43,6 @@ vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
 
-vim.opt.isfname:append("@-@")
-
 vim.opt.mouse = "a"
 
 -- completion
@@ -58,9 +56,11 @@ vim.opt.wildmode = { "longest:full", "full" }
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
+vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
+vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+vim.g.snacks_animate = false
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -91,6 +91,7 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
+vim.opt.statuscolumn = "%!v:lua.require'snacks.statuscolumn'.get()"
 
 vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 
