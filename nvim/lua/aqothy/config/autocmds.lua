@@ -3,11 +3,31 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Check if we need to reload the file when it changed
+autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+	group = augroup("checktime"),
+	callback = function()
+		if vim.o.buftype ~= "nofile" then
+			vim.cmd.checktime()
+		end
+	end,
+})
+
 -- Highlight on yank
 autocmd("TextYankPost", {
 	group = augroup("highlight_yank"),
 	callback = function()
 		(vim.hl or vim.highlight).on_yank({ timeout = 60 })
+	end,
+})
+
+-- resize splits if window got resized
+autocmd({ "VimResized" }, {
+	group = augroup("resize_splits"),
+	callback = function()
+		local current_tab = vim.fn.tabpagenr()
+		vim.cmd("tabdo wincmd =")
+		vim.cmd("tabnext " .. current_tab)
 	end,
 })
 
@@ -69,6 +89,31 @@ autocmd("BufReadPost", {
 		if mark[1] > 0 and mark[1] <= lcount then
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
 			vim.cmd.normal("zz")
+		end
+	end,
+})
+
+autocmd("FileType", {
+	group = augroup("treesitter_folding"),
+	callback = function(args)
+		local bufnr = args.buf
+
+		-- If LSP folding is already enabled, do nothing.
+		if vim.b[bufnr].lsp_fold then
+			return
+		end
+
+		if vim.b[bufnr].ts_folds == nil then
+			vim.b[bufnr].ts_folds = pcall(vim.treesitter.get_parser, bufnr)
+		end
+
+		local win = vim.api.nvim_get_current_win()
+
+		if vim.b[bufnr].ts_folds then
+			vim.wo[win][0].foldmethod = "expr"
+			vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		else
+			vim.wo[win][0].foldmethod = "manual"
 		end
 	end,
 })

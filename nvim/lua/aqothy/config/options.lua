@@ -91,7 +91,6 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
-vim.opt.foldmethod = "manual"
 
 vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 

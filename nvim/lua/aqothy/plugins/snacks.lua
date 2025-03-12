@@ -109,12 +109,8 @@ return {
 		},
 		indent = {
 			enabled = true,
-			indent = {
-				char = "▏",
-			},
-			-- chunk = {
-			-- 	enabled = true,
-			-- },
+			indent = { enabled = true },
+			chunk = { enabled = false },
 			scope = { enabled = false },
 		},
 		scroll = {
@@ -226,7 +222,6 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-        { "<leader>rp", function() Snacks.picker.resume() end, desc = "Resume" },
         {
             "<leader>tt",
             function()

@@ -1,13 +1,13 @@
 return {
 	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
-		"xzbdmw/cmp-mini-snippets",
+		"abeldekat/cmp-mini-snippets",
 	},
 	config = function()
 		local user = require("aqothy.config.user")
@@ -28,11 +28,10 @@ return {
 			},
 			snippet = {
 				expand = function(args)
-					while mini_snippets.session.get() do
-						mini_snippets.session.stop()
-					end
 					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
 					insert({ body = args.body }) -- Insert at cursor
+					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+					require("cmp.config").set_onetime({ sources = {} })
 				end,
 			},
 			experimental = {
@@ -110,13 +109,7 @@ return {
 						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
 					end,
 				},
-				{
-					name = "mini.snippets",
-					option = {
-						use_minisnippets_match_rule = false,
-						only_show_in_line_start = true,
-					},
-				},
+				{ name = "mini_snippets" },
 				{ name = "path" },
 			}, {
 				{ name = "buffer" },

@@ -5,6 +5,7 @@ vim.g.maplocalleader = " "
 local keymap = vim.keymap.set
 
 vim.notify = vscode.notify
+vim.g.clipboard = vim.g.vscode_clipboard
 
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
@@ -19,107 +20,66 @@ vim.opt.smartcase = true
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.writebackup = false
+
+local function vscode_action(cmd)
+	return function()
+		vscode.action(cmd)
+	end
+end
 
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
-keymap("n", "<leader>nf", function()
-	vscode.call("workbench.action.files.newUntitledFile")
-end, {
-	desc = "New file",
-})
+keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+
+keymap("n", "]d", vscode_action("editor.action.marker.next"), { desc = "Next diagnostic" })
+keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous diagnostic" })
+
+keymap("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
+keymap("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
+
+keymap("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
 
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
-keymap("n", "<leader>\\", function()
-	vscode.call("workbench.action.splitEditor")
-end, { desc = "Split editor" })
+keymap("n", "<leader>\\", vscode_action("workbench.action.splitEditor"), { desc = "Split editor" })
 
-keymap("n", "<leader>-", function()
-	vscode.call("workbench.action.splitEditorDown")
-end, { desc = "Split editor down" })
+keymap("n", "<leader>-", vscode_action("workbench.action.splitEditorDown"), { desc = "Split editor down" })
 
-keymap("n", "<leader>ff", function()
-	vscode.call("workbench.action.quickOpen")
-end, {
-	desc = "Open file finder",
-})
+keymap("n", "<leader>ff", vscode_action("workbench.action.quickOpen"), { desc = "Open file finder" })
+keymap("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc = "Search in files" })
 
-keymap("n", "<leader>bd", function()
-	vscode.call("workbench.action.closeActiveEditor")
-end, {
-	desc = "Close buffer",
-})
+keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
+keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
 
-keymap("n", "<leader>bo", function()
-	vscode.call("workbench.action.closeAllEditors")
-end, {
-	desc = "Close buffer",
-})
+keymap("n", "<leader>rn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
 
-keymap("n", "<leader>fs", function()
-	vscode.call("workbench.action.findInFiles")
-end, {
-	desc = "Search in files",
-})
+keymap("n", "u", "<Cmd>call VSCodeNotify('undo')<CR>", { desc = "Undo" })
+keymap("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
-keymap({ "n", "v" }, "<leader>tt", function()
-	vscode.action("workbench.action.togglePanel")
-end, { desc = "Toggle Terminal" })
+keymap("n", "gr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
+
+keymap({ "n", "v" }, "<leader>tt", vscode_action("workbench.action.togglePanel"), { desc = "Toggle Terminal" })
 
 keymap({ "n", "v" }, "<leader>d", [["_d]])
 
--- Updated keymaps using the `vscode` variable directly
-keymap({ "n", "v" }, "<leader>la", function()
-	vscode.action("editor.action.quickFix")
-end, { desc = "Quick Fix" })
+keymap({ "n", "v" }, "<leader>la", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
+keymap({ "n", "v" }, "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
-keymap({ "n", "v" }, "<leader>fd", function()
-	vscode.action("workbench.actions.view.problems")
-end, { desc = "View Problems" })
+keymap({ "n", "v" }, "<leader>k", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
 
-keymap({ "n", "v" }, "<leader>k", function()
-	vscode.action("editor.action.formatDocument")
-end, { desc = "Format Document" })
+keymap({ "n", "v" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 
-keymap({ "n", "v" }, "K", function()
-	vscode.action("editor.action.showHover")
-end, { desc = "Show Hover" })
+keymap({ "n", "v" }, "'s", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
 
--- vscode-harpoon keymaps
-keymap({ "n", "v" }, "'s", function()
-	vscode.action("vscode-harpoon.addEditor")
-end, { desc = "Harpoon: Add Editor" })
+keymap({ "n", "v" }, "'e", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
 
-keymap({ "n", "v" }, "'e", function()
-	vscode.action("vscode-harpoon.editEditors")
-end, { desc = "Harpoon: Edit Editors" })
+keymap({ "n", "v" }, "'1", vscode_action("vscode-harpoon.gotoEditor1"), { desc = "Harpoon: Goto Editor 1" })
 
-keymap({ "n", "v" }, "'1", function()
-	vscode.action("vscode-harpoon.gotoEditor1")
-end, { desc = "Harpoon: Goto Editor 1" })
+keymap({ "n", "v" }, "'2", vscode_action("vscode-harpoon.gotoEditor2"), { desc = "Harpoon: Goto Editor 2" })
 
-keymap({ "n", "v" }, "'2", function()
-	vscode.action("vscode-harpoon.gotoEditor2")
-end, { desc = "Harpoon: Goto Editor 2" })
+keymap({ "n", "v" }, "'3", vscode_action("vscode-harpoon.gotoEditor3"), { desc = "Harpoon: Goto Editor 3" })
 
-keymap({ "n", "v" }, "'3", function()
-	vscode.action("vscode-harpoon.gotoEditor3")
-end, { desc = "Harpoon: Goto Editor 3" })
+keymap({ "n", "v" }, "'4", vscode_action("vscode-harpoon.gotoEditor4"), { desc = "Harpoon: Goto Editor 4" })
 
-keymap({ "n", "v" }, "'4", function()
-	vscode.action("vscode-harpoon.gotoEditor4")
-end, { desc = "Harpoon: Goto Editor 4" })
-
-keymap({ "n", "v" }, "'5", function()
-	vscode.action("vscode-harpoon.gotoEditor5")
-end, { desc = "Harpoon: Goto Editor 5" })
-
--- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-	callback = function()
-		(vim.hl or vim.highlight).on_yank({ timeout = 60 })
-	end,
-})
+keymap({ "n", "v" }, "'5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
