@@ -125,6 +125,9 @@ M.on_attach = function(client, bufnr)
 	end
 
 	if client:supports_method("textDocument/foldingRange") then
+		if vim.b[bufnr].lsp_fold == nil then
+			vim.b[bufnr].lsp_fold = true -- mark buffer as having LSP folding
+		end
 		local win = vim.api.nvim_get_current_win()
 		vim.wo[win][0].foldmethod = "expr"
 		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"

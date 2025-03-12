@@ -109,12 +109,8 @@ return {
 		},
 		indent = {
 			enabled = true,
-			indent = {
-				char = "▏",
-			},
-			-- chunk = {
-			-- 	enabled = true,
-			-- },
+			indent = { enabled = true },
+			chunk = { enabled = false },
 			scope = { enabled = false },
 		},
 		scroll = {
@@ -136,8 +132,8 @@ return {
 		quickfile = { enabled = true },
 		statuscolumn = {
 			enabled = false,
-			left = { "sign", "git" },
-			right = { "mark", "fold" },
+			left = { "git" },
+			right = { "fold" },
 			folds = {
 				open = true,
 				git_hl = false,
@@ -226,7 +222,6 @@ return {
         {"<leader>bo", function()
             Snacks.bufdelete.other()
         end,  desc = "Delete Other Buffers" },
-        { "<leader>rp", function() Snacks.picker.resume() end, desc = "Resume" },
         {
             "<leader>tt",
             function()
@@ -306,7 +301,6 @@ return {
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
 	init = function()
-		vim.g.snacks_animate = false
 		vim.api.nvim_create_autocmd("User", {
 			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
 			pattern = "VeryLazy",

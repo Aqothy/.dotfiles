@@ -79,7 +79,7 @@ if not is_vscode then
 		require("aqothy.config.autocmds")
 	end
 
-	-- Setup lazy loading
+	-- Lazy load config
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "VeryLazy",
 		group = vim.api.nvim_create_augroup("LazyLoad", { clear = true }),

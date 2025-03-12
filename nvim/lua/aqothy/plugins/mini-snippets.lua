@@ -30,6 +30,27 @@ return {
 			return mini_snippets.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
 		end
 
+		local autocmd = vim.api.nvim_create_autocmd
+		local group = vim.api.nvim_create_augroup("stop_session", { clear = true })
+
+		-- Stop session on esc
+		autocmd("User", {
+			pattern = "MiniSnippetsSessionStart",
+			group = group,
+			callback = function()
+				autocmd("ModeChanged", {
+					pattern = "*:n",
+					once = true,
+					group = group,
+					callback = function()
+						while mini_snippets.session.get() do
+							mini_snippets.session.stop()
+						end
+					end,
+				})
+			end,
+		})
+
 		local jsx_patterns = { "javascript.json", "react-es7.json" }
 		local tsx_patterns = { "typescript.json", "react-es7.json" }
 
@@ -51,12 +72,11 @@ return {
 				-- Created for the duration of active session(s)
 				jump_next = "<C-l>",
 				jump_prev = "<C-h>",
-				stop = "<C-c>",
+				stop = "",
 			},
 			expand = {
 				select = function(snippets, insert)
 					-- Close completion window on snippet select - vim.ui.select
-					-- Needed to remove virtual text for fzf-lua and telescope, but not for mini.pick...
 					local select = expand_select_override or mini_snippets.default_select
 					select(snippets, insert)
 				end,

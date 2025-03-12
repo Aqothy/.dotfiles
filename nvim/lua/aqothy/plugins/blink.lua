@@ -5,7 +5,7 @@ return {
 	-- build = "cargo build --release",
     version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -89,9 +89,6 @@ return {
 					},
 				},
 				menu = {
-					draw = {
-						treesitter = { "lsp" },
-					},
 					border = "rounded",
 				},
 				list = {

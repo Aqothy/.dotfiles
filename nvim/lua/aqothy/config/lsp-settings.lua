@@ -5,7 +5,7 @@ local M = {}
 -- since were not using mason-lspconfig it will not be initialized by default
 
 M["tailwindcss"] = {
-	enabled = false,
+	enabled = true,
 	filetypes = {
 		"html",
 		"javascript",
