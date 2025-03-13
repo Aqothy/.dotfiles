@@ -124,15 +124,6 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
-	if client:supports_method("textDocument/foldingRange") then
-		if vim.b[bufnr].lsp_fold == nil then
-			vim.b[bufnr].lsp_fold = true -- mark buffer as having LSP folding
-		end
-		local win = vim.api.nvim_get_current_win()
-		vim.wo[win][0].foldmethod = "expr"
-		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-	end
-
 	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
 		local has_cmp, cmp = pcall(require, "cmp")

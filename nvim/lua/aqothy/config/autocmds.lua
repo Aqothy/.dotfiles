@@ -92,28 +92,3 @@ autocmd("BufReadPost", {
 		end
 	end,
 })
-
-autocmd("FileType", {
-	group = augroup("treesitter_folding"),
-	callback = function(args)
-		local bufnr = args.buf
-
-		-- If LSP folding is already enabled, do nothing.
-		if vim.b[bufnr].lsp_fold then
-			return
-		end
-
-		if vim.b[bufnr].ts_folds == nil then
-			vim.b[bufnr].ts_folds = pcall(vim.treesitter.get_parser, bufnr)
-		end
-
-		local win = vim.api.nvim_get_current_win()
-
-		if vim.b[bufnr].ts_folds then
-			vim.wo[win][0].foldmethod = "expr"
-			vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-		else
-			vim.wo[win][0].foldmethod = "manual"
-		end
-	end,
-})

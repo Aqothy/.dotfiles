@@ -91,7 +91,8 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
-vim.opt.statuscolumn = "%!v:lua.require'snacks.statuscolumn'.get()"
+vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
+vim.opt.foldmethod = "expr"
 
 vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 
