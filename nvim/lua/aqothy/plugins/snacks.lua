@@ -209,7 +209,7 @@ return {
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame line", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
         { "<leader>to", function()
-            require("snacks").picker.grep({
+            Snacks.picker.grep({
                 search = [[TODO:|todo!\(.*\)]],
                 live = false,
                 supports_live = false,
@@ -218,6 +218,8 @@ return {
                 end,
             })
         end, { desc = "Grep TODOs", nargs = 0 }},
+        { "<leader>rp", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
+        { "<leader>ap", function () Snacks.picker() end, desc = "All pickers" },
 		{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function()
             Snacks.bufdelete.other()
