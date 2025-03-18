@@ -3,16 +3,6 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
--- Check if we need to reload the file when it changed
-autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-	group = augroup("checktime"),
-	callback = function()
-		if vim.o.buftype ~= "nofile" then
-			vim.cmd.checktime()
-		end
-	end,
-})
-
 -- Highlight on yank
 autocmd("TextYankPost", {
 	group = augroup("highlight_yank"),

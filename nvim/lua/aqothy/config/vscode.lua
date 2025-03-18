@@ -69,7 +69,7 @@ keymap({ "n", "v" }, "<leader>d", [["_d]])
 keymap({ "n", "v" }, "<leader>la", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap({ "n", "v" }, "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
-keymap({ "n", "v" }, "<leader>k", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
+keymap({ "n", "v" }, "<leader>fm", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
 
 keymap({ "n", "v" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 

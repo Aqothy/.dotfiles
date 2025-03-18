@@ -64,10 +64,14 @@ return {
 		"echasnovski/mini.ai",
 		event = "VeryLazy",
 		opts = function()
+			local ai = require("mini.ai")
 			return {
 				n_lines = 500,
 				silent = true,
 				custom_textobjects = {
+					d = { "%f[%d]%d+" }, -- digits
+					t = "", -- Disable custom tag textobjects, built in t is better
+					u = ai.gen_spec.function_call(), -- u for "Usage"
 					g = function() -- Whole buffer, similar to `gg` and 'G' motion
 						local from = { line = 1, col = 1 }
 						local to = {

@@ -99,6 +99,7 @@ return {
 				-- If the Lazy window is visible, hold onto it for later.
 				if ok and not lazy_view.visible() then
 					persistence.load()
+					vim.cmd.normal("zz")
 					return
 				end
 
@@ -119,6 +120,7 @@ return {
 							-- Schedule restoration for after window close completes
 							vim.schedule(function()
 								persistence.load()
+								vim.cmd.normal("zz")
 							end)
 						end,
 					})
