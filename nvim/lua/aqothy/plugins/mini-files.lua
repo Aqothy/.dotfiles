@@ -139,7 +139,7 @@ return {
 
 		autocmd("User", {
 			group = group,
-			pattern = "MiniFilesActionRename",
+			pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
 			callback = function(event)
 				Snacks.rename.on_rename_file(event.data.from, event.data.to)
 			end,

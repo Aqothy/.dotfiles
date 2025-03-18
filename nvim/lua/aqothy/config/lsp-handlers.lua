@@ -25,11 +25,6 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
-
 local s = vim.diagnostic.severity
 
 local signs = {

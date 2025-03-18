@@ -109,7 +109,7 @@ return {
 		},
 		indent = {
 			enabled = true,
-			indent = { enabled = true },
+			indent = { enabled = true, char = "▏" },
 			chunk = { enabled = false },
 			scope = { enabled = false },
 		},
