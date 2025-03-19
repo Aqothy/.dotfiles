@@ -38,7 +38,7 @@ return {
 			-- just like oil
 			"-",
 			function()
-				require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+				require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
 				require("mini.files").reveal_cwd()
 			end,
 			desc = "Open mini.files (Directory of Current File)",

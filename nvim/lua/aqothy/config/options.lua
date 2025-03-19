@@ -61,6 +61,7 @@ vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " "
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+vim.opt.formatoptions:remove("o")
 vim.g.snacks_animate = false
 
 vim.opt.encoding = "utf-8"
@@ -72,7 +73,7 @@ vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 25
 
 vim.opt.spelllang = "en_us"
---vim.opt.spell = true
+-- vim.opt.spell = true
 
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"

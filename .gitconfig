@@ -26,6 +26,9 @@
 [pull]
     rebase = true
 
+[commit]
+    verbose = true
+
 [merge]
 	conflictstyle = diff3
     tool = nvimdiff
@@ -36,9 +39,6 @@
 
 [mergetool "nvimdiff"]
     layout = "LOCAL,BASE,REMOTE / MERGED"
-
-[help]
-    autocorrect = prompt
 
 [diff]
     algorithm = histogram
