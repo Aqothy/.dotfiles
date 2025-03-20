@@ -25,11 +25,6 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
-
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -124,12 +119,6 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
-	if client:supports_method("textDocument/foldingRange") then
-		local win = vim.api.nvim_get_current_win()
-		vim.wo[win][0].foldmethod = "expr"
-		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-	end
-
 	-- Signature help
 	if client:supports_method("textDocument/signatureHelp") then
 		local has_cmp, cmp = pcall(require, "cmp")
@@ -150,8 +139,8 @@ M.on_attach = function(client, bufnr)
 	-- Key mappings for LSP functions
 	keymap("n", "K", vim.lsp.buf.hover)
 	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
-	keymap("n", "<leader>rn", vim.lsp.buf.rename)
-	keymap("n", "<leader>,", vim.diagnostic.open_float)
+	keymap("n", "grn", vim.lsp.buf.rename)
+	keymap("n", "<leader>k", vim.diagnostic.open_float)
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
@@ -163,13 +152,16 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "gd", function()
 		Snacks.picker.lsp_definitions()
 	end)
-	keymap("n", "gr", function()
+	keymap("n", "gD", function()
+		Snacks.picker.lsp_declarations()
+	end)
+	keymap("n", "grr", function()
 		Snacks.picker.lsp_references()
 	end, { nowait = true, desc = "References" })
-	keymap("n", "gi", function()
+	keymap("n", "gri", function()
 		Snacks.picker.lsp_implementations()
 	end)
-	keymap("n", "<leader>lt", function()
+	keymap("n", "gy", function()
 		Snacks.picker.lsp_type_definitions()
 	end)
 	keymap("n", "<leader>ls", function()

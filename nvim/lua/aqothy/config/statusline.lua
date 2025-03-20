@@ -9,6 +9,7 @@ local stl_group = vim.api.nvim_create_augroup("aqline", { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
 
 local user = require("aqothy.config.user")
+local utils = require("aqothy.config.utils")
 local mini_icons = require("mini.icons")
 
 function M.os_component()
@@ -126,7 +127,7 @@ function M.git_components()
 	end
 
 	-- Head component: Concatenate the symbol and branch name.
-	local head = " " .. git_info.head
+	local head = "%#StatuslineTitle# " .. git_info.head
 
 	local status_parts = {}
 	if git_info.added and git_info.added > 0 then
@@ -226,7 +227,6 @@ autocmd("LspProgress", {
 			return
 		end
 
-		-- Mark cache as dirty
 		M.progress_dirty = true
 
 		-- Update or create progress entry for this client
@@ -259,7 +259,8 @@ function M.lsp_progress_component()
 		if status.title then
 			local is_done = status.kind == "end"
 			local symbol = is_done and " " or "󱥸 "
-			local title = is_done and "" or " %#StatuslineItalic#" .. status.title
+			local trunc_title = utils.truncateString(status.title, 30)
+			local title = is_done and "" or " %#StatuslineItalic#" .. trunc_title
 			table.insert(
 				progress_parts,
 				table.concat({

@@ -19,13 +19,13 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.smartindent = true
 vim.opt.autoindent = true
+vim.opt.breakindent = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
-vim.opt.autowrite = true
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -43,8 +43,6 @@ vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
 
-vim.opt.isfname:append("@-@")
-
 vim.opt.mouse = "a"
 
 -- completion
@@ -58,9 +56,13 @@ vim.opt.wildmode = { "longest:full", "full" }
 -- vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
+vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
+vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+vim.opt.conceallevel = 2
+vim.opt.formatoptions:remove("o")
+vim.g.snacks_animate = false
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -71,7 +73,7 @@ vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 25
 
 vim.opt.spelllang = "en_us"
---vim.opt.spell = true
+-- vim.opt.spell = true
 
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
@@ -82,7 +84,6 @@ vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 
 -- command line
-vim.opt.cmdheight = 1
 vim.opt.showcmd = false
 vim.opt.showmode = false
 
@@ -91,13 +92,13 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
-vim.opt.foldmethod = "manual"
+vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
+vim.opt.foldmethod = "expr"
 
 vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true
-vim.opt.breakindent = true
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 

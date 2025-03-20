@@ -1,6 +1,6 @@
 return {
 	"folke/flash.nvim",
-	enabled = false,
+	-- enabled = false,
 	opts = {
 		-- Disable enhanced f and t
 		modes = {
@@ -9,20 +9,10 @@ return {
 			},
 		},
 		jump = { nohlsearch = true },
-		search = {
-			exclude = {
-				"flash_prompt",
-				"qf",
-				function(win)
-					-- Non-focusable windows.
-					return not vim.api.nvim_win_get_config(win).focusable
-				end,
-			},
-		},
 	},
 	keys = {
 		{
-			"<C-l>",
+			"<C-j>",
 			mode = { "n", "x", "o" },
 			function()
 				require("flash").jump()

@@ -3,39 +3,7 @@ return {
 	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "BufReadPost",
-    enabled = false,
-	opts = {
-		panel = {
-			enabled = false,
-		},
-		suggestion = {
-			enabled = true,
-			auto_trigger = true,
-			debounce = 30,
-			keymap = {
-				accept = false,
-				next = "<M-]>",
-				prev = "<M-[>",
-				dismiss = "<C-]>",
-			},
-		},
-		filetypes = {
-			["*"] = true,
-		},
-	},
-	config = function(_, opts)
-		require("copilot").setup(opts)
-
-		vim.keymap.set("i", "<Tab>", function()
-			if require("copilot.suggestion").is_visible() then
-				require("copilot.suggestion").accept()
-			else
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-			end
-		end, {
-			silent = true,
-		})
-
+	opts = function()
 		Snacks.toggle({
 			name = "Copilot",
 			get = function()
@@ -49,5 +17,25 @@ return {
 				end
 			end,
 		}):map("<leader>tc")
+
+		return {
+			panel = {
+				enabled = false,
+			},
+			suggestion = {
+				enabled = true,
+				auto_trigger = true,
+				debounce = 30,
+				keymap = {
+					accept = "<M-a>",
+					next = "<M-]>",
+					prev = "<M-[>",
+					dismiss = "<C-]>",
+				},
+			},
+			filetypes = {
+				["*"] = true,
+			},
+		}
 	end,
 }

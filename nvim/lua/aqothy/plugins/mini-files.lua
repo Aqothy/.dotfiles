@@ -20,7 +20,7 @@ return {
 				go_in = "l",
 				go_in_plus = "<CR>",
 				go_out = "h",
-				go_out_plus = "-",
+				go_out_plus = "H",
 			},
 			content = {
 				filter = filter_show,
@@ -38,17 +38,10 @@ return {
 			-- just like oil
 			"-",
 			function()
-				require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
+				require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
 				require("mini.files").reveal_cwd()
 			end,
 			desc = "Open mini.files (Directory of Current File)",
-		},
-		{
-			"<leader>ee",
-			function()
-				require("mini.files").open(vim.uv.cwd(), true)
-			end,
-			desc = "Open mini.files (Hide hidden files by default)",
 		},
 	},
 	config = function(_, opts)
@@ -139,7 +132,7 @@ return {
 
 		autocmd("User", {
 			group = group,
-			pattern = "MiniFilesActionRename",
+			pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
 			callback = function(event)
 				Snacks.rename.on_rename_file(event.data.from, event.data.to)
 			end,

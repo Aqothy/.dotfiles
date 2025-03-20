@@ -89,9 +89,6 @@ return {
 					},
 				},
 				menu = {
-					draw = {
-						treesitter = { "lsp" },
-					},
 					border = "rounded",
 				},
 				list = {
