@@ -43,13 +43,6 @@ return {
 			end,
 			desc = "Open mini.files (Directory of Current File)",
 		},
-		{
-			"<leader>ee",
-			function()
-				require("mini.files").open(vim.uv.cwd(), true)
-			end,
-			desc = "Open mini.files (Hide hidden files by default)",
-		},
 	},
 	config = function(_, opts)
 		local mf = require("mini.files")

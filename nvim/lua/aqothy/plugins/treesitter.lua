@@ -2,7 +2,6 @@ return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
 	event = { "LazyFile", "VeryLazy" },
-	dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 	lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
 	init = function(plugin)
 		require("lazy.core.loader").add_to_rtp(plugin)
@@ -46,20 +45,6 @@ return {
 			},
 		},
 
-		textobjects = {
-			move = {
-				enable = true,
-				goto_next_start = { ["]f"] = "@function.outer", ["]]"] = "@class.outer", ["]a"] = "@parameter.inner" },
-				goto_next_end = { ["]F"] = "@function.outer", ["]["] = "@class.outer", ["]A"] = "@parameter.inner" },
-				goto_previous_start = {
-					["[f"] = "@function.outer",
-					["[["] = "@class.outer",
-					["[a"] = "@parameter.inner",
-				},
-				goto_previous_end = { ["[F"] = "@function.outer", ["[]"] = "@class.outer", ["[A"] = "@parameter.inner" },
-			},
-		},
-
 		-- Install parsers synchronously (only applied to `ensure_installed`)
 		sync_install = false,
 
@@ -96,9 +81,6 @@ return {
 		require("nvim-treesitter.configs").setup(opts)
 
 		vim.filetype.add({
-			filename = {
-				["vifmrc"] = "vim",
-			},
 			pattern = {
 				[".*/kitty/.+%.conf"] = "kitty",
 				["%.env%.[%w_.-]+"] = "sh",

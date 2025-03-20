@@ -61,6 +61,7 @@ vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " "
 vim.opt.signcolumn = "yes"
 vim.opt.showbreak = "↪ "
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+vim.opt.conceallevel = 2
 vim.opt.formatoptions:remove("o")
 vim.g.snacks_animate = false
 

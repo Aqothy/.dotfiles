@@ -8,7 +8,7 @@ return {
 			{ "gzz", mode = "n" },
 			{ "gZ", mode = "n" },
 			{ "gZZ", mode = "n" },
-			{ "gS", mode = "v" },
+			{ "Z", mode = "v" },
 			{ "ds", mode = "n" },
 			{ "cs", mode = "n" },
 			{ "cS", mode = "n" },
@@ -22,7 +22,7 @@ return {
 				normal_line = "gZ",
 				normal_cur_line = "gZZ",
 				visual = "gz",
-				visual_line = "gS",
+				visual_line = "Z",
 				delete = "ds",
 				change = "cs",
 				change_line = "cS",
@@ -43,7 +43,7 @@ return {
 		},
 		keys = {
 			{
-				"<C-l>",
+				"<C-j>",
 				mode = { "n", "x", "o" },
 				function()
 					require("flash").jump()

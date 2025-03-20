@@ -104,16 +104,20 @@ return {
 				{ header = "Good Luck!" },
 			},
 		},
+
 		indent = {
 			enabled = true,
 			indent = { enabled = true, char = "▏" },
 			chunk = { enabled = false },
 			scope = { enabled = false },
 		},
+
 		scroll = {
 			enabled = false,
 		},
+
 		input = { enabled = false },
+
 		notifier = {
 			enabled = false,
 			icons = {
@@ -126,7 +130,9 @@ return {
 			level = vim.log.levels.INFO,
 			style = "minimal",
 		},
+
 		quickfile = { enabled = true },
+
 		statuscolumn = {
 			enabled = false,
 			left = { "git" },
@@ -137,8 +143,14 @@ return {
 			},
 			refresh = 300,
 		},
+
 		scope = { enabled = false },
-		words = { enabled = false, modes = { "n" } },
+
+		words = {
+			enabled = true,
+			debounce = 300,
+			modes = { "n" },
+		},
 
 		zen = {
 			toggles = {
@@ -162,6 +174,11 @@ return {
 					},
 				},
 			},
+		},
+
+		explorer = {
+			enabled = true,
+			replace_netrw = true,
 		},
 
 		lazygit = {
@@ -202,6 +219,9 @@ return {
 
   -- stylua: ignore
 	keys = {
+    { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+    { "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+    { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame line", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
@@ -267,7 +287,7 @@ return {
 			end,
 			desc = "Todo List",
 		},
-		{ "<leader>;", function() Snacks.picker.buffers({ on_show = function()
+		{ "<leader>fb", function() Snacks.picker.buffers({ on_show = function()
       vim.cmd.stopinsert()
     end }) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true }) end, desc = "Find Config File" },
@@ -299,7 +319,6 @@ return {
     { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
     { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
-
 	init = function()
 		vim.api.nvim_create_autocmd("User", {
 			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
@@ -317,7 +336,7 @@ return {
 				-- Create some toggle mappings
 				Snacks.toggle
 					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-					:map("<leader>cl")
+					:map("<leader>tl")
 
 				Snacks.toggle.dim():map("<leader>sd")
 				Snacks.toggle.diagnostics():map("<leader>td")
