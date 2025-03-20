@@ -3,6 +3,7 @@ return {
 	cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
 	keys = {
 		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File history" },
+		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff main" },
 		{
 			"<leader>gd",
 			function()

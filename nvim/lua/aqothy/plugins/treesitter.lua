@@ -33,6 +33,7 @@ return {
 			"yaml",
 			"json",
 			"dockerfile",
+			"regex",
 		},
 
 		incremental_selection = {

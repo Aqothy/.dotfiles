@@ -26,7 +26,6 @@ vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
-vim.opt.autowrite = true
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true

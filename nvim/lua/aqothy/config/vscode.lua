@@ -55,16 +55,17 @@ keymap("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc 
 keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
 keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
 
-keymap("n", "<leader>rn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
+keymap("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
 
 keymap("n", "u", "<Cmd>call VSCodeNotify('undo')<CR>", { desc = "Undo" })
 keymap("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
-keymap("n", "gr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
+keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
 
 keymap({ "n", "v" }, "<leader>tt", vscode_action("workbench.action.togglePanel"), { desc = "Toggle Terminal" })
 
-keymap({ "n", "v" }, "<leader>d", [["_d]])
+keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
+keymap({ "n", "v" }, "<leader>c", [["_c]], { desc = "Change without yanking" })
 
 keymap({ "n", "v" }, "<leader>la", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap({ "n", "v" }, "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
