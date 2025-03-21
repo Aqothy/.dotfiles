@@ -33,6 +33,7 @@ return {
 	-- enabled = false,
 	opts = {
 		dir = session_state,
+    branch = false,
 	},
 	keys = {
 		{
@@ -83,6 +84,10 @@ return {
 			return
 		end
 
+		if not load then
+			return
+		end
+
 		local group = vim.api.nvim_create_augroup("restore_session", { clear = true })
 
 		vim.api.nvim_create_autocmd("VimEnter", {
@@ -90,23 +95,18 @@ return {
 			nested = true,
 			once = true,
 			callback = function()
-				if not load then
-					return
-				end
-
 				local ok, lazy_view = pcall(require, "lazy.view")
 
 				-- If the Lazy window is visible, hold onto it for later.
-				if ok and not lazy_view.visible() then
+				if not ok or not lazy_view.visible() then
 					persistence.load()
-					vim.cmd.normal("zz")
 					return
 				end
 
 				-- Track the lazy view window
 				local lazy_view_win = lazy_view.view.win
 
-				if lazy_view_win then
+				if ok and lazy_view_win then
 					-- Make sure don't load session til lazy view is closed (for when lazy is downloading plugins)
 					vim.api.nvim_create_autocmd("WinClosed", {
 						group = group,
@@ -120,7 +120,6 @@ return {
 							-- Schedule restoration for after window close completes
 							vim.schedule(function()
 								persistence.load()
-								vim.cmd.normal("zz")
 							end)
 						end,
 					})

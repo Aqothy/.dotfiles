@@ -98,7 +98,7 @@ return {
 				fetching_timeout = 300,
 				confirm_resolve_timeout = 35,
 				async_budget = 1,
-				max_view_entries = 15,
+				max_view_entries = 30,
 			},
 
 			-- sources for autocompletion with dynamic snippet provider selection

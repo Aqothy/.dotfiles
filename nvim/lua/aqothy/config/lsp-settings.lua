@@ -57,29 +57,25 @@ M["vtsls"] = {
 
 M["lua_ls"] = {
 	on_init = function(client)
-		local path = client.workspace_folders and client.workspace_folders[1] and client.workspace_folders[1].name
-		if not path or not (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc")) then
-			client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-				Lua = {
-					runtime = {
-						version = "LuaJIT",
-					},
-					workspace = {
-						checkThirdParty = false,
-						library = {
-							vim.env.VIMRUNTIME,
-							"${3rd}/luv/library",
-						},
-					},
-				},
-			})
-			client:notify(
-				vim.lsp.protocol.Methods.workspace_didChangeConfiguration,
-				{ settings = client.config.settings }
-			)
+		if client.workspace_folders then
+			local path = client.workspace_folders and client.workspace_folders[1] and client.workspace_folders[1].name
+			if path and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc")) then
+				return
+			end
 		end
 
-		return true
+		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			runtime = {
+				version = "LuaJIT",
+			},
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+					"${3rd}/luv/library",
+				},
+			},
+		})
 	end,
 	settings = {
 		Lua = {

@@ -52,6 +52,8 @@ keymap("n", "<leader>-", vscode_action("workbench.action.splitEditorDown"), { de
 keymap("n", "<leader>ff", vscode_action("workbench.action.quickOpen"), { desc = "Open file finder" })
 keymap("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc = "Search in files" })
 
+keymap("n", "<leader>ee", vscode_action("workbench.action.toggleSidebarVisibility"), { desc = "Toggle Explorer" })
+
 keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
 keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
 

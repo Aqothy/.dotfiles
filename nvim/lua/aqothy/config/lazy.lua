@@ -74,6 +74,14 @@ require("lazy").setup({
 })
 
 if not is_vscode then
+	_G.dd = function(...)
+		Snacks.debug.inspect(...)
+	end
+	_G.bt = function()
+		Snacks.debug.backtrace()
+	end
+	vim.print = _G.dd
+
 	-- Load autocmds immediately if there are arguments
 	if not lazy_autocmds then
 		require("aqothy.config.autocmds")
@@ -82,7 +90,7 @@ if not is_vscode then
 	-- Lazy load config
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "VeryLazy",
-		group = vim.api.nvim_create_augroup("LazyLoad", { clear = true }),
+		group = vim.api.nvim_create_augroup("Lazyload_Config", { clear = true }),
 		callback = function()
 			if lazy_autocmds then
 				require("aqothy.config.autocmds")
