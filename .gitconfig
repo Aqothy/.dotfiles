@@ -9,6 +9,9 @@
 [column]
     ui = auto
 
+[color]
+  ui = auto
+
 [branch]
     sort = -committerdate
 
@@ -25,6 +28,14 @@
 
 [pull]
     rebase = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+
+[help]
+    autocorrect = prompt
 
 [commit]
     verbose = true
@@ -43,3 +54,6 @@
 [diff]
     algorithm = histogram
     renames = true
+
+[rebase]
+    updateRefs = true

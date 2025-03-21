@@ -219,8 +219,6 @@ return {
 
   -- stylua: ignore
 	keys = {
-    { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
-    { "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
     { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame line", mode = { "n", "v" } },
@@ -297,8 +295,6 @@ return {
 		{ "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
 		{ "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 		{ "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
-    { "<leader>gl", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
-    { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit" },
 		{
 			"<leader>/",
 			function()
@@ -319,32 +315,4 @@ return {
     { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
     { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
-	init = function()
-		vim.api.nvim_create_autocmd("User", {
-			group = vim.api.nvim_create_augroup("aqothy/snacks", { clear = true }),
-			pattern = "VeryLazy",
-			callback = function()
-				-- Setup some globals for debugging (lazy-loaded)
-				_G.dd = function(...)
-					Snacks.debug.inspect(...)
-				end
-				_G.bt = function()
-					Snacks.debug.backtrace()
-				end
-				vim.print = _G.dd -- Override print to use snacks for `:=` command
-
-				-- Create some toggle mappings
-				Snacks.toggle
-					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-					:map("<leader>tl")
-
-				Snacks.toggle.dim():map("<leader>sd")
-				Snacks.toggle.diagnostics():map("<leader>td")
-				Snacks.toggle.zen():map("<leader>zz")
-				Snacks.toggle.profiler():map("<leader>pp")
-
-				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-			end,
-		})
-	end,
 }

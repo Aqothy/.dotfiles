@@ -4,20 +4,6 @@ return {
 	cmd = "Copilot",
 	event = "BufReadPost",
 	opts = function()
-		Snacks.toggle({
-			name = "Copilot",
-			get = function()
-				return not require("copilot.client").is_disabled()
-			end,
-			set = function(state)
-				if state then
-					require("copilot.command").enable()
-				else
-					require("copilot.command").disable()
-				end
-			end,
-		}):map("<leader>tc")
-
 		return {
 			panel = {
 				enabled = false,
@@ -33,6 +19,10 @@ return {
 					dismiss = "<C-]>",
 				},
 			},
+			workspace_folders = {
+				"~/Code/Personal",
+			},
+			copilot_model = "gpt-4o-copilot",
 			filetypes = {
 				["*"] = true,
 			},

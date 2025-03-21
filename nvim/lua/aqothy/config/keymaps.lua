@@ -18,9 +18,6 @@ keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Terminal mode
-keymap("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Exit terminal mode" })
-
 -- Editing and text manipulation
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 keymap({ "n", "v" }, "<leader>c", [["_c]], { desc = "Change without yanking" })
@@ -37,3 +34,60 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 })
 
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
+
+-- lazygit
+if vim.fn.executable("lazygit") == 1 then
+  keymap("n", "<leader>gs", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
+  keymap("n", "<leader>gl", function() Snacks.lazygit.log_file() end, { desc = "Git Log File" })
+end
+
+-- Toggle
+Snacks.toggle
+	.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+	:map("<leader>tl")
+
+Snacks.toggle.dim():map("<leader>sd")
+Snacks.toggle.diagnostics():map("<leader>td")
+Snacks.toggle.zen():map("<leader>zz")
+Snacks.toggle.profiler():map("<leader>pp")
+
+Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
+
+Snacks.toggle({
+	name = "Copilot",
+	get = function()
+		return not require("copilot.client").is_disabled()
+	end,
+	set = function(state)
+		if state then
+			require("copilot.command").enable()
+		else
+			require("copilot.command").disable()
+		end
+	end,
+}):map("<leader>tc")
+
+Snacks.toggle.treesitter():map("<leader>ts")
+
+local tsc = require("treesitter-context")
+Snacks.toggle({
+	name = "Treesitter Context",
+	get = tsc.enabled,
+	set = function(state)
+		if state then
+			tsc.enable()
+		else
+			tsc.disable()
+		end
+	end,
+}):map("<leader>tu")
+
+Snacks.toggle({
+	name = "Diffview",
+	get = function()
+		return require("diffview.lib").get_current_view() ~= nil
+	end,
+	set = function(state)
+		vim.cmd("Diffview" .. (state and "Open" or "Close"))
+	end,
+}):map("<leader>gd")

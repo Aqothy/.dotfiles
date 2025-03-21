@@ -19,6 +19,7 @@ return {
 					GruvboxBg2 = { fg = colors.gray },
 					SignColumn = { bg = colors.dark0_soft },
 					Pmenu = { bg = colors.dark0_soft },
+          TreesitterContextBottom = { underline = true, sp = colors.dark3 },
 				}
 
 				groups = {
@@ -32,6 +33,7 @@ return {
 					SignColumn = { bg = colors.light0_soft },
 					GruvboxBg2 = { fg = colors.gray },
 					Pmenu = { bg = colors.light0_soft },
+          TreesitterContextBottom = { underline = true, sp = colors.light3 },
 				}
 
 				groups = {

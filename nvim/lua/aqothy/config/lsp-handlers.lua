@@ -148,6 +148,13 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
+	keymap("n", "]]", function()
+		Snacks.words.jump(vim.v.count1)
+	end, { desc = "Next Reference" })
+	keymap("n", "[[", function()
+		Snacks.words.jump(-vim.v.count1)
+	end, { desc = "Prev Reference" })
+
 	-- Snacks picker mappings
 	keymap("n", "gd", function()
 		Snacks.picker.lsp_definitions()
