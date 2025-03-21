@@ -81,11 +81,19 @@ M.MODE_TO_HIGHLIGHT = {
 	TERMINAL = "Command",
 }
 
-function M.update_mode_cache()
+-- For op-pending mode
+autocmd("ModeChanged", {
+	group = stl_group,
+	callback = vim.schedule_wrap(function()
+		vim.cmd.redrawstatus()
+	end),
+})
+
+function M.mode_component()
 	local mode = api.nvim_get_mode().mode
 	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
-	M.mode_cache = "%#"
+	return "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
 		.. "#"
@@ -100,24 +108,6 @@ function M.update_mode_cache()
 		.. hl
 		.. "#"
 		.. ""
-
-	-- For op-pending mode to show
-	vim.cmd.redrawstatus()
-end
-
--- Only update mode cache when mode changes
-autocmd("ModeChanged", {
-	group = stl_group,
-	callback = vim.schedule_wrap(function()
-		M.update_mode_cache()
-	end),
-})
-
-function M.mode_component()
-	if not M.mode_cache then
-		M.update_mode_cache()
-	end
-	return M.mode_cache
 end
 
 function M.git_components()
