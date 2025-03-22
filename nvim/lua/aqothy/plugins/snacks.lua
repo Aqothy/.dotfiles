@@ -223,7 +223,8 @@ return {
 
   -- stylua: ignore
 	keys = {
-    { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
+    ---@diagnostic disable-next-line: missing-fields
+    { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
 		{ "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
 		{ "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame line", mode = { "n", "v" } },
 		{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },

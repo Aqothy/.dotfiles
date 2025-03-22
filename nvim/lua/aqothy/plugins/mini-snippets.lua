@@ -34,27 +34,22 @@ return {
 		local group = vim.api.nvim_create_augroup("stop_session", { clear = true })
 
 		-- Stop session on esc
-		autocmd("User", {
-			pattern = "MiniSnippetsSessionStart",
-			group = group,
-			callback = function()
-				autocmd("ModeChanged", {
-					pattern = "*:n",
-					once = true,
-					group = group,
-					callback = function()
-						while mini_snippets.session.get() do
-							mini_snippets.session.stop()
-						end
-					end,
-				})
-			end,
-		})
+		local make_stop = function()
+			local au_opts = { pattern = "*:n", once = true, group = group }
+			au_opts.callback = function()
+				while mini_snippets.session.get() do
+					mini_snippets.session.stop()
+				end
+			end
+			autocmd("ModeChanged", au_opts)
+		end
+		local opts = { pattern = "MiniSnippetsSessionStart", callback = make_stop, group = group }
+		autocmd("User", opts)
 
 		local jsx_patterns = { "javascript.json", "react-es7.json" }
 		local tsx_patterns = { "typescript.json", "react-es7.json" }
 
-		-- :=MiniSnippets.default_prepare({}) to see lang
+		-- :=MiniSnippets.default_prepare({}) to see lang or just press <C-j> in insert mode
 		local lang_patterns = {
 			jsx = jsx_patterns,
 			tsx = tsx_patterns,

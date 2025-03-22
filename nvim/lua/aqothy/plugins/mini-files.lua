@@ -10,29 +10,27 @@ local autocmd = vim.api.nvim_create_autocmd
 
 return {
 	"echasnovski/mini.files",
-	opts = function()
-		return {
-			options = {
-				use_as_default_explorer = false,
-				permanent_delete = false,
-			},
-			mappings = {
-				go_in = "l",
-				go_in_plus = "<CR>",
-				go_out = "h",
-				go_out_plus = "H",
-			},
-			content = {
-				filter = filter_show,
-			},
-			windows = {
-				preview = true,
-				width_focus = 30,
-				width_preview = 30,
-				width_nofocus = 30,
-			},
-		}
-	end,
+	opts = {
+		options = {
+			use_as_default_explorer = false,
+			permanent_delete = false,
+		},
+		mappings = {
+			go_in = "l",
+			go_in_plus = "<CR>",
+			go_out = "h",
+			go_out_plus = "H",
+		},
+		content = {
+			filter = filter_show,
+		},
+		windows = {
+			preview = true,
+			width_focus = 30,
+			width_preview = 30,
+			width_nofocus = 30,
+		},
+	},
 	keys = {
 		{
 			-- just like oil

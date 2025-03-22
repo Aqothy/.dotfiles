@@ -33,7 +33,7 @@ return {
 	-- enabled = false,
 	opts = {
 		dir = session_state,
-    branch = false,
+		branch = false,
 	},
 	keys = {
 		{
