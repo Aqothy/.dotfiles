@@ -1,14 +1,13 @@
 return {
 	{
 		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
 		-- enabled = false,
 		config = function()
 			local gruvbox = require("gruvbox")
 
 			local colors = gruvbox.palette
 
-			local is_dark = vim.o.background == "dark"
+			local is_dark = vim.opt.background == "dark"
 			local overrides
 			local groups
 

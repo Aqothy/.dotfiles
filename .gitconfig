@@ -29,11 +29,6 @@
 [pull]
     rebase = true
 
-[fetch]
-    prune = true
-    pruneTags = true
-    all = true
-
 [help]
     autocorrect = prompt
 
@@ -54,6 +49,3 @@
 [diff]
     algorithm = histogram
     renames = true
-
-[rebase]
-    updateRefs = true

@@ -58,7 +58,7 @@ M["vtsls"] = {
 M["lua_ls"] = {
 	on_init = function(client)
 		if client.workspace_folders then
-			local path = client.workspace_folders and client.workspace_folders[1] and client.workspace_folders[1].name
+			local path = client.workspace_folders[1] and client.workspace_folders[1].name
 			if path and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc")) then
 				return
 			end
@@ -181,5 +181,9 @@ M["cssls"] = {}
 M["texlab"] = {}
 
 M["ruff"] = {}
+
+M["bashls"] = {
+	filetypes = { "bash", "sh", "zsh" },
+}
 
 return M

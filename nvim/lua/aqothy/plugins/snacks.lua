@@ -128,7 +128,6 @@ return {
 				trace = user.signs.trace,
 			},
 			level = vim.log.levels.INFO,
-			style = "minimal",
 		},
 
 		quickfile = { enabled = true },

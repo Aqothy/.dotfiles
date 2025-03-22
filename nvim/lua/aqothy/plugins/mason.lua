@@ -18,6 +18,7 @@ return {
 			"vtsls",
 			"emmet-language-server",
 			"ruff",
+			"bash-language-server",
 
 			-- Tools (formatters, linters, etc.)
 			"stylua",

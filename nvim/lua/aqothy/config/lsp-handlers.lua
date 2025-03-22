@@ -60,24 +60,22 @@ local config = {
 
 vim.diagnostic.config(config)
 
+local float_config = {
+	border = "rounded",
+	max_height = math.floor(vim.o.lines * 0.5),
+	max_width = math.floor(vim.o.columns * 0.4),
+}
+
 local hover = vim.lsp.buf.hover
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.buf.hover = function()
-	return hover({
-		border = "rounded",
-		max_height = math.floor(vim.o.lines * 0.5),
-		max_width = math.floor(vim.o.columns * 0.4),
-	})
+	return hover(float_config)
 end
 
 local signature_help = vim.lsp.buf.signature_help
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.buf.signature_help = function()
-	return signature_help({
-		border = "rounded",
-		max_height = math.floor(vim.o.lines * 0.5),
-		max_width = math.floor(vim.o.columns * 0.4),
-	})
+	return signature_help(float_config)
 end
 
 --- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
