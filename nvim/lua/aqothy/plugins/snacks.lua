@@ -316,4 +316,45 @@ return {
     { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
     { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
 	},
+	config = function(_, opts)
+		require("snacks").setup(opts)
+
+		_G.dd = function(...)
+			Snacks.debug.inspect(...)
+		end
+		_G.bt = function()
+			Snacks.debug.backtrace()
+		end
+		vim.print = _G.dd
+
+		vim.api.nvim_create_autocmd("LspProgress", {
+			group = vim.api.nvim_create_augroup("lsp_progress", { clear = true }),
+			pattern = { "begin", "end" },
+			---@param args {data: {client_id: integer, params: lsp.ProgressParams}}
+			callback = function(args)
+				if not args.data then
+					return
+				end
+				local client_id = args.data.client_id
+				local client = vim.lsp.get_client_by_id(client_id)
+				local value = args.data.params.value
+				if not client or type(value) ~= "table" then
+					return
+				end
+
+				local is_end = value.kind == "end"
+
+				local id = value.title
+
+				vim.notify(value.title, "info", {
+					id = id,
+					title = client.name,
+					timeout = is_end and 3000 or 0,
+					opts = function(notif)
+						notif.icon = is_end and " " or "󱥸 "
+					end,
+				})
+			end,
+		})
+	end,
 }

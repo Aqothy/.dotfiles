@@ -9,7 +9,6 @@ local stl_group = vim.api.nvim_create_augroup("aqline", { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
 
 local user = require("aqothy.config.user")
-local utils = require("aqothy.config.utils")
 local mini_icons = require("mini.icons")
 
 function M.os_component()
@@ -196,110 +195,6 @@ function M.diagnostics_component()
 	return result
 end
 
--- LSP Progress component optimization
-M.progress_statuses = {}
-M.progress_cache = nil
-M.progress_dirty = true
-
-autocmd("LspProgress", {
-	group = stl_group,
-	desc = "Update LSP progress in statusline",
-	pattern = { "begin", "end" },
-	callback = function(args)
-		if not args.data then
-			return
-		end
-		local client_id = args.data.client_id
-		local client = vim.lsp.get_client_by_id(client_id)
-		local value = args.data.params.value
-		if not client or type(value) ~= "table" then
-			return
-		end
-		M.progress_dirty = true
-
-		-- Initialize client entry if it doesn't exist
-		if not M.progress_statuses[client_id .. client.name] then
-			M.progress_statuses[client_id .. client.name] = {
-				client = client.name,
-				titles = {},
-			}
-		end
-
-		local key = value.title:gsub("%s+", "_")
-
-		-- Update progress entry for this specific title
-		M.progress_statuses[client_id .. client.name].titles[key] = {
-			kind = value.kind,
-			title = value.title,
-		}
-
-		if value.kind == "end" then
-			-- Remove the entry after delay while keeping completion checkmark
-			vim.defer_fn(function()
-				if
-					M.progress_statuses[client_id .. client.name]
-					and M.progress_statuses[client_id .. client.name].titles
-				then
-					M.progress_statuses[client_id .. client.name].titles[key] = nil
-
-					-- If no more titles, remove the entire client entry
-					if vim.tbl_isempty(M.progress_statuses[client_id .. client.name].titles) then
-						M.progress_statuses[client_id .. client.name] = nil
-					end
-
-					M.progress_dirty = true
-					vim.cmd.redrawstatus()
-				end
-			end, 3000)
-		end
-		vim.cmd.redrawstatus()
-	end,
-})
-
-function M.lsp_progress_component()
-	-- Return cached result if not dirty
-	if not M.progress_dirty and M.progress_cache then
-		return M.progress_cache
-	end
-
-	local progress_parts = {}
-
-	for _, status in pairs(M.progress_statuses) do
-		if status.client then
-			local client_added = false
-			local client_parts = {}
-
-			for _, title_data in pairs(status.titles) do
-				local is_done = title_data.kind == "end"
-				local symbol = is_done and " " or "󱥸 "
-
-				if not client_added then
-					-- Add client name only once
-					table.insert(client_parts, "%#StatuslineTitle#" .. symbol .. status.client)
-					client_added = true
-				end
-
-				if title_data.title then
-					local trunc_title = utils.truncateString(title_data.title or "", 30)
-					local title_str = is_done and "" or " %#StatuslineItalic#" .. trunc_title
-					if title_str ~= "" then
-						table.insert(client_parts, title_str)
-					end
-				end
-			end
-
-			if #client_parts > 0 then
-				table.insert(progress_parts, table.concat(client_parts, " "))
-			end
-		end
-	end
-
-	local result = table.concat(progress_parts, " ")
-	M.progress_cache = result
-	M.progress_dirty = false
-	return result
-end
-
 function M.filetype_component()
 	local relative_path = fn.expand("%:.")
 	local icon, icon_hl = mini_icons.get("file", relative_path)
@@ -343,7 +238,6 @@ function M.render()
 	local right_components = {}
 	local right_candidates = {
 		M.diagnostics_component(),
-		M.lsp_progress_component(),
 		M.file_info_component(),
 		M.position_component(),
 	}
