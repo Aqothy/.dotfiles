@@ -82,3 +82,31 @@ autocmd("BufReadPost", {
 		end
 	end,
 })
+
+autocmd("LspProgress", {
+	group = augroup("lsp_progress"),
+	pattern = { "begin", "end" },
+	---@param args {data: {client_id: integer, params: lsp.ProgressParams}}
+	callback = function(args)
+		if not args.data then
+			return
+		end
+		local client_id = args.data.client_id
+		local client = vim.lsp.get_client_by_id(client_id)
+		local value = args.data.params.value
+		if not client or type(value) ~= "table" then
+			return
+		end
+
+		local is_end = value.kind == "end"
+
+		vim.notify(value.title, "info", {
+			id = client.name .. client_id,
+			title = client.name,
+			timeout = is_end and 3000 or 0,
+			opts = function(notif)
+				notif.icon = is_end and " " or "󱥸 "
+			end,
+		})
+	end,
+})

@@ -197,7 +197,6 @@ function M.diagnostics_component()
 end
 
 -- LSP Progress component optimization
----@type table<number, {client: string, kind: string, title: string?}>
 M.progress_statuses = {}
 M.progress_cache = nil
 M.progress_dirty = true
@@ -216,12 +215,20 @@ autocmd("LspProgress", {
 		if not client or type(value) ~= "table" then
 			return
 		end
-
 		M.progress_dirty = true
 
-		-- Update or create progress entry for this client
-		M.progress_statuses[client_id] = {
-			client = client.name,
+		-- Initialize client entry if it doesn't exist
+		if not M.progress_statuses[client_id .. client.name] then
+			M.progress_statuses[client_id .. client.name] = {
+				client = client.name,
+				titles = {},
+			}
+		end
+
+		local key = value.title:gsub("%s+", "_")
+
+		-- Update progress entry for this specific title
+		M.progress_statuses[client_id .. client.name].titles[key] = {
 			kind = value.kind,
 			title = value.title,
 		}
@@ -229,9 +236,20 @@ autocmd("LspProgress", {
 		if value.kind == "end" then
 			-- Remove the entry after delay while keeping completion checkmark
 			vim.defer_fn(function()
-				M.progress_statuses[client_id] = nil
-				M.progress_dirty = true
-				vim.cmd.redrawstatus()
+				if
+					M.progress_statuses[client_id .. client.name]
+					and M.progress_statuses[client_id .. client.name].titles
+				then
+					M.progress_statuses[client_id .. client.name].titles[key] = nil
+
+					-- If no more titles, remove the entire client entry
+					if vim.tbl_isempty(M.progress_statuses[client_id .. client.name].titles) then
+						M.progress_statuses[client_id .. client.name] = nil
+					end
+
+					M.progress_dirty = true
+					vim.cmd.redrawstatus()
+				end
 			end, 3000)
 		end
 		vim.cmd.redrawstatus()
@@ -245,19 +263,34 @@ function M.lsp_progress_component()
 	end
 
 	local progress_parts = {}
+
 	for _, status in pairs(M.progress_statuses) do
-		if status.title then
-			local is_done = status.kind == "end"
-			local symbol = is_done and " " or "󱥸 "
-			local trunc_title = utils.truncateString(status.title, 30)
-			local title = is_done and "" or " %#StatuslineItalic#" .. trunc_title
-			table.insert(
-				progress_parts,
-				table.concat({
-					"%#StatuslineTitle#" .. symbol .. status.client,
-					title,
-				})
-			)
+		if status.client then
+			local client_added = false
+			local client_parts = {}
+
+			for _, title_data in pairs(status.titles) do
+				local is_done = title_data.kind == "end"
+				local symbol = is_done and " " or "󱥸 "
+
+				if not client_added then
+					-- Add client name only once
+					table.insert(client_parts, "%#StatuslineTitle#" .. symbol .. status.client)
+					client_added = true
+				end
+
+				if title_data.title then
+					local trunc_title = utils.truncateString(title_data.title or "", 30)
+					local title_str = is_done and "" or " %#StatuslineItalic#" .. trunc_title
+					if title_str ~= "" then
+						table.insert(client_parts, title_str)
+					end
+				end
+			end
+
+			if #client_parts > 0 then
+				table.insert(progress_parts, table.concat(client_parts, " "))
+			end
 		end
 	end
 
