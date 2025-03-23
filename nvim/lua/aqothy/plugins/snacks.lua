@@ -119,7 +119,7 @@ return {
 		input = { enabled = false },
 
 		notifier = {
-			enabled = false,
+			enabled = true,
 			icons = {
 				error = user.signs.error,
 				warn = user.signs.warn,
@@ -134,13 +134,12 @@ return {
 
 		statuscolumn = {
 			enabled = false,
-			left = { "git" },
-			right = { "fold" },
+			left = { "sign", "git" },
+			right = { "mark", "fold" },
 			folds = {
 				open = true,
 				git_hl = false,
 			},
-			refresh = 300,
 		},
 
 		scope = { enabled = false },
@@ -265,12 +264,14 @@ return {
       desc = "Terminal",
     },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+    { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
+    { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
 		{ "<leader>sh", function() Snacks.win({
       border = "rounded",
       zindex = 100,
       width = 0.6,
       height = 0.6,
-      title = " Notification History ",
+      title = "Messages History ",
       title_pos = "center",
       ft = "vim",
       bo = { buflisted = false, bufhidden = "wipe", swapfile = false, modifiable = false, buftype = "nofile" },

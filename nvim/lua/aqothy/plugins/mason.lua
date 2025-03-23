@@ -20,10 +20,14 @@ return {
 			"ruff",
 			"bash-language-server",
 
-			-- Tools (formatters, linters, etc.)
+			-- Formatters/linters
 			"stylua",
 			"prettier",
 			"gofumpt",
+
+			-- Dap
+			"js-debug-adapter",
+			"delve",
 		},
 
 		ui = {
@@ -53,6 +57,7 @@ return {
 			for _, tool in ipairs(opts.ensure_installed) do
 				local p = mr.get_package(tool)
 				if not p:is_installed() then
+					vim.notify("Installing " .. tool)
 					p:install()
 				end
 			end

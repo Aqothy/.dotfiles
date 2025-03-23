@@ -25,6 +25,11 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
+M.capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
+}
+
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -132,6 +137,11 @@ M.on_attach = function(client, bufnr)
 
 			vim.lsp.buf.signature_help()
 		end)
+	end
+
+	if client:supports_method("textDocument/foldingRange") then
+		local win = vim.api.nvim_get_current_win()
+		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
 	end
 
 	-- Key mappings for LSP functions

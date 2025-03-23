@@ -49,6 +49,7 @@ if not is_vscode then
 			end
 			require("aqothy.config.keymaps")
 			require("aqothy.config.statusline")
+			require("aqothy.config.statuscolumn")
 		end,
 	})
 end
