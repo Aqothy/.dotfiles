@@ -181,10 +181,6 @@ return {
 
 		lazygit = {
 			configure = true,
-			win = {
-				width = 0,
-				height = 0,
-			},
 		},
 
 		terminal = {

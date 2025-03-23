@@ -21,18 +21,11 @@ Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
 Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
 local is_vscode = vim.g.vscode
-local lazy_autocmds = vim.fn.argc(-1) == 0
 
 require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
 if not is_vscode then
-	_G.dd = function(...)
-		Snacks.debug.inspect(...)
-	end
-	_G.bt = function()
-		Snacks.debug.backtrace()
-	end
-	vim.print = _G.dd
+	local lazy_autocmds = vim.fn.argc(-1) == 0
 
 	-- Load autocmds immediately if there are arguments
 	if not lazy_autocmds then
@@ -47,9 +40,9 @@ if not is_vscode then
 			if lazy_autocmds then
 				require("aqothy.config.autocmds")
 			end
+
 			require("aqothy.config.keymaps")
 			require("aqothy.config.statusline")
-			require("aqothy.config.statuscolumn")
 		end,
 	})
 end

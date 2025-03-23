@@ -20,7 +20,6 @@ keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = tru
 
 -- Editing and text manipulation
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-keymap({ "n", "v" }, "<leader>c", [["_c]], { desc = "Change without yanking" })
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
@@ -105,13 +104,3 @@ Snacks.toggle({
 		require("gitsigns").toggle_signs(state)
 	end,
 }):map("<leader>tg")
-
-Snacks.toggle({
-	name = "Mini Pairs",
-	get = function()
-		return not vim.g.minipairs_disable
-	end,
-	set = function(state)
-		vim.g.minipairs_disable = not state
-	end,
-}):map("<leader>tp")

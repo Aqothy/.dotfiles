@@ -13,6 +13,4 @@ function M.render()
 	return "%s%l " .. M.get_fold(vim.v.lnum) .. " "
 end
 
-vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
-
 return M

@@ -15,8 +15,7 @@ return {
     keys = {
       { "<leader>bc", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
       { "<leader>bp", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-      { "<leader>pc", function() require("dap").continue() end, desc = "Run/Continue" },
-      { "<leader>dC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
+      { "<leader>cp", function() require("dap").continue() end, desc = "Run/Continue" },
       { "<leader>si", function() require("dap").step_into() end, desc = "Step Into" },
       { "<leader>so", function() require("dap").step_out() end, desc = "Step Out" },
       { "<leader>sO", function() require("dap").step_over() end, desc = "Step Over" },

@@ -40,6 +40,7 @@ keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous
 
 keymap("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
 keymap("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
+keymap("n", "<leader>gd", vscode_action("workbench.view.scm"), { desc = "Source control" })
 
 keymap("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
 
@@ -67,7 +68,6 @@ keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go t
 keymap({ "n", "v" }, "<leader>tt", vscode_action("workbench.action.togglePanel"), { desc = "Toggle Terminal" })
 
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-keymap({ "n", "v" }, "<leader>c", [["_c]], { desc = "Change without yanking" })
 
 keymap({ "n", "v" }, "<leader>la", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap({ "n", "v" }, "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })

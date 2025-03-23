@@ -8,39 +8,7 @@ function M.truncateString(str, maxLen)
 	end
 end
 
--- Ref: persisted nvim
-function M.make_fs_safe(text)
-	return text:gsub("[\\/:]+", "%%")
-end
-
-function M.is_subdirectory(parent, child)
-	return vim.startswith(child, parent)
-end
-
-function M.dirs_match(dir, dirs)
-	dir = M.make_fs_safe(vim.fn.expand(dir))
-
-	for _, search in ipairs(dirs) do
-		if type(search) == "string" then
-			search = M.make_fs_safe(vim.fn.expand(search))
-			if M.is_subdirectory(search, dir) then
-				return true
-			end
-		elseif type(search) == "table" then
-			if search.exact then
-				search = M.make_fs_safe(vim.fn.expand(search[1]))
-				if dir == search then
-					return true
-				end
-			end
-		end
-	end
-
-	return false
-end
-
 -- Custom snacks pickers
-
 function M.pick_projects()
 	local projects = {}
 	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
@@ -74,66 +42,6 @@ function M.pick_projects()
 		format = "file",
 		win = {
 			preview = { minimal = true },
-		},
-		confirm = "load_session",
-	})
-end
-
-function M.select_sessions(session_state)
-	local ok, persistence = pcall(require, "persistence")
-	if not ok then
-		return
-	end
-	Snacks.picker.pick("Sessions", {
-		finder = function()
-			local items = {} ---@type snacks.picker.finder.Item[]
-			local have = {}
-			-- Ref: persistence nvim select function
-			for _, session in ipairs(persistence.list()) do
-				if vim.uv.fs_stat(session) then
-					local session_name = session:sub(#session_state + 1, -5)
-					local dirPath = unpack(vim.split(session_name, "%%", { plain = true }))
-					dirPath = dirPath:gsub("%%", "/")
-					if jit.os:find("Windows") then
-						dirPath = dirPath:gsub("^(%w)/", "%1:/")
-					end
-					if not have[dirPath] then
-						have[dirPath] = true
-						items[#items + 1] = { file = dirPath, text = session, dir = true }
-					end
-				end
-			end
-			return items
-		end,
-		win = {
-			preview = { minimal = true },
-			input = {
-				keys = {
-					["<C-x>"] = { "delete_session", mode = { "i", "n" } },
-				},
-			},
-		},
-		layout = {
-			preset = "vscode",
-		},
-		format = "file",
-		actions = {
-			["delete_session"] = {
-				-- Basically snacks picker buf_del action
-				function(picker)
-					picker.preview:reset()
-					for _, item in ipairs(picker:selected({ fallback = true })) do
-						if item.text then
-							vim.fn.delete(item.text)
-						else
-							vim.notify("No session found")
-						end
-					end
-					picker.list:set_selected()
-					picker.list:set_target()
-					picker:find()
-				end,
-			},
 		},
 		confirm = "load_session",
 	})

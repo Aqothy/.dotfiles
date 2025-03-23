@@ -62,6 +62,7 @@ vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 vim.opt.conceallevel = 2
 vim.opt.formatoptions:remove("o")
 vim.g.snacks_animate = false
+vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -93,8 +94,6 @@ vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
 vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
 vim.opt.foldmethod = "expr"
-
-vim.opt.sessionoptions = { "curdir", "folds", "help", "winsize", "winpos", "terminal" }
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true
