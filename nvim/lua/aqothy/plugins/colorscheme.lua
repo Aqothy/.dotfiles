@@ -2,13 +2,13 @@ return {
 	{
 		"ellisonleao/gruvbox.nvim",
 		-- enabled = false,
-    priority = 500,
+		priority = 500,
 		config = function()
 			local gruvbox = require("gruvbox")
 
 			local colors = gruvbox.palette
 
-			local is_dark = vim.opt.background == "dark"
+			local is_dark = vim.o.background == "dark"
 			local overrides
 			local groups
 
@@ -19,7 +19,10 @@ return {
 					GruvboxBg2 = { fg = colors.gray },
 					SignColumn = { bg = colors.dark0_soft },
 					Pmenu = { bg = colors.dark0_soft },
-          TreesitterContextBottom = { underline = true, sp = colors.dark3 },
+					TreesitterContextBottom = { underline = true, sp = colors.dark3 },
+					LspReferenceText = { link = "Visual" },
+					LspReferenceRead = { link = "Visual" },
+					LspReferenceWrite = { link = "Visual" },
 				}
 
 				groups = {
@@ -33,7 +36,10 @@ return {
 					SignColumn = { bg = colors.light0_soft },
 					GruvboxBg2 = { fg = colors.gray },
 					Pmenu = { bg = colors.light0_soft },
-          TreesitterContextBottom = { underline = true, sp = colors.light3 },
+					TreesitterContextBottom = { underline = true, sp = colors.light3 },
+					LspReferenceText = { bg = "#CAC2A6" },
+					LspReferenceRead = { bg = "#CAC2A6" },
+					LspReferenceWrite = { bg = "#CAC2A6" },
 				}
 
 				groups = {

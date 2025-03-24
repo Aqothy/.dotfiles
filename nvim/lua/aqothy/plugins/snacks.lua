@@ -146,7 +146,7 @@ return {
 
 		words = {
 			enabled = true,
-			debounce = 300,
+			debounce = 100,
 			modes = { "n" },
 		},
 
