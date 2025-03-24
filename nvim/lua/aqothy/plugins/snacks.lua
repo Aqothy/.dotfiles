@@ -110,6 +110,12 @@ return {
 			indent = { enabled = true, char = "▏" },
 			chunk = { enabled = false },
 			scope = { enabled = false },
+			filter = function(buf)
+				return vim.bo[buf].filetype ~= "snacks_picker_preview"
+					and vim.g.snacks_indent ~= false
+					and vim.b[buf].snacks_indent ~= false
+					and vim.bo[buf].buftype == ""
+			end,
 		},
 
 		scroll = {
@@ -326,35 +332,5 @@ return {
 			Snacks.debug.backtrace()
 		end
 		vim.print = _G.dd
-
-		vim.api.nvim_create_autocmd("LspProgress", {
-			group = vim.api.nvim_create_augroup("lsp_progress", { clear = true }),
-			pattern = { "begin", "end" },
-			---@param args {data: {client_id: integer, params: lsp.ProgressParams}}
-			callback = function(args)
-				if not args.data then
-					return
-				end
-				local client_id = args.data.client_id
-				local client = vim.lsp.get_client_by_id(client_id)
-				local value = args.data.params.value
-				if not client or type(value) ~= "table" then
-					return
-				end
-
-				local is_end = value.kind == "end"
-
-				local id = value.title
-
-				vim.notify(value.title, "info", {
-					id = id,
-					title = client.name,
-					timeout = is_end and 3000 or 0,
-					opts = function(notif)
-						notif.icon = is_end and " " or "󱥸 "
-					end,
-				})
-			end,
-		})
 	end,
 }

@@ -1,7 +1,7 @@
 return {
 	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-buffer",
@@ -95,7 +95,7 @@ return {
 			performance = {
 				debounce = 30,
 				throttle = 15,
-				fetching_timeout = 300,
+				fetching_timeout = 500,
 				confirm_resolve_timeout = 35,
 				async_budget = 1,
 				max_view_entries = 30,

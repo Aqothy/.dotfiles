@@ -36,12 +36,8 @@ keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then
-	keymap("n", "<leader>gs", function()
-		Snacks.lazygit()
-	end, { desc = "Lazygit (cwd)" })
-	keymap("n", "<leader>gl", function()
-		Snacks.lazygit.log_file()
-	end, { desc = "Git Log File" })
+	keymap("n", "<leader>gs", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
+	keymap("n", "<leader>gl", function() Snacks.lazygit.log_file() end, { desc = "Git Log File" })
 end
 
 -- Toggle
@@ -104,3 +100,5 @@ Snacks.toggle({
 		require("gitsigns").toggle_signs(state)
 	end,
 }):map("<leader>tg")
+
+Snacks.toggle.indent():map("<leader>id")

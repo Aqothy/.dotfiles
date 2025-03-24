@@ -4,7 +4,7 @@ return {
 	"saghen/blink.cmp",
 	build = "cargo build --release",
 	event = { "InsertEnter", "CmdLineEnter" },
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -43,6 +43,12 @@ return {
 					return { "lsp", "path", "snippets", "buffer" }
 				end
 			end,
+
+			providers = {
+				lsp = {
+					timeout_ms = 500,
+				},
+			},
 
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies

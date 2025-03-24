@@ -19,7 +19,7 @@ return {
 			go_in = "l",
 			go_in_plus = "<CR>",
 			go_out = "h",
-			go_out_plus = "H",
+			go_out_plus = "-",
 		},
 		content = {
 			filter = filter_show,
