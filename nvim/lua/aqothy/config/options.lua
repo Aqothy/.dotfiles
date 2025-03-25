@@ -29,7 +29,7 @@ vim.opt.updatetime = 300
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.splitkeep = "screen" -- no shift and screen stays stable when splitting
+vim.opt.splitkeep = "screen"
 vim.opt.inccommand = "split"
 
 vim.opt.ignorecase = true

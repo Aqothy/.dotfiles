@@ -44,61 +44,10 @@ end
 Snacks.toggle
 	.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
 	:map("<leader>tl")
-
 Snacks.toggle.dim():map("<leader>sd")
 Snacks.toggle.diagnostics():map("<leader>td")
 Snacks.toggle.zen():map("<leader>zz")
 Snacks.toggle.profiler():map("<leader>pp")
-
 Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-
-Snacks.toggle({
-	name = "Copilot",
-	get = function()
-		return not require("copilot.client").is_disabled()
-	end,
-	set = function(state)
-		if state then
-			require("copilot.command").enable()
-		else
-			require("copilot.command").disable()
-		end
-	end,
-}):map("<leader>tc")
-
-Snacks.toggle.treesitter():map("<leader>ts")
-
-local tsc = require("treesitter-context")
-Snacks.toggle({
-	name = "Treesitter Context",
-	get = tsc.enabled,
-	set = function(state)
-		if state then
-			tsc.enable()
-		else
-			tsc.disable()
-		end
-	end,
-}):map("<leader>tu")
-
-Snacks.toggle({
-	name = "Diffview",
-	get = function()
-		return require("diffview.lib").get_current_view() ~= nil
-	end,
-	set = function(state)
-		vim.cmd("Diffview" .. (state and "Open" or "Close"))
-	end,
-}):map("<leader>gd")
-
-Snacks.toggle({
-	name = "Git Signs",
-	get = function()
-		return require("gitsigns.config").config.signcolumn
-	end,
-	set = function(state)
-		require("gitsigns").toggle_signs(state)
-	end,
-}):map("<leader>tg")
-
 Snacks.toggle.indent():map("<leader>id")
+Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")

@@ -122,7 +122,7 @@ return {
 			enabled = false,
 		},
 
-		input = { enabled = false },
+		input = { enabled = true },
 
 		notifier = {
 			enabled = true,
@@ -214,6 +214,9 @@ return {
 		},
 
 		styles = {
+			notification = {
+				wo = { wrap = true },
+			},
 			zen = {
 				width = 180,
 				backdrop = { transparent = false },
@@ -296,6 +299,7 @@ return {
       vim.cmd.stopinsert()
     end }) end, desc = "Buffers" },
 		{ "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true }) end, desc = "Find Config File" },
+		{ "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
 		{ "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
 		{ "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
 		{ "<leader>fs", function() Snacks.picker.grep({ hidden = true }) end, desc = "Grep" },

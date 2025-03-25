@@ -43,13 +43,16 @@ return {
 					return { "lsp", "path", "snippets", "buffer" }
 				end
 			end,
-
 			providers = {
 				lsp = {
 					timeout_ms = 500,
 				},
+				path = {
+					opts = {
+						show_hidden_files_by_default = true,
+					},
+				},
 			},
-
 			-- adding any nvim-cmp sources here will enable them
 			-- with blink.compat, need to uncomment compat in dependencies
 			-- compat = {},
@@ -94,7 +97,7 @@ return {
 			},
 			list = {
 				selection = { auto_insert = false },
-				max_items = 15,
+				max_items = 30,
 			},
 			documentation = {
 				window = { border = "rounded" },

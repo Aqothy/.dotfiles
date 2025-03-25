@@ -12,7 +12,7 @@
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
   "mason.nvim": { "branch": "main", "commit": "fc98833b6da5de5a9c5b1446ac541577059555be" },
   "mini.ai": { "branch": "main", "commit": "978ffc65c6b513fde9ef075326d34d89197f1ea5" },
-  "mini.files": { "branch": "main", "commit": "24129103897345196355f254bdf5a59e061cc324" },
+  "mini.files": { "branch": "main", "commit": "b6c9cb5f5ebbd9014097cd1296baf74c92b656aa" },
   "mini.hipatterns": { "branch": "main", "commit": "fbf1e2195fdd65cf1bc970316c28098257728868" },
   "mini.icons": { "branch": "main", "commit": "ec61af6e606fc89ee3b1d8f2f20166a3ca917a36" },
   "mini.snippets": { "branch": "main", "commit": "04e1c0f8538a4ee0ddc054e30e92a93cb4c1b568" },

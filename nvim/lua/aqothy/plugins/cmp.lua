@@ -80,7 +80,7 @@ return {
 
 					item.kind = user.kinds[item.kind]
 
-					item.menu = utils.truncateString(menu_text, 30)
+					item.menu = utils.truncateString(menu_text, 15)
 
 					return item
 				end,
@@ -93,11 +93,8 @@ return {
 			},
 
 			performance = {
-				debounce = 30,
-				throttle = 15,
-				fetching_timeout = 500,
-				confirm_resolve_timeout = 35,
-				async_budget = 1,
+				debounce = 6,
+				throttle = 3,
 				max_view_entries = 30,
 			},
 
