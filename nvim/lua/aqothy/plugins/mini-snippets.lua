@@ -8,6 +8,7 @@ return {
 
 		local has_cmp, cmp = pcall(require, "nvim-cmp")
 		local has_blink, blink = pcall(require, "blink.cmp")
+		local has_copilot, copilot = pcall(require, "copilot.suggestion")
 
 		local expand_select_override = nil
 
@@ -28,6 +29,10 @@ return {
 		local my_insert = function(snippet)
 			-- Empty tabstop chars
 			return mini_snippets.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
+		end
+
+		local my_m = function(snippets)
+			return mini_snippets.default_match(snippets, { pattern_fuzzy = "%w*" })
 		end
 
 		local autocmd = vim.api.nvim_create_autocmd
@@ -69,13 +74,18 @@ return {
 				jump_prev = "<C-h>",
 				stop = "",
 			},
+
 			expand = {
 				select = function(snippets, insert)
-					-- Close completion window on snippet select - vim.ui.select
+					-- Close completion window and clear copilot ghost text on snippet select - vim.ui.select
 					local select = expand_select_override or mini_snippets.default_select
+					if has_copilot and copilot.is_visible() then
+						copilot.dismiss()
+					end
 					select(snippets, insert)
 				end,
 				insert = my_insert,
+				match = my_m,
 			},
 		}
 	end,

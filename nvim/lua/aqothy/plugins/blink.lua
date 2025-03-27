@@ -2,9 +2,9 @@ local user = require("aqothy.config.user")
 
 return {
 	"saghen/blink.cmp",
-	build = "cargo build --release",
+	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -50,6 +50,14 @@ return {
 				path = {
 					opts = {
 						show_hidden_files_by_default = true,
+					},
+				},
+				buffer = {
+					opts = {
+						-- Only current buf
+						get_bufnrs = function()
+							return { vim.api.nvim_get_current_buf() }
+						end,
 					},
 				},
 			},

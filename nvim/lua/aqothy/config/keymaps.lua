@@ -43,7 +43,7 @@ end
 -- Toggle
 Snacks.toggle
 	.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-	:map("<leader>tl")
+	:map("<leader>cl")
 Snacks.toggle.dim():map("<leader>sd")
 Snacks.toggle.diagnostics():map("<leader>td")
 Snacks.toggle.zen():map("<leader>zz")

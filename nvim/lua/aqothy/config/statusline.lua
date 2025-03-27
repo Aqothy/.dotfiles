@@ -220,15 +220,16 @@ autocmd("LspProgress", {
 		end
 
 		local client_name = client.name
+		local progress = value.kind
 
 		-- Mark cache as dirty to trigger rebuild
 		M.progress_dirty = true
 
 		M.progress_statuses[client_name] = {
-			kind = value.kind,
+			kind = progress,
 		}
 
-		if value.kind == "end" then
+		if progress == "end" then
 			vim.defer_fn(function()
 				M.progress_statuses[client_name] = nil
 				M.progress_dirty = true

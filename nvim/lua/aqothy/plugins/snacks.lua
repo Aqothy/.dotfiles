@@ -160,6 +160,15 @@ return {
 			toggles = {
 				dim = false,
 			},
+			on_open = function(win)
+				-- disable snacks indent
+				vim.b[win.buf].snacks_indent_old = vim.b[win.buf].snacks_indent
+				vim.b[win.buf].snacks_indent = false
+			end,
+			on_close = function(win)
+				-- restore snacks indent setting
+				vim.b[win.buf].snacks_indent = vim.b[win.buf].snacks_indent_old
+			end,
 		},
 
 		dim = {
@@ -171,6 +180,7 @@ return {
 		picker = {
 			enabled = true,
 			icons = user.kinds,
+			ui_select = true,
 			layouts = {
 				vscode = {
 					layout = {
@@ -218,8 +228,19 @@ return {
 				wo = { wrap = true },
 			},
 			zen = {
-				width = 180,
-				backdrop = { transparent = false },
+				width = function()
+					return math.floor(vim.o.columns * 0.75)
+				end,
+				backdrop = {
+					transparent = false,
+					-- win = { wo = { winhighlight = "Normal:Normal" } },
+				},
+				wo = {
+					signcolumn = "no",
+					statuscolumn = "",
+					number = false,
+					relativenumber = false,
+				},
 			},
 		},
 	},
@@ -241,8 +262,8 @@ return {
         end,
       })
     end, { desc = "Grep TODOs", nargs = 0 }},
-    { "<leader>rp", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
-    { "<leader>ap", function () Snacks.picker() end, desc = "All pickers" },
+    { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
+    { "<leader>pa", function () Snacks.picker() end, desc = "All pickers" },
 		{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
     {"<leader>bo", function()
       Snacks.bufdelete.other()
@@ -324,7 +345,9 @@ return {
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
     { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
-    { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" }
+    { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
+    { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
+    { "<leader>pw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
 	},
 	config = function(_, opts)
 		require("snacks").setup(opts)

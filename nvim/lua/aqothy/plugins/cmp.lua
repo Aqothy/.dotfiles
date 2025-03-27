@@ -1,18 +1,19 @@
 return {
 	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
-		"abeldekat/cmp-mini-snippets",
+		"xzbdmw/cmp-mini-snippets",
 	},
 	config = function()
 		local user = require("aqothy.config.user")
 		local utils = require("aqothy.config.utils")
 		local cmp = require("cmp")
+		local compare = cmp.config.compare
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -30,8 +31,6 @@ return {
 				expand = function(args)
 					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
 					insert({ body = args.body }) -- Insert at cursor
-					cmp.resubscribe({ "TextChangedI", "TextChangedP" })
-					require("cmp.config").set_onetime({ sources = {} })
 				end,
 			},
 			experimental = {
@@ -66,21 +65,14 @@ return {
 				fields = { "kind", "abbr", "menu" },
 				format = function(entry, item)
 					local completion_item = entry.completion_item
-
-					local label_description = completion_item.labelDetails and completion_item.labelDetails.description
-						or ""
-
-					local label_detail = completion_item.detail or ""
-
-					-- Use label_detail if label_description is empty
-					local menu_text = label_description ~= "" and label_description or label_detail
+					local label_details = completion_item.labelDetails
 
 					item.abbr = utils.truncateString(completion_item.label, 30)
-						.. (item.kind == "Snippet" and "~" or "")
-
 					item.kind = user.kinds[item.kind]
-
-					item.menu = utils.truncateString(menu_text, 15)
+					item.menu = utils.truncateString(
+						(label_details and label_details.description) or completion_item.detail or "",
+						15
+					)
 
 					return item
 				end,
@@ -106,34 +98,44 @@ return {
 						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
 					end,
 				},
-				{ name = "mini_snippets" },
+				{
+					name = "mini.snippets",
+					option = {
+						only_show_in_line_start = true,
+					},
+				},
 				{ name = "path" },
 			}, {
-				{ name = "buffer" },
+				{
+					name = "buffer",
+					option = {
+						indexing_interval = 1000,
+						get_bufnrs = function()
+							local buf = vim.api.nvim_get_current_buf()
+							local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+							if byte_size > 1024 * 1024 then -- 1 Megabyte max
+								return {}
+							end
+							return { buf }
+						end,
+					},
+				},
 			}),
 
 			sorting = {
 				priority_weight = 2,
 				comparators = {
-					cmp.config.compare.exact,
-					cmp.config.compare.offset,
-					cmp.config.compare.score,
-					cmp.config.compare.scopes,
-					cmp.config.compare.recently_used,
-					cmp.config.compare.length,
-					cmp.config.compare.sort_text,
-					cmp.config.compare.locality,
-					cmp.config.compare.order,
-					cmp.config.compare.kind,
+					compare.exact,
+					compare.score,
+					compare.offset,
+					compare.scopes,
+					compare.recently_used,
+					compare.length,
+					compare.sort_text,
+					compare.locality,
+					compare.order,
+					compare.kind,
 				},
-			},
-			matching = {
-				disallow_fuzzy_matching = false,
-				disallow_fullfuzzy_matching = false,
-				disallow_partial_fuzzy_matching = false,
-				disallow_partial_matching = false,
-				disallow_prefix_unmatching = false,
-				disallow_symbol_nonprefix_matching = true,
 			},
 		})
 
@@ -158,9 +160,9 @@ return {
 					end,
 				},
 			}),
-			sources = {
+			sources = cmp.config.sources({
 				{ name = "buffer" },
-			},
+			}),
 		})
 
 		cmp.setup.cmdline(":", {

@@ -120,15 +120,6 @@ return {
 		})
 
 		autocmd("User", {
-			desc = "Add rounded corners to minifiles window",
-			group = group,
-			pattern = "MiniFilesWindowOpen",
-			callback = function(args)
-				vim.api.nvim_win_set_config(args.data.win_id, { border = "rounded" })
-			end,
-		})
-
-		autocmd("User", {
 			group = group,
 			pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
 			callback = function(event)

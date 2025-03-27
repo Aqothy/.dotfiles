@@ -150,6 +150,7 @@ M["gopls"] = {
 M["basedpyright"] = {
 	settings = {
 		basedpyright = {
+			disableOrganizeImports = true,
 			analysis = {
 				typeCheckingMode = "standard",
 			},

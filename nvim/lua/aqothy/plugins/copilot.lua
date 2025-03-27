@@ -1,6 +1,5 @@
 return {
 	"zbirenbaum/copilot.lua",
-	build = ":Copilot auth",
 	cmd = "Copilot",
 	event = "InsertEnter",
 	opts = function()
@@ -35,6 +34,13 @@ return {
 			copilot_model = "gpt-4o-copilot",
 			filetypes = {
 				["*"] = true,
+			},
+			server_opts_overrides = {
+				settings = {
+					telemetry = {
+						telemetryLevel = "off",
+					},
+				},
 			},
 		}
 	end,
