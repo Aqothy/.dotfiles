@@ -17,8 +17,6 @@ return {
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-		local mini_snippets = require("mini.snippets")
-
 		cmp.setup({
 			completion = {
 				completeopt = "menu,menuone,noinsert",
@@ -29,7 +27,7 @@ return {
 			},
 			snippet = {
 				expand = function(args)
-					local insert = mini_snippets.config.expand.insert or mini_snippets.default_insert
+					local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
 					insert({ body = args.body }) -- Insert at cursor
 				end,
 			},
@@ -139,53 +137,36 @@ return {
 			},
 		})
 
+		local mapping = cmp.mapping.preset.cmdline({
+			["<C-n>"] = {
+				c = function(fallback)
+					if cmp.visible() then
+						cmp.select_next_item(cmp_select)
+					else
+						fallback()
+					end
+				end,
+			},
+			["<C-p>"] = {
+				c = function(fallback)
+					if cmp.visible() then
+						cmp.select_prev_item(cmp_select)
+					else
+						fallback()
+					end
+				end,
+			},
+		})
+
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = cmp.mapping.preset.cmdline({
-				["<C-n>"] = {
-					c = function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item(cmp_select)
-						else
-							fallback()
-						end
-					end,
-				},
-				["<C-p>"] = {
-					c = function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item(cmp_select)
-						else
-							fallback()
-						end
-					end,
-				},
-			}),
+			mapping = mapping,
 			sources = cmp.config.sources({
 				{ name = "buffer" },
 			}),
 		})
 
 		cmp.setup.cmdline(":", {
-			mapping = cmp.mapping.preset.cmdline({
-				["<C-n>"] = {
-					c = function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item(cmp_select)
-						else
-							fallback()
-						end
-					end,
-				},
-				["<C-p>"] = {
-					c = function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item(cmp_select)
-						else
-							fallback()
-						end
-					end,
-				},
-			}),
+			mapping = mapping,
 			sources = cmp.config.sources({
 				{ name = "cmdline" },
 				{ name = "path" },

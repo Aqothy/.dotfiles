@@ -6,26 +6,6 @@ return {
 		local mini_snippets = require("mini.snippets")
 		local gen_loader = mini_snippets.gen_loader
 
-		local has_cmp, cmp = pcall(require, "nvim-cmp")
-		local has_blink, blink = pcall(require, "blink.cmp")
-		local has_copilot, copilot = pcall(require, "copilot.suggestion")
-
-		local expand_select_override = nil
-
-		if has_cmp then
-			expand_select_override = function(snippets, insert)
-				if cmp.visible() then
-					cmp.close()
-				end
-				mini_snippets.default_select(snippets, insert)
-			end
-		elseif has_blink then
-			expand_select_override = function(snippets, insert)
-				blink.cancel()
-				mini_snippets.default_select(snippets, insert)
-			end
-		end
-
 		local my_insert = function(snippet)
 			-- Empty tabstop chars
 			return mini_snippets.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
@@ -78,11 +58,17 @@ return {
 			expand = {
 				select = function(snippets, insert)
 					-- Close completion window and clear copilot ghost text on snippet select - vim.ui.select
-					local select = expand_select_override or mini_snippets.default_select
+					local has_blink, blink = pcall(require, "blink.cmp")
+					if has_blink and blink.is_menu_visible() then
+						blink.cancel()
+					end
+
+					local has_copilot, copilot = pcall(require, "copilot.suggestion")
 					if has_copilot and copilot.is_visible() then
 						copilot.dismiss()
 					end
-					select(snippets, insert)
+
+					mini_snippets.default_select(snippets, insert)
 				end,
 				insert = my_insert,
 				match = my_m,

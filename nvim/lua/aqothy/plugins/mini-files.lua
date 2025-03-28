@@ -36,8 +36,14 @@ return {
 			-- just like oil
 			"-",
 			function()
-				require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
-				require("mini.files").reveal_cwd()
+				local bufname = vim.api.nvim_buf_get_name(0)
+				local path = vim.fn.fnamemodify(bufname, ":p")
+
+				if path and vim.uv.fs_stat(path) then
+					local mini_files = require("mini.files")
+					mini_files.open(bufname, false)
+					mini_files.reveal_cwd()
+				end
 			end,
 			desc = "Open mini.files (Directory of Current File)",
 		},

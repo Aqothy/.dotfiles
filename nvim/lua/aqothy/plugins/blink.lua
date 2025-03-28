@@ -113,7 +113,10 @@ return {
 		},
 
 		snippets = {
-			preset = "mini_snippets",
+			expand = function(snippet)
+				local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+				insert({ body = snippet })
+			end,
 		},
 
 		appearance = {

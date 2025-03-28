@@ -1,5 +1,4 @@
 local user = require("aqothy.config.user")
-local utils = require("aqothy.config.utils")
 
 return {
 	"folke/snacks.nvim",
@@ -344,20 +343,9 @@ return {
     end,}) end, desc = "undo tree" },
 		{ "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
 		{ "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
-    { "<leader>fp", function() utils.pick_projects() end, desc = "Custom projects picker" },
+    { "<leader>fp", function() require("aqothy.config.utils").pick_projects() end, desc = "Custom projects picker" },
     { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
     { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
     { "<leader>pw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
 	},
-	config = function(_, opts)
-		require("snacks").setup(opts)
-
-		_G.dd = function(...)
-			Snacks.debug.inspect(...)
-		end
-		_G.bt = function()
-			Snacks.debug.backtrace()
-		end
-		vim.print = _G.dd
-	end,
 }

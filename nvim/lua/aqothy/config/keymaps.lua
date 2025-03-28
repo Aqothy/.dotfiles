@@ -25,13 +25,14 @@ keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 -- Utility functions
-keymap("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
+keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "<C-h>", "<cmd>silent !tmux neww ts<cr>", { desc = "New tmux session" }) -- need to be in tmux already for this to work
 keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 	silent = false,
 	desc = "Open a new file in the same directory",
 })
-
+keymap("n", "<leader>it", "<cmd>InspectTree<cr>", { desc = "InspectTree" })
+keymap("n", "<leader>ip", "<cmd>Inspect<cr>", { desc = "Inspect position" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
 
 -- lazygit
