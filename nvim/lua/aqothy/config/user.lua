@@ -46,12 +46,6 @@ M.dap = {
 	LogPoint = ".>",
 }
 
-M.os = {
-	Darwin = "",
-	Linux = "",
-	Windows = "",
-}
-
 M.signs = {
 	error = "",
 	warn = "",
@@ -59,15 +53,6 @@ M.signs = {
 	debug = "",
 	trace = "",
 	hint = "󰛨",
-}
-
-M.symbols = {
-	modified = "",
-	readonly = "",
-	newfile = "",
-	unnamed = "",
-	ellipsis = "…",
-	separator = "",
 }
 
 return M

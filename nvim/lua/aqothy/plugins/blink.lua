@@ -31,7 +31,7 @@ return {
 
 		sources = {
 			-- Dynamic sources based on treesitter nodes
-			default = function(ctx)
+			default = function()
 				local success, node = pcall(vim.treesitter.get_node)
 				if
 					success

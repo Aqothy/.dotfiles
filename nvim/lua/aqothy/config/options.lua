@@ -63,6 +63,7 @@ vim.opt.conceallevel = 2
 vim.opt.formatoptions:remove("o")
 vim.g.snacks_animate = false
 vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
+vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"

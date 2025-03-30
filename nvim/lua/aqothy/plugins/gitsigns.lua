@@ -30,7 +30,7 @@ return {
 				untracked = { text = "┆" },
 			},
 			update_debounce = 300,
-			-- attach_to_untracked = true,
+			attach_to_untracked = true,
 			on_attach = function(bufnr)
 				local gs = package.loaded.gitsigns
 

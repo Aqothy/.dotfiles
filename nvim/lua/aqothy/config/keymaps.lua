@@ -34,6 +34,7 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 keymap("n", "<leader>it", "<cmd>InspectTree<cr>", { desc = "InspectTree" })
 keymap("n", "<leader>ip", "<cmd>Inspect<cr>", { desc = "Inspect position" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
+keymap("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Source current file" })
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then

@@ -4,7 +4,6 @@ local lazy_autocmds = vim.fn.argc(-1) == 0
 require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
 if not is_vscode then
-	-- Setup debug helpers
 	_G.dd = function(...)
 		Snacks.debug.inspect(...)
 	end
@@ -26,7 +25,6 @@ if not is_vscode then
 		pattern = "VeryLazy",
 		group = vim.api.nvim_create_augroup("Lazyload_Config", { clear = true }),
 		callback = function()
-			-- Load configs that can be deferred
 			if lazy_autocmds then
 				require("aqothy.config.autocmds")
 			end
@@ -35,3 +33,5 @@ if not is_vscode then
 		end,
 	})
 end
+
+vim.deprecate = function() end
