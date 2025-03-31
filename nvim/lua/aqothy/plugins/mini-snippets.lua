@@ -38,6 +38,8 @@ return {
 		local lang_patterns = {
 			jsx = jsx_patterns,
 			tsx = tsx_patterns,
+			javascript = jsx_patterns,
+			typescript = tsx_patterns,
 		}
 
 		return {

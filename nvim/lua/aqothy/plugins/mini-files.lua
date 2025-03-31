@@ -1,13 +1,3 @@
-local filter_show = function(entry)
-	return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
-end
-
-local filter_hide = function(entry)
-	return filter_show(entry) and not vim.startswith(entry.name, ".")
-end
-
-local autocmd = vim.api.nvim_create_autocmd
-
 return {
 	"echasnovski/mini.files",
 	opts = {
@@ -22,7 +12,9 @@ return {
 			go_out_plus = "-",
 		},
 		content = {
-			filter = filter_show,
+			filter = function(entry)
+				return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
+			end,
 		},
 		windows = {
 			preview = true,
@@ -54,9 +46,13 @@ return {
 
 		local show_dotfiles = true
 
+		local filter_hide = function(entry)
+			return mf.config.content.filter(entry) and not vim.startswith(entry.name, ".")
+		end
+
 		local toggle_dotfiles = function()
 			show_dotfiles = not show_dotfiles
-			local new_filter = show_dotfiles and filter_show or filter_hide
+			local new_filter = show_dotfiles and mf.config.content.filter or filter_hide
 			mf.refresh({ content = { filter = new_filter } })
 			vim.notify("Dotfiles " .. (show_dotfiles and "shown" or "hidden"))
 		end
@@ -105,6 +101,7 @@ return {
 			vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
 		end
 
+		local autocmd = vim.api.nvim_create_autocmd
 		local group = vim.api.nvim_create_augroup("aqothy/mini_files", { clear = true })
 
 		autocmd("User", {

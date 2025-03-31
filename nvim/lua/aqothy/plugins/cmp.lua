@@ -19,7 +19,7 @@ return {
 
 		cmp.setup({
 			completion = {
-				completeopt = "menu,menuone,noinsert",
+				completeopt = "menuone,noinsert",
 			},
 			window = {
 				completion = cmp.config.window.bordered(),
@@ -35,27 +35,37 @@ return {
 				ghost_text = false,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<C-e>"] = cmp.mapping.abort(),
-				["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-				["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-				["<C-space>"] = function()
-					if cmp.core.view:visible() then
-						if cmp.visible_docs() then
-							cmp.close_docs()
+				["<C-space>"] = {
+					i = function()
+						if cmp.visible() then
+							if cmp.visible_docs() then
+								cmp.close_docs()
+							else
+								cmp.open_docs()
+							end
 						else
-							cmp.open_docs()
+							cmp.complete()
 						end
-					else
-						cmp.complete()
-					end
-				end,
-				["<C-y>"] = function(fallback)
-					if cmp.core.view:visible() then
-						cmp.confirm({ select = true })
-					else
-						fallback()
-					end
-				end,
+					end,
+				},
+				["<C-n>"] = {
+					i = function()
+						if cmp.visible() then
+							cmp.select_next_item(cmp_select)
+						else
+							cmp.complete()
+						end
+					end,
+				},
+				["<C-p>"] = {
+					i = function()
+						if cmp.visible() then
+							cmp.select_prev_item(cmp_select)
+						else
+							cmp.complete()
+						end
+					end,
+				},
 				["<C-b>"] = cmp.mapping.scroll_docs(-3),
 				["<C-f>"] = cmp.mapping.scroll_docs(3),
 			}),
@@ -85,6 +95,7 @@ return {
 			performance = {
 				debounce = 6,
 				throttle = 3,
+				fetching_timeout = 2000,
 				max_view_entries = 30,
 			},
 
@@ -124,8 +135,8 @@ return {
 				priority_weight = 2,
 				comparators = {
 					compare.exact,
-					compare.score,
 					compare.offset,
+					compare.score,
 					compare.scopes,
 					compare.recently_used,
 					compare.length,
@@ -137,7 +148,7 @@ return {
 			},
 		})
 
-		local mapping = cmp.mapping.preset.cmdline({
+		local cmd_map = cmp.mapping.preset.cmdline({
 			["<C-n>"] = {
 				c = function(fallback)
 					if cmp.visible() then
@@ -159,14 +170,14 @@ return {
 		})
 
 		cmp.setup.cmdline({ "/", "?" }, {
-			mapping = mapping,
+			mapping = cmd_map,
 			sources = cmp.config.sources({
 				{ name = "buffer" },
 			}),
 		})
 
 		cmp.setup.cmdline(":", {
-			mapping = mapping,
+			mapping = cmd_map,
 			sources = cmp.config.sources({
 				{ name = "cmdline" },
 				{ name = "path" },

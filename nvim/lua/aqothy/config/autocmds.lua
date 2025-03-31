@@ -30,6 +30,9 @@ autocmd("FileType", {
 		"checkhealth",
 		"qf",
 		"vim",
+		"dap*",
+		"gitsigns*",
+		"query",
 	},
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false

@@ -1,5 +1,3 @@
-local user = require("aqothy.config.user")
-
 return {
 	"saghen/blink.cmp",
 	version = "*",
@@ -19,14 +17,7 @@ return {
 	opts_extend = { "sources.default" },
 	opts = {
 		keymap = {
-			preset = "none",
-			["<C-y>"] = { "select_and_accept" },
-			["<C-b>"] = { "scroll_documentation_up", "fallback" },
-			["<C-f>"] = { "scroll_documentation_down", "fallback" },
-			["<C-e>"] = { "hide", "fallback" },
-			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-			["<C-p>"] = { "select_prev", "fallback" },
-			["<C-n>"] = { "select_next", "fallback" },
+			preset = "default",
 		},
 
 		sources = {
@@ -44,9 +35,6 @@ return {
 				end
 			end,
 			providers = {
-				lsp = {
-					timeout_ms = 500,
-				},
 				path = {
 					opts = {
 						show_hidden_files_by_default = true,
@@ -113,10 +101,7 @@ return {
 		},
 
 		snippets = {
-			expand = function(snippet)
-				local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-				insert({ body = snippet })
-			end,
+			preset = "mini_snippets",
 		},
 
 		appearance = {
@@ -127,7 +112,7 @@ return {
 			-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 			-- Adjusts spacing to ensure icons are aligned
 			nerd_font_variant = "mono",
-			kind_icons = user.kinds,
+			kind_icons = require("aqothy.config.user").kinds,
 		},
 
 		-- experimental signature help support

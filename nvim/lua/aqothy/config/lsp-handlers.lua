@@ -83,6 +83,23 @@ vim.lsp.buf.signature_help = function()
 	return signature_help(float_config)
 end
 
+--- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
+---@param bufnr integer
+---@param contents string[]
+---@param opts table
+---@return string[]
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
+	contents = vim.lsp.util._normalize_markdown(contents, {
+		width = vim.lsp.util._make_floating_popup_size(contents, opts),
+	})
+	vim.bo[bufnr].filetype = "markdown"
+	vim.treesitter.start(bufnr)
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
+
+	return contents
+end
+
 local diagnostic_goto = function(next, severity)
 	severity = severity and vim.diagnostic.severity[severity] or nil
 
@@ -98,6 +115,32 @@ M.on_attach = function(client, bufnr)
 	local function keymap(mode, lhs, rhs, extra_opts)
 		vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
 	end
+
+	-- local kinds = require("aqothy.config.user").kinds
+	-- local utils = require("aqothy.config.utils")
+	-- if client:supports_method("textDocument/completion") then
+	-- 	client.server_capabilities.completionProvider.triggerCharacters = vim.split("qwertyuiopasdfghjklzxcvbnm. ", "")
+	--
+	-- 	vim.lsp.completion.enable(true, client.id, bufnr, {
+	-- 		autotrigger = true,
+	-- 		convert = function(item)
+	-- 			local label_details = item.labelDetails
+	-- 			local menu =
+	-- 				utils.truncateString((label_details and label_details.description) or item.detail or "", 15)
+	--
+	-- 			local kind = kinds[vim.lsp.protocol.CompletionItemKind[item.kind]] or "u"
+	-- 			return {
+	-- 				abbr = item.label:gsub("%b()", ""),
+	-- 				kind = kind,
+	-- 				menu = menu,
+	-- 			}
+	-- 		end,
+	-- 	})
+	--
+	-- 	vim.keymap.set("i", "<c-space>", function()
+	-- 		vim.lsp.completion.get()
+	-- 	end)
+	-- end
 
 	-- Inlay hints
 	if client:supports_method("textDocument/inlayHint") then
@@ -139,10 +182,10 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
-	keymap("n", "]]", function()
+	keymap("n", "]r", function()
 		Snacks.words.jump(vim.v.count1)
 	end, { desc = "Next Reference" })
-	keymap("n", "[[", function()
+	keymap("n", "[r", function()
 		Snacks.words.jump(-vim.v.count1)
 	end, { desc = "Prev Reference" })
 

@@ -8,6 +8,9 @@ return {
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
 		opts = {
 			-- A list of parser names, or "all"
 			ensure_installed = {
@@ -59,6 +62,39 @@ return {
 				enable = true,
 			},
 
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["ai"] = "@conditional.outer",
+						["ii"] = "@conditional.inner",
+						["al"] = "@loop.outer",
+						["il"] = "@loop.inner",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true,
+					goto_next_start = {
+						["]f"] = "@function.outer",
+						["]]"] = "@class.outer",
+						["]a"] = "@parameter.inner",
+					},
+					goto_previous_start = {
+						["[f"] = "@function.outer",
+						["[["] = "@class.outer",
+						["[a"] = "@parameter.inner",
+					},
+				},
+			},
+
 			highlight = {
 				enable = true,
 
@@ -91,28 +127,6 @@ return {
 			vim.treesitter.language.register("bash", "kitty")
 
 			Snacks.toggle.treesitter():map("<leader>ts")
-		end,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		event = "LazyFile",
-		opts = function()
-			local tsc = require("treesitter-context")
-			Snacks.toggle({
-				name = "Treesitter Context",
-				get = tsc.enabled,
-				set = function(state)
-					if state then
-						tsc.enable()
-					else
-						tsc.disable()
-					end
-				end,
-			}):map("<leader>tu")
-
-			return {
-				max_lines = 3,
-			}
 		end,
 	},
 }

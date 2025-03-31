@@ -31,6 +31,8 @@ end
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
+keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
+
 keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })

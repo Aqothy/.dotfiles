@@ -31,12 +31,12 @@ M["vtsls"] = {
 		vtsls = {
 			enableMoveToFileCodeAction = true,
 			autoUseWorkspaceTsdk = true,
-			experimental = {
-				maxInlayHintLength = 30,
-				completion = {
-					enableServerSideFuzzyMatch = true,
-				},
-			},
+			-- experimental = {
+			-- 	maxInlayHintLength = 30,
+			-- 	completion = {
+			-- 		enableServerSideFuzzyMatch = true,
+			-- 	},
+			-- },
 		},
 		typescript = {
 			updateImportsOnFileMove = { enabled = "always" },

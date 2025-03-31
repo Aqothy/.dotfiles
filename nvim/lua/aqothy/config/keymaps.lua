@@ -34,7 +34,7 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 keymap("n", "<leader>it", "<cmd>InspectTree<cr>", { desc = "InspectTree" })
 keymap("n", "<leader>ip", "<cmd>Inspect<cr>", { desc = "Inspect position" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
-keymap("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Source current file" })
+keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then
@@ -43,13 +43,7 @@ if vim.fn.executable("lazygit") == 1 then
 end
 
 -- Toggle
-Snacks.toggle
-	.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-	:map("<leader>cl")
 Snacks.toggle.dim():map("<leader>sd")
-Snacks.toggle.diagnostics():map("<leader>td")
 Snacks.toggle.zen():map("<leader>zz")
 Snacks.toggle.profiler():map("<leader>pp")
-Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
 Snacks.toggle.indent():map("<leader>id")
-Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
