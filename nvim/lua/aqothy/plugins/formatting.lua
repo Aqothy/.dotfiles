@@ -3,7 +3,7 @@ return {
 	cmd = "ConformInfo",
 	keys = {
 		{
-			"<leader>fm",
+			"<leader>F",
 			function()
 				require("conform").format({ async = true })
 			end,

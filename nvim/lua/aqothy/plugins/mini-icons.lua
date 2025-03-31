@@ -22,9 +22,10 @@ return {
 			go = { glyph = "", hl = "MiniIconsAzure" },
 		},
 	},
-	config = function(_, opts)
-		local mi = require("mini.icons")
-		mi.setup(opts)
-		mi.mock_nvim_web_devicons()
+	init = function()
+		package.preload["nvim-web-devicons"] = function()
+			require("mini.icons").mock_nvim_web_devicons()
+			return package.loaded["nvim-web-devicons"]
+		end
 	end,
 }

@@ -2,22 +2,27 @@ return {
 	"sindrets/diffview.nvim",
 	cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
 	keys = {
-		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File history" },
-		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff main" },
 		{
 			"<leader>gd",
 			function()
-				if next(require("diffview.lib").views) == nil then
-					vim.cmd("DiffviewOpen")
-				else
-					vim.cmd("DiffviewClose")
-				end
+				vim.cmd("Diffview" .. (require("diffview.lib").get_current_view() == nil and "Open" or "Close"))
 			end,
-			desc = "Diff view",
+			desc = "Toggle Diff view",
 		},
+		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File history" },
+		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff main" },
 	},
 	opts = function()
 		require("diffview.ui.panel").Panel.default_config_float.border = "rounded"
-		return {}
+		return {
+			view = {
+				merge_tool = {
+					layout = "diff4_mixed",
+				},
+				file_history = {
+					layout = "diff2_horizontal",
+				},
+			},
+		}
 	end,
 }

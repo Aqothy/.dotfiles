@@ -21,9 +21,6 @@ Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
 Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
 local is_vscode = vim.g.vscode
-local lazy_autocmds = vim.fn.argc(-1) == 0
-
-require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -72,23 +69,3 @@ require("lazy").setup({
 		},
 	},
 })
-
-if not is_vscode then
-	-- Load autocmds immediately if there are arguments
-	if not lazy_autocmds then
-		require("aqothy.config.autocmds")
-	end
-
-	-- Lazy load config
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "VeryLazy",
-		group = vim.api.nvim_create_augroup("LazyLoad", { clear = true }),
-		callback = function()
-			if lazy_autocmds then
-				require("aqothy.config.autocmds")
-			end
-			require("aqothy.config.keymaps")
-			require("aqothy.config.statusline")
-		end,
-	})
-end

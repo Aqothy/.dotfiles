@@ -1,45 +1,41 @@
-local filter_show = function(entry)
-	return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
-end
-
-local filter_hide = function(entry)
-	return filter_show(entry) and not vim.startswith(entry.name, ".")
-end
-
-local autocmd = vim.api.nvim_create_autocmd
-
 return {
 	"echasnovski/mini.files",
-	opts = function()
-		return {
-			options = {
-				use_as_default_explorer = false,
-				permanent_delete = false,
-			},
-			mappings = {
-				go_in = "l",
-				go_in_plus = "<CR>",
-				go_out = "h",
-				go_out_plus = "H",
-			},
-			content = {
-				filter = filter_show,
-			},
-			windows = {
-				preview = true,
-				width_focus = 30,
-				width_preview = 30,
-				width_nofocus = 30,
-			},
-		}
-	end,
+	opts = {
+		options = {
+			use_as_default_explorer = false,
+			permanent_delete = false,
+		},
+		mappings = {
+			go_in = "l",
+			go_in_plus = "<CR>",
+			go_out = "h",
+			go_out_plus = "-",
+		},
+		content = {
+			filter = function(entry)
+				return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
+			end,
+		},
+		windows = {
+			preview = true,
+			width_focus = 30,
+			width_preview = 30,
+			width_nofocus = 30,
+		},
+	},
 	keys = {
 		{
 			-- just like oil
 			"-",
 			function()
-				require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
-				require("mini.files").reveal_cwd()
+				local bufname = vim.api.nvim_buf_get_name(0)
+				local path = vim.fn.fnamemodify(bufname, ":p")
+
+				if path and vim.uv.fs_stat(path) then
+					local mini_files = require("mini.files")
+					mini_files.open(bufname, false)
+					mini_files.reveal_cwd()
+				end
 			end,
 			desc = "Open mini.files (Directory of Current File)",
 		},
@@ -50,9 +46,13 @@ return {
 
 		local show_dotfiles = true
 
+		local filter_hide = function(entry)
+			return mf.config.content.filter(entry) and not vim.startswith(entry.name, ".")
+		end
+
 		local toggle_dotfiles = function()
 			show_dotfiles = not show_dotfiles
-			local new_filter = show_dotfiles and filter_show or filter_hide
+			local new_filter = show_dotfiles and mf.config.content.filter or filter_hide
 			mf.refresh({ content = { filter = new_filter } })
 			vim.notify("Dotfiles " .. (show_dotfiles and "shown" or "hidden"))
 		end
@@ -101,6 +101,7 @@ return {
 			vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
 		end
 
+		local autocmd = vim.api.nvim_create_autocmd
 		local group = vim.api.nvim_create_augroup("aqothy/mini_files", { clear = true })
 
 		autocmd("User", {
@@ -118,15 +119,6 @@ return {
 				map_split(buf_id, "<C-w>v", "vertical", false)
 				map_split(buf_id, "<C-w>S", "horizontal", true)
 				map_split(buf_id, "<C-w>V", "vertical", true)
-			end,
-		})
-
-		autocmd("User", {
-			desc = "Add rounded corners to minifiles window",
-			group = group,
-			pattern = "MiniFilesWindowOpen",
-			callback = function(args)
-				vim.api.nvim_win_set_config(args.data.win_id, { border = "rounded" })
 			end,
 		})
 

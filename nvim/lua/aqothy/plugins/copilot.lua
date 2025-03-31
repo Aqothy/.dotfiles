@@ -1,8 +1,7 @@
 return {
 	"zbirenbaum/copilot.lua",
-	build = ":Copilot auth",
 	cmd = "Copilot",
-	event = "BufReadPost",
+	event = "InsertEnter",
 	opts = function()
 		Snacks.toggle({
 			name = "Copilot",
@@ -25,7 +24,6 @@ return {
 			suggestion = {
 				enabled = true,
 				auto_trigger = true,
-				debounce = 30,
 				keymap = {
 					accept = "<M-a>",
 					next = "<M-]>",
@@ -33,8 +31,16 @@ return {
 					dismiss = "<C-]>",
 				},
 			},
+			copilot_model = "gpt-4o-copilot",
 			filetypes = {
 				["*"] = true,
+			},
+			server_opts_overrides = {
+				settings = {
+					telemetry = {
+						telemetryLevel = "off",
+					},
+				},
 			},
 		}
 	end,

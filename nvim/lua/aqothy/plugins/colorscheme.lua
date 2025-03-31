@@ -1,8 +1,8 @@
 return {
 	{
 		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
 		-- enabled = false,
+		priority = 500,
 		config = function()
 			local gruvbox = require("gruvbox")
 
@@ -19,6 +19,10 @@ return {
 					GruvboxBg2 = { fg = colors.gray },
 					SignColumn = { bg = colors.dark0_soft },
 					Pmenu = { bg = colors.dark0_soft },
+					TreesitterContextBottom = { underline = true, sp = colors.dark3 },
+					LspReferenceText = { link = "Visual" },
+					LspReferenceRead = { link = "Visual" },
+					LspReferenceWrite = { link = "Visual" },
 				}
 
 				groups = {
@@ -32,6 +36,10 @@ return {
 					SignColumn = { bg = colors.light0_soft },
 					GruvboxBg2 = { fg = colors.gray },
 					Pmenu = { bg = colors.light0_soft },
+					TreesitterContextBottom = { underline = true, sp = colors.light3 },
+					LspReferenceText = { bg = "#CAC2A6" },
+					LspReferenceRead = { bg = "#CAC2A6" },
+					LspReferenceWrite = { bg = "#CAC2A6" },
 				}
 
 				groups = {

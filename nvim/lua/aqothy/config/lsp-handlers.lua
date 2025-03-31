@@ -25,6 +25,11 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
+M.capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
+}
+
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -60,24 +65,22 @@ local config = {
 
 vim.diagnostic.config(config)
 
+local float_config = {
+	border = "rounded",
+	max_height = math.floor(vim.o.lines * 0.5),
+	max_width = math.floor(vim.o.columns * 0.4),
+}
+
 local hover = vim.lsp.buf.hover
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.buf.hover = function()
-	return hover({
-		border = "rounded",
-		max_height = math.floor(vim.o.lines * 0.5),
-		max_width = math.floor(vim.o.columns * 0.4),
-	})
+	return hover(float_config)
 end
 
 local signature_help = vim.lsp.buf.signature_help
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.buf.signature_help = function()
-	return signature_help({
-		border = "rounded",
-		max_height = math.floor(vim.o.lines * 0.5),
-		max_width = math.floor(vim.o.columns * 0.4),
-	})
+	return signature_help(float_config)
 end
 
 --- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
@@ -113,6 +116,32 @@ M.on_attach = function(client, bufnr)
 		vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
 	end
 
+	-- local kinds = require("aqothy.config.user").kinds
+	-- local utils = require("aqothy.config.utils")
+	-- if client:supports_method("textDocument/completion") then
+	-- 	client.server_capabilities.completionProvider.triggerCharacters = vim.split("qwertyuiopasdfghjklzxcvbnm. ", "")
+	--
+	-- 	vim.lsp.completion.enable(true, client.id, bufnr, {
+	-- 		autotrigger = true,
+	-- 		convert = function(item)
+	-- 			local label_details = item.labelDetails
+	-- 			local menu =
+	-- 				utils.truncateString((label_details and label_details.description) or item.detail or "", 15)
+	--
+	-- 			local kind = kinds[vim.lsp.protocol.CompletionItemKind[item.kind]] or "u"
+	-- 			return {
+	-- 				abbr = item.label:gsub("%b()", ""),
+	-- 				kind = kind,
+	-- 				menu = menu,
+	-- 			}
+	-- 		end,
+	-- 	})
+	--
+	-- 	vim.keymap.set("i", "<c-space>", function()
+	-- 		vim.lsp.completion.get()
+	-- 	end)
+	-- end
+
 	-- Inlay hints
 	if client:supports_method("textDocument/inlayHint") then
 		-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -124,7 +153,7 @@ M.on_attach = function(client, bufnr)
 		local has_cmp, cmp = pcall(require, "cmp")
 
 		keymap({ "i", "s" }, "<C-s>", function()
-			if has_blink then
+			if has_blink and blink.is_menu_visible() then
 				blink.cancel()
 			end
 
@@ -134,6 +163,11 @@ M.on_attach = function(client, bufnr)
 
 			vim.lsp.buf.signature_help()
 		end)
+	end
+
+	if client:supports_method("textDocument/foldingRange") then
+		local win = vim.api.nvim_get_current_win()
+		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
 	end
 
 	-- Key mappings for LSP functions
@@ -147,6 +181,13 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+
+	keymap("n", "]r", function()
+		Snacks.words.jump(vim.v.count1)
+	end, { desc = "Next Reference" })
+	keymap("n", "[r", function()
+		Snacks.words.jump(-vim.v.count1)
+	end, { desc = "Prev Reference" })
 
 	-- Snacks picker mappings
 	keymap("n", "gd", function()

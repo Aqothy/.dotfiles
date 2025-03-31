@@ -31,6 +31,8 @@ end
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
+keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
+
 keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
@@ -40,6 +42,7 @@ keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous
 
 keymap("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
 keymap("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
+keymap("n", "<leader>gd", vscode_action("workbench.view.scm"), { desc = "Source control" })
 
 keymap("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
 
@@ -51,6 +54,8 @@ keymap("n", "<leader>-", vscode_action("workbench.action.splitEditorDown"), { de
 
 keymap("n", "<leader>ff", vscode_action("workbench.action.quickOpen"), { desc = "Open file finder" })
 keymap("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc = "Search in files" })
+
+keymap("n", "<leader>ee", vscode_action("workbench.action.toggleSidebarVisibility"), { desc = "Toggle Explorer" })
 
 keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
 keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
@@ -65,12 +70,11 @@ keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go t
 keymap({ "n", "v" }, "<leader>tt", vscode_action("workbench.action.togglePanel"), { desc = "Toggle Terminal" })
 
 keymap({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-keymap({ "n", "v" }, "<leader>c", [["_c]], { desc = "Change without yanking" })
 
 keymap({ "n", "v" }, "<leader>la", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap({ "n", "v" }, "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
-keymap({ "n", "v" }, "<leader>fm", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
+keymap({ "n", "v" }, "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
 
 keymap({ "n", "v" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 

@@ -38,10 +38,12 @@ M.kinds = {
 	Copilot = "",
 }
 
-M.os = {
-	Darwin = "",
-	Linux = "",
-	Windows = "",
+M.dap = {
+	Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+	Breakpoint = " ",
+	BreakpointCondition = " ",
+	BreakpointRejected = { " ", "DiagnosticError" },
+	LogPoint = ".>",
 }
 
 M.signs = {
@@ -51,15 +53,6 @@ M.signs = {
 	debug = "",
 	trace = "",
 	hint = "󰛨",
-}
-
-M.symbols = {
-	modified = "",
-	readonly = "",
-	newfile = "",
-	unnamed = "",
-	ellipsis = "…",
-	separator = "",
 }
 
 return M

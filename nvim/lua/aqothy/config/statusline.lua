@@ -4,19 +4,19 @@ local api = vim.api
 local bo = vim.bo
 local uv = vim.uv or vim.loop
 local fn = vim.fn
+local cmd = vim.cmd
 
-local stl_group = vim.api.nvim_create_augroup("aqline", { clear = true })
-local autocmd = vim.api.nvim_create_autocmd
+local stl_group = api.nvim_create_augroup("aqline", { clear = true })
+local autocmd = api.nvim_create_autocmd
 
 local user = require("aqothy.config.user")
-local utils = require("aqothy.config.utils")
 local mini_icons = require("mini.icons")
 
 function M.os_component()
 	if not M._os_cache then
 		local uname_info = uv.os_uname() or {}
 		local sysname = uname_info.sysname or ""
-		if vim.fn.has("win32") == 1 then
+		if fn.has("win32") == 1 then
 			sysname = "windows"
 		else
 			sysname = (sysname == "Darwin") and "macos" or sysname:lower()
@@ -81,11 +81,19 @@ M.MODE_TO_HIGHLIGHT = {
 	TERMINAL = "Command",
 }
 
-function M.update_mode_cache()
+-- For op-pending mode
+autocmd("ModeChanged", {
+	group = stl_group,
+	callback = vim.schedule_wrap(function()
+		cmd.redrawstatus()
+	end),
+})
+
+function M.mode_component()
 	local mode = api.nvim_get_mode().mode
 	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
-	M.mode_cache = "%#"
+	return "%#"
 		.. "StatuslineModeSeparator"
 		.. hl
 		.. "#"
@@ -100,24 +108,6 @@ function M.update_mode_cache()
 		.. hl
 		.. "#"
 		.. ""
-
-	-- For op-pending mode to show
-	vim.cmd.redrawstatus()
-end
-
--- Only update mode cache when mode changes
-autocmd("ModeChanged", {
-	group = stl_group,
-	callback = vim.schedule_wrap(function()
-		M.update_mode_cache()
-	end),
-})
-
-function M.mode_component()
-	if not M.mode_cache then
-		M.update_mode_cache()
-	end
-	return M.mode_cache
 end
 
 function M.git_components()
@@ -173,7 +163,7 @@ autocmd("DiagnosticChanged", {
 })
 
 function M.diagnostics_component()
-	if vim.bo.filetype == "lazy" then
+	if bo.filetype == "lazy" then
 		return ""
 	end
 
@@ -207,7 +197,7 @@ function M.diagnostics_component()
 end
 
 -- LSP Progress component optimization
----@type table<number, {client: string, kind: string, title: string?}>
+---@type table<string, {kind: string}>
 M.progress_statuses = {}
 M.progress_cache = nil
 M.progress_dirty = true
@@ -220,31 +210,34 @@ autocmd("LspProgress", {
 		if not args.data then
 			return
 		end
+
 		local client_id = args.data.client_id
 		local client = vim.lsp.get_client_by_id(client_id)
 		local value = args.data.params.value
+
 		if not client or type(value) ~= "table" then
 			return
 		end
 
+		local client_name = client.name
+		local progress = value.kind
+
+		-- Mark cache as dirty to trigger rebuild
 		M.progress_dirty = true
 
-		-- Update or create progress entry for this client
-		M.progress_statuses[client_id] = {
-			client = client.name,
-			kind = value.kind,
-			title = value.title,
+		M.progress_statuses[client_name] = {
+			kind = progress,
 		}
 
-		if value.kind == "end" then
-			-- Remove the entry after delay while keeping completion checkmark
+		if progress == "end" then
 			vim.defer_fn(function()
-				M.progress_statuses[client_id] = nil
+				M.progress_statuses[client_name] = nil
 				M.progress_dirty = true
-				vim.cmd.redrawstatus()
+				cmd.redrawstatus()
 			end, 3000)
 		end
-		vim.cmd.redrawstatus()
+
+		cmd.redrawstatus()
 	end,
 })
 
@@ -255,25 +248,16 @@ function M.lsp_progress_component()
 	end
 
 	local progress_parts = {}
-	for _, status in pairs(M.progress_statuses) do
-		if status.title then
-			local is_done = status.kind == "end"
-			local symbol = is_done and " " or "󱥸 "
-			local trunc_title = utils.truncateString(status.title, 30)
-			local title = is_done and "" or " %#StatuslineItalic#" .. trunc_title
-			table.insert(
-				progress_parts,
-				table.concat({
-					"%#StatuslineTitle#" .. symbol .. status.client,
-					title,
-				})
-			)
-		end
+	for client_name, status in pairs(M.progress_statuses) do
+		local is_done = status.kind == "end"
+		local symbol = is_done and " " or "󱥸 "
+		table.insert(progress_parts, "%#StatuslineTitle#" .. symbol .. client_name)
 	end
 
 	local result = table.concat(progress_parts, " ")
 	M.progress_cache = result
 	M.progress_dirty = false
+
 	return result
 end
 
@@ -286,7 +270,7 @@ function M.filetype_component()
 		.. icon
 		.. " %#StatuslineTitle#"
 		-- Show relative path if not empty and not a terminal buffer
-		.. ((relative_path ~= "" and vim.bo.buftype ~= "terminal") and relative_path or "%t")
+		.. ((relative_path ~= "" and bo.buftype ~= "terminal") and relative_path or "%t")
 		.. "%m%r"
 end
 
