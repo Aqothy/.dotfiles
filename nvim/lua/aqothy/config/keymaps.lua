@@ -34,7 +34,10 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 keymap("n", "<leader>it", "<cmd>InspectTree<cr>", { desc = "InspectTree" })
 keymap("n", "<leader>ip", "<cmd>Inspect<cr>", { desc = "Inspect position" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
-keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
+
+-- "Whole Buffer" text-object:
+keymap("x", "ig", "gg^oG$")
+keymap("o", "ig", "<cmd>normal vig<cr>")
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then
@@ -44,6 +47,7 @@ end
 
 -- Toggle
 Snacks.toggle.dim():map("<leader>sd")
+Snacks.toggle.diagnostics():map("<leader>td")
 Snacks.toggle.zen():map("<leader>zz")
 Snacks.toggle.profiler():map("<leader>pp")
 Snacks.toggle.indent():map("<leader>id")

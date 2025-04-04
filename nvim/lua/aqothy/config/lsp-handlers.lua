@@ -25,10 +25,10 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
+-- M.capabilities.textDocument.foldingRange = {
+-- 	dynamicRegistration = false,
+-- 	lineFoldingOnly = true,
+-- }
 
 local s = vim.diagnostic.severity
 
@@ -56,7 +56,6 @@ local config = {
 	float = {
 		focusable = true,
 		style = "minimal",
-		border = "rounded",
 		source = "if_many",
 		header = "",
 		prefix = "",
@@ -66,7 +65,6 @@ local config = {
 vim.diagnostic.config(config)
 
 local float_config = {
-	border = "rounded",
 	max_height = math.floor(vim.o.lines * 0.5),
 	max_width = math.floor(vim.o.columns * 0.4),
 }
@@ -89,16 +87,16 @@ end
 ---@param opts table
 ---@return string[]
 ---@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
-	contents = vim.lsp.util._normalize_markdown(contents, {
-		width = vim.lsp.util._make_floating_popup_size(contents, opts),
-	})
-	vim.bo[bufnr].filetype = "markdown"
-	vim.treesitter.start(bufnr)
-	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
-
-	return contents
-end
+-- vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
+-- 	contents = vim.lsp.util._normalize_markdown(contents, {
+-- 		width = vim.lsp.util._make_floating_popup_size(contents, opts),
+-- 	})
+-- 	vim.bo[bufnr].filetype = "markdown"
+-- 	vim.treesitter.start(bufnr)
+-- 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
+--
+-- 	return contents
+-- end
 
 local diagnostic_goto = function(next, severity)
 	severity = severity and vim.diagnostic.severity[severity] or nil
@@ -165,10 +163,10 @@ M.on_attach = function(client, bufnr)
 		end)
 	end
 
-	if client:supports_method("textDocument/foldingRange") then
-		local win = vim.api.nvim_get_current_win()
-		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-	end
+	-- if client:supports_method("textDocument/foldingRange") then
+	-- 	local win = vim.api.nvim_get_current_win()
+	-- 	vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+	-- end
 
 	-- Key mappings for LSP functions
 	keymap("n", "K", vim.lsp.buf.hover)

@@ -61,4 +61,34 @@ function M.foldexpr()
 	return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or "0"
 end
 
+function M.hide_tmux(state, disable)
+	if not vim.env.TMUX then
+		return
+	end
+	if disable then
+		local function get_tmux_opt(option)
+			local option_raw = vim.fn.system([[tmux show -w ]] .. option)
+			if option_raw == "" then
+				option_raw = vim.fn.system([[tmux show -g ]] .. option)
+			end
+			local opt = vim.split(vim.trim(option_raw), " ")[2]
+			return opt
+		end
+		state.status = get_tmux_opt("status")
+		state.pane = get_tmux_opt("pane-border-status")
+
+		vim.fn.system([[tmux set -w pane-border-status off]])
+		vim.fn.system([[tmux set status off]])
+		vim.fn.system([[tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z]])
+	else
+		if type(state.pane) == "string" then
+			vim.fn.system(string.format([[tmux set -w pane-border-status %s]], state.pane))
+		else
+			vim.fn.system([[tmux set -uw pane-border-status]])
+		end
+		vim.fn.system(string.format([[tmux set status %s]], state.status))
+		vim.fn.system([[tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z]])
+	end
+end
+
 return M

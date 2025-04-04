@@ -31,7 +31,9 @@ end
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
-keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
+-- "Whole Buffer" text-object:
+keymap("x", "ig", "gg^oG$")
+keymap("o", "ig", "<cmd>normal vig<cr>")
 
 keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 

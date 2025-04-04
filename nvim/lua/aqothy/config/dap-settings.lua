@@ -85,6 +85,17 @@ M["pwa-node"] = {
 			processId = dap_utils.pick_process,
 			cwd = "${workspaceFolder}",
 		},
+		{
+			name = "tsx",
+			type = "pwa-node",
+			request = "launch",
+			program = "${file}",
+			runtimeExecutable = "tsx",
+			cwd = "${workspaceFolder}",
+			console = "integratedTerminal",
+			internalConsoleOptions = "neverOpen",
+			skipFiles = { "<node_internals>/**", "${workspaceFolder}/node_modules/**" },
+		},
 	},
 }
 

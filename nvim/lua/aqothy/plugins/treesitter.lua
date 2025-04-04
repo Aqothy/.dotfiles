@@ -73,8 +73,8 @@ return {
 						["ic"] = "@class.inner",
 						["aa"] = "@parameter.outer",
 						["ia"] = "@parameter.inner",
-						["ai"] = "@conditional.outer",
-						["ii"] = "@conditional.inner",
+						["ao"] = "@conditional.outer",
+						["io"] = "@conditional.inner",
 						["al"] = "@loop.outer",
 						["il"] = "@loop.inner",
 					},
@@ -85,12 +85,10 @@ return {
 					goto_next_start = {
 						["]f"] = "@function.outer",
 						["]]"] = "@class.outer",
-						["]a"] = "@parameter.inner",
 					},
 					goto_previous_start = {
 						["[f"] = "@function.outer",
 						["[["] = "@class.outer",
-						["[a"] = "@parameter.inner",
 					},
 				},
 			},

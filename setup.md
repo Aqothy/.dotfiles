@@ -35,7 +35,6 @@
 - vpn
 - skim (set up sync and command: nvim, arguments: --headless -c "VimtexInverseSearch %line '%file'")
 - wblock
-- imageoptim
 - docker
 - karabiner element
 - ollama (already in external ssd)

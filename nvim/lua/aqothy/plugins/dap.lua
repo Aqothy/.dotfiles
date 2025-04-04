@@ -14,15 +14,17 @@ return {
       { "<leader>so", function() require("dap").step_over() end, desc = "Step Over" },
       { "<leader>eb", function() require("dap").terminate() end, desc = "Terminate" },
       { "<leader>rt", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
-      { "<leader>wh", function() require("dap.ui.widgets").hover(nil, { border = "rounded" }) end, desc = "Widgets" },
+      { "<leader>wh", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
       { "<leader>rl", function() require("dap").run_last() end, desc = "Run Last" },
+      { "<leader>cb", function() require("dap").clear_breakpoints() end, desc = "Clear Breakpoint" },
+      { "<leader>tl", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
       { "<leader>sf", function()
         local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.frames, { border = "rounded" })
+        widgets.centered_float(widgets.frames)
       end, desc = "Frames" },
       { "<leader>vs", function()
         local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.scopes, { border = "rounded" })
+        widgets.centered_float(widgets.scopes)
       end, desc = "Scopes" },
     },
 

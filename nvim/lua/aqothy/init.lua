@@ -33,5 +33,3 @@ if not is_vscode then
 		end,
 	})
 end
-
-vim.deprecate = function() end

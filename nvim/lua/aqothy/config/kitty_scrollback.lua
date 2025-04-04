@@ -16,9 +16,12 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 	vim.opt.background = "light"
 	vim.api.nvim_set_hl(0, "Normal", { bg = "#f2e5bc" }) -- make bg color gruvbox
 
+	local autocmd = vim.api.nvim_create_autocmd
+	local group = vim.api.nvim_create_augroup("aqothy/kitty_scrollback", { clear = true })
+
 	-- Highlight on yank
-	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+	autocmd("TextYankPost", {
+		group = group,
 		callback = function()
 			(vim.hl or vim.highlight).on_yank({ timeout = 60 })
 		end,
@@ -28,8 +31,6 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 	local term_io = vim.api.nvim_open_term(term_buf, {})
 
 	vim.api.nvim_buf_set_keymap(term_buf, "n", "q", "<cmd>q<CR>", {})
-
-	local group = vim.api.nvim_create_augroup("aqothy/kitty_scrollback", { clear = true })
 
 	local set_cursor = function()
 		vim.api.nvim_feedkeys(tostring(INPUT_LINE_NUMBER) .. [[ggzt]], "n", true)
@@ -43,7 +44,7 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 		vim.api.nvim_feedkeys(tostring(CURSOR_COLUMN - 1) .. [[l]], "n", true)
 	end
 
-	vim.api.nvim_create_autocmd("ModeChanged", {
+	autocmd("ModeChanged", {
 		group = group,
 		buffer = term_buf,
 		callback = function()
@@ -55,7 +56,7 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 		end,
 	})
 
-	vim.api.nvim_create_autocmd("VimEnter", {
+	autocmd("VimEnter", {
 		group = group,
 		once = true,
 		callback = function(args)

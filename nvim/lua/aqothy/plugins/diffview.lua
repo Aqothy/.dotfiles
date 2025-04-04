@@ -13,7 +13,6 @@ return {
 		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff main" },
 	},
 	opts = function()
-		require("diffview.ui.panel").Panel.default_config_float.border = "rounded"
 		return {
 			view = {
 				merge_tool = {

@@ -2,7 +2,7 @@ return {
 	"saghen/blink.cmp",
 	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
-	enabled = false,
+	-- enabled = false,
 	dependencies = {
 		-- enable if there is any cmp sources that you want blink to use from nvim cmp
 		-- {
@@ -61,7 +61,7 @@ return {
 					end
 					return b.client_name == "emmet_language_server"
 				end,
-				"exact",
+				-- "exact",
 				-- default sorts
 				"score",
 				"sort_text",
@@ -88,15 +88,9 @@ return {
 					enabled = false,
 				},
 			},
-			menu = {
-				border = "rounded",
-			},
 			list = {
 				selection = { auto_insert = false },
 				max_items = 30,
-			},
-			documentation = {
-				window = { border = "rounded" },
 			},
 		},
 
