@@ -151,10 +151,6 @@ M.on_attach = function(client, bufnr)
 		local has_cmp, cmp = pcall(require, "cmp")
 
 		keymap({ "i", "s" }, "<C-s>", function()
-			if has_blink and blink.is_menu_visible() then
-				blink.cancel()
-			end
-
 			if has_cmp and cmp.visible() then
 				cmp.close()
 			end

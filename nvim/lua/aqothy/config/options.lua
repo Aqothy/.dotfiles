@@ -60,7 +60,6 @@ vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
-vim.opt.showbreak = "↪ "
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 vim.opt.conceallevel = 2
 vim.g.snacks_animate = false
