@@ -8,7 +8,7 @@ return {
 				require("conform").format({ async = true })
 			end,
 			mode = { "n", "v" },
-			desc = "Format buffer",
+			desc = "Format Buffer or Selection",
 		},
 	},
 	opts = {

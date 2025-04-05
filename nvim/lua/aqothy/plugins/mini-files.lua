@@ -37,7 +37,7 @@ return {
 					mini_files.reveal_cwd()
 				end
 			end,
-			desc = "Open mini.files (Directory of Current File)",
+			desc = "Open MiniFiles (Directory of Current File)",
 		},
 	},
 	config = function(_, opts)
