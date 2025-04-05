@@ -32,8 +32,8 @@ keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 
 -- "Whole Buffer" text-object:
-keymap("x", "ig", "gg^oG$")
-keymap("o", "ig", "<cmd>normal vig<cr>")
+keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
+keymap("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
 keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 

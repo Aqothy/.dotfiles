@@ -6,26 +6,40 @@ return {
 		},
     -- stylua: ignore
     keys = {
-      { "<leader>bc", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
-      { "<leader>bp", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-      { "<leader>cp", function() require("dap").continue() end, desc = "Run/Continue" },
-      { "<leader>si", function() require("dap").step_into() end, desc = "Step Into" },
-      { "<leader>sO", function() require("dap").step_out() end, desc = "Step Out" },
-      { "<leader>so", function() require("dap").step_over() end, desc = "Step Over" },
-      { "<leader>eb", function() require("dap").terminate() end, desc = "Terminate" },
-      { "<leader>rt", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
-      { "<leader>wh", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
-      { "<leader>rl", function() require("dap").run_last() end, desc = "Run Last" },
-      { "<leader>cb", function() require("dap").clear_breakpoints() end, desc = "Clear Breakpoint" },
-      { "<leader>tl", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
-      { "<leader>sf", function()
-        local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.frames)
-      end, desc = "Frames" },
-      { "<leader>vs", function()
-        local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.scopes)
-      end, desc = "Scopes" },
+        {
+            "<leader>bc",
+            function()
+                require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) 
+            end,
+            desc = "Breakpoint Condition"
+        },
+        { "<leader>bp", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+        { "<leader>cp", function() require("dap").continue() end, desc = "Run/Continue" },
+        { "<leader>si", function() require("dap").step_into() end, desc = "Step Into" },
+        { "<leader>sO", function() require("dap").step_out() end, desc = "Step Out" },
+        { "<leader>so", function() require("dap").step_over() end, desc = "Step Over" },
+        { "<leader>eb", function() require("dap").terminate() end, desc = "Terminate" },
+        { "<leader>rt", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+        { "<leader>wh", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
+        { "<leader>rl", function() require("dap").run_last() end, desc = "Run Last" },
+        { "<leader>cb", function() require("dap").clear_breakpoints() end, desc = "Clear Breakpoint" },
+        { "<leader>tl", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
+        {
+            "<leader>sf",
+            function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.frames)
+            end,
+            desc = "Frames"
+        },
+        {
+            "<leader>vs",
+            function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.scopes)
+            end,
+            desc = "Scopes"
+        },
     },
 
 		config = function()

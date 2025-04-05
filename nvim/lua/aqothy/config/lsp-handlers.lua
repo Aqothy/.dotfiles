@@ -160,7 +160,7 @@ M.on_attach = function(client, bufnr)
 			end
 
 			vim.lsp.buf.signature_help()
-		end)
+		end, { desc = "Signature help" })
 	end
 
 	-- if client:supports_method("textDocument/foldingRange") then
@@ -169,10 +169,10 @@ M.on_attach = function(client, bufnr)
 	-- end
 
 	-- Key mappings for LSP functions
-	keymap("n", "K", vim.lsp.buf.hover)
-	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
-	keymap("n", "grn", vim.lsp.buf.rename)
-	keymap("n", "<leader>k", vim.diagnostic.open_float)
+	keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action" })
+	keymap("n", "grn", vim.lsp.buf.rename, { desc = "Lsp Rename" })
+	keymap("n", "<leader>k", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
@@ -190,25 +190,25 @@ M.on_attach = function(client, bufnr)
 	-- Snacks picker mappings
 	keymap("n", "gd", function()
 		Snacks.picker.lsp_definitions()
-	end)
+	end, { desc = "Lsp Definition" })
 	keymap("n", "gD", function()
 		Snacks.picker.lsp_declarations()
-	end)
+	end, { desc = "Lsp Declaration" })
 	keymap("n", "grr", function()
 		Snacks.picker.lsp_references()
-	end, { nowait = true, desc = "References" })
+	end, { nowait = true, desc = "Lsp References" })
 	keymap("n", "gri", function()
 		Snacks.picker.lsp_implementations()
-	end)
+	end, { desc = "Lsp Implementations" })
 	keymap("n", "gy", function()
 		Snacks.picker.lsp_type_definitions()
-	end)
+	end, { desc = "Lsp Type Definitions" })
 	keymap("n", "<leader>ls", function()
 		Snacks.picker.lsp_symbols()
-	end)
+	end, { desc = "Lsp Symbols" })
 	keymap("n", "<leader>lS", function()
 		Snacks.picker.lsp_workspace_symbols()
-	end)
+	end, { desc = "Lsp Workspace Symbols" })
 end
 
 return M

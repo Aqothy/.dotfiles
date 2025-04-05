@@ -13,7 +13,7 @@ M.plugin = {
 			function()
 				require("mini.hipatterns").toggle()
 			end,
-			{ desc = "Toggle MiniHipatterns" },
+			desc = "Toggle MiniHipatterns",
 		},
 	},
 	opts = function()

@@ -23,6 +23,7 @@ vim.opt.breakindent = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
@@ -33,6 +34,7 @@ vim.opt.splitkeep = "screen"
 vim.opt.inccommand = "split"
 
 vim.opt.ignorecase = true
+vim.opt.infercase = true
 vim.opt.smartcase = true
 
 vim.opt.termguicolors = true
@@ -54,7 +56,7 @@ vim.opt.wildignorecase = true
 vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.wildoptions:append({ "fuzzy" })
 
--- vim.opt.cursorline = true
+vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"

@@ -17,6 +17,7 @@ return {
 		quiet = true,
 		formatters_by_ft = {
 			c = { name = "clangd", lsp_format = "prefer" },
+			cpp = { name = "clangd", lsp_format = "prefer" },
 			javascript = { "prettier" },
 			typescript = { "prettier" },
 			javascriptreact = { "prettier" },
