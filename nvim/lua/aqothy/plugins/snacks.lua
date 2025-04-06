@@ -111,9 +111,10 @@ return {
 	keys = {
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
-        { "<leader>fr", function() Snacks.rename.rename_file() end, desc = "Rename File" },
         { "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame Line", mode = { "n", "v" } },
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
+        ---@diagnostic disable-next-line: missing-fields
+        { "<leader>gY", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
         {
             "<leader>to",
             function()
@@ -218,8 +219,6 @@ return {
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep Lines" },
         { "<leader>u", function() Snacks.picker.undo() end, desc = "undo tree" },
-        { "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, desc = "Document Diagnostics" },
-        { "<leader>fD", function() Snacks.picker.diagnostics() end, desc = "Workspace Diagnostics" },
         { "<leader>fp", function() require("aqothy.config.utils").pick_projects() end, desc = "Projects picker" },
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
         { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },

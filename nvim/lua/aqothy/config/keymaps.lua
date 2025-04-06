@@ -40,6 +40,7 @@ keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 keymap("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
 -- lazygit
+-- stylua: ignore
 if vim.fn.executable("lazygit") == 1 then
 	keymap("n", "<leader>gs", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
 	keymap("n", "<leader>gl", function() Snacks.lazygit.log_file() end, { desc = "Git Log File" })

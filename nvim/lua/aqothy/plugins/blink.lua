@@ -29,8 +29,6 @@ return {
 
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
-
-			["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
 		},
 
 		sources = {
@@ -74,7 +72,7 @@ return {
 					end
 					return b.client_name == "emmet_language_server"
 				end,
-				-- "exact",
+				"exact",
 				-- default sorts
 				"score",
 				"sort_text",
@@ -105,6 +103,9 @@ return {
 				selection = { auto_insert = false },
 				max_items = 30,
 			},
+			trigger = {
+				prefetch_on_insert = false,
+			},
 		},
 
 		snippets = {
@@ -124,7 +125,7 @@ return {
 
 		-- experimental signature help support
 		signature = {
-			enabled = true,
+			enabled = false,
 		},
 	},
 }

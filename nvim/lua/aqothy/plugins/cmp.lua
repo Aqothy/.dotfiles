@@ -144,8 +144,8 @@ return {
 			sorting = {
 				priority_weight = 2,
 				comparators = {
-					compare.offset,
 					compare.exact,
+					compare.offset,
 					compare.score,
 					compare.scopes,
 					compare.recently_used,
