@@ -3,7 +3,7 @@ return {
 	ft = { "markdown" },
 	enabled = false,
 	keys = {
-		{ "<leader>P", "<cmd>Presen<cr>", desc = "Present" },
+		{ "<leader>P", "<cmd>Present<cr>", desc = "Present" },
 	},
 	opts = {},
 }

@@ -24,26 +24,17 @@ keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
--- Utility functions
+-- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "<C-h>", "<cmd>silent !tmux neww ts<cr>", { desc = "New tmux session" }) -- need to be in tmux already for this to work
 keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], {
 	silent = false,
 	desc = "Open a new file in the same directory",
 })
-keymap("n", "<leader>it", "<cmd>InspectTree<cr>", { desc = "InspectTree" })
-keymap("n", "<leader>ip", "<cmd>Inspect<cr>", { desc = "Inspect position" })
+keymap("n", "<leader>ip", vim.show_pos, { desc = "Inspect Pos" })
+keymap("n", "<leader>it", function() vim.treesitter.inspect_tree() vim.api.nvim_input("I") end, { desc = "Inspect Tree" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
-keymap("n", "<leader>a", "ggVG", { desc = "Select all" })
 
--- lazygit
-if vim.fn.executable("lazygit") == 1 then
-	keymap("n", "<leader>gs", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
-	keymap("n", "<leader>gl", function() Snacks.lazygit.log_file() end, { desc = "Git Log File" })
-end
-
--- Toggle
-Snacks.toggle.dim():map("<leader>sd")
-Snacks.toggle.zen():map("<leader>zz")
-Snacks.toggle.profiler():map("<leader>pp")
-Snacks.toggle.indent():map("<leader>id")
+-- "Whole Buffer" text-object:
+keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
+keymap("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })

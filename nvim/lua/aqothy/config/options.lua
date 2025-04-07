@@ -23,6 +23,7 @@ vim.opt.breakindent = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.updatetime = 300
@@ -33,6 +34,7 @@ vim.opt.splitkeep = "screen"
 vim.opt.inccommand = "split"
 
 vim.opt.ignorecase = true
+vim.opt.infercase = true
 vim.opt.smartcase = true
 
 vim.opt.termguicolors = true
@@ -52,20 +54,17 @@ vim.opt.completeitemalign = { "kind", "abbr", "menu" }
 vim.opt.wildignore:append({ ".DS_Store" })
 vim.opt.wildignorecase = true
 vim.opt.wildmode = { "longest:full", "full" }
+vim.opt.wildoptions:append({ "fuzzy" })
 
--- vim.opt.cursorline = true
+vim.opt.cursorline = true
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
-vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
 vim.opt.signcolumn = "yes"
-vim.opt.showbreak = "↪ "
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 vim.opt.conceallevel = 2
-vim.opt.formatoptions:remove("o")
 vim.g.snacks_animate = false
-vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
-vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
--- vim.opt.winborder = "rounded"
+vim.opt.winborder = "rounded"
+-- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
@@ -95,8 +94,11 @@ vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
-vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
-vim.opt.foldmethod = "expr"
+vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
+-- vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
+-- vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
 
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.wrap = true

@@ -1,7 +1,8 @@
 return {
-	"hrsh7th/nvim-cmp",
+	-- "hrsh7th/nvim-cmp",
+	dir = "~/Code/Personal/nvim-cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
-	-- enabled = false,
+	enabled = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-buffer",
@@ -20,10 +21,6 @@ return {
 		cmp.setup({
 			completion = {
 				completeopt = "menuone,noinsert",
-			},
-			window = {
-				completion = cmp.config.window.bordered(),
-				documentation = cmp.config.window.bordered(),
 			},
 			snippet = {
 				expand = function(args)
@@ -73,14 +70,27 @@ return {
 				fields = { "kind", "abbr", "menu" },
 				format = function(entry, item)
 					local completion_item = entry.completion_item
-					local label_details = completion_item.labelDetails
+
+					local label_detail = ""
+
+					if completion_item.labelDetails then
+						if
+							completion_item.labelDetails.description
+							and completion_item.labelDetails.description ~= ""
+						then
+							label_detail = completion_item.labelDetails.description
+						elseif completion_item.labelDetails.detail and completion_item.labelDetails.detail ~= "" then
+							label_detail = completion_item.labelDetails.detail
+						end
+					end
+
+					if label_detail == "" and completion_item.detail and completion_item.detail ~= "" then
+						label_detail = completion_item.detail
+					end
 
 					item.abbr = utils.truncateString(completion_item.label, 30)
 					item.kind = user.kinds[item.kind]
-					item.menu = utils.truncateString(
-						(label_details and label_details.description) or completion_item.detail or "",
-						15
-					)
+					item.menu = utils.truncateString(label_detail, 30)
 
 					return item
 				end,

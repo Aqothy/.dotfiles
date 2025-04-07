@@ -31,12 +31,12 @@ M["vtsls"] = {
 		vtsls = {
 			enableMoveToFileCodeAction = true,
 			autoUseWorkspaceTsdk = true,
-			-- experimental = {
-			-- 	maxInlayHintLength = 30,
-			-- 	completion = {
-			-- 		enableServerSideFuzzyMatch = true,
-			-- 	},
-			-- },
+			experimental = {
+				maxInlayHintLength = 30,
+				-- completion = {
+				-- 	enableServerSideFuzzyMatch = true,
+				-- },
+			},
 		},
 		typescript = {
 			updateImportsOnFileMove = { enabled = "always" },
@@ -112,7 +112,7 @@ M["clangd"] = {
 		"--header-insertion=iwyu",
 		"--completion-style=detailed",
 		"--function-arg-placeholders",
-		"--fallback-style=LLVM",
+		"--fallback-style=none",
 	},
 	init_options = {
 		usePlaceholders = true,

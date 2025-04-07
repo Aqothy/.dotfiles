@@ -5,15 +5,22 @@ return {
 		{
 			"<leader>gd",
 			function()
-				vim.cmd("Diffview" .. (require("diffview.lib").get_current_view() == nil and "Open" or "Close"))
+				Snacks.toggle({
+					name = "Diffview",
+					get = function()
+						return require("diffview.lib").get_current_view() ~= nil
+					end,
+					set = function(state)
+						vim.cmd("Diffview" .. (state and "Open" or "Close"))
+					end,
+				}):toggle()
 			end,
-			desc = "Toggle Diff view",
+			desc = "Toggle Diffview",
 		},
-		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File history" },
-		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff main" },
+		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File History" },
+		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff Main" },
 	},
 	opts = function()
-		require("diffview.ui.panel").Panel.default_config_float.border = "rounded"
 		return {
 			view = {
 				merge_tool = {

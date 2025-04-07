@@ -25,10 +25,10 @@ M.capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 
-M.capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
-	lineFoldingOnly = true,
-}
+-- M.capabilities.textDocument.foldingRange = {
+-- 	dynamicRegistration = false,
+-- 	lineFoldingOnly = true,
+-- }
 
 local s = vim.diagnostic.severity
 
@@ -56,7 +56,6 @@ local config = {
 	float = {
 		focusable = true,
 		style = "minimal",
-		border = "rounded",
 		source = "if_many",
 		header = "",
 		prefix = "",
@@ -66,7 +65,6 @@ local config = {
 vim.diagnostic.config(config)
 
 local float_config = {
-	border = "rounded",
 	max_height = math.floor(vim.o.lines * 0.5),
 	max_width = math.floor(vim.o.columns * 0.4),
 }
@@ -108,12 +106,35 @@ local diagnostic_goto = function(next, severity)
 	end
 end
 
+function M.has(method, client)
+	if type(method) == "table" then
+		for _, m in ipairs(method) do
+			if M.has(m, client) then
+				return true
+			end
+		end
+		return false
+	end
+	method = method:find("/") and method or "textDocument/" .. method
+	if client.supports_method(method) then
+		return true
+	end
+	return false
+end
+
 M.on_attach = function(client, bufnr)
 	local opts = { buffer = bufnr, silent = true }
 
 	-- Custom function to wrap keymap setting
 	local function keymap(mode, lhs, rhs, extra_opts)
-		vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
+		local has = not extra_opts.has or M.has(extra_opts.has, client)
+		local cond = not (extra_opts.cond == false or ((type(extra_opts.cond) == "function") and not extra_opts.cond()))
+		extra_opts.cond = nil
+		extra_opts.has = nil
+
+		if has and cond then
+			vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
+		end
 	end
 
 	-- local kinds = require("aqothy.config.user").kinds
@@ -148,33 +169,11 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
-	-- Signature help
-	if client:supports_method("textDocument/signatureHelp") then
-		local has_cmp, cmp = pcall(require, "cmp")
+	-- if client:supports_method("textDocument/foldingRange") then
+	-- 	local win = vim.api.nvim_get_current_win()
+	-- 	vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+	-- end
 
-		keymap({ "i", "s" }, "<C-s>", function()
-			if has_blink and blink.is_menu_visible() then
-				blink.cancel()
-			end
-
-			if has_cmp and cmp.visible() then
-				cmp.close()
-			end
-
-			vim.lsp.buf.signature_help()
-		end)
-	end
-
-	if client:supports_method("textDocument/foldingRange") then
-		local win = vim.api.nvim_get_current_win()
-		vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-	end
-
-	-- Key mappings for LSP functions
-	keymap("n", "K", vim.lsp.buf.hover)
-	keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
-	keymap("n", "grn", vim.lsp.buf.rename)
-	keymap("n", "<leader>k", vim.diagnostic.open_float)
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
@@ -182,35 +181,36 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
-	keymap("n", "]r", function()
-		Snacks.words.jump(vim.v.count1)
-	end, { desc = "Next Reference" })
-	keymap("n", "[r", function()
-		Snacks.words.jump(-vim.v.count1)
-	end, { desc = "Prev Reference" })
+    -- stylua: ignore start
+    keymap("i", "<c-s>", function()
+        local has_cmp, cmp = pcall(require, "cmp")
 
-	-- Snacks picker mappings
-	keymap("n", "gd", function()
-		Snacks.picker.lsp_definitions()
-	end)
-	keymap("n", "gD", function()
-		Snacks.picker.lsp_declarations()
-	end)
-	keymap("n", "grr", function()
-		Snacks.picker.lsp_references()
-	end, { nowait = true, desc = "References" })
-	keymap("n", "gri", function()
-		Snacks.picker.lsp_implementations()
-	end)
-	keymap("n", "gy", function()
-		Snacks.picker.lsp_type_definitions()
-	end)
-	keymap("n", "<leader>ls", function()
-		Snacks.picker.lsp_symbols()
-	end)
-	keymap("n", "<leader>lS", function()
-		Snacks.picker.lsp_workspace_symbols()
-	end)
+        if has_blink and blink.is_menu_visible() then
+            blink.cancel()
+        end
+        if has_cmp and cmp.visible() then
+            cmp.close()
+        end
+        return vim.lsp.buf.signature_help()
+    end, { desc = "Signature Help", has = "signatureHelp" })
+
+    keymap("n", "K", function() return vim.lsp.buf.hover() end, { desc = "Hover", has = "hover" })
+    keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" })
+    keymap("n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } })
+    keymap("n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" })
+    keymap("n", "<leader>k", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
+    keymap("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" })
+    keymap("n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" })
+    keymap("n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" })
+    keymap("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition", has = "typeDefinition" })
+    keymap("n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" })
+    keymap("n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" })
+    keymap("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" })
+    keymap("n", "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
+    keymap("n", "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
+    keymap("n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" })
+    keymap("n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" })
+	-- stylua: ignore end
 end
 
 return M

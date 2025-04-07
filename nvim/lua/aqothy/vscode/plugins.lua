@@ -2,16 +2,16 @@ return {
 	{
 		"kylechui/nvim-surround",
 		keys = {
-			{ "<C-g>s", mode = "i" },
-			{ "<C-g>S", mode = "i" },
-			{ "gz", mode = { "n", "v" } },
-			{ "gzz", mode = "n" },
-			{ "gZ", mode = "n" },
-			{ "gZZ", mode = "n" },
-			{ "Z", mode = "v" },
-			{ "ds", mode = "n" },
-			{ "cs", mode = "n" },
-			{ "cS", mode = "n" },
+			{ "<C-g>s", mode = "i", desc = "Add Surround In Insert Mode" },
+			{ "<C-g>S", mode = "i", desc = "Add Surround On New Lines In Insert Mode" },
+			{ "gz", mode = { "n", "v" }, desc = "Surround Normal And Visual" },
+			{ "gzz", mode = "n", desc = "Surround Current Line" },
+			{ "gZ", mode = "n", desc = "Surround On New Lines" },
+			{ "gZZ", mode = "n", desc = "Surround Current Line On New Lines" },
+			{ "Z", mode = "v", desc = "Surround Visual Selection On New Lines" },
+			{ "ds", mode = "n", desc = "Delete Surrounding" },
+			{ "cs", mode = "n", desc = "Change Surrounding" },
+			{ "cS", mode = "n", desc = "Change Surrounding On New Lines" },
 		},
 		opts = {
 			keymaps = {

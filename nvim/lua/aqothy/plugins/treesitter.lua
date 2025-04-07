@@ -2,15 +2,13 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		event = { "LazyFile", "VeryLazy" },
+		event = "VeryLazy",
 		lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		init = function(plugin)
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-		},
 		opts = {
 			-- A list of parser names, or "all"
 			ensure_installed = {
@@ -73,8 +71,8 @@ return {
 						["ic"] = "@class.inner",
 						["aa"] = "@parameter.outer",
 						["ia"] = "@parameter.inner",
-						["ai"] = "@conditional.outer",
-						["ii"] = "@conditional.inner",
+						["ao"] = "@conditional.outer",
+						["io"] = "@conditional.inner",
 						["al"] = "@loop.outer",
 						["il"] = "@loop.inner",
 					},
@@ -85,12 +83,10 @@ return {
 					goto_next_start = {
 						["]f"] = "@function.outer",
 						["]]"] = "@class.outer",
-						["]a"] = "@parameter.inner",
 					},
 					goto_previous_start = {
 						["[f"] = "@function.outer",
 						["[["] = "@class.outer",
-						["[a"] = "@parameter.inner",
 					},
 				},
 			},
