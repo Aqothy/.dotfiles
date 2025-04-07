@@ -1,7 +1,7 @@
 local vscode = require("vscode")
 
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = "\\"
 local keymap = vim.keymap.set
 
 vim.notify = vscode.notify
@@ -20,6 +20,7 @@ vim.opt.smartcase = true
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.swapfile = false
 vim.opt.backup = false
+vim.opt.writebackup = false
 vim.opt.showcmd = false
 
 local function vscode_action(cmd)

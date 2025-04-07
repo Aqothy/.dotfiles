@@ -17,6 +17,7 @@ return {
 				scope = { enabled = true, char = "▎" },
 				filter = function(buf)
 					return vim.bo[buf].filetype ~= "snacks_picker_preview"
+						and vim.bo[buf].filetype ~= "bigfile"
 						and vim.g.snacks_indent ~= false
 						and vim.b[buf].snacks_indent ~= false
 						and vim.bo[buf].buftype == ""
@@ -108,29 +109,11 @@ return {
 		}
 	end,
     -- stylua: ignore
-	keys = {
-        ---@diagnostic disable-next-line: missing-fields
-        { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
+    keys = {
         { "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame Line", mode = { "n", "v" } },
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>gY", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
-        {
-            "<leader>to",
-            function()
-                Snacks.picker.grep({
-                    search = [[TODO:|todo!\(.*\)]],
-                    live = false,
-                    supports_live = false,
-                    on_show = function()
-                        vim.cmd.stopinsert()
-                    end,
-                })
-            end,
-            desc = "Grep TODOs"
-        },
-        { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
-        { "<leader>pa", function () Snacks.picker() end, desc = "All Pickers" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
@@ -154,8 +137,6 @@ return {
             end,
             desc = "Terminal",
         },
-        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-        { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
             "<leader>sh",
@@ -189,6 +170,28 @@ return {
             end,
             desc = "Todo List",
         },
+        { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
+        { "<leader>gl", function() Snacks.lazygit.log_file() end, desc = "Git Log File" },
+        ---@diagnostic disable-next-line: missing-fields
+        { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
+        {
+            "<leader>to",
+            function()
+                Snacks.picker.grep({
+                    search = [[TODO:|todo!\(.*\)]],
+                    live = false,
+                    supports_live = false,
+                    on_show = function()
+                        vim.cmd.stopinsert()
+                    end,
+                })
+            end,
+            desc = "Grep TODOs"
+        },
+        { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
+        { "<leader>pa", function () Snacks.picker() end, desc = "All Pickers" },
+        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+        { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         {
             "<leader>fb",
             function()
@@ -196,7 +199,6 @@ return {
                     on_show = function()
                         vim.cmd.stopinsert()
                     end,
-                    hidden = true
                 })
             end,
             desc = "Buffers" },
@@ -223,5 +225,25 @@ return {
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
         { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
         { "<leader>pw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-	},
+    },
+	config = function(_, opts)
+		require("snacks").setup(opts)
+
+		_G.dd = function(...)
+			Snacks.debug.inspect(...)
+		end
+		_G.bt = function()
+			Snacks.debug.backtrace()
+		end
+		vim.print = _G.dd
+
+		-- Toggle
+		Snacks.toggle.dim():map("<leader>sd")
+		Snacks.toggle.diagnostics():map("<leader>td")
+		Snacks.toggle.zen():map("<leader>zz")
+		Snacks.toggle.profiler():map("<leader>pp")
+		Snacks.toggle.indent():map("<leader>id")
+		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
+		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+	end,
 }

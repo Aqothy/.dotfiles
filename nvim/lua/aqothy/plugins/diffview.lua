@@ -5,7 +5,15 @@ return {
 		{
 			"<leader>gd",
 			function()
-				vim.cmd("Diffview" .. (require("diffview.lib").get_current_view() == nil and "Open" or "Close"))
+				Snacks.toggle({
+					name = "Diffview",
+					get = function()
+						return require("diffview.lib").get_current_view() ~= nil
+					end,
+					set = function(state)
+						vim.cmd("Diffview" .. (state and "Open" or "Close"))
+					end,
+				}):toggle()
 			end,
 			desc = "Toggle Diffview",
 		},
