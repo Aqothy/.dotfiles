@@ -56,6 +56,7 @@ M["vtsls"] = {
 }
 
 M["lua_ls"] = {
+	enabled = true,
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1] and client.workspace_folders[1].name

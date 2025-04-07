@@ -127,8 +127,8 @@ fzf_append_dir_widget() {
     fi
 }
 zle -N fzf_append_dir_widget
-bindkey '^f' fzf_append_dir_widget
-bindkey -s '^h' 'ts\n'
+bindkey '^[f' fzf_append_dir_widget
+bindkey -s '^f' 'ts.sh\n'
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

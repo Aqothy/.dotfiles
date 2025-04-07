@@ -90,7 +90,7 @@ return {
 			},
 		},
 		term = {
-			enabled = true,
+			enabled = false,
 		},
 		completion = {
 			accept = {
