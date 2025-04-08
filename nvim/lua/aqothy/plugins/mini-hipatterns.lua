@@ -6,7 +6,6 @@ M.hl = {}
 M.plugin = {
 	"echasnovski/mini.hipatterns",
 	event = "LazyFile",
-	desc = "Highlight colors in your code. Also includes Tailwind CSS support.",
 	keys = {
 		{
 			"<leader>th",

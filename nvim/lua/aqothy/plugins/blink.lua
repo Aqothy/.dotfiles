@@ -3,17 +3,17 @@ return {
 	version = "*",
 	event = { "InsertEnter", "CmdLineEnter" },
 	-- enabled = false,
-	dependencies = {
-		-- enable if there is any cmp sources that you want blink to use from nvim cmp
-		-- {
-		--     'saghen/blink.compat',
-		--     version = '*',
-		--     lazy = true,
-		--     opts = {
-		--         impersonate_nvim_cmp = true,
-		--     }
-		-- },
-	},
+	-- dependencies = {
+	-- 	-- enable if there is any cmp sources that you want blink to use from nvim cmp
+	-- 	{
+	-- 		"saghen/blink.compat",
+	-- 		version = "*",
+	-- 		lazy = true,
+	-- 		opts = {
+	-- 			impersonate_nvim_cmp = true,
+	-- 		},
+	-- 	},
+	-- },
 	opts_extend = { "sources.default" },
 	opts = {
 		keymap = {
@@ -32,19 +32,7 @@ return {
 		},
 
 		sources = {
-			-- Dynamic sources based on treesitter nodes
-			default = function()
-				local success, node = pcall(vim.treesitter.get_node)
-				if
-					success
-					and node
-					and vim.tbl_contains({ "comment", "comment_content", "line_comment", "block_comment" }, node:type())
-				then
-					return { "buffer" }
-				else
-					return { "lsp", "path", "snippets", "buffer" }
-				end
-			end,
+			default = { "lsp", "path", "snippets", "buffer" },
 			providers = {
 				path = {
 					opts = {

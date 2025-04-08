@@ -9,7 +9,7 @@ return {
         {
             "<leader>bc",
             function()
-                require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) 
+                require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: '))
             end,
             desc = "Breakpoint Condition"
         },
@@ -27,8 +27,8 @@ return {
         {
             "<leader>sf",
             function()
-                local widgets = require('dap.ui.widgets')
-                widgets.centered_float(widgets.frames)
+                local my_sidebar = widgets.sidebar(widgets.frames)
+                my_sidebar.open()
             end,
             desc = "Frames"
         },
@@ -36,7 +36,8 @@ return {
             "<leader>vs",
             function()
                 local widgets = require('dap.ui.widgets')
-                widgets.centered_float(widgets.scopes)
+                local my_sidebar = widgets.sidebar(widgets.scopes)
+                my_sidebar.open()
             end,
             desc = "Scopes"
         },

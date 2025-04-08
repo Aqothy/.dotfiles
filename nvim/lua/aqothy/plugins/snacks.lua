@@ -190,7 +190,7 @@ return {
         },
         { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function () Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+        { "<leader>pc", function() Snacks.picker.command_history() end, desc = "Command History" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         {
             "<leader>fb",
@@ -224,7 +224,9 @@ return {
         { "<leader>fp", function() require("aqothy.config.utils").pick_projects() end, desc = "Projects picker" },
         { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
         { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
+        { "<leader>:", function() Snacks.picker.commands() end, desc = "Commands" },
         { "<leader>pw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>fm", function() Snacks.picker.man() end, desc = "Man Pages" },
     },
 	config = function(_, opts)
 		require("snacks").setup(opts)
@@ -243,7 +245,5 @@ return {
 		Snacks.toggle.zen():map("<leader>zz")
 		Snacks.toggle.profiler():map("<leader>pp")
 		Snacks.toggle.indent():map("<leader>id")
-		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sc")
-		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
 	end,
 }

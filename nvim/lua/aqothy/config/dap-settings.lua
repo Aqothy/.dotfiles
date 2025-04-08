@@ -32,7 +32,7 @@ M["delve"] = {
 			program = "${file}",
 		},
 		{
-			type = "go",
+			type = "delve",
 			name = "Attach",
 			mode = "local",
 			request = "attach",

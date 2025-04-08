@@ -76,7 +76,7 @@ vim.g.netrw_browse_split = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 25
 
-vim.opt.spelllang = "en_us"
+vim.opt.spelllang = { "en" }
 -- vim.opt.spell = true
 
 vim.opt.grepprg = "rg --vimgrep"

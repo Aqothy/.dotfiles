@@ -17,14 +17,6 @@ M.capabilities.workspace = {
 	},
 }
 
-M.capabilities.textDocument.completion.completionItem.resolveSupport = {
-	properties = {
-		"documentation",
-		"detail",
-		"additionalTextEdits",
-	},
-}
-
 -- M.capabilities.textDocument.foldingRange = {
 -- 	dynamicRegistration = false,
 -- 	lineFoldingOnly = true,
@@ -96,6 +88,17 @@ vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
 
 	return contents
+end
+
+local register_capability = vim.lsp.handlers["client/registerCapability"]
+vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
+	local client = vim.lsp.get_client_by_id(ctx.client_id)
+	if client then
+		for buffer in pairs(client.attached_buffers) do
+			M.on_attach(client, buffer)
+		end
+	end
+	return register_capability(err, res, ctx)
 end
 
 local diagnostic_goto = function(next, severity)

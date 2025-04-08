@@ -36,6 +36,7 @@ M.kinds = {
 	Key = "",
 	Null = "∅",
 	Copilot = "",
+	Control = " ",
 }
 
 M.dap = {

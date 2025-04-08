@@ -13,6 +13,14 @@ keymap("n", "n", "nzvzz", { desc = "Next search result, open folds, and center s
 keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 keymap("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
+keymap("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+keymap("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
+-- Resize windows
+keymap("n", "<C-a-k>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+keymap("n", "<C-a-j>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+keymap("n", "<C-a-h>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+keymap("n", "<C-a-l>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- Move Lines
 keymap("n", "<A-down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })

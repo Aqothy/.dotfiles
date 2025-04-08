@@ -29,6 +29,7 @@ return {
 			markdown = { "prettier" },
 			lua = { "stylua" },
 			go = { "gofumpt" },
+			python = { "ruff_format" },
 			-- For filetypes without a formatter:
 			["_"] = { "trim_whitespace", "trim_newlines" },
 		},
