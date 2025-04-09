@@ -1,0 +1,59 @@
+{
+  "editor.minimap.enabled": false,
+  "explorer.compactFolders": false,
+  "editor.fontLigatures": true,
+  "emmet.preferences": {},
+  "[javascriptreact]": {},
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.wordWrap": "on",
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "files.autoSaveDelay": 100,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true
+  },
+  "editor.formatOnPaste": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "files.autoSaveWhenNoErrors": true,
+  "settingsSync.ignoredSettings": [],
+  "settingsSync.ignoredExtensions": [],
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.files.exclude": {
+    "**/.vscode": true,
+    "**/.vs": true
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.inheritEnv": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "editor.stickyScroll.scrollWithEditor": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.lineNumbers": "relative",
+  "telemetry.telemetryLevel": "off",
+  "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 18,
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "workbench.activityBar.location": "top",
+  "python.terminal.shellIntegration.enabled": true,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.suggest.enabled": true,
+  "zenMode.hideLineNumbers": false,
+  "zenMode.showTabs": "single",
+  "zenMode.fullScreen": false,
+  "zenMode.hideStatusBar": false,
+  "zenMode.restore": false,
+  "workbench.colorTheme": "Gruvbox Light Soft",
+  "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
+  "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
+  "editor.hover.sticky": false,
+  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingDelete": "never",
+  "editor.autoClosingOvertype": "never",
+  "editor.stickyScroll.enabled": true
+}

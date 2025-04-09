@@ -45,11 +45,9 @@ keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous
 
 keymap("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
 keymap("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
-keymap("n", "<leader>gd", vscode_action("workbench.view.scm"), { desc = "Source control" })
+keymap("n", "<leader>gs", vscode_action("workbench.view.scm"), { desc = "Source control" })
 
 keymap("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
-
-keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 keymap("n", "<leader>\\", vscode_action("workbench.action.splitEditor"), { desc = "Split editor" })
 

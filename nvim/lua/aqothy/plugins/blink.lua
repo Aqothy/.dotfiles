@@ -32,7 +32,29 @@ return {
 		},
 
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			default = function()
+				local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+				row = row - 1 -- Convert to 0-indexed
+
+				-- Position to check either current position or one character before
+				local check_col = col > 0 and col - 1 or col
+
+				local success, node = pcall(vim.treesitter.get_node, {
+					pos = { row, check_col },
+				})
+
+				if
+					success
+					and node
+					and vim.tbl_contains({ "comment", "comment_content", "line_comment", "block_comment" }, node:type())
+				then
+					return { "buffer" }
+				end
+
+				-- Default sources if not in a comment
+				return { "lsp", "path", "snippets", "buffer" }
+			end,
 			providers = {
 				path = {
 					opts = {

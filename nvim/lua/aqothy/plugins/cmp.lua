@@ -25,7 +25,7 @@ return {
 			snippet = {
 				expand = function(args)
 					local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-					insert({ body = args.body }) -- Insert at cursor
+					insert({ body = args.body })
 				end,
 			},
 			experimental = {

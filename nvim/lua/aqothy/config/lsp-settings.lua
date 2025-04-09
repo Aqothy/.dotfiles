@@ -102,6 +102,7 @@ M["lua_ls"] = {
 }
 
 M["clangd"] = {
+	enabled = true,
 	capabilities = {
 		offsetEncoding = { "utf-16" },
 	},
@@ -122,6 +123,7 @@ M["clangd"] = {
 }
 
 M["gopls"] = {
+	enabled = true,
 	settings = {
 		gopls = {
 			gofumpt = true,
@@ -149,6 +151,7 @@ M["gopls"] = {
 }
 
 M["basedpyright"] = {
+	enabled = true,
 	settings = {
 		basedpyright = {
 			disableOrganizeImports = true,
@@ -175,16 +178,24 @@ M["emmet_language_server"] = {
 }
 
 M["sourcekit"] = {
+	enabled = true,
 	filetypes = { "swift", "objc", "objcpp" },
 }
 
-M["cssls"] = {}
+M["cssls"] = {
+	enabled = true,
+}
 
-M["texlab"] = {}
+M["texlab"] = {
+	enabled = true,
+}
 
-M["ruff"] = {}
+M["ruff"] = {
+	enabled = true,
+}
 
 M["bashls"] = {
+	enabled = true,
 	filetypes = { "bash", "sh", "zsh" },
 }
 

@@ -12,7 +12,7 @@ return {
 		},
 	},
 	opts = {
-		log_level = vim.log.levels.DEBUG,
+		log_level = vim.log.levels.OFF,
 		notify_on_error = false,
 		quiet = true,
 		formatters_by_ft = {

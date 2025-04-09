@@ -123,7 +123,7 @@ fzf_append_dir_widget() {
     local dir
     dir=$(fzf_dir.sh) || return
     if [[ -n "$dir" ]]; then
-        LBUFFER+="$dir"
+        LBUFFER+="\"$dir\""
     fi
 }
 zle -N fzf_append_dir_widget

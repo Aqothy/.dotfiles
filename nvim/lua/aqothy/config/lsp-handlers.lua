@@ -17,11 +17,6 @@ M.capabilities.workspace = {
 	},
 }
 
--- M.capabilities.textDocument.foldingRange = {
--- 	dynamicRegistration = false,
--- 	lineFoldingOnly = true,
--- }
-
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -55,6 +50,8 @@ local config = {
 }
 
 vim.diagnostic.config(config)
+
+vim.lsp.log.set_level(vim.log.levels.OFF)
 
 local float_config = {
 	max_height = math.floor(vim.o.lines * 0.5),
@@ -140,42 +137,11 @@ M.on_attach = function(client, bufnr)
 		end
 	end
 
-	-- local kinds = require("aqothy.config.user").kinds
-	-- local utils = require("aqothy.config.utils")
-	-- if client:supports_method("textDocument/completion") then
-	-- 	client.server_capabilities.completionProvider.triggerCharacters = vim.split("qwertyuiopasdfghjklzxcvbnm. ", "")
-	--
-	-- 	vim.lsp.completion.enable(true, client.id, bufnr, {
-	-- 		autotrigger = true,
-	-- 		convert = function(item)
-	-- 			local label_details = item.labelDetails
-	-- 			local menu =
-	-- 				utils.truncateString((label_details and label_details.description) or item.detail or "", 15)
-	--
-	-- 			local kind = kinds[vim.lsp.protocol.CompletionItemKind[item.kind]] or "u"
-	-- 			return {
-	-- 				abbr = item.label:gsub("%b()", ""),
-	-- 				kind = kind,
-	-- 				menu = menu,
-	-- 			}
-	-- 		end,
-	-- 	})
-	--
-	-- 	vim.keymap.set("i", "<c-space>", function()
-	-- 		vim.lsp.completion.get()
-	-- 	end)
-	-- end
-
 	-- Inlay hints
 	if client:supports_method("textDocument/inlayHint") then
 		-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
-
-	-- if client:supports_method("textDocument/foldingRange") then
-	-- 	local win = vim.api.nvim_get_current_win()
-	-- 	vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-	-- end
 
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
@@ -209,8 +175,8 @@ M.on_attach = function(client, bufnr)
     keymap("n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" })
     keymap("n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" })
     keymap("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" })
-    keymap("n", "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
-    keymap("n", "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
+    keymap("n", "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
+    keymap("n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
     keymap("n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" })
     keymap("n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" })
 end

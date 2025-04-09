@@ -38,6 +38,8 @@ return {
 				package_uninstalled = "",
 			},
 		},
+
+		log_level = vim.log.levels.OFF,
 	},
 	config = function(_, opts)
 		require("mason").setup(opts)
