@@ -28,6 +28,7 @@ return {
 			-- Dap
 			"js-debug-adapter",
 			"delve",
+			"codelldb",
 		},
 
 		ui = {

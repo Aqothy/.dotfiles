@@ -53,6 +53,17 @@ M["vtsls"] = {
 			},
 		},
 	},
+	keys = {
+		{
+			"n",
+			"<leader>oi",
+			"",
+			{
+				action = "source.addMissingImports.ts",
+				desc = "Add Missing Imports",
+			},
+		},
+	},
 }
 
 M["lua_ls"] = {
@@ -148,6 +159,26 @@ M["gopls"] = {
 			directoryFilters = { "-.git", "-.vscode", "-node_modules" },
 		},
 	},
+	keys = {
+		{
+			"n",
+			"<leader>oi",
+			"",
+			{
+				action = "source.organizeImports",
+				desc = "Organize Imports",
+			},
+		},
+		{
+			"n",
+			"<leader>rr",
+			"",
+			{
+				action = "refactor.rewrite.fillStruct",
+				desc = "Fill Struct",
+			},
+		},
+	},
 }
 
 M["basedpyright"] = {
@@ -188,10 +219,24 @@ M["cssls"] = {
 
 M["texlab"] = {
 	enabled = true,
+	keys = {
+		{ "n", "<Leader>K", "<plug>(vimtex-doc-package)", { desc = "Vimtex Docs", silent = true } },
+	},
 }
 
 M["ruff"] = {
 	enabled = true,
+	keys = {
+		{
+			"n",
+			"<leader>oi",
+			"",
+			{
+				action = "source.organizeImports",
+				desc = "Organize Imports",
+			},
+		},
+	},
 }
 
 M["bashls"] = {

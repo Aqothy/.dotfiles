@@ -122,18 +122,30 @@ function M.has(method, client)
 	return false
 end
 
+local settings = require("aqothy.config.lsp-settings")
+
 M.on_attach = function(client, bufnr)
 	local opts = { buffer = bufnr, silent = true }
 
 	-- Custom function to wrap keymap setting
 	local function keymap(mode, lhs, rhs, extra_opts)
-		local has = not extra_opts.has or M.has(extra_opts.has, client)
-		local cond = not (extra_opts.cond == false or ((type(extra_opts.cond) == "function") and not extra_opts.cond()))
-		extra_opts.cond = nil
-		extra_opts.has = nil
+		local final_opts = {}
 
-		if has and cond then
-			vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, extra_opts or {}))
+		-- Check conditions first
+		local has_met = not extra_opts.has or M.has(extra_opts.has, client)
+		local cond_met = not (
+			extra_opts.cond == false or ((type(extra_opts.cond) == "function") and not extra_opts.cond())
+		)
+
+		if has_met and cond_met then
+			-- Only copy the properties that vim.keymap.set needs
+			for k, v in pairs(extra_opts) do
+				if k ~= "has" and k ~= "cond" and k ~= "exec" and k ~= "action" then
+					final_opts[k] = v
+				end
+			end
+
+			vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", opts, final_opts))
 		end
 	end
 
@@ -141,6 +153,39 @@ M.on_attach = function(client, bufnr)
 	if client:supports_method("textDocument/inlayHint") then
 		-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 		Snacks.toggle.inlay_hints():map("<leader>ti")
+	end
+
+	local lsp_config = settings[client.name]
+	if lsp_config and lsp_config.keys then
+		for _, key in ipairs(lsp_config.keys) do
+			local mode, lhs, rhs, key_opts = unpack(key)
+
+			-- Handle LSP code actions
+			if key_opts.action then
+				keymap(mode, lhs, function()
+					vim.lsp.buf.code_action({
+						apply = true,
+						context = {
+							only = { key_opts.action },
+							diagnostics = {},
+						},
+					})
+				end, key_opts)
+
+			-- Handle workspace execute commands
+			elseif key_opts.exec then
+				keymap(mode, lhs, function()
+					client:request("workspace/executeCommand", {
+						command = key_opts.exec.command,
+						arguments = key_opts.exec.arguments,
+					}, key_opts.exec.handler, bufnr)
+				end, key_opts)
+
+			-- Handle regular keymaps
+			else
+				keymap(mode, lhs, rhs, key_opts)
+			end
+		end
 	end
 
 	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })

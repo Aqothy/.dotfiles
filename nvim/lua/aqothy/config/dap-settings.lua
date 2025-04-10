@@ -88,4 +88,40 @@ M["pwa-node"] = {
 	},
 }
 
+M["codelldb"] = {
+	enabled = true,
+	filetypes = { "c", "cpp" },
+	adapter = {
+		type = "server",
+		host = "127.0.0.1",
+		port = "${port}",
+		executable = {
+			command = "codelldb",
+			args = {
+				"--port",
+				"${port}",
+			},
+		},
+	},
+	configurations = {
+		{
+			type = "codelldb",
+			request = "launch",
+			name = "Launch file",
+			program = function()
+				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+			end,
+			cwd = "${workspaceFolder}",
+			stopOnEntry = false,
+		},
+		{
+			type = "codelldb",
+			request = "attach",
+			name = "Attach to process",
+			pid = dap_utils.pick_process,
+			cwd = "${workspaceFolder}",
+		},
+	},
+}
+
 return M

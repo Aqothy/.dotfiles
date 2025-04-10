@@ -27,6 +27,7 @@ return {
         {
             "<leader>sf",
             function()
+                local widgets = require('dap.ui.widgets')
                 local my_sidebar = widgets.sidebar(widgets.frames)
                 my_sidebar.open()
             end,

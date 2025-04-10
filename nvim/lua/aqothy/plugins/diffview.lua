@@ -18,7 +18,7 @@ return {
 			desc = "Toggle Diffview",
 		},
 		{ "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File History" },
-		{ "<leader>gm", "<cmd>DiffviewOpen origin/main..HEAD<cr>", desc = "Diff Main" },
+		{ "<leader>gm", "<cmd>DiffviewOpen remotes/origin/main..HEAD<cr>", desc = "Diff Main" },
 	},
 	opts = function()
 		return {
