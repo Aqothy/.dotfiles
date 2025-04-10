@@ -24,6 +24,7 @@ return {
 			"stylua",
 			"prettier",
 			"gofumpt",
+			"goimports",
 
 			-- Dap
 			"js-debug-adapter",

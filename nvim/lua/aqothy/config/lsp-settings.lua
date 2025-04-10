@@ -57,7 +57,7 @@ M["vtsls"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			nil,
 			{
 				action = "source.addMissingImports.ts",
 				desc = "Add Missing Imports",
@@ -133,6 +133,48 @@ M["clangd"] = {
 	},
 }
 
+local function goModTag(operation)
+	if vim.fn.executable("gomodifytags") == 0 then
+		vim.api.nvim_echo({ { "gomodifytags not found", "ErrorMsg" } }, true, {})
+		return
+	end
+
+	if vim.bo.modified then
+		vim.api.nvim_echo({ { "Save file before adding JSON tags", "WarningMsg" } }, true, {})
+		return
+	end
+
+	local filename = vim.fn.expand("%:p")
+
+	vim.ui.input({
+		prompt = "Enter struct name (leave empty for all structs): ",
+	}, function(struct_name)
+		-- User canceled the input
+		if struct_name == nil then
+			return
+		end
+
+		local cmd = "gomodifytags -file " .. vim.fn.shellescape(filename)
+
+		if struct_name ~= "" then
+			cmd = cmd .. " -struct " .. vim.fn.shellescape(struct_name)
+		else
+			cmd = cmd .. " -all"
+		end
+
+		cmd = cmd .. " -" .. operation .. "-tags json -transform camelcase -w --quiet"
+
+		local output = vim.fn.system(cmd)
+
+		if vim.v.shell_error ~= 0 then
+			vim.api.nvim_echo({ { "Failed to add JSON tags: " .. output, "ErrorMsg" } }, true, {})
+			return
+		end
+
+		vim.cmd("checktime")
+	end)
+end
+
 M["gopls"] = {
 	enabled = true,
 	settings = {
@@ -163,7 +205,7 @@ M["gopls"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			nil,
 			{
 				action = "source.organizeImports",
 				desc = "Organize Imports",
@@ -172,11 +214,27 @@ M["gopls"] = {
 		{
 			"n",
 			"<leader>rr",
-			"",
+			nil,
 			{
 				action = "refactor.rewrite.fillStruct",
 				desc = "Fill Struct",
 			},
+		},
+		{
+			"n",
+			"<leader>aj",
+			function()
+				goModTag("add")
+			end,
+			{ desc = "Add json tags to struct" },
+		},
+		{
+			"n",
+			"<leader>rj",
+			function()
+				goModTag("remove")
+			end,
+			{ desc = "Remove json tags from struct" },
 		},
 	},
 }
@@ -230,7 +288,7 @@ M["ruff"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			nil,
 			{
 				action = "source.organizeImports",
 				desc = "Organize Imports",

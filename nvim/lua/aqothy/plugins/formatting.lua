@@ -28,7 +28,7 @@ return {
 			yaml = { "prettier" },
 			markdown = { "prettier" },
 			lua = { "stylua" },
-			go = { "gofumpt" },
+			go = { "goimports", "gofumpt" },
 			python = { "ruff_format" },
 			-- For filetypes without a formatter:
 			["_"] = { "trim_whitespace", "trim_newlines" },
