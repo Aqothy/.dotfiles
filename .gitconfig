@@ -40,12 +40,17 @@
     tool = nvimdiff
 
 [mergetool]
-    prompt = false
     keepBackup = false
 
 [mergetool "nvimdiff"]
-    layout = "LOCAL,BASE,REMOTE / MERGED"
+    cmd = nvim -d $MERGED $LOCAL $REMOTE -c 'wincmd J'
 
 [diff]
     algorithm = histogram
     renames = true
+
+[diff]
+    tool = nvimdiff
+
+[difftool "nvimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE

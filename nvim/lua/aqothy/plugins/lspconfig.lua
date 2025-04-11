@@ -5,6 +5,7 @@ return {
 	dependencies = {
 		"williamboman/mason.nvim",
 	},
+	cmd = "LspInfo",
 	config = function()
 		local lspconfig = require("lspconfig")
 		local handlers = require("aqothy.config.lsp-handlers")

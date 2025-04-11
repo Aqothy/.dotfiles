@@ -44,6 +44,7 @@ return {
 
 		return {
 			snippets = {
+				gen_loader.from_file(vim.fn.stdpath("config") .. "/snippets/global.json"),
 				gen_loader.from_lang({ lang_patterns = lang_patterns }),
 			},
 			mappings = {

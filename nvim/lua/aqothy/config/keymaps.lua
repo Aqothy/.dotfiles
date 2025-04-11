@@ -46,6 +46,7 @@ keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], { silent = fa
 keymap("n", "<leader>ip", vim.show_pos, { desc = "Inspect Pos" })
 keymap("n", "<leader>it", function() vim.treesitter.inspect_tree() vim.api.nvim_input("I") end, { desc = "Inspect Tree" })
 keymap("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
+keymap("n", "<c-h>", "<cmd>silent !tmux neww ts.sh<CR>", { desc = "New tmux session" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

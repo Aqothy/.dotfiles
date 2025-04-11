@@ -111,7 +111,7 @@ alias cm="chmod +x"
 alias py="python3"
 alias tm="tmux"
 alias lg="lazygit"
-alias clang="clang++ -std=c++20"
+alias cpp="clang++ -std=c++20"
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='TERM=xterm-256color command ssh'
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
@@ -127,8 +127,8 @@ fzf_append_dir_widget() {
     fi
 }
 zle -N fzf_append_dir_widget
-bindkey '^[f' fzf_append_dir_widget
-bindkey -s '^f' 'ts.sh\n'
+bindkey '^f' fzf_append_dir_widget
+bindkey -s '^h' 'ts.sh\n'
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

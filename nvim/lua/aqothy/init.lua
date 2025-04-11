@@ -15,11 +15,10 @@ if not is_vscode then
 		pattern = "VeryLazy",
 		group = vim.api.nvim_create_augroup("Lazyload_Config", { clear = true }),
 		callback = function()
-			require("aqothy.config.keymaps")
 			if lazy_autocmds then
 				require("aqothy.config.autocmds")
 			end
-			require("aqothy.config.commands")
+			require("aqothy.config.keymaps")
 			require("aqothy.config.statusline")
 		end,
 	})

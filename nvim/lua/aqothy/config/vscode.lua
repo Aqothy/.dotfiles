@@ -11,17 +11,20 @@ vim.g.clipboard = vim.g.vscode_clipboard
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
+
 vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.virtualedit = "block"
+vim.opt.wildignore:append({ ".DS_Store" })
+vim.opt.wildignorecase = true
 vim.opt.wildmode = { "longest:full", "full" }
+vim.opt.wildoptions:append({ "fuzzy" })
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
-vim.opt.showcmd = false
 
 local function vscode_action(cmd)
 	return function()

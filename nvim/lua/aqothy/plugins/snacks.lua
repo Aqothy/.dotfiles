@@ -171,7 +171,7 @@ return {
             desc = "Todo List",
         },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
-        { "<leader>gl", function() Snacks.lazygit.log_file() end, desc = "Git Log File" },
+        { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
         {
@@ -190,7 +190,7 @@ return {
         },
         { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function () Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>pc", function() Snacks.picker.command_history() end, desc = "Command History" },
+        { "<leader>pi", function() Snacks.picker.icons() end, desc = "Pick icons" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         {
             "<leader>fb",
@@ -222,11 +222,9 @@ return {
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep Lines" },
         { "<leader>u", function() Snacks.picker.undo() end, desc = "undo tree" },
         { "<leader>fp", function() require("aqothy.config.utils").pick_projects() end, desc = "Projects picker" },
-        { "<leader>li", function () Snacks.picker.lsp_config() end, desc = "Lsp info" },
         { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
-        { "<leader>:", function() Snacks.picker.commands() end, desc = "Commands" },
-        { "<leader>pw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-        { "<leader>fm", function() Snacks.picker.man() end, desc = "Man Pages" },
+        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command history" },
+        { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
 	config = function(_, opts)
 		require("snacks").setup(opts)

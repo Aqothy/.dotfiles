@@ -23,19 +23,7 @@ hydrate() {
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
-    selected=$(
-        ( echo "$HOME/.config"
-          echo "$HOME/Code"
-          fd --type d --max-depth 1 --min-depth 1 . \
-            "$HOME/.config" \
-            "$HOME/Code" \
-            "$HOME/Code/School" \
-            "$HOME/Code/Personal" \
-            "$HOME/Documents/documents-mac" \
-            "$HOME/Documents/documents-mac/school" \
-            "$HOME/Documents"
-        ) | sed 's:/*$::' | fzf
-    )
+    selected=$(fzf_dir.sh)
 fi
 
 [[ -z "$selected" ]] && exit 0

@@ -197,7 +197,7 @@ function M.diagnostics_component()
 end
 
 -- LSP Progress component optimization
----@type table<string, {kind: string}>
+---@type table<string, {kind: string, client: string}>
 M.progress_statuses = {}
 M.progress_cache = nil
 M.progress_dirty = true
@@ -225,13 +225,14 @@ autocmd("LspProgress", {
 		-- Mark cache as dirty to trigger rebuild
 		M.progress_dirty = true
 
-		M.progress_statuses[client_name] = {
+		M.progress_statuses[client_name .. client_id] = {
 			kind = progress,
+			client = client_name,
 		}
 
 		if progress == "end" then
 			vim.defer_fn(function()
-				M.progress_statuses[client_name] = nil
+				M.progress_statuses[client_name .. client_id] = nil
 				M.progress_dirty = true
 				cmd.redrawstatus()
 			end, 3000)
@@ -248,10 +249,10 @@ function M.lsp_progress_component()
 	end
 
 	local progress_parts = {}
-	for client_name, status in pairs(M.progress_statuses) do
+	for _, status in pairs(M.progress_statuses) do
 		local is_done = status.kind == "end"
 		local symbol = is_done and " " or "󱥸 "
-		table.insert(progress_parts, "%#StatuslineTitle#" .. symbol .. client_name)
+		table.insert(progress_parts, "%#StatuslineTitle#" .. symbol .. status.client)
 	end
 
 	local result = table.concat(progress_parts, " ")

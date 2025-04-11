@@ -53,6 +53,17 @@
           "tex"
         ],
         "path": "./tex.json"
+      },
+      {
+        "language": [
+          "plaintext",
+          "markdown",
+          "tex",
+          "html",
+          "global",
+          "all"
+        ],
+        "path": "./snippets/global.json"
       }
     ]
   }

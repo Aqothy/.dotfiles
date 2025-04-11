@@ -24,7 +24,7 @@ return {
 		return {
 			view = {
 				merge_tool = {
-					layout = "diff4_mixed",
+					layout = "diff3_mixed",
 				},
 				file_history = {
 					layout = "diff2_horizontal",
