@@ -276,7 +276,10 @@ function M.filetype_component()
 end
 
 function M.file_info_component()
-	return "%#StatuslineModeSeparatorOther# " .. (bo.fileencoding or bo.encoding) .. " Tab:" .. bo.shiftwidth
+	return "%#StatuslineModeSeparatorOther# "
+		.. (bo.fileencoding or bo.encoding)
+		.. (bo.expandtab and " Spaces:" or " Tab:")
+		.. bo.shiftwidth
 end
 
 function M.position_component()

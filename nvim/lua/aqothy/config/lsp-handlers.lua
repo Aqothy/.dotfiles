@@ -116,7 +116,7 @@ function M.has(method, client)
 		return false
 	end
 	method = method:find("/") and method or "textDocument/" .. method
-	if client.supports_method(method) then
+	if client:supports_method(method) then
 		return true
 	end
 	return false
@@ -156,7 +156,7 @@ M.on_attach = function(client, bufnr)
 	end
 
 	local lsp_config = settings[client.name]
-	if lsp_config and lsp_config.keys then
+	if lsp_config and lsp_config.enabled and lsp_config.keys then
 		for _, key in ipairs(lsp_config.keys) do
 			local mode, lhs, rhs, key_opts = unpack(key)
 
@@ -170,15 +170,6 @@ M.on_attach = function(client, bufnr)
 							diagnostics = {},
 						},
 					})
-				end, key_opts)
-
-			-- Handle workspace execute commands
-			elseif key_opts.exec then
-				keymap(mode, lhs, function()
-					client:request("workspace/executeCommand", {
-						command = key_opts.exec.command,
-						arguments = key_opts.exec.arguments,
-					}, key_opts.exec.handler, bufnr)
 				end, key_opts)
 
 			-- Handle regular keymaps
@@ -197,8 +188,7 @@ M.on_attach = function(client, bufnr)
 
     -- stylua: ignore start
     keymap("i", "<c-s>", function()
-        local has_cmp, cmp = pcall(require, "cmp")
-
+		local has_cmp, cmp = pcall(require, "cmp")
         if has_blink and blink.is_menu_visible() then
             blink.cancel()
         end
@@ -209,11 +199,12 @@ M.on_attach = function(client, bufnr)
     end, { desc = "Signature Help", has = "signatureHelp" })
 
     keymap("n", "K", function() return vim.lsp.buf.hover() end, { desc = "Hover", has = "hover" })
-    keymap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" })
+    keymap({ "n", "v" }, "gra", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" })
     keymap("n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } })
     keymap("n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" })
-    keymap("n", "<leader>k", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
+    keymap("n", "<c-w>d", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
     keymap("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" })
+	keymap("n", "<leader>pd", function() Snacks.picker.lsp_definitions({ auto_confirm = false, layout = "ivy" }) end, { desc = "Peek definition", has = "definition" })
     keymap("n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" })
     keymap("n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" })
     keymap("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition", has = "typeDefinition" })

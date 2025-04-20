@@ -20,9 +20,6 @@
 [core]
 	excludesfile = ~/.gitignore
 
-[alias]
-	tree = log --graph --oneline --decorate --all
-
 [push]
 	autoSetupRemote = true
 

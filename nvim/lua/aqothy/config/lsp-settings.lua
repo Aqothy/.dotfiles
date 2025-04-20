@@ -17,6 +17,21 @@ M["eslint"] = {
 	},
 }
 
+local jsts_config = {
+	updateImportsOnFileMove = { enabled = "always" },
+	suggest = {
+		completeFunctionCalls = true,
+	},
+	inlayHints = {
+		enumMemberValues = { enabled = true },
+		functionLikeReturnTypes = { enabled = true },
+		parameterNames = { enabled = "literals" },
+		parameterTypes = { enabled = true },
+		propertyDeclarationTypes = { enabled = true },
+		variableTypes = { enabled = false },
+	},
+}
+
 M["vtsls"] = {
 	enabled = true,
 	settings = {
@@ -26,25 +41,14 @@ M["vtsls"] = {
 			autoUseWorkspaceTsdk = true,
 			experimental = {
 				maxInlayHintLength = 30,
-				-- completion = {
-				-- 	enableServerSideFuzzyMatch = true,
-				-- },
+				completion = {
+					enableServerSideFuzzyMatch = true,
+					entriesLimit = 300,
+				},
 			},
 		},
-		typescript = {
-			updateImportsOnFileMove = { enabled = "always" },
-			suggest = {
-				completeFunctionCalls = true,
-			},
-			inlayHints = {
-				enumMemberValues = { enabled = true },
-				functionLikeReturnTypes = { enabled = true },
-				parameterNames = { enabled = "literals" },
-				parameterTypes = { enabled = true },
-				propertyDeclarationTypes = { enabled = true },
-				variableTypes = { enabled = false },
-			},
-		},
+		typescript = jsts_config,
+		javascript = jsts_config,
 	},
 	keys = {
 		{
@@ -52,8 +56,8 @@ M["vtsls"] = {
 			"<leader>oi",
 			"",
 			{
-				action = "source.addMissingImports.ts",
-				desc = "Add Missing Imports",
+				action = "source.organizeImports",
+				desc = "Organize Imports",
 			},
 		},
 	},
@@ -152,7 +156,6 @@ M["gopls"] = {
 			usePlaceholders = true,
 			completeUnimported = true,
 			staticcheck = true,
-			directoryFilters = { "-.git", "-.vscode", "-node_modules" },
 		},
 	},
 	keys = {
@@ -167,7 +170,7 @@ M["gopls"] = {
 		},
 		{
 			"n",
-			"<leader>rr",
+			"<leader>fl",
 			"",
 			{
 				action = "refactor.rewrite.fillStruct",
@@ -191,6 +194,7 @@ M["basedpyright"] = {
 
 M["emmet_language_server"] = {
 	enabled = true,
+	filetypes = { "html", "css", "scss", "javascript", "typescript", "javascriptreact", "typescriptreact" },
 	init_options = {
 		showSuggestionsAsSnippets = true,
 	},

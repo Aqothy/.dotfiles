@@ -3,7 +3,7 @@
 select_dir() {
     ( echo "$HOME/.config"
       echo "$HOME/Code"
-      fd --type d --max-depth 1 --min-depth 1 . \
+      fd --type d --hidden --follow --exclude .git --max-depth 1 --min-depth 1 . \
         "$HOME/.config" \
         "$HOME/Code" \
         "$HOME/Code/School" \

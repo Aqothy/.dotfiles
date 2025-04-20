@@ -111,18 +111,42 @@ return {
 			},
 		},
 		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
-
 			vim.filetype.add({
 				pattern = {
 					[".*/kitty/.+%.conf"] = "kitty",
+					[".*/ghostty/config.*"] = "ghostty",
 					["%.env%.[%w_.-]+"] = "sh",
 				},
 			})
 
 			vim.treesitter.language.register("bash", "kitty")
+			vim.treesitter.language.register("bash", "ghostty")
+
+			require("nvim-treesitter.configs").setup(opts)
 
 			Snacks.toggle.treesitter():map("<leader>ts")
+		end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		event = "LazyFile",
+		opts = function()
+			local tsc = require("treesitter-context")
+			Snacks.toggle({
+				name = "Treesitter Context",
+				get = tsc.enabled,
+				set = function(state)
+					if state then
+						tsc.enable()
+					else
+						tsc.disable()
+					end
+				end,
+			}):map("<leader>tu")
+
+			return {
+				max_lines = 3,
+			}
 		end,
 	},
 }

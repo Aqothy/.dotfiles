@@ -1,6 +1,5 @@
 return {
-	-- "hrsh7th/nvim-cmp",
-	dir = "~/Code/Personal/nvim-cmp",
+	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter", "CmdLineEnter" },
 	enabled = false,
 	dependencies = {

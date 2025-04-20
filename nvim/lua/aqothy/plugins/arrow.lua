@@ -7,5 +7,9 @@ return {
 		show_icons = true,
 		leader_key = "'", -- Recommended to be a single key
 		hide_handbook = false,
+		mappings = {
+			next_item = "j",
+			prev_item = "k",
+		},
 	},
 }

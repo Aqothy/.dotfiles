@@ -13,8 +13,8 @@ return {
 			group = vim.api.nvim_create_augroup("vimtex_event_focus", { clear = true }),
 			pattern = "VimtexEventViewReverse",
 			callback = function()
-				-- Replace "Kitty" with the name of your terminal app if it's different
-				vim.fn.system({ "open", "-a", "Kitty" })
+				-- Replace "Ghostty" with the name of your terminal app if it's different
+				vim.fn.system({ "open", "-a", "Ghostty" })
 			end,
 		})
 

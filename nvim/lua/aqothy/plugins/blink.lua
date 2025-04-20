@@ -49,7 +49,7 @@ return {
 					and node
 					and vim.tbl_contains({ "comment", "comment_content", "line_comment", "block_comment" }, node:type())
 				then
-					return {}
+					return { "buffer" }
 				end
 
 				-- Default sources if not in a comment

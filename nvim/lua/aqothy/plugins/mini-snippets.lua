@@ -62,7 +62,7 @@ return {
 				select = function(snippets, insert)
 					-- Close completion window and clear copilot ghost text on snippet select - vim.ui.select
 					local has_blink, blink = pcall(require, "blink.cmp")
-					if has_blink and blink.is_menu_visible() then
+					if has_blink then
 						blink.cancel()
 					end
 

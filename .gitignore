@@ -3,3 +3,6 @@ configstore
 simple-update-notifier
 gcloud
 nvm
+zed/*
+!zed/keymap.json
+!zed/settings.json

@@ -4,8 +4,6 @@ return {
 	lazy = false,
 	opts = function()
 		local user = require("aqothy.config.user")
-		local utils = require("aqothy.config.utils")
-		local state = {}
 
 		return {
 			bigfile = { enabled = true },
@@ -50,18 +48,11 @@ return {
 				toggles = {
 					dim = false,
 				},
-				on_open = function()
-					state["tmux"] = {}
-					utils.hide_tmux(state["tmux"], true)
-				end,
-				on_close = function()
-					utils.hide_tmux(state["tmux"], false)
-				end,
 			},
 
 			dim = {
 				scope = {
-					min_size = 0,
+					min_size = 1,
 				},
 				animate = {
 					enabled = false,
@@ -86,6 +77,8 @@ return {
 					notify = false,
 				},
 			},
+
+			scope = { enabled = true },
 
 			styles = {
 				notification = {
@@ -122,15 +115,7 @@ return {
                 Snacks.terminal(nil, {
                     win = {
                         keys = {
-                            term_normal = {
-                                "<esc>",
-                                function()
-                                    vim.cmd.stopinsert()
-                                end,
-                                mode = "t",
-                                expr = true,
-                                desc = "Single escape to normal mode",
-                            },
+                            term_normal = "",
                         },
                     },
                 })
@@ -182,7 +167,7 @@ return {
                     live = false,
                     supports_live = false,
                     on_show = function()
-                        vim.cmd.stopinsert()
+				        vim.cmd("stopinsert")
                     end,
                 })
             end,
@@ -197,7 +182,7 @@ return {
             function()
                 Snacks.picker.buffers({
                     on_show = function()
-                        vim.cmd.stopinsert()
+				        vim.cmd("stopinsert")
                     end,
                 })
             end,
@@ -243,5 +228,6 @@ return {
 		Snacks.toggle.zen():map("<leader>zz")
 		Snacks.toggle.profiler():map("<leader>pp")
 		Snacks.toggle.indent():map("<leader>id")
+		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
 	end,
 }

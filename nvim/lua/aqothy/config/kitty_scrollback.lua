@@ -50,7 +50,7 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 		callback = function()
 			local mode = vim.fn.mode()
 			if mode == "t" then
-				vim.cmd.stopinsert()
+				vim.cmd("stopinsert")
 				vim.schedule(set_cursor)
 			end
 		end,

@@ -12,14 +12,6 @@ has_session() {
     tmux has-session -t "$1" 2>/dev/null
 }
 
-hydrate() {
-    if [ -f "$2/.tmux-sessionizer" ]; then
-        tmux send-keys -t "$1" "source $2/.tmux-sessionizer" C-m
-    elif [ -f "$HOME/.tmux-sessionizer" ]; then
-        tmux send-keys -t "$1" "source $HOME/.tmux-sessionizer" C-m
-    fi
-}
-
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
@@ -33,13 +25,11 @@ tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s "$selected_name" -c "$selected"
-    hydrate "$selected_name" "$selected"
     exit 0
 fi
 
 if ! has_session "$selected_name"; then
     tmux new-session -ds "$selected_name" -c "$selected"
-    hydrate "$selected_name" "$selected"
 fi
 
 switch_to "$selected_name"

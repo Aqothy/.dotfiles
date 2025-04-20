@@ -1,0 +1,45 @@
+font-family = "Hack Nerd Font Mono"
+font-size = 18
+
+# Macos:
+macos-option-as-alt = true
+macos-window-shadow = false
+macos-non-native-fullscreen = visible-menu
+
+# Other:
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+adjust-cell-height = 23%
+cursor-opacity = 0.6
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+# Color theme:
+theme = GruvboxLight
+background = f0e5c0
+
+# Key bindings:
+keybind = super+one=goto_tab:1
+keybind = super+two=goto_tab:2
+keybind = super+three=goto_tab:3
+keybind = super+four=goto_tab:4
+keybind = super+five=goto_tab:5
+keybind = super+shift+comma=reload_config
+keybind = super+shift+k=goto_split:top
+keybind = super+shift+j=goto_split:bottom
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+l=goto_split:right
+keybind = super+shift+c=copy_to_clipboard
+keybind = super+shift+h=write_screen_file:paste
+keybind = super+c=copy_to_clipboard
+keybind = super+k=clear_screen
+keybind = super+v=paste_from_clipboard
+keybind = super+equal=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+zero=reset_font_size
+keybind = super+q=quit
+keybind = super+n=new_window
+keybind = super+t=new_tab
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+shift+i=inspector:toggle

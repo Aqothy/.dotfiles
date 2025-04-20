@@ -39,8 +39,6 @@ vim.opt.ignorecase = true
 vim.opt.infercase = true
 vim.opt.smartcase = true
 
-vim.opt.termguicolors = true
-
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
@@ -63,10 +61,12 @@ vim.opt.cursorline = true
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
 vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
-vim.opt.conceallevel = 2
 vim.g.snacks_animate = false
 vim.opt.winborder = "rounded"
 vim.opt.diffopt = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
+vim.opt.list = true
+vim.opt.termguicolors = true
+vim.opt.showbreak = "↪"
 -- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"

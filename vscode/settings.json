@@ -35,7 +35,7 @@
   "editor.lineNumbers": "relative",
   "telemetry.telemetryLevel": "off",
   "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
-  "editor.fontSize": 18,
+  "editor.fontSize": 17,
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
@@ -55,5 +55,7 @@
   "editor.autoClosingBrackets": "never",
   "editor.autoClosingDelete": "never",
   "editor.autoClosingOvertype": "never",
-  "editor.stickyScroll.enabled": true
+  "editor.stickyScroll.enabled": true,
+  "terminal.integrated.fontSize": 17,
+  "editor.stickyScroll.maxLineCount": 3
 }

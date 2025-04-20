@@ -11,7 +11,9 @@ end
 -- Custom snacks pickers
 function M.pick_projects()
 	local projects = {}
-	local cmd = "fd --type d --max-depth 1 --min-depth 1 . " .. vim.g.projects_dir .. "/Personal"
+	local cmd = "fd --type d --hidden --follow --exclude .git --max-depth 1 --min-depth 1 . "
+		.. vim.g.projects_dir
+		.. "/Personal"
 
 	-- For windows
 	-- local projects_dir = vim.g.projects_dir .. "/Personal"
