@@ -7,13 +7,18 @@ return {
 				enabled = false,
 			},
 		},
+		prompt = {
+			win_config = {
+				border = "none",
+			},
+		},
 		label = {
 			uppercase = false,
 		},
 	},
 	keys = {
 		{
-			"<C-j>",
+			"<leader>;",
 			mode = { "n", "x", "o" },
 			function()
 				require("flash").jump()
@@ -21,7 +26,7 @@ return {
 			desc = "Flash",
 		},
 		{
-			"<C-s>",
+			"<leader>S",
 			mode = { "n", "x", "o" },
 			function()
 				require("flash").treesitter()

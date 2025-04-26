@@ -64,9 +64,9 @@ vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
 vim.g.snacks_animate = false
 vim.opt.winborder = "rounded"
 vim.opt.diffopt = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
-vim.opt.list = true
 vim.opt.termguicolors = true
 vim.opt.showbreak = "↪"
+vim.opt.scrolloff = 8
 -- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"

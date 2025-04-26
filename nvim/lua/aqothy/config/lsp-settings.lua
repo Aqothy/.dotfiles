@@ -35,7 +35,6 @@ local jsts_config = {
 M["vtsls"] = {
 	enabled = true,
 	settings = {
-		complete_function_calls = true,
 		vtsls = {
 			enableMoveToFileCodeAction = true,
 			autoUseWorkspaceTsdk = true,
@@ -43,7 +42,7 @@ M["vtsls"] = {
 				maxInlayHintLength = 30,
 				completion = {
 					enableServerSideFuzzyMatch = true,
-					entriesLimit = 300,
+					entriesLimit = 200,
 				},
 			},
 		},

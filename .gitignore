@@ -2,7 +2,8 @@ github-copilot
 configstore
 simple-update-notifier
 gcloud
-nvm
 zed/*
+uv
+zsh/.zcompdump
 !zed/keymap.json
 !zed/settings.json

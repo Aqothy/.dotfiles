@@ -54,7 +54,7 @@ return {
 			show_dotfiles = not show_dotfiles
 			local new_filter = show_dotfiles and mf.config.content.filter or filter_hide
 			mf.refresh({ content = { filter = new_filter } })
-			vim.notify("Dotfiles " .. (show_dotfiles and "shown" or "hidden"))
+			vim.notify((show_dotfiles and "Showing" or "Hiding") .. " Dotfiles")
 		end
 
 		local files_set_cwd = function()

@@ -41,8 +41,8 @@ return {
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					init_selection = "<C-space>",
-					node_incremental = "<C-space>",
+					init_selection = "<cr>",
+					node_incremental = "<cr>",
 					scope_incremental = false,
 					node_decremental = "<bs>",
 				},
@@ -61,32 +61,18 @@ return {
 			},
 
 			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-						["aa"] = "@parameter.outer",
-						["ia"] = "@parameter.inner",
-						["ao"] = "@conditional.outer",
-						["io"] = "@conditional.inner",
-						["al"] = "@loop.outer",
-						["il"] = "@loop.inner",
-					},
-				},
 				move = {
 					enable = true,
 					set_jumps = true,
 					goto_next_start = {
 						["]f"] = "@function.outer",
 						["]]"] = "@class.outer",
+						["]a"] = "@parameter.inner",
 					},
 					goto_previous_start = {
 						["[f"] = "@function.outer",
 						["[["] = "@class.outer",
+						["[a"] = "@parameter.inner",
 					},
 				},
 			},
@@ -119,34 +105,11 @@ return {
 				},
 			})
 
-			vim.treesitter.language.register("bash", "kitty")
-			vim.treesitter.language.register("bash", "ghostty")
+			vim.treesitter.language.register("bash", { "kitty", "ghostty" })
 
 			require("nvim-treesitter.configs").setup(opts)
 
 			Snacks.toggle.treesitter():map("<leader>ts")
-		end,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		event = "LazyFile",
-		opts = function()
-			local tsc = require("treesitter-context")
-			Snacks.toggle({
-				name = "Treesitter Context",
-				get = tsc.enabled,
-				set = function(state)
-					if state then
-						tsc.enable()
-					else
-						tsc.disable()
-					end
-				end,
-			}):map("<leader>tu")
-
-			return {
-				max_lines = 3,
-			}
 		end,
 	},
 }

@@ -9,10 +9,15 @@ macos-non-native-fullscreen = visible-menu
 # Other:
 mouse-hide-while-typing = true
 copy-on-select = clipboard
-adjust-cell-height = 23%
 cursor-opacity = 0.6
+adjust-cell-height = 23%
+adjust-cursor-height = 23%
 confirm-close-surface = false
 quit-after-last-window-closed = true
+window-padding-balance = true
+window-padding-x = 0
+window-padding-y = 0
+window-padding-color = extend
 
 # Color theme:
 theme = GruvboxLight

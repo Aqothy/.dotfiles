@@ -14,12 +14,6 @@ function build_nvim(){
         return 1
     fi
 
-    # Check if there is a .git directory
-    if [ ! -d ".git" ]; then
-        echo "No .git directory found. Please check the path."
-        return 1
-    fi
-
     git switch master
     git pull
 

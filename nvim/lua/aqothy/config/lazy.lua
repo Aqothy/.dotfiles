@@ -39,9 +39,6 @@ require("lazy").setup({
 		},
 	},
 	install = { colorscheme = { "gruvbox" } },
-	ui = {
-		border = "rounded",
-	},
 	defaults = {
 		lazy = false,
 		version = false, -- always use the latest git commit

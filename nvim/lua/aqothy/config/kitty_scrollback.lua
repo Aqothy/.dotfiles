@@ -15,6 +15,7 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 	vim.opt.scrollback = INPUT_LINE_NUMBER + CURSOR_LINE
 	vim.opt.background = "light"
 	vim.api.nvim_set_hl(0, "Normal", { bg = "#f2e5bc" }) -- make bg color gruvbox
+	vim.api.nvim_set_hl(0, "Visual", { bg = "#BDAE93" })
 
 	local autocmd = vim.api.nvim_create_autocmd
 	local group = vim.api.nvim_create_augroup("aqothy/kitty_scrollback", { clear = true })

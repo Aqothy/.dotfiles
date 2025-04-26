@@ -265,13 +265,34 @@ end
 function M.filetype_component()
 	local relative_path = fn.expand("%:.")
 	local icon, icon_hl = mini_icons.get("file", relative_path)
+
+	-- Truncate long paths
+	local truncated_path = relative_path
+	if #relative_path > 40 and relative_path ~= "" and bo.buftype ~= "terminal" then
+		-- Find the first directory separator
+		local first_sep = relative_path:find("[/\\]")
+		-- Find the last directory separator
+		local last_sep = relative_path:reverse():find("[/\\]")
+		if first_sep and last_sep then
+			last_sep = #relative_path - last_sep + 1
+
+			-- Get the parent directory
+			local parent = relative_path:sub(1, first_sep)
+			-- Get the filename with extension
+			local filename = relative_path:sub(last_sep)
+
+			-- Construct the truncated path
+			truncated_path = parent .. "…" .. filename
+		end
+	end
+
 	return "%#"
 		.. icon_hl
 		.. "#"
 		.. icon
 		.. " %#StatuslineTitle#"
-		-- Show relative path if not empty and not a terminal buffer
-		.. ((relative_path ~= "" and bo.buftype ~= "terminal") and relative_path or "%t")
+		-- Show truncated path if not empty and not a terminal buffer
+		.. ((relative_path ~= "" and bo.buftype ~= "terminal") and truncated_path or "%t")
 		.. "%m%r"
 end
 
