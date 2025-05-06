@@ -90,6 +90,7 @@ keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make 
 keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 
 keymap({ "n", "v" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
+keymap("n", "<leader>k", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
 
 keymap("n", "'s", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
 

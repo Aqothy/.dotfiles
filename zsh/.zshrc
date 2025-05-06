@@ -38,20 +38,20 @@ alias gc="git commit"
 alias gm="git merge"
 alias gb="git branch"
 alias gac="git add -A && git commit"
-alias si="git switch"
+alias sb="git switch"
+alias sc="git switch -c"
 alias gd="git diff"
 alias co="git checkout"
 alias pu="git push"
 alias pl="git pull"
 alias fe="git fetch"
-alias re="git rebase"
+alias rb="git rebase"
 alias gl="git log"
 alias gt="git log --graph --oneline --decorate --all"
 alias so="source ${ZDOTDIR}/.zshrc"
-alias fs="git branch --no-color --sort=-committerdate --format='%(refname:short)' | fzf --header 'git switch' | xargs git switch"
+alias fsb="git branch --no-color --sort=-committerdate --format='%(refname:short)' | fzf --header 'git switch' | xargs git switch"
 alias ls='ls --color=auto'
 alias rg='rg --color=auto'
-alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias d='dirs -v'
@@ -140,7 +140,6 @@ _comp_options+=(globdots)
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
-setopt COMPLETE_ALIASES
 
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' menu select

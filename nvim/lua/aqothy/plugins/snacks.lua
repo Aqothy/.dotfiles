@@ -26,13 +26,7 @@ return {
 
 			notifier = {
 				enabled = true,
-				icons = {
-					error = user.signs.error,
-					warn = user.signs.warn,
-					info = user.signs.info,
-					debug = user.signs.debug,
-					trace = user.signs.trace,
-				},
+				icons = user.signs,
 				level = vim.log.levels.INFO,
 			},
 
@@ -261,5 +255,6 @@ return {
 		Snacks.toggle.profiler():map("<leader>pp")
 		Snacks.toggle.indent():map("<leader>id")
 		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
+		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
 	end,
 }

@@ -55,6 +55,7 @@ return {
 				-- Default sources if not in a comment
 				return { "lsp", "path", "snippets", "buffer" }
 			end,
+			per_filetype = { ["dap-repl"] = { "omni" } },
 			providers = {
 				path = {
 					opts = {
@@ -115,6 +116,11 @@ return {
 			},
 			trigger = {
 				prefetch_on_insert = false,
+			},
+			menu = {
+				draw = {
+					treesitter = { "lsp" },
+				},
 			},
 		},
 

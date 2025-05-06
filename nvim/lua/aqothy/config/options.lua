@@ -56,7 +56,7 @@ vim.opt.wildignorecase = true
 vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.wildoptions:append({ "fuzzy" })
 
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
@@ -67,6 +67,7 @@ vim.opt.diffopt = { "internal", "filler", "closeoff", "indent-heuristic", "linem
 vim.opt.termguicolors = true
 vim.opt.showbreak = "↪"
 vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 8
 -- vim.opt.colorcolumn = "80"
 
 vim.opt.encoding = "utf-8"
@@ -103,8 +104,8 @@ vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " "
 -- vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
 -- vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
 
-vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
-vim.opt.wrap = true
+vim.opt.whichwrap:append("h,l") -- allow move to next line with the
+vim.opt.wrap = false
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 

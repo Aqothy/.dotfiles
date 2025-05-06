@@ -41,8 +41,8 @@ return {
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					init_selection = "<cr>",
-					node_incremental = "<cr>",
+					init_selection = "<c-j>",
+					node_incremental = "<c-j>",
 					scope_incremental = false,
 					node_decremental = "<bs>",
 				},
@@ -61,18 +61,52 @@ return {
 			},
 
 			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["am"] = "@function.outer",
+						["im"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["ao"] = "@conditional.outer",
+						["io"] = "@conditional.inner",
+						["al"] = "@loop.outer",
+						["il"] = "@loop.inner",
+						["af"] = "@call.outer",
+						["if"] = "@call.inner",
+					},
+				},
 				move = {
 					enable = true,
 					set_jumps = true,
 					goto_next_start = {
-						["]f"] = "@function.outer",
+						["]m"] = "@function.outer",
 						["]]"] = "@class.outer",
 						["]a"] = "@parameter.inner",
 					},
 					goto_previous_start = {
-						["[f"] = "@function.outer",
+						["[m"] = "@function.outer",
 						["[["] = "@class.outer",
 						["[a"] = "@parameter.inner",
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = {
+						["<leader>an"] = "@parameter.inner",
+					},
+					swap_previous = {
+						["<leader>ap"] = "@parameter.inner",
+					},
+				},
+				lsp_interop = {
+					enable = true,
+					floating_preview_opts = {},
+					peek_definition_code = {
+						["<leader>k"] = "@*",
 					},
 				},
 			},

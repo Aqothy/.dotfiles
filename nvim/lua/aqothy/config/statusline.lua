@@ -12,19 +12,19 @@ local autocmd = api.nvim_create_autocmd
 local user = require("aqothy.config.user")
 local mini_icons = require("mini.icons")
 
+M.sysname = uv.os_uname().sysname or ""
+
 function M.os_component()
-	if not M._os_cache then
-		local uname_info = uv.os_uname() or {}
-		local sysname = uname_info.sysname or ""
+	if not M.os_cache then
 		if fn.has("win32") == 1 then
-			sysname = "windows"
+			M.sysname = "windows"
 		else
-			sysname = (sysname == "Darwin") and "macos" or sysname:lower()
+			M.sysname = (M.sysname == "Darwin") and "macos" or M.sysname:lower()
 		end
-		local icon, icon_hl = mini_icons.get("os", sysname)
-		M._os_cache = "%#" .. icon_hl .. "#" .. icon
+		local icon, icon_hl = mini_icons.get("os", M.sysname)
+		M.os_cache = "%#" .. icon_hl .. "#" .. icon
 	end
-	return M._os_cache
+	return M.os_cache
 end
 
 M.MODE_MAP = {
@@ -84,6 +84,7 @@ M.MODE_TO_HIGHLIGHT = {
 -- For op-pending mode
 autocmd("ModeChanged", {
 	group = stl_group,
+	desc = "Update statusline on mode change",
 	callback = vim.schedule_wrap(function()
 		cmd.redrawstatus()
 	end),
@@ -196,7 +197,6 @@ function M.diagnostics_component()
 	return result
 end
 
--- LSP Progress component optimization
 ---@type table<string, {kind: string, client: string}>
 M.progress_statuses = {}
 M.progress_cache = nil
@@ -207,32 +207,34 @@ autocmd("LspProgress", {
 	desc = "Update LSP progress in statusline",
 	pattern = { "begin", "end" },
 	callback = function(args)
-		if not args.data then
+		local data = args.data
+		if not data then
 			return
 		end
 
-		local client_id = args.data.client_id
+		local client_id = data.client_id
 		local client = vim.lsp.get_client_by_id(client_id)
-		local value = args.data.params.value
+		local value = data.params.value
 
 		if not client or type(value) ~= "table" then
 			return
 		end
 
-		local client_name = client.name
 		local progress = value.kind
 
 		-- Mark cache as dirty to trigger rebuild
 		M.progress_dirty = true
 
-		M.progress_statuses[client_name .. client_id] = {
+		local client_key = client.name .. client_id
+
+		M.progress_statuses[client_key] = {
 			kind = progress,
-			client = client_name,
+			client = client.name,
 		}
 
 		if progress == "end" then
 			vim.defer_fn(function()
-				M.progress_statuses[client_name .. client_id] = nil
+				M.progress_statuses[client_key] = nil
 				M.progress_dirty = true
 				cmd.redrawstatus()
 			end, 3000)
@@ -250,57 +252,92 @@ function M.lsp_progress_component()
 
 	local progress_parts = {}
 	for _, status in pairs(M.progress_statuses) do
-		local is_done = status.kind == "end"
-		local symbol = is_done and " " or "󱥸 "
-		table.insert(progress_parts, "%#StatuslineTitle#" .. symbol .. status.client)
-	end
-
-	local result = table.concat(progress_parts, " ")
-	M.progress_cache = result
-	M.progress_dirty = false
-
-	return result
-end
-
-function M.filetype_component()
-	local relative_path = fn.expand("%:.")
-	local icon, icon_hl = mini_icons.get("file", relative_path)
-
-	-- Truncate long paths
-	local truncated_path = relative_path
-	if #relative_path > 40 and relative_path ~= "" and bo.buftype ~= "terminal" then
-		-- Find the first directory separator
-		local first_sep = relative_path:find("[/\\]")
-		-- Find the last directory separator
-		local last_sep = relative_path:reverse():find("[/\\]")
-		if first_sep and last_sep then
-			last_sep = #relative_path - last_sep + 1
-
-			-- Get the parent directory
-			local parent = relative_path:sub(1, first_sep)
-			-- Get the filename with extension
-			local filename = relative_path:sub(last_sep)
-
-			-- Construct the truncated path
-			truncated_path = parent .. "…" .. filename
+		if status then
+			local is_done = status.kind == "end"
+			local symbol = is_done and " " or "󱥸 "
+			table.insert(progress_parts, "%#StatuslineTitle#" .. symbol .. status.client)
 		end
 	end
 
-	return "%#"
-		.. icon_hl
-		.. "#"
-		.. icon
-		.. " %#StatuslineTitle#"
-		-- Show truncated path if not empty and not a terminal buffer
-		.. ((relative_path ~= "" and bo.buftype ~= "terminal") and truncated_path or "%t")
-		.. "%m%r"
+	M.progress_cache = table.concat(progress_parts, " ")
+	M.progress_dirty = false
+
+	return M.progress_cache
+end
+
+autocmd({ "BufEnter", "TermLeave", "BufLeave" }, {
+	group = stl_group,
+	callback = function()
+		M.file_cache = nil
+		M.file_info = nil
+	end,
+	desc = "Invalidate file cache",
+})
+
+function M.truncate_path(path, max_len)
+	if #path <= max_len or path == "" then
+		return path
+	end
+
+	local sep = M.sysname == "windows" and "\\" or "/"
+	local parts = {}
+	for part in string.gmatch(path, "[^" .. sep .. "]+") do
+		table.insert(parts, part)
+	end
+
+	-- Keep first dir and filename intact, abbreviate middle parts if needed
+	if #parts <= 2 then
+		return path -- If only one directory deep or less, return full path
+	end
+
+	local first = parts[1]
+	local last = parts[#parts]
+	return first .. sep .. "…" .. sep .. last
+end
+
+function M.get_filetype_cache()
+	local relative_path = fn.expand("%:.")
+	local icon, icon_hl = mini_icons.get("file", relative_path)
+
+	-- Only truncate if not empty and not a terminal buffer
+	local display_path = relative_path
+	if relative_path ~= "" and bo.buftype ~= "terminal" then
+		display_path = M.truncate_path(relative_path, 40)
+	else
+		display_path = "%t" -- Use only the filename
+	end
+
+	M.file_cache = "%#" .. icon_hl .. "#" .. icon .. " %#StatuslineTitle#" .. display_path .. "%m%r"
+end
+
+function M.filetype_component()
+	if not M.file_cache then
+		M.get_filetype_cache()
+	end
+	return M.file_cache
+end
+
+autocmd("OptionSet", {
+	group = stl_group,
+	pattern = { "fileencoding", "expandtab", "tabstop" },
+	callback = function()
+		M.file_info = nil
+	end,
+	desc = "Invalidate file info cache",
+})
+
+function M.get_file_info()
+	M.file_info = "%#StatuslineModeSeparatorOther# "
+		.. bo.fileencoding
+		.. (bo.expandtab and " Spaces:" or " Tab:")
+		.. bo.tabstop
 end
 
 function M.file_info_component()
-	return "%#StatuslineModeSeparatorOther# "
-		.. (bo.fileencoding or bo.encoding)
-		.. (bo.expandtab and " Spaces:" or " Tab:")
-		.. bo.shiftwidth
+	if not M.file_info then
+		M.get_file_info()
+	end
+	return M.file_info
 end
 
 function M.position_component()

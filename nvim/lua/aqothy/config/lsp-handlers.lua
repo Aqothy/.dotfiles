@@ -17,6 +17,8 @@ M.capabilities.workspace = {
 	},
 }
 
+local user = require("aqothy.config.user")
+
 local s = vim.diagnostic.severity
 
 local signs = {
@@ -36,7 +38,11 @@ local signs = {
 
 local config = {
 	signs = signs,
-	virtual_text = true,
+	virtual_text = {
+		prefix = function(diagnostic)
+			return " " .. user.signs[string.lower(s[diagnostic.severity])]
+		end,
+	},
 	update_in_insert = false,
 	underline = true,
 	severity_sort = true,
@@ -45,7 +51,11 @@ local config = {
 		style = "minimal",
 		source = "if_many",
 		header = "",
-		prefix = "",
+		prefix = function(diag)
+			local level = string.lower(s[diag.severity])
+			local prefix = string.format(" %s ", user.signs[level])
+			return prefix, "Diagnostic" .. level:sub(1, 1):upper() .. level:sub(2)
+		end,
 	},
 }
 
@@ -194,7 +204,6 @@ M.on_attach = function(client, bufnr)
 	keymap("n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" })
 	keymap("n", "<c-w>d", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
 	keymap("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" })
-	keymap("n", "<leader>pd", function() Snacks.picker.lsp_definitions({ auto_confirm = false, layout = "ivy" }) end, { desc = "Peek definition", has = "definition" })
 	keymap("n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" })
 	keymap("n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" })
 	keymap("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition", has = "typeDefinition" })
