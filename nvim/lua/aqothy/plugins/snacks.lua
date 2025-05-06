@@ -136,7 +136,7 @@ return {
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
-            "<c-j>",
+            "<c-`>",
             function()
                 Snacks.terminal(nil, {
                     win = {

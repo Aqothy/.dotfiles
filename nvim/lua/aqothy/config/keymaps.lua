@@ -15,6 +15,10 @@ keymap("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 keymap("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+keymap("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+keymap("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+keymap("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
+keymap("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 -- Line wrapping
 keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -27,10 +31,10 @@ keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 -- Resize windows
-keymap("n", "<C-7>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-keymap("n", "<C-8>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-keymap("n", "<C-9>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-keymap("n", "<C-0>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+keymap("n", "<C-0>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+keymap("n", "<C-->", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+keymap("n", "<C-=>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
@@ -43,6 +47,7 @@ keymap("x", "@", function()
 		vim.cmd([['<,'>normal @]] .. reg)
 	end)
 end, { silent = false })
+keymap("t", "<c-/>", "<c-\\><c-n>", { desc = "Escape Terminal Mode" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

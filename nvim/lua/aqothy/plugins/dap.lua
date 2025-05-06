@@ -4,6 +4,7 @@ return {
 		dependencies = {
 			"williamboman/mason.nvim",
 		},
+		lazy = true,
 		config = function()
 			local dap = require("dap")
 			local icons = require("aqothy.config.user").dap
