@@ -26,6 +26,12 @@ keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
+-- Resize windows
+keymap("n", "<C-7>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+keymap("n", "<C-8>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+keymap("n", "<C-9>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+keymap("n", "<C-0>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+
 -- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], { silent = false, desc = "Open a new file in the same directory" })

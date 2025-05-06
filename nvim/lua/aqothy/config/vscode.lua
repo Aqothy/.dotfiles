@@ -76,8 +76,6 @@ keymap("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
 keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
 
-keymap("n", "<leader>tt", vscode_action("workbench.action.togglePanel"), { desc = "Toggle Terminal" })
-
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 
 keymap({ "n", "v" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })

@@ -10,3 +10,4 @@ zsh/.zcompdump
 .wrangler
 ngrok
 swiftpm
+dlv

@@ -64,6 +64,7 @@ M.MODE_MAP = {
 	["r?"] = "CONFIRM",
 	["!"] = "SHELL",
 	["t"] = "TERMINAL",
+	["D"] = "DEBUG",
 }
 
 M.MODE_TO_HIGHLIGHT = {
@@ -79,7 +80,18 @@ M.MODE_TO_HIGHLIGHT = {
 	COMMAND = "Command",
 	EX = "Command",
 	TERMINAL = "Command",
+	DEBUG = "Debug",
 }
+
+-- Debug mode component
+local dmode_enabled = false
+autocmd("User", {
+	pattern = "DebugModeChanged",
+	callback = function(args)
+		dmode_enabled = args.data.enabled
+		cmd.redrawstatus()
+	end,
+})
 
 -- For op-pending mode
 autocmd("ModeChanged", {
@@ -91,7 +103,7 @@ autocmd("ModeChanged", {
 })
 
 function M.mode_component()
-	local mode = api.nvim_get_mode().mode
+	local mode = dmode_enabled and "D" or api.nvim_get_mode().mode
 	local mode_str = M.MODE_MAP[mode] or "UNKNOWN"
 	local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 	return "%#"

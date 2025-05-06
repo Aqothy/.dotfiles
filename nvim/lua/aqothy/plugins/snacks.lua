@@ -136,7 +136,7 @@ return {
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
-            "<leader>tt",
+            "<c-j>",
             function()
                 Snacks.terminal(nil, {
                     win = {
@@ -146,8 +146,9 @@ return {
                     },
                 })
             end,
-            desc = "Terminal",
-        },
+            desc = "Toggle Terminal",
+			mode = { "n", "t" },
+		},
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
             "<leader>sh",

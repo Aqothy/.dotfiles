@@ -63,6 +63,7 @@ return {
 				Insert = "bright_green",
 				Command = "neutral_yellow",
 				Other = "neutral_purple",
+				Debug = "neutral_red",
 			}
 
 			-- Add mode-specific groups
