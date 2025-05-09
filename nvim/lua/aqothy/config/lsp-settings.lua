@@ -1,5 +1,7 @@
 local M = {}
 
+local utils = require("aqothy.config.utils")
+
 -- use enabled field to disable or enable a lsp
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
@@ -53,9 +55,8 @@ M["vtsls"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			utils.action("source.organizeImports"),
 			{
-				action = "source.organizeImports",
 				desc = "Organize Imports",
 			},
 		},
@@ -161,18 +162,16 @@ M["gopls"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			utils.action("source.organizeImports"),
 			{
-				action = "source.organizeImports",
 				desc = "Organize Imports",
 			},
 		},
 		{
 			"n",
 			"<leader>fl",
-			"",
+			utils.action("refactor.rewrite.fillStruct"),
 			{
-				action = "refactor.rewrite.fillStruct",
 				desc = "Fill Struct",
 			},
 		},
@@ -221,9 +220,8 @@ M["ruff"] = {
 		{
 			"n",
 			"<leader>oi",
-			"",
+			utils.action("source.organizeImports"),
 			{
-				action = "source.organizeImports",
 				desc = "Organize Imports",
 			},
 		},

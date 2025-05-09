@@ -176,7 +176,7 @@ autocmd("DiagnosticChanged", {
 })
 
 function M.diagnostics_component()
-	if bo.filetype == "lazy" then
+	if bo.filetype == "lazy" or bo.filetype == "mason" then
 		return ""
 	end
 

@@ -135,86 +135,81 @@ function M.has(method, client)
 	return false
 end
 
+M._keys = nil
+
+function M.get()
+	if M._keys then
+		return M._keys
+	end
+    -- stylua: ignore
+	M._keys = {
+		{ "n", "K", vim.lsp.buf.hover, { desc = "Hover", has = "hover" } },
+		{ { "n", "x" }, "gra", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" } },
+		{ "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
+		{ "n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
+		{ "n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
+		{ "n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
+		{ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
+		{ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
+		{ { "i", "s" }, "<c-s>", function()
+			local has_cmp, cmp = pcall(require, "cmp")
+			if has_blink and blink.is_menu_visible() then
+				blink.hide()
+			end
+			if has_cmp and cmp.visible() then
+				cmp.close()
+			end
+			vim.lsp.buf.signature_help()
+		end, { desc = "Signature Help", has = "signatureHelp" } },
+		{ "n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
+		{ "n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" } },
+		{ "n", "<c-w>d", vim.diagnostic.open_float, { desc = "Float Diagnostics" } },
+		{ "n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
+		{ "n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
+		{ "n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
+		{ "n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
+		{ "n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" } },
+		{ "n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
+		{ "n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
+		{ "n", "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+		{ "n", "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+		{ "n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
+		{ "n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
+		{ "n", "<leader>li", function() Snacks.picker.lsp_config() end, { desc = "Lsp info" } },
+	}
+
+	return M._keys
+end
+
 local settings = require("aqothy.config.lsp-settings")
 
 M.on_attach = function(client, bufnr)
-	-- Custom function to wrap keymap setting
-	local function keymap(mode, lhs, rhs, extra_opts)
-		-- Check conditions first
-		local has_met = not extra_opts.has or M.has(extra_opts.has, client)
-		local cond_met = not (
-			extra_opts.cond == false or ((type(extra_opts.cond) == "function") and not extra_opts.cond())
-		)
-
-		if has_met and cond_met then
-			vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = extra_opts.desc })
-		end
-	end
-
 	-- Inlay hints
 	if client:supports_method("textDocument/inlayHint") then
 		-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
+	local spec = vim.tbl_extend("force", {}, M.get())
+
 	local lsp_config = settings[client.name]
 	if lsp_config and lsp_config.enabled and lsp_config.keys then
-		for _, key in ipairs(lsp_config.keys) do
-			local mode, lhs, rhs, key_opts = unpack(key)
-
-			-- Handle LSP code actions
-			if key_opts.action then
-				keymap(mode, lhs, function()
-					vim.lsp.buf.code_action({
-						apply = true,
-						context = {
-							only = { key_opts.action },
-							diagnostics = {},
-						},
-					})
-				end, key_opts)
-
-			-- Handle regular keymaps
-			else
-				keymap(mode, lhs, rhs, key_opts)
-			end
-		end
+		vim.list_extend(spec, lsp_config.keys)
 	end
 
-	keymap("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
-	keymap("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
-	keymap("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-	keymap("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-	keymap("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
-	keymap("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-	-- stylua: ignore start
-	keymap({ "i", "s" }, "<c-s>", function()
-		local has_cmp, cmp = pcall(require, "cmp")
-		if has_blink and blink.is_menu_visible() then
-			blink.hide()
+	for _, key in pairs(spec) do
+		local mode, lhs, rhs, opts = unpack(key)
+		local has_met = not opts.has or M.has(opts.has, client)
+		local cond_met = not (opts.cond == false or ((type(opts.cond) == "function") and not opts.cond()))
+
+		if has_met and cond_met then
+			opts.cond = nil
+			opts.has = nil
+			opts.silent = opts.silent ~= false
+			opts.buffer = bufnr
+			vim.keymap.set(mode or "n", lhs, rhs, opts)
 		end
-		if has_cmp and cmp.visible() then
-			cmp.close()
-		end
-		vim.lsp.buf.signature_help()
-	end, { desc = "Signature Help", has = "signatureHelp" })
-	keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover", has = "hover" })
-	keymap({ "n", "x" }, "gra", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" })
-	keymap("n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } })
-	keymap("n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" })
-	keymap("n", "<c-w>d", vim.diagnostic.open_float, { desc = "Float Diagnostics" })
-	keymap("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" })
-	keymap("n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" })
-	keymap("n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" })
-	keymap("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition", has = "typeDefinition" })
-	keymap("n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" })
-	keymap("n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" })
-	keymap("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" })
-	keymap("n", "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
-	keymap("n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end })
-	keymap("n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" })
-	keymap("n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" })
-	keymap("n", "<leader>li", function() Snacks.picker.lsp_config() end, { desc = "Lsp info" })
+	end
 end
 
 return M

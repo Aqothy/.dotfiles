@@ -93,4 +93,16 @@ function M.hide_tmux(state, disable)
 	end
 end
 
+function M.action(action)
+	return function()
+		vim.lsp.buf.code_action({
+			apply = true,
+			context = {
+				only = { action },
+				diagnostics = {},
+			},
+		})
+	end
+end
+
 return M

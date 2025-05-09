@@ -62,12 +62,12 @@ return {
 					input = {
 						keys = {
 							["<a-s>"] = { "flash", mode = { "n", "i" } },
-							["<a-n>"] = { "toggle_hidden", mode = { "i", "n" } },
+							["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
 						},
 					},
 					list = {
 						keys = {
-							["<a-n>"] = { "toggle_hidden", mode = { "i", "n" } },
+							["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
 						},
 					},
 				},
