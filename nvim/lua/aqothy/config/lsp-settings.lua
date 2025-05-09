@@ -233,4 +233,23 @@ M["bashls"] = {
 	filetypes = { "bash", "sh", "zsh" },
 }
 
+M["jsonls"] = {
+	enabled = true,
+	settings = {
+		json = {
+			schemas = {
+				{
+					fileMatch = { "package.json" },
+					url = "https://json.schemastore.org/package.json",
+				},
+				{
+					fileMatch = { "tsconfig.json" },
+					url = "https://json.schemastore.org/tsconfig.json",
+				},
+			},
+			validate = { enable = true },
+		},
+	},
+}
+
 return M

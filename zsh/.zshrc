@@ -38,7 +38,6 @@ alias gc="git commit"
 alias gm="git merge"
 alias gb="git branch"
 alias gac="git add -A && git commit"
-alias sb="git switch"
 alias sc="git switch -c"
 alias st="git stash"
 alias gd="git diff"
@@ -50,7 +49,7 @@ alias rb="git rebase"
 alias gl="git log"
 alias gt="git log --graph --oneline --decorate --all"
 alias so="source ${ZDOTDIR}/.zshrc"
-alias fsb="git branch --no-color --sort=-committerdate --format='%(refname:short)' | fzf --header 'git switch' | xargs git switch"
+alias sb="git branch --no-color --sort=-committerdate --format='%(refname:short)' | fzf --header 'git switch' | xargs git switch"
 alias ls='ls --color=auto'
 alias rg='rg --color=auto'
 alias ...='cd ../..'

@@ -19,6 +19,7 @@ return {
 			"emmet-language-server",
 			"ruff",
 			"bash-language-server",
+			"json-lsp",
 
 			-- Formatters/linters
 			"stylua",
