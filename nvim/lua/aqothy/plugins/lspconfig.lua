@@ -7,7 +7,6 @@ return {
 	},
 	cmd = "LspInfo",
 	config = function()
-		local lspconfig = require("lspconfig")
 		local handlers = require("aqothy.config.lsp-handlers")
 
 		local params = {
@@ -17,7 +16,8 @@ return {
 		local settings = require("aqothy.config.lsp-settings")
 		for lsp, opts in pairs(settings) do
 			if opts.enabled ~= false then
-				lspconfig[lsp].setup(vim.tbl_deep_extend("force", params, opts))
+				vim.lsp.config(lsp, vim.tbl_deep_extend("force", params, opts))
+				vim.lsp.enable(lsp)
 			end
 		end
 
