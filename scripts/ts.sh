@@ -15,7 +15,7 @@ has_session() {
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
-    selected=$(fzf_dir.sh)
+    selected=$(fzf_dir)
 fi
 
 [[ -z "$selected" ]] && exit 0

@@ -168,7 +168,7 @@ source <(fzf --zsh)
 
 fzf_append_dir_widget() {
   local dir
-  dir=$(fzf_dir.sh) || return
+  dir=$(fzf_dir) || return
   if [[ -n "$dir" ]]; then
     LBUFFER+="\"$dir\""
   fi

@@ -18,7 +18,7 @@
 [credential]
 
 [core]
-	excludesfile = ~/.gitignore
+	excludesfile = ~/.gitignore_global
 
 [fetch]
     prune = true
@@ -54,7 +54,6 @@
 [diff]
     algorithm = histogram
     renames = true
-    colorMoved = plain
     mnemonicPrefix = true
     tool = nvimdiff
 

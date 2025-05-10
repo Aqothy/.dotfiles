@@ -1,13 +1,1 @@
-github-copilot
-configstore
-simple-update-notifier
-gcloud
-zed/*
-uv
-zsh/.zcompdump
-!zed/keymap.json
-!zed/settings.json
-.wrangler
-ngrok
-swiftpm
-dlv
+zsh/.zcompdump*
