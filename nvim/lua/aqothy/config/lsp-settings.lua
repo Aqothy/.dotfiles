@@ -169,7 +169,7 @@ M["gopls"] = {
 		},
 		{
 			"n",
-			"<leader>fl",
+			"<leader>fi",
 			utils.action("refactor.rewrite.fillStruct"),
 			{
 				desc = "Fill Struct",

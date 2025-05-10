@@ -132,7 +132,7 @@ return {
         { "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame Line", mode = { "n", "v" } },
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
         ---@diagnostic disable-next-line: missing-fields
-        { "<leader>gY", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
+        { "<leader>gy", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
@@ -184,6 +184,7 @@ return {
         },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
+		{ "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
         {

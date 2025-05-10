@@ -148,7 +148,7 @@ return {
 		keys = {
 			{ "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
 			---@diagnostic disable-next-line: missing-fields
-			{ "<leader>gY", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
+			{ "<leader>gy", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
 			{ "ai", mode = { "o", "x" }, desc = "Around indent" },
 			{ "ii", mode = { "o", "x" }, desc = "In indent" },
 			{ "]i", desc = "Next ident" },

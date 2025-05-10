@@ -4,7 +4,6 @@ select_dir() {
     ( echo "$HOME/.dotfiles"
       echo "$HOME/Code"
       fd --type d --hidden --follow --exclude .git --max-depth 1 --min-depth 1 . \
-        "$HOME/.config" \
         "$HOME/Code" \
         "$HOME/Code/School" \
         "$HOME/Code/Personal" \
