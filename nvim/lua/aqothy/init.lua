@@ -7,7 +7,7 @@ require("aqothy.config.lazy")
 if not is_vscode then
 	local lazy_autocmds = vim.fn.argc(-1) == 0
 
-	-- Load autocmds immediately if needed
+	-- Load autocmds immediately if starting nvim with file
 	if not lazy_autocmds then
 		require("aqothy.config.autocmds")
 	end

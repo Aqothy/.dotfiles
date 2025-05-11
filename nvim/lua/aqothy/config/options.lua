@@ -18,7 +18,7 @@ vim.opt.relativenumber = true
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
+vim.opt.softtabstop = -1
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 vim.opt.breakindent = true
@@ -66,7 +66,7 @@ vim.opt.winborder = "rounded"
 vim.opt.diffopt = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
 vim.opt.termguicolors = true
 vim.opt.showbreak = "↪"
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 4
 vim.opt.sidescrolloff = 8
 -- vim.opt.colorcolumn = "80"
 

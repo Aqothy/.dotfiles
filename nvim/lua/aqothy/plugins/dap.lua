@@ -48,6 +48,8 @@ return {
 				nowait = true,
 			},
 		},
-		config = function() end,
+		config = function()
+			vim.api.nvim_set_hl(0, "dCursor", { bg = "#cc241d" })
+		end,
 	},
 }

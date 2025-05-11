@@ -108,6 +108,8 @@ keymap("n", "'5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon
 
 keymap("n", "<leader>zz", vscode_action("workbench.action.toggleZenMode"), { desc = "Toggle ZenMode" })
 
+keymap("n", "<leader>ls", vscode_action("workbench.action.gotoSymbol"), { desc = "Show Symbols" })
+
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),

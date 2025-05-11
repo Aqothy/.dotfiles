@@ -190,14 +190,14 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
-	local spec = vim.tbl_extend("force", {}, M.get())
+	local keys = vim.tbl_extend("force", {}, M.get())
 
 	local lsp_config = settings[client.name]
 	if lsp_config and lsp_config.enabled and lsp_config.keys then
-		vim.list_extend(spec, lsp_config.keys)
+		vim.list_extend(keys, lsp_config.keys)
 	end
 
-	for _, key in pairs(spec) do
+	for _, key in pairs(keys) do
 		local mode, lhs, rhs, opts = unpack(key)
 		local has_met = not opts.has or M.has(opts.has, client)
 		local cond_met = not (opts.cond == false or ((type(opts.cond) == "function") and not opts.cond()))
