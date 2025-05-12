@@ -14,8 +14,9 @@ function build_nvim(){
         return 1
     fi
 
-    git switch master
-    git pull
+    # Use -c flag to set configuration for this command only
+    git -c safe.directory="$NVIM_DIR" checkout master
+    git -c safe.directory="$NVIM_DIR" pull
 
     # Clean out previous builds
     INSTALL_DIR="/usr/local/share/nvim"

@@ -129,7 +129,7 @@ M["clangd"] = {
 		clangdFileStatus = true,
 	},
 	keys = {
-		{ "n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" } },
+		{ "n", "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" } },
 	},
 }
 
@@ -159,14 +159,6 @@ M["gopls"] = {
 		},
 	},
 	keys = {
-		{
-			"n",
-			"<leader>oi",
-			utils.action("source.organizeImports"),
-			{
-				desc = "Organize Imports",
-			},
-		},
 		{
 			"n",
 			"<leader>fi",

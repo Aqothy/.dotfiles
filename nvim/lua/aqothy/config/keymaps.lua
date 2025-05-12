@@ -43,7 +43,8 @@ keymap("x", "@", function()
 		vim.cmd([['<,'>normal @]] .. reg)
 	end)
 end, { silent = false })
-keymap("t", "<c-/>", "<c-\\><c-n>", { desc = "Escape Terminal Mode" })
+keymap("t", "<c-.>", "<c-\\><c-n>", { desc = "Escape Terminal Mode" })
+keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

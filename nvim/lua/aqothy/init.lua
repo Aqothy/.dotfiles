@@ -23,4 +23,6 @@ if not is_vscode then
 			require("aqothy.config.statusline")
 		end,
 	})
+
+	require("vim._extui").enable({ msg = { pos = "box" } })
 end

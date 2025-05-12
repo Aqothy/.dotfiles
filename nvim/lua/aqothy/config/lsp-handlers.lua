@@ -190,6 +190,8 @@ M.on_attach = function(client, bufnr)
 		Snacks.toggle.inlay_hints():map("<leader>ti")
 	end
 
+	vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
+
 	local keys = vim.tbl_extend("force", {}, M.get())
 
 	local lsp_config = settings[client.name]
