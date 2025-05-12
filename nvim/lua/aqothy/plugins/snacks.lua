@@ -132,7 +132,7 @@ return {
         { "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame Line", mode = { "n", "v" } },
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
         ---@diagnostic disable-next-line: missing-fields
-        { "<leader>gy", function () Snacks.gitbrowse({ open = function (url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
+        { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
@@ -151,25 +151,6 @@ return {
 		},
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
-            "<leader>sh",
-            function() Snacks.win({
-                zindex = 100,
-                width = 0.6,
-                height = 0.6,
-                title = "Messages History ",
-                title_pos = "center",
-                ft = "vim",
-                bo = { buflisted = false, bufhidden = "wipe", swapfile = false, modifiable = false, buftype = "nofile" },
-                wo = { winhighlight = "NormalFloat:Normal", wrap = true },
-                minimal = true,
-                keys = { q = "close", ["<esc>"] = "close" },
-                text = function ()
-                    return vim.split(vim.fn.execute("messages", "silent"), "\n")
-                end
-            }) end,
-            desc = "Show Messages History"
-        },
-        {
             "<leader>no",
             function()
                 ---@diagnostic disable-next-line: missing-fields
@@ -186,7 +167,7 @@ return {
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
 		{ "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
-        { "<leader>ee", function() Snacks.explorer({ hidden = true }) end, desc = "File Explorer" },
+        { "<leader>ee", function() Snacks.explorer({ hidden = true, ignored = true, layout = { layout = { width = 30 } } }) end, desc = "File Explorer" },
         {
             "<leader>to",
             function()
@@ -201,8 +182,8 @@ return {
             end,
             desc = "Grep TODOs"
         },
-        { "<leader>pr", function () Snacks.picker.resume() end, desc = "Resume Last Picker" },
-        { "<leader>pa", function () Snacks.picker() end, desc = "All Pickers" },
+        { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
+        { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
         { "<leader>pi", function() Snacks.picker.icons() end, desc = "Pick icons" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         {
@@ -215,20 +196,11 @@ return {
                 })
             end,
             desc = "Buffers" },
-        {
-            "<leader>fc",
-            function()
-                Snacks.picker.files({
-                    cwd = vim.fn.stdpath("config"),
-                    hidden = true
-                })
-            end,
-            desc = "Find Config File"
-        },
+        { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
-        { "<leader>ff", function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
+        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
         { "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
-        { "<leader>fs", function() Snacks.picker.grep({ hidden = true }) end, desc = "Grep" },
+        { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },

@@ -131,14 +131,20 @@ return {
 		},
 		config = function(_, opts)
 			vim.filetype.add({
+				extension = {
+					env = "dotenv",
+				},
+				filename = {
+					[".env"] = "dotenv",
+				},
 				pattern = {
 					[".*/kitty/.+%.conf"] = "kitty",
-					[".*/ghostty/config.*"] = "ghostty",
-					["%.env%.[%w_.-]+"] = "sh",
+					[".*/ghostty/.+"] = "ghostty",
+					["%.env%.[%w_.-]+"] = "dotenv",
 				},
 			})
 
-			vim.treesitter.language.register("bash", { "kitty", "ghostty" })
+			vim.treesitter.language.register("bash", { "kitty", "ghostty", "dotenv", "zsh" })
 
 			require("nvim-treesitter.configs").setup(opts)
 

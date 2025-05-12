@@ -45,6 +45,7 @@ keymap("x", "@", function()
 end, { silent = false })
 keymap("t", "<c-.>", "<c-\\><c-n>", { desc = "Escape Terminal Mode" })
 keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
+keymap("n", "<leader>sh", "<cmd>messages<cr>", { desc = "Show Message History" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

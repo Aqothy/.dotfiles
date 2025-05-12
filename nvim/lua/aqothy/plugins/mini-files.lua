@@ -17,9 +17,7 @@ return {
 			end,
 		},
 		windows = {
-			preview = true,
 			width_focus = 20,
-			width_preview = 20,
 			width_nofocus = 20,
 		},
 	},

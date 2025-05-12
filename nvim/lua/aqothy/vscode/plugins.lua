@@ -63,7 +63,7 @@ return {
 				"html",
 				"tsx",
 				"yaml",
-				"json",
+				"json5",
 				"dockerfile",
 				"regex",
 			},

@@ -21,7 +21,7 @@ vim.opt.wildmode = { "longest:full", "full" }
 vim.opt.wildoptions:append({ "fuzzy" })
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.whichwrap:append("<,>,[,],h,l") -- allow move to next line with the
+vim.opt.whichwrap:append("h,l") -- allow move to next line with the
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false

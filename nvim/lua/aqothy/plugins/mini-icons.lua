@@ -20,6 +20,7 @@ return {
 			dotenv = { glyph = "", hl = "MiniIconsYellow" },
 			gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
 			go = { glyph = "", hl = "MiniIconsAzure" },
+			kitty = { glyph = "", hl = "MiniIconsOrange" },
 		},
 	},
 	init = function()
