@@ -2,7 +2,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		event = "VeryLazy",
+		event = "LazyFile",
 		lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
 		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		init = function(plugin)
@@ -74,8 +74,8 @@ return {
 						["io"] = "@conditional.inner",
 						["al"] = "@loop.outer",
 						["il"] = "@loop.inner",
-						["af"] = "@call.outer",
-						["if"] = "@call.inner",
+						["au"] = "@call.outer",
+						["iu"] = "@call.inner",
 					},
 				},
 				move = {

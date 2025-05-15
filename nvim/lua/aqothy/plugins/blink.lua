@@ -91,6 +91,19 @@ return {
 		},
 		cmdline = {
 			enabled = true,
+			keymap = {
+				preset = "none",
+				["<Tab>"] = { "show_and_insert", "select_next" },
+				["<S-Tab>"] = { "show_and_insert", "select_prev" },
+
+				["<C-space>"] = { "show", "fallback" },
+
+				["<C-n>"] = { "select_next", "fallback" },
+				["<C-p>"] = { "select_prev", "fallback" },
+
+				["<C-y>"] = { "select_and_accept" },
+				["<C-e>"] = { "cancel" },
+			},
 			completion = {
 				menu = { auto_show = true },
 				list = {
@@ -112,7 +125,7 @@ return {
 			},
 			list = {
 				selection = { auto_insert = false },
-				max_items = 30,
+				max_items = 50,
 			},
 			trigger = {
 				prefetch_on_insert = false,

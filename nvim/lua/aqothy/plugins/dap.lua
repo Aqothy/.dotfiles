@@ -2,7 +2,7 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		dependencies = {
-			"williamboman/mason.nvim",
+			"mason-org/mason.nvim",
 		},
 		lazy = true,
 		config = function()

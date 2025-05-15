@@ -39,6 +39,7 @@ return {
 		},
 		copilot_model = "gpt-4o-copilot",
 		filetypes = {
+			dotenv = false,
 			["*"] = true,
 		},
 		server_opts_overrides = {
@@ -47,9 +48,6 @@ return {
 					telemetryLevel = "off",
 				},
 			},
-		},
-		logger = {
-			print_log_level = vim.log.levels.OFF,
 		},
 	},
 }

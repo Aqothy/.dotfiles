@@ -1,7 +1,7 @@
 return {
 	"stevearc/conform.nvim",
 	dependencies = {
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 	},
 	cmd = "ConformInfo",
 	keys = {
@@ -33,6 +33,7 @@ return {
 			lua = { "stylua" },
 			go = { "goimports", "gofumpt" },
 			python = { "ruff_format" },
+			swift = { name = "sourcekit", lsp_format = "prefer" },
 			-- For filetypes without a formatter:
 			["_"] = { "trim_whitespace", "trim_newlines" },
 		},

@@ -10,6 +10,7 @@ brew "lazygit"                # Terminal UI for git
 brew "gettext"                # Internationalization library
 brew "fd"                     # Simple, fast and user-friendly alternative to find
 brew "pyenv"                  # Python version manager
+brew "xcode-build-server"     # Xcode build server
 
 # Development tools
 brew "postgresql@16", restart_service: true # PostgreSQL database

@@ -3,7 +3,7 @@ return {
 	event = "LazyFile",
 	-- Mason has to load before lspconfig
 	dependencies = {
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 	},
 	cmd = "LspInfo",
 	config = function()
@@ -13,10 +13,13 @@ return {
 			capabilities = handlers.capabilities,
 		}
 
+		-- Global capabilities > lspconfig > personal
+		vim.lsp.config("*", params)
+
 		local settings = require("aqothy.config.lsp-settings")
 		for lsp, opts in pairs(settings) do
 			if opts.enabled ~= false then
-				vim.lsp.config(lsp, vim.tbl_deep_extend("force", params, opts))
+				vim.lsp.config(lsp, opts)
 				vim.lsp.enable(lsp)
 			end
 		end

@@ -70,6 +70,10 @@
     "prefix": "p",
     "body": ["print(${0})"]
   },
+  "vim.print": {
+    "prefix": "vp",
+    "body": ["vim.print(${0})"]
+  },
   "self": {
     "prefix": "self:",
     "body": ["function self:${1:methodName}($2)", "\t$0", "end"]

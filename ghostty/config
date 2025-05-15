@@ -34,8 +34,7 @@ keybind = super+shift+k=goto_split:top
 keybind = super+shift+j=goto_split:bottom
 keybind = super+shift+h=goto_split:left
 keybind = super+shift+l=goto_split:right
-keybind = super+shift+c=copy_to_clipboard
-keybind = super+shift+h=write_screen_file:paste
+keybind = super+[=write_screen_file:paste
 keybind = super+c=copy_to_clipboard
 keybind = super+k=clear_screen
 keybind = super+v=paste_from_clipboard
@@ -45,6 +44,7 @@ keybind = super+zero=reset_font_size
 keybind = super+q=quit
 keybind = super+n=new_window
 keybind = super+t=new_tab
-keybind = super+d=new_split:right
-keybind = super+shift+d=new_split:down
+keybind = super+\=new_split:right
+keybind = super+enter=new_split:down
+keybind = super+shift+d=close_surface
 keybind = super+shift+i=inspector:toggle

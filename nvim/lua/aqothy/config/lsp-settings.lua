@@ -55,9 +55,22 @@ M["vtsls"] = {
 		{
 			"n",
 			"<leader>oi",
-			utils.action("source.organizeImports"),
+			function()
+				utils.action("source.addMissingImports.ts")
+				utils.action("source.organizeImports")
+			end,
 			{
 				desc = "Organize Imports",
+			},
+		},
+		{
+			"n",
+			"<leader>rm",
+			function()
+				utils.action("source.removeUnused.ts")
+			end,
+			{
+				desc = "Remove Unused",
 			},
 		},
 	},
@@ -162,7 +175,9 @@ M["gopls"] = {
 		{
 			"n",
 			"<leader>fi",
-			utils.action("refactor.rewrite.fillStruct"),
+			function()
+				utils.action("refactor.rewrite.fillStruct")
+			end,
 			{
 				desc = "Fill Struct",
 			},
@@ -212,7 +227,9 @@ M["ruff"] = {
 		{
 			"n",
 			"<leader>oi",
-			utils.action("source.organizeImports"),
+			function()
+				utils.action("source.organizeImports")
+			end,
 			{
 				desc = "Organize Imports",
 			},
