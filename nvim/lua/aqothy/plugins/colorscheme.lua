@@ -2,7 +2,7 @@ return {
 	{
 		"ellisonleao/gruvbox.nvim",
 		-- enabled = false,
-		priority = 500,
+		priority = 1000,
 		config = function()
 			local gruvbox = require("gruvbox")
 

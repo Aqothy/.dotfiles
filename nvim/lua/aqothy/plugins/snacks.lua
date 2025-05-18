@@ -1,6 +1,6 @@
 return {
 	"folke/snacks.nvim",
-	priority = 1000,
+	priority = 999,
 	lazy = false,
 	opts = function()
 		local user = require("aqothy.config.user")

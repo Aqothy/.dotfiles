@@ -21,8 +21,7 @@ if not is_vscode then
 			end
 			require("aqothy.config.keymaps")
 			require("aqothy.config.statusline")
+			require("vim._extui").enable({ msg = { pos = "box" } })
 		end,
 	})
-
-	require("vim._extui").enable({ msg = { pos = "box" } })
 end
