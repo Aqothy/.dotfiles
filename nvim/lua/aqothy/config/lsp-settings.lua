@@ -17,6 +17,16 @@ M["eslint"] = {
 		workingDirectories = { mode = "auto" },
 		format = false,
 	},
+	keys = {
+		{
+			"n",
+			"<leader>fa",
+			"<cmd>LspEslintFixAll<cr>",
+			{
+				desc = "Fix all",
+			},
+		},
+	},
 }
 
 local jsts_config = {
