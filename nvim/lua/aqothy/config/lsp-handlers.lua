@@ -5,6 +5,7 @@ local has_blink, blink = pcall(require, "blink.cmp")
 
 M.capabilities = vim.tbl_deep_extend(
 	"force",
+	{},
 	vim.lsp.protocol.make_client_capabilities(),
 	has_cmp_lsp and cmp_nvim_lsp.default_capabilities() or {},
 	has_blink and blink.get_lsp_capabilities() or {}
@@ -171,8 +172,8 @@ function M.get()
 		{ "n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" } },
 		{ "n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
 		{ "n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
-		{ "n", "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
-		{ "n", "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+		{ "n", "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+		{ "n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
 		{ "n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
 		{ "n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
 		{ "n", "<leader>li", function() Snacks.picker.lsp_config() end, { desc = "Lsp info" } },

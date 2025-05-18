@@ -13,7 +13,7 @@ return {
 			capabilities = handlers.capabilities,
 		}
 
-		-- Global capabilities > lspconfig > personal
+		-- global capabilities, lspconfig, peronal config in order of increasing priority
 		vim.lsp.config("*", params)
 
 		local settings = require("aqothy.config.lsp-settings")

@@ -124,6 +124,10 @@ return {
 						winbar = "",
 					},
 				},
+				lazygit = {
+					width = 0,
+					height = 0,
+				},
 			},
 		}
 	end,

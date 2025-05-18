@@ -57,7 +57,9 @@ M["vtsls"] = {
 			"<leader>oi",
 			function()
 				utils.action("source.addMissingImports.ts")
-				utils.action("source.organizeImports")
+				vim.defer_fn(function()
+					utils.action("source.organizeImports")
+				end, 100)
 			end,
 			{
 				desc = "Organize Imports",

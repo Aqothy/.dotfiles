@@ -30,6 +30,16 @@ return {
 					layout = "diff2_horizontal",
 				},
 			},
+			file_panel = {
+				win_config = {
+					width = 30,
+				},
+			},
+			file_history_panel = {
+				win_config = {
+					height = 12,
+				},
+			},
 		}
 	end,
 }

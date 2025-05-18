@@ -43,9 +43,14 @@ keymap("x", "@", function()
 		vim.cmd([['<,'>normal @]] .. reg)
 	end)
 end, { silent = false })
-keymap("t", "<c-.>", "<c-\\><c-n>", { desc = "Escape Terminal Mode" })
 keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
 keymap("n", "<leader>sh", "<cmd>messages<cr>", { desc = "Show Message History" })
+keymap("n", "<leader>ld", function()
+  local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.diagnostic.setloclist)
+  if not success and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
+end, { desc = "Toggle Diagnostic Loclist" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
