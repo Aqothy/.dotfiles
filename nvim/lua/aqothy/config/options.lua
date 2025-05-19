@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = ","
 
 -- Disable health checks for these providers.
 vim.g.loaded_python3_provider = 0
@@ -60,8 +60,6 @@ vim.opt.cursorline = false
 -- vim.opt.showtabline = 0
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
-vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
-vim.g.snacks_animate = false
 vim.opt.winborder = "rounded"
 vim.opt.diffopt = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
 vim.opt.termguicolors = true

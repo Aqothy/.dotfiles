@@ -6,6 +6,9 @@ return {
 		"mason-org/mason.nvim",
 	},
 	cmd = "LspInfo",
+	keys = {
+		{ "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },
+	},
 	config = function()
 		local handlers = require("aqothy.config.lsp-handlers")
 

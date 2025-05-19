@@ -10,7 +10,7 @@ M.plugin = {
 		{
 			"<leader>th",
 			function()
-				require("mini.hipatterns").toggle()
+				MiniHipatterns.toggle()
 			end,
 			desc = "Toggle MiniHipatterns",
 		},

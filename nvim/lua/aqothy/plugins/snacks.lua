@@ -1,7 +1,7 @@
 return {
 	"folke/snacks.nvim",
-	priority = 999,
-	lazy = false,
+	event = "VeryLazy",
+	lazy = vim.fn.argc(-1) == 0,
 	opts = function()
 		local user = require("aqothy.config.user")
 
@@ -91,6 +91,13 @@ return {
 						})
 					end,
 				},
+				layouts = {
+					sidebar = {
+						layout = {
+							width = 30,
+						},
+					},
+				},
 			},
 
 			explorer = {
@@ -171,7 +178,7 @@ return {
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
 		{ "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
-        { "<leader>ee", function() Snacks.explorer({ hidden = true, ignored = true, layout = { layout = { width = 30 } } }) end, desc = "File Explorer" },
+        { "<leader>ee", function() Snacks.explorer({ hidden = true, ignored = true }) end, desc = "File Explorer" },
         {
             "<leader>to",
             function()

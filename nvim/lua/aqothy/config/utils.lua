@@ -15,12 +15,6 @@ function M.pick_projects()
 		.. vim.g.projects_dir
 		.. "/Personal"
 
-	-- For windows
-	-- local projects_dir = vim.g.projects_dir .. "/Personal"
-	-- local cmd = "powershell -Command \"Get-ChildItem -Path '"
-	-- 	.. projects_dir
-	-- 	.. "' -Directory | Select-Object -ExpandProperty FullName\""
-
 	local output = vim.fn.system(cmd)
 	local exit_code = vim.v.shell_error
 
@@ -33,7 +27,7 @@ function M.pick_projects()
 		table.insert(projects, line)
 	end
 
-	Snacks.picker.pick("Projects", {
+	Snacks.picker.pick("personal_projects", {
 		finder = function()
 			local dirs = {}
 			for _, dir in ipairs(projects) do
@@ -44,53 +38,27 @@ function M.pick_projects()
 		format = "file",
 		win = {
 			preview = { minimal = true },
+			input = {
+				keys = {
+					---@diagnostic disable: assign-type-mismatch
+					["<c-e>"] = { { "tcd", "picker_explorer" }, mode = { "n", "i" } },
+					["<c-f>"] = { { "tcd", "picker_files" }, mode = { "n", "i" } },
+					["<c-g>"] = { { "tcd", "picker_grep" }, mode = { "n", "i" } },
+					["<c-r>"] = { { "tcd", "picker_recent" }, mode = { "n", "i" } },
+					["<c-w>"] = { { "tcd" }, mode = { "n", "i" } },
+					["<c-t>"] = {
+						function(picker)
+							vim.cmd("tabnew")
+							picker:close()
+							M.pick_projects()
+						end,
+						mode = { "n", "i" },
+					},
+				},
+			},
 		},
 		confirm = "load_session",
 	})
-end
-
--- optimized treesitter foldexpr
-function M.foldexpr()
-	local buf = vim.api.nvim_get_current_buf()
-	if vim.b[buf].ts_folds == nil then
-		-- as long as we don't have a filetype, don't bother
-		-- checking if treesitter is available (it won't)
-		if vim.bo[buf].filetype == "" then
-			return "0"
-		end
-		vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
-	end
-	return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or "0"
-end
-
-function M.hide_tmux(state, disable)
-	if not vim.env.TMUX then
-		return
-	end
-	if disable then
-		local function get_tmux_opt(option)
-			local option_raw = vim.fn.system([[tmux show -w ]] .. option)
-			if option_raw == "" then
-				option_raw = vim.fn.system([[tmux show -g ]] .. option)
-			end
-			local opt = vim.split(vim.trim(option_raw), " ")[2]
-			return opt
-		end
-		state.status = get_tmux_opt("status")
-		state.pane = get_tmux_opt("pane-border-status")
-
-		vim.fn.system([[tmux set -w pane-border-status off]])
-		vim.fn.system([[tmux set status off]])
-		vim.fn.system([[tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z]])
-	else
-		if type(state.pane) == "string" then
-			vim.fn.system(string.format([[tmux set -w pane-border-status %s]], state.pane))
-		else
-			vim.fn.system([[tmux set -uw pane-border-status]])
-		end
-		vim.fn.system(string.format([[tmux set status %s]], state.status))
-		vim.fn.system([[tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z]])
-	end
 end
 
 function M.action(action)

@@ -1,13 +1,11 @@
 local M = {}
 
-local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 local has_blink, blink = pcall(require, "blink.cmp")
 
 M.capabilities = vim.tbl_deep_extend(
 	"force",
 	{},
 	vim.lsp.protocol.make_client_capabilities(),
-	has_cmp_lsp and cmp_nvim_lsp.default_capabilities() or {},
 	has_blink and blink.get_lsp_capabilities() or {}
 )
 
@@ -153,12 +151,8 @@ function M.get()
 		{ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
 		{ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
 		{ { "i", "s" }, "<c-s>", function()
-			local has_cmp, cmp = pcall(require, "cmp")
 			if has_blink and blink.is_menu_visible() then
 				blink.hide()
-			end
-			if has_cmp and cmp.visible() then
-				cmp.close()
 			end
 			vim.lsp.buf.signature_help()
 		end, { desc = "Signature Help", has = "signatureHelp" } },
@@ -176,7 +170,6 @@ function M.get()
 		{ "n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
 		{ "n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
 		{ "n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
-		{ "n", "<leader>li", function() Snacks.picker.lsp_config() end, { desc = "Lsp info" } },
 	}
 
 	return M._keys

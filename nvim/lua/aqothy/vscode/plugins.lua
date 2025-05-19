@@ -89,8 +89,8 @@ return {
 					enable = true,
 					lookahead = true,
 					keymaps = {
-						["am"] = "@function.outer",
-						["im"] = "@function.inner",
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
 						["ac"] = "@class.outer",
 						["ic"] = "@class.inner",
 						["aa"] = "@parameter.outer",
@@ -107,12 +107,12 @@ return {
 					enable = true,
 					set_jumps = true,
 					goto_next_start = {
-						["]m"] = "@function.outer",
+						["]f"] = "@function.outer",
 						["]]"] = "@class.outer",
 						["]a"] = "@parameter.inner",
 					},
 					goto_previous_start = {
-						["[m"] = "@function.outer",
+						["[f"] = "@function.outer",
 						["[["] = "@class.outer",
 						["[a"] = "@parameter.inner",
 					},

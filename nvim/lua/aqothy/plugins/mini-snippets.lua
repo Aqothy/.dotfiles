@@ -3,16 +3,16 @@ return {
 	event = "InsertEnter",
 	-- enabled = false,
 	opts = function()
-		local mini_snippets = require("mini.snippets")
-		local gen_loader = mini_snippets.gen_loader
+		local ms = require("mini.snippets")
+		local gen_loader = ms.gen_loader
 
 		local my_insert = function(snippet)
 			-- Empty tabstop chars
-			return mini_snippets.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
+			return ms.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
 		end
 
 		local my_m = function(snippets)
-			return mini_snippets.default_match(snippets, { pattern_fuzzy = "%w*" })
+			return ms.default_match(snippets, { pattern_fuzzy = "%w*" })
 		end
 
 		local autocmd = vim.api.nvim_create_autocmd
@@ -22,8 +22,8 @@ return {
 		local make_stop = function()
 			local au_opts = { pattern = "*:n", once = true, group = group }
 			au_opts.callback = function()
-				while mini_snippets.session.get() do
-					mini_snippets.session.stop()
+				while ms.session.get() do
+					ms.session.stop()
 				end
 			end
 			autocmd("ModeChanged", au_opts)
@@ -70,7 +70,7 @@ return {
 						copilot.dismiss()
 					end
 
-					mini_snippets.default_select(snippets, insert)
+					ms.default_select(snippets, insert)
 				end,
 				insert = my_insert,
 				match = my_m,

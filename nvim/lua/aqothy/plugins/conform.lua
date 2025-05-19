@@ -14,6 +14,9 @@ return {
 			desc = "Format Buffer or Selection",
 		},
 	},
+	init = function()
+		vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
+	end,
 	opts = {
 		log_level = vim.log.levels.OFF,
 		notify_on_error = false,

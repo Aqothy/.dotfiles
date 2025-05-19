@@ -12,11 +12,7 @@ return {
 						return not require("copilot.client").is_disabled()
 					end,
 					set = function(state)
-						if state then
-							require("copilot.command").enable()
-						else
-							require("copilot.command").disable()
-						end
+						vim.cmd("Copilot " .. (state and "enable" or "disable"))
 					end,
 				}):toggle()
 			end,
