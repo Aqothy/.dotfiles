@@ -232,12 +232,12 @@ M["texlab"] = {
 		{ "n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
 		{ "n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
 		{ "n", "<localleader>ce", "<cmd>LspTexlabChangeEnvironment<cr>", { desc = "Change Environment" } },
+		{ "n", "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { desc = "Clean Aux" } },
 	},
 	settings = {
 		texlab = {
 			build = {
 				onSave = true,
-				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "-auxdir=.aux", "%f" },
 			},
 			forwardSearch = {
 				executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",

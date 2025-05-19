@@ -33,7 +33,7 @@
 - firefox, arc
 - bruno
 - vpn
-- skim (set up sync and command: nvim, arguments: --headless --noplugin --server /tmp/nvim --remote-send "<c-\\><c-n><cmd>%line | normal zz<cr>" %file)
+- skim (set up sync and command: nvim, arguments: --headless --noplugin --server /tmp/nvim --remote-send "<cmd>e +%line %file | normal zz<cr>")
 - wblock
 - docker
 - karabiner element
