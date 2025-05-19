@@ -229,7 +229,21 @@ M["cssls"] = {
 M["texlab"] = {
 	enabled = true,
 	keys = {
-		{ "n", "<Leader>K", "<plug>(vimtex-doc-package)", { desc = "Vimtex Docs", silent = true } },
+		{ "n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
+		{ "n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
+		{ "n", "<localleader>ce", "<cmd>LspTexlabChangeEnvironment<cr>", { desc = "Change Environment" } },
+	},
+	settings = {
+		texlab = {
+			build = {
+				onSave = true,
+				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "-auxdir=.aux", "%f" },
+			},
+			forwardSearch = {
+				executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
+				args = { "-g", "-r", "%l", "%p", "%f" },
+			},
+		},
 	},
 }
 

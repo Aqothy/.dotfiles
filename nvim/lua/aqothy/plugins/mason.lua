@@ -26,6 +26,7 @@ return {
 			"prettier",
 			"gofumpt",
 			"goimports",
+			"latexindent",
 
 			-- Dap
 			"js-debug-adapter",
