@@ -16,12 +16,13 @@ return {
 						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 						{ icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end},
 						{ icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+						{ icon = " ", key = "e", desc = "New File", action = ":ene | startinsert" },
 						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 					},
 				},
 				sections = {
 					{ section = "header" },
-					{ section = "keys", indent = 1, padding = 1, gap = 1 },
+					{ section = "keys", indent = 2, padding = 1, gap = 1 },
 					{
 						section = "terminal",
 						enabled = in_git,
