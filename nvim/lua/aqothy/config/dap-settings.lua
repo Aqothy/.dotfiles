@@ -102,6 +102,21 @@ M["pwa-node"] = {
 	},
 }
 
+M["node"] = {
+	enabled = true,
+	adapter = function(callback, config)
+		if config.type == "node" then
+			config.type = "pwa-node"
+		end
+		local nativeAdapter = M["pwa-node"].adapter
+		if type(nativeAdapter) == "function" then
+			nativeAdapter(callback, config)
+		else
+			callback(nativeAdapter)
+		end
+	end,
+}
+
 M["codelldb"] = {
 	enabled = true,
 	filetypes = { "c", "cpp" },

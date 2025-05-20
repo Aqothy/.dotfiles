@@ -54,6 +54,7 @@
     algorithm = histogram
     renames = true
     mnemonicPrefix = true
+    colorMoved = plain
     tool = nvimdiff
 
 [difftool "nvimdiff"]

@@ -1,7 +1,8 @@
-notARepository: 'quit'
+notARepository: "quit"
 os:
-  editPreset: 'nvim'
+  editPreset: "nvim"
 gui:
   scrollHeight: 10
-  nerdFontsVersion: '3'
-  filterMode: 'fuzzy'
+  nerdFontsVersion: "3"
+  filterMode: "fuzzy"
+  mouseEvents: true

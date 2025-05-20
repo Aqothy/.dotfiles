@@ -52,8 +52,6 @@ return {
 				overrides = overrides,
 			})
 
-			vim.cmd("colorscheme gruvbox")
-
 			-- Extend the gruvbox hightlight groups
 			local mode_colors = {
 				Normal = "gray",
@@ -77,6 +75,8 @@ return {
 			for group, opts in pairs(groups) do
 				vim.api.nvim_set_hl(0, group, opts)
 			end
+
+			vim.cmd("colorscheme gruvbox")
 		end,
 	},
 }

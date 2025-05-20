@@ -1,6 +1,7 @@
 return {
 	"folke/snacks.nvim",
-	lazy = false,
+	lazy = vim.fn.argc(-1) == 0,
+	event = "VeryLazy",
 	opts = function()
 		local user = require("aqothy.config.user")
 		local in_git = Snacks.git.get_root() ~= nil
@@ -16,7 +17,17 @@ return {
 						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 						{ icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end},
 						{ icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-						{ icon = " ", key = "e", desc = "New File", action = ":ene | startinsert" },
+						{ icon = " ", key = "e", desc = "New File", action = function()
+							local current_dir = vim.fn.expand("%:p:h") .. "/"
+							vim.ui.input({
+								prompt = "File: ",
+								default = current_dir
+							}, function(file)
+								if file and file ~= "" then
+									vim.cmd("e " .. file .. " | startinsert | e")
+								end
+							end)
+						end },
 						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 					},
 				},
@@ -266,28 +277,26 @@ return {
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
 	init = function()
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VeryLazy",
-			callback = function()
-				vim.g.snacks_animate = false
+		vim.g.snacks_animate = false
+	end,
+	config = function(_, opts)
+		Snacks.setup(opts)
 
-				_G.dd = function(...)
-					Snacks.debug.inspect(...)
-				end
-				_G.bt = function()
-					Snacks.debug.backtrace()
-				end
-				vim.print = _G.dd
+		_G.dd = function(...)
+			Snacks.debug.inspect(...)
+		end
+		_G.bt = function()
+			Snacks.debug.backtrace()
+		end
+		vim.print = _G.dd
 
-				-- Toggle
-				Snacks.toggle.dim():map("<leader>sd")
-				Snacks.toggle.diagnostics():map("<leader>td")
-				Snacks.toggle.zen():map("<leader>zz")
-				Snacks.toggle.profiler():map("<leader>pp")
-				Snacks.toggle.indent():map("<leader>id")
-				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
-				Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
-			end,
-		})
+		-- Toggle
+		Snacks.toggle.dim():map("<leader>sd")
+		Snacks.toggle.diagnostics():map("<leader>td")
+		Snacks.toggle.zen():map("<leader>zz")
+		Snacks.toggle.profiler():map("<leader>pp")
+		Snacks.toggle.indent():map("<leader>id")
+		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
+		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
 	end,
 }
