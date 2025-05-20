@@ -1,11 +1,38 @@
 return {
 	"folke/snacks.nvim",
-	event = "VeryLazy",
-	lazy = vim.fn.argc(-1) == 0,
+	lazy = false,
 	opts = function()
 		local user = require("aqothy.config.user")
+		local in_git = Snacks.git.get_root() ~= nil
 
 		return {
+			dashboard = {
+				enabled = true,
+				preset = {
+					header = [[:)]],
+					-- stylua: ignore
+					keys = {
+						{ icon = " ", key = "b", desc = "Browse Repo", enabled = in_git, action = function() Snacks.gitbrowse() end },
+						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+						{ icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end},
+						{ icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+					},
+				},
+				sections = {
+					{ section = "header" },
+					{ section = "keys", indent = 1, padding = 1, gap = 1 },
+					{
+						section = "terminal",
+						enabled = in_git,
+						cmd = [[git status --short --branch --renames && 
+						echo \ && git log --graph --oneline --decorate --all]],
+						height = 12,
+						ttl = 5 * 60,
+					},
+				},
+			},
+
 			bigfile = { enabled = true },
 
 			indent = {
@@ -54,6 +81,21 @@ return {
 
 			picker = {
 				enabled = true,
+				sources = {
+					files = {
+						hidden = true,
+					},
+					grep = {
+						hidden = true,
+					},
+					grep_word = {
+						hidden = true,
+					},
+					explorer = {
+						hidden = true,
+						ignored = true,
+					},
+				},
 				icons = {
 					kinds = user.kinds,
 				},
@@ -178,7 +220,7 @@ return {
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
 		{ "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
-        { "<leader>ee", function() Snacks.explorer({ hidden = true, ignored = true }) end, desc = "File Explorer" },
+        { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
         {
             "<leader>to",
             function()
@@ -222,24 +264,29 @@ return {
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command history" },
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
-	config = function(_, opts)
-		require("snacks").setup(opts)
+	init = function()
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "VeryLazy",
+			callback = function()
+				vim.g.snacks_animate = false
 
-		_G.dd = function(...)
-			Snacks.debug.inspect(...)
-		end
-		_G.bt = function()
-			Snacks.debug.backtrace()
-		end
-		vim.print = _G.dd
+				_G.dd = function(...)
+					Snacks.debug.inspect(...)
+				end
+				_G.bt = function()
+					Snacks.debug.backtrace()
+				end
+				vim.print = _G.dd
 
-		-- Toggle
-		Snacks.toggle.dim():map("<leader>sd")
-		Snacks.toggle.diagnostics():map("<leader>td")
-		Snacks.toggle.zen():map("<leader>zz")
-		Snacks.toggle.profiler():map("<leader>pp")
-		Snacks.toggle.indent():map("<leader>id")
-		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
-		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+				-- Toggle
+				Snacks.toggle.dim():map("<leader>sd")
+				Snacks.toggle.diagnostics():map("<leader>td")
+				Snacks.toggle.zen():map("<leader>zz")
+				Snacks.toggle.profiler():map("<leader>pp")
+				Snacks.toggle.indent():map("<leader>id")
+				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
+				Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+			end,
+		})
 	end,
 }

@@ -10,7 +10,7 @@
   "gruvbox.nvim": { "branch": "main", "commit": "00e38a379bab3389e187b3953566d67d494dfddd" },
   "guess-indent.nvim": { "branch": "main", "commit": "84a4987ff36798c2fc1169cbaff67960aed9776f" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
-  "mason.nvim": { "branch": "main", "commit": "888d6ee499d8089a3a4be4309d239d6be1c1e6c0" },
+  "mason.nvim": { "branch": "main", "commit": "1aceba8bc158b5aaf90649077cad06744bc23ac4" },
   "mini.files": { "branch": "main", "commit": "49c855977e9f4821d1ed8179ed44fe098b93ea2a" },
   "mini.hipatterns": { "branch": "main", "commit": "e5083df391171dc9d8172645606f8496d9443374" },
   "mini.icons": { "branch": "main", "commit": "397ed3807e96b59709ef3292f0a3e253d5c1dc0a" },
