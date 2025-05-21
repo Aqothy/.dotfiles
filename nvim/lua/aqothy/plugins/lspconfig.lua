@@ -1,10 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile", "BufWritePre" },
-	-- Mason has to load before lspconfig
-	dependencies = {
-		"mason-org/mason.nvim",
-	},
 	cmd = "LspInfo",
 	keys = {
 		{ "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },

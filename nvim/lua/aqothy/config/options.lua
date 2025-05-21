@@ -108,3 +108,8 @@ vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 vim.opt.background = "light"
+
+local is_windows = vim.fn.has("win32") ~= 0
+local sep = is_windows and "\\" or "/"
+local delim = is_windows and ";" or ":"
+vim.env.PATH = table.concat({ vim.fn.stdpath("data"), "mason", "bin" }, sep) .. delim .. vim.env.PATH

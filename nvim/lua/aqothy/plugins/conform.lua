@@ -1,8 +1,5 @@
 return {
 	"stevearc/conform.nvim",
-	dependencies = {
-		"mason-org/mason.nvim",
-	},
 	cmd = "ConformInfo",
 	keys = {
 		{
