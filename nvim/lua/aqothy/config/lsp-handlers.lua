@@ -1,20 +1,27 @@
 local M = {}
 
+M._capabilities = nil
+
 local has_blink, blink = pcall(require, "blink.cmp")
 
-M.capabilities = vim.tbl_deep_extend(
-	"force",
-	{},
-	vim.lsp.protocol.make_client_capabilities(),
-	has_blink and blink.get_lsp_capabilities() or {}
-)
+function M.get_capabilities()
+	if M._capabilities then
+		return M._capabilities
+	end
 
-M.capabilities.workspace = {
-	fileOperations = {
-		didRename = true,
-		willRename = true,
-	},
-}
+	M._capabilities = {
+		workspace = {
+			fileOperations = {
+				didRename = true,
+				willRename = true,
+			},
+		},
+	}
+
+	M._capabilities = has_blink and blink.get_lsp_capabilities(M._capabilities, true) or {}
+
+	return M._capabilities
+end
 
 local user = require("aqothy.config.user")
 
