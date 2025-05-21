@@ -2,6 +2,7 @@ return {
 	"folke/snacks.nvim",
 	lazy = vim.fn.argc(-1) == 0,
 	event = "VeryLazy",
+	priority = 999,
 	opts = function()
 		local user = require("aqothy.config.user")
 		local in_git = Snacks.git.get_root() ~= nil

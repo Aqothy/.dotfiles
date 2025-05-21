@@ -43,6 +43,8 @@ return {
 		},
 
 		log_level = vim.log.levels.OFF,
+
+		PATH = "skip",
 	},
 	config = function(_, opts)
 		require("mason").setup(opts)

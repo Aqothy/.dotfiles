@@ -1,6 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPre", "BufNewFile", "BufWritePre" },
+	event = "LazyFile",
 	cmd = "LspInfo",
 	keys = {
 		{ "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },
@@ -12,14 +12,15 @@ return {
 			capabilities = handlers.capabilities,
 		}
 
-		-- global capabilities, lspconfig, peronal config in order of increasing priority
-		vim.lsp.config("*", params)
+		local lspconfig = require("lspconfig")
 
+		-- global capabilities, lspconfig, peronal config in order of increasing priority
 		local settings = require("aqothy.config.lsp-settings")
 		for lsp, opts in pairs(settings) do
 			if opts.enabled ~= false then
-				vim.lsp.config(lsp, opts)
-				vim.lsp.enable(lsp)
+				lspconfig[lsp].setup(
+					vim.tbl_deep_extend("force", params, lspconfig[lsp].config_def.default_config, opts)
+				)
 			end
 		end
 
