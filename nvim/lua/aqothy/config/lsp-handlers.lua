@@ -150,7 +150,7 @@ function M.get()
 		{ "n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
 		{ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
 		{ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
-		{ { "i", "s" }, "<c-s>", function()
+		{ { "i", "s", "n" }, "<c-s>", function()
 			if has_blink and blink.is_menu_visible() then
 				blink.hide()
 			end
