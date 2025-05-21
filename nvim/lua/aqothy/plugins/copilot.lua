@@ -1,7 +1,7 @@
 return {
 	"zbirenbaum/copilot.lua",
 	cmd = "Copilot",
-	event = "LazyFile",
+	event = "InsertEnter",
 	keys = {
 		{
 			"<leader>tc",

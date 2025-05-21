@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- custom lazyfile event so no need to write these 3 events everytime
 local Event = require("lazy.core.handler.event")
-local lazy_file_events = { "BufReadPre", "BufNewFile", "BufWritePre" }
+local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
 Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 

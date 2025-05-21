@@ -106,6 +106,9 @@ return {
 				sources = {
 					files = {
 						hidden = true,
+						layout = {
+							hidden = { "preview" },
+						},
 					},
 					grep = {
 						hidden = true,
@@ -161,6 +164,14 @@ return {
 							width = 30,
 						},
 					},
+					vertical = {
+						layout = {
+							backdrop = true,
+						},
+					},
+				},
+				layout = {
+					preset = "vertical",
 				},
 			},
 

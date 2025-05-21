@@ -20,6 +20,7 @@ if not is_vscode then
 				require("aqothy.config.autocmds")
 			end
 			require("aqothy.config.keymaps")
+			require("aqothy.config.commands")
 			require("aqothy.config.statusline")
 			require("vim._extui").enable({ msg = { pos = "box" } })
 		end,
