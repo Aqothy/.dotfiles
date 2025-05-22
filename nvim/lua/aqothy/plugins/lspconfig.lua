@@ -1,6 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPre", "BufNewFile", "BufWritePre" },
+	event = LazyLoad and { "BufReadPre", "BufNewFile", "BufWritePre" } or "VeryLazy",
 	cmd = "LspInfo",
 	keys = {
 		{ "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },

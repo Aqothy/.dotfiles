@@ -1,9 +1,59 @@
+local textobjects = {
+	select = {
+		enable = true,
+		lookahead = true,
+		keymaps = {
+			["af"] = "@function.outer",
+			["if"] = "@function.inner",
+			["ac"] = "@class.outer",
+			["ic"] = "@class.inner",
+			["aa"] = "@parameter.outer",
+			["ia"] = "@parameter.inner",
+			["ao"] = "@conditional.outer",
+			["io"] = "@conditional.inner",
+			["al"] = "@loop.outer",
+			["il"] = "@loop.inner",
+			["au"] = "@call.outer",
+			["iu"] = "@call.inner",
+		},
+	},
+	move = {
+		enable = true,
+		set_jumps = true,
+		goto_next_start = {
+			["]f"] = "@function.outer",
+			["]]"] = "@class.outer",
+			["]a"] = "@parameter.inner",
+		},
+		goto_previous_start = {
+			["[f"] = "@function.outer",
+			["[["] = "@class.outer",
+			["[a"] = "@parameter.inner",
+		},
+	},
+	swap = {
+		enable = true,
+		swap_next = {
+			["<leader>an"] = "@parameter.inner",
+		},
+		swap_previous = {
+			["<leader>ap"] = "@parameter.inner",
+		},
+	},
+	lsp_interop = {
+		enable = true,
+		floating_preview_opts = {},
+		peek_definition_code = {
+			["<leader>k"] = "@*",
+		},
+	},
+}
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		event = "LazyFile",
-		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		opts = {
 			-- A list of parser names, or "all"
 			ensure_installed = {
@@ -54,56 +104,7 @@ return {
 				enable = true,
 			},
 
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
-						["aa"] = "@parameter.outer",
-						["ia"] = "@parameter.inner",
-						["ao"] = "@conditional.outer",
-						["io"] = "@conditional.inner",
-						["al"] = "@loop.outer",
-						["il"] = "@loop.inner",
-						["au"] = "@call.outer",
-						["iu"] = "@call.inner",
-					},
-				},
-				move = {
-					enable = true,
-					set_jumps = true,
-					goto_next_start = {
-						["]f"] = "@function.outer",
-						["]]"] = "@class.outer",
-						["]a"] = "@parameter.inner",
-					},
-					goto_previous_start = {
-						["[f"] = "@function.outer",
-						["[["] = "@class.outer",
-						["[a"] = "@parameter.inner",
-					},
-				},
-				swap = {
-					enable = true,
-					swap_next = {
-						["<leader>an"] = "@parameter.inner",
-					},
-					swap_previous = {
-						["<leader>ap"] = "@parameter.inner",
-					},
-				},
-				lsp_interop = {
-					enable = true,
-					floating_preview_opts = {},
-					peek_definition_code = {
-						["<leader>k"] = "@*",
-					},
-				},
-			},
+			textobjects = textobjects,
 
 			highlight = {
 				enable = true,
@@ -144,6 +145,15 @@ return {
 			require("nvim-treesitter.configs").setup(opts)
 
 			Snacks.toggle.treesitter():map("<leader>ts")
+		end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		event = LazyLoad and "BufReadPre" or "VeryLazy",
+		config = function()
+			if not LazyLoad then
+				require("nvim-treesitter.configs").setup({ textobjects = textobjects })
+			end
 		end,
 	},
 }

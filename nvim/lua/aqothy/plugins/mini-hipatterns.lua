@@ -5,7 +5,7 @@ M.hl = {}
 
 M.plugin = {
 	"echasnovski/mini.hipatterns",
-	event = "LazyFile",
+	event = LazyLoad and "LazyFile" or "VeryLazy",
 	keys = {
 		{
 			"<leader>th",
