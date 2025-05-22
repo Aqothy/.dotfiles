@@ -126,22 +126,6 @@ return {
 			},
 		},
 		config = function(_, opts)
-			vim.filetype.add({
-				extension = {
-					env = "dotenv",
-				},
-				filename = {
-					[".env"] = "dotenv",
-				},
-				pattern = {
-					[".*/kitty/.+%.conf"] = "kitty",
-					[".*/ghostty/.+"] = "ghostty",
-					["%.env%.[%w_.-]+"] = "dotenv",
-				},
-			})
-
-			vim.treesitter.language.register("bash", { "kitty", "ghostty", "dotenv", "zsh" })
-
 			require("nvim-treesitter.configs").setup(opts)
 
 			Snacks.toggle.treesitter():map("<leader>ts")

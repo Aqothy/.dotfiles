@@ -3,14 +3,21 @@ local M = {}
 ---@type table<string,true>
 M.hl = {}
 
+local hipattern = false
+
 M.plugin = {
 	"echasnovski/mini.hipatterns",
-	event = LazyLoad and "LazyFile" or "VeryLazy",
 	keys = {
 		{
 			"<leader>th",
 			function()
+				hipattern = not hipattern
 				MiniHipatterns.toggle()
+				vim.notify(
+					"MiniHipatterns " .. (hipattern and "on" or "off"),
+					vim.log.levels.INFO,
+					{ title = "MiniHipatterns" }
+				)
 			end,
 			desc = "Toggle MiniHipatterns",
 		},

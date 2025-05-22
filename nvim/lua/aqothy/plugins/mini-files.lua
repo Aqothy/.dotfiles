@@ -19,6 +19,8 @@ return {
 		windows = {
 			width_focus = 20,
 			width_nofocus = 20,
+			width_preview = 20,
+			preview = false,
 		},
 	},
 	keys = {
@@ -32,6 +34,8 @@ return {
 				if path and vim.uv.fs_stat(path) then
 					MiniFiles.open(bufname, false)
 					MiniFiles.reveal_cwd()
+				else
+					vim.notify("No valid path found", vim.log.levels.WARN)
 				end
 			end,
 			desc = "Open MiniFiles (Directory of Current File)",
@@ -42,6 +46,7 @@ return {
 		mf.setup(opts)
 
 		local show_dotfiles = true
+		local show_preview = false
 
 		local filter_hide = function(entry)
 			return mf.config.content.filter(entry) and not vim.startswith(entry.name, ".")
@@ -51,7 +56,6 @@ return {
 			show_dotfiles = not show_dotfiles
 			local new_filter = show_dotfiles and mf.config.content.filter or filter_hide
 			mf.refresh({ content = { filter = new_filter } })
-			vim.notify((show_dotfiles and "Showing" or "Hiding") .. " Dotfiles")
 		end
 
 		local files_set_cwd = function()
@@ -79,15 +83,15 @@ return {
 		local map_split = function(buf_id, lhs, direction, close_on_file)
 			local rhs = function()
 				local new_target_window
-				local cur_target_window = MiniFiles.get_explorer_state().target_window
+				local cur_target_window = mf.get_explorer_state().target_window
 				if cur_target_window ~= nil then
 					vim.api.nvim_win_call(cur_target_window, function()
 						vim.cmd("belowright " .. direction .. " split")
 						new_target_window = vim.api.nvim_get_current_win()
 					end)
 
-					MiniFiles.set_target_window(new_target_window)
-					MiniFiles.go_in({ close_on_file = close_on_file })
+					mf.set_target_window(new_target_window)
+					mf.go_in({ close_on_file = close_on_file })
 				end
 			end
 
@@ -111,6 +115,15 @@ return {
 				vim.keymap.set("n", "cd", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
 				vim.keymap.set("n", "gx", ui_open, { buffer = buf_id, desc = "OS open" })
 				vim.keymap.set("n", "gy", yank_path, { buffer = buf_id, desc = "Yank path" })
+				vim.keymap.set("n", "<a-p>", function()
+					show_preview = not show_preview
+					mf.refresh({ windows = { preview = show_preview } })
+				end, { buffer = buf_id, desc = "Toggle preview" })
+				vim.keymap.set("n", "q", function()
+					show_preview = show_preview and false or true
+					show_dotfiles = show_dotfiles and false or true
+					mf.close()
+				end, { buffer = buf_id, desc = "Close this window" })
 
 				map_split(buf_id, "<C-w>s", "horizontal", false)
 				map_split(buf_id, "<C-w>v", "vertical", false)
