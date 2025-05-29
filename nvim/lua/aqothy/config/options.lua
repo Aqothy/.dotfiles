@@ -27,7 +27,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.undofile = true
-vim.opt.undolevels = 1000
+vim.opt.undolevels = 10000
 vim.opt.updatetime = 300
 
 vim.opt.splitright = true
@@ -42,7 +42,22 @@ vim.opt.smartcase = true
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
+    vim.opt.clipboard = "unnamedplus"
+
+    if vim.env.SSH_TTY ~= nil then
+        local osc52 = require("vim.ui.clipboard.osc52")
+        vim.g.clipboard = {
+            name = "OSC 52",
+            copy = {
+                ["+"] = osc52.copy("+"),
+                ["*"] = osc52.copy("*"),
+            },
+            paste = {
+                ["+"] = osc52.paste("+"),
+                ["*"] = osc52.paste("*"),
+            },
+        }
+    end
 end)
 
 vim.opt.mouse = "a"

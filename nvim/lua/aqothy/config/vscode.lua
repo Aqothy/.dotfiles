@@ -9,11 +9,9 @@ vim.g.clipboard = vim.g.vscode_clipboard
 
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
+    vim.opt.clipboard = "unnamedplus"
 end)
 
-vim.opt.undofile = true
-vim.opt.undolevels = 1000
 vim.opt.virtualedit = "block"
 vim.opt.wildignore:append({ ".DS_Store" })
 vim.opt.wildignorecase = true
@@ -29,9 +27,9 @@ vim.opt.updatetime = 300
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 
 local function vscode_action(cmd)
-	return function()
-		vscode.action(cmd)
-	end
+    return function()
+        vscode.action(cmd)
+    end
 end
 
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
@@ -112,8 +110,8 @@ keymap("n", "<leader>ls", vscode_action("workbench.action.gotoSymbol"), { desc =
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-	callback = function()
-		(vim.hl or vim.highlight).on_yank({ timeout = 60 })
-	end,
+    group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+    callback = function()
+        (vim.hl or vim.highlight).on_yank({ timeout = 60 })
+    end,
 })

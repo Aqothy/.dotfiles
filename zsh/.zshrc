@@ -10,8 +10,8 @@ setopt PUSHD_SILENT
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=3000
-SAVEHIST=3000
+HISTSIZE=10000
+SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS
@@ -57,6 +57,10 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
+
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
 
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh='TERM=xterm-256color ssh'
 
@@ -134,13 +138,20 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-autoload -Uz compinit; compinit
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 _comp_options+=(globdots)
 
+setopt GLOB_DOTS
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
+setopt CORRECT
 
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' menu select

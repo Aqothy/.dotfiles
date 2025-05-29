@@ -1,64 +1,64 @@
 return {
-	"mason-org/mason.nvim",
-	build = ":MasonUpdate",
-	cmd = { "Mason", "MasonInstall" },
-	keys = { { "<leader>tm", "<cmd>Mason<cr>", desc = "Mason" } },
-	opts_extend = { "ensure_installed" },
-	opts = {
-		ensure_installed = {
-			-- LSP servers
-			"css-lsp",
-			"tailwindcss-language-server",
-			"lua-language-server",
-			"basedpyright",
-			"clangd",
-			"gopls",
-			"eslint-lsp",
-			"texlab",
-			"vtsls",
-			"emmet-language-server",
-			"ruff",
-			"bash-language-server",
-			"json-lsp",
+    "mason-org/mason.nvim",
+    build = ":MasonUpdate",
+    cmd = { "Mason", "MasonInstall" },
+    keys = { { "<leader>tm", "<cmd>Mason<cr>", desc = "Mason" } },
+    opts_extend = { "ensure_installed" },
+    opts = {
+        ensure_installed = {
+            -- LSP servers
+            "css-lsp",
+            "tailwindcss-language-server",
+            "lua-language-server",
+            "basedpyright",
+            "clangd",
+            "gopls",
+            "eslint-lsp",
+            "texlab",
+            "vtsls",
+            "emmet-language-server",
+            "ruff",
+            "bash-language-server",
+            "json-lsp",
 
-			-- Formatters/linters
-			"stylua",
-			"prettier",
-			"gofumpt",
-			"goimports",
-			"latexindent",
+            -- Formatters/linters
+            "stylua",
+            "prettier",
+            "gofumpt",
+            "goimports",
+            "latexindent",
 
-			-- Dap
-			"js-debug-adapter",
-			"delve",
-			"codelldb",
-		},
+            -- Dap
+            "js-debug-adapter",
+            "delve",
+            "codelldb",
+        },
 
-		ui = {
-			icons = {
-				package_installed = "",
-				package_pending = "",
-				package_uninstalled = "",
-			},
-		},
+        ui = {
+            icons = {
+                package_installed = "",
+                package_pending = "",
+                package_uninstalled = "",
+            },
+        },
 
-		log_level = vim.log.levels.OFF,
+        log_level = vim.log.levels.OFF,
 
-		PATH = "skip",
-	},
-	config = function(_, opts)
-		require("mason").setup(opts)
+        PATH = "skip",
+    },
+    config = function(_, opts)
+        require("mason").setup(opts)
 
-		local mr = require("mason-registry")
+        local mr = require("mason-registry")
 
-		mr.refresh(function()
-			for _, tool in ipairs(opts.ensure_installed) do
-				local p = mr.get_package(tool)
-				if not p:is_installed() then
-					vim.notify("Installing " .. tool)
-					p:install()
-				end
-			end
-		end)
-	end,
+        mr.refresh(function()
+            for _, tool in ipairs(opts.ensure_installed) do
+                local p = mr.get_package(tool)
+                if not p:is_installed() then
+                    vim.notify("Installing " .. tool)
+                    p:install()
+                end
+            end
+        end)
+    end,
 }
