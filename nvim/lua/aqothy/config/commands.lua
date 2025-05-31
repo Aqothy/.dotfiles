@@ -9,7 +9,7 @@ command("SI", function(opts)
     end
 
     vim.opt_local.expandtab = true
-    vim.opt_local.shiftwidth = size
+    vim.opt_local.shiftwidth = 0
     vim.opt_local.tabstop = size
     vim.opt_local.softtabstop = -1
 

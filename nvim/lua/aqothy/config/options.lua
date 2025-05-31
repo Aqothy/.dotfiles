@@ -16,7 +16,7 @@ vim.opt.relativenumber = true
 
 -- indentation
 vim.opt.expandtab = true
-vim.opt.shiftwidth = 4
+vim.opt.shiftwidth = 0
 vim.opt.tabstop = 4
 vim.opt.softtabstop = -1
 vim.opt.smartindent = true

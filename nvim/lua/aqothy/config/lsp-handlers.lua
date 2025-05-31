@@ -148,33 +148,38 @@ function M.get()
         return M._keys
     end
     -- stylua: ignore
-	M._keys = {
-		{ "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
-		{ "n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
-		{ "n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
-		{ "n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
-		{ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
-		{ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
-		{ { "i", "s", "n" }, "<c-s>", function()
-            local has_blink, blink = pcall(require, "blink.cmp")
-			if has_blink and blink.is_menu_visible() then
-				blink.hide()
-			end
-			vim.lsp.buf.signature_help()
-		end, { desc = "Signature Help", has = "signatureHelp" } },
-		{ "n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
-		{ "n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
-		{ "n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
-		{ "n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
-		{ "n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
-		{ "n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" } },
-		{ "n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
-		{ "n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
-		{ "n", "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
-		{ "n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
-		{ "n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
-		{ "n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
-	}
+    M._keys = {
+        { "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
+        { "n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
+        { "n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
+        { "n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
+        { "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
+        { "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
+        {
+            { "i", "s", "n" },
+            "<c-s>",
+            function()
+                local has_blink, blink = pcall(require, "blink.cmp")
+                if has_blink and blink.is_menu_visible() then
+                    blink.hide()
+                end
+                vim.lsp.buf.signature_help()
+            end,
+            { desc = "Signature Help", has = "signatureHelp" },
+        },
+        { "n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
+        { "n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
+        { "n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
+        { "n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
+        { "n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
+        { "n", "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" } },
+        { "n", "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
+        { "n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
+        { "n", "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+        { "n", "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+        { "n", "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
+        { "n", "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
+    }
 
     return M._keys
 end

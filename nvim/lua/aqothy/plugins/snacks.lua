@@ -12,7 +12,7 @@ return {
                 enabled = false,
                 preset = {
                     header = [[
-		⣤⡀⠀⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⣤⡀⠀⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣆⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠸⣷⣮⣿⣿⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢀⡠⠒⠉⠀⠀⠀⠀⠀⠀⠈⠁⠲⢖⠒⡀⠀⠀
@@ -29,25 +29,30 @@ return {
 ⠀⠀⠀⠀⢀⠠⠓⠢⠤⣀⣀⡀⠀⠀⣀⣀⡀⠤⠒⠑⢄⠀⠀
 ⠀⠀⠀⠰⠥⠤⢄⢀⡠⠄⡈⡀⠀⠀⣇⣀⠠⢄⠀⠒⠤⠣⠀
 ⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀]],
-					-- stylua: ignore
-					keys = {
-						{ icon = " ", key = "b", desc = "Browse Repo", enabled = in_git, action = function() Snacks.gitbrowse() end },
-						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('smart')" },
-						{ icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end},
-						{ icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-						{ icon = " ", key = "e", desc = "New File", action = function()
-							local current_dir = vim.fn.expand("%:p:h") .. "/"
-							vim.ui.input({
-								prompt = "File: ",
-								default = current_dir
-							}, function(file)
-								if file and file ~= "" then
-									vim.cmd("e " .. file .. " | startinsert | e")
-								end
-							end)
-						end },
-						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
-					},
+                    -- stylua: ignore
+                    keys = {
+                        { icon = " ", key = "b", desc = "Browse Repo", enabled = in_git, action = function() Snacks.gitbrowse() end },
+                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('smart')" },
+                        { icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end },
+                        { icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                        {
+                            icon = " ",
+                            key = "e",
+                            desc = "New File",
+                            action = function()
+                                local current_dir = vim.fn.expand("%:p:h") .. "/"
+                                vim.ui.input({
+                                    prompt = "File: ",
+                                    default = current_dir,
+                                }, function(file)
+                                    if file and file ~= "" then
+                                        vim.cmd("e " .. file .. " | startinsert | e")
+                                    end
+                                end)
+                            end,
+                        },
+                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                    },
                 },
                 sections = {
                     { section = "header", padding = { 0, 1 } },
@@ -236,8 +241,8 @@ return {
                 })
             end,
             desc = "Toggle Terminal",
-			mode = { "n", "t" },
-		},
+            mode = { "n", "t" },
+        },
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
             "<leader>no",
@@ -254,7 +259,7 @@ return {
         },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
-		{ "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+        { "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>ee", function() Snacks.explorer() end, desc = "File Explorer" },
         {
@@ -265,7 +270,7 @@ return {
                     live = false,
                     supports_live = false,
                     on_show = function()
-				        vim.cmd("stopinsert")
+                        vim.cmd("stopinsert")
                     end,
                 })
             end,
@@ -280,7 +285,7 @@ return {
             function()
                 Snacks.picker.buffers({
                     on_show = function()
-				        vim.cmd("stopinsert")
+                        vim.cmd("stopinsert")
                     end,
                 })
             end,
