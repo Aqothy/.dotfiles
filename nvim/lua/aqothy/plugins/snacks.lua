@@ -9,7 +9,7 @@ return {
 
         return {
             dashboard = {
-                enabled = true,
+                enabled = false,
                 preset = {
                     header = [[
 		⣤⡀⠀⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -172,7 +172,7 @@ return {
                 layouts = {
                     sidebar = {
                         layout = {
-                            width = 25,
+                            width = 30,
                         },
                     },
                 },
@@ -225,7 +225,7 @@ return {
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
-            "<c-`>",
+            "<c-j>",
             function()
                 Snacks.terminal(nil, {
                     win = {

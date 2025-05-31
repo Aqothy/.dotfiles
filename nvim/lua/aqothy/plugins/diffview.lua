@@ -25,9 +25,7 @@ return {
             view = {
                 merge_tool = {
                     layout = "diff3_mixed",
-                },
-                file_history = {
-                    layout = "diff2_horizontal",
+                    disable_diagnostics = false,
                 },
             },
             file_panel = {

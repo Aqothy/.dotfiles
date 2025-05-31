@@ -98,7 +98,7 @@ vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 
 vim.opt.confirm = true
-vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
+vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
 vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 

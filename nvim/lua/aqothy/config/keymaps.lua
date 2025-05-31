@@ -12,10 +12,6 @@ keymap("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center screen" })
 keymap("n", "n", "nzvzz", { desc = "Next search result, open folds, and center screen" })
 keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 
--- Line wrapping
-keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-keymap({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-
 -- Editing and text manipulation
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
