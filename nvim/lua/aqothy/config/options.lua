@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = ","
+vim.g.maplocalleader = "\\"
 
 -- Disable health checks for these providers.
 vim.g.loaded_python3_provider = 0

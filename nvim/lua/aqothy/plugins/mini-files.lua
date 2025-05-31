@@ -46,7 +46,6 @@ return {
         mf.setup(opts)
 
         local show_dotfiles = true
-        local show_preview = false
 
         local filter_hide = function(entry)
             return mf.config.content.filter(entry) and not vim.startswith(entry.name, ".")
@@ -115,12 +114,7 @@ return {
                 vim.keymap.set("n", "cd", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
                 vim.keymap.set("n", "gx", ui_open, { buffer = buf_id, desc = "OS open" })
                 vim.keymap.set("n", "gy", yank_path, { buffer = buf_id, desc = "Yank path" })
-                vim.keymap.set("n", "<a-p>", function()
-                    show_preview = not show_preview
-                    mf.refresh({ windows = { preview = show_preview } })
-                end, { buffer = buf_id, desc = "Toggle preview" })
                 vim.keymap.set("n", "q", function()
-                    show_preview = show_preview and false or true
                     show_dotfiles = show_dotfiles and false or true
                     mf.close()
                 end, { buffer = buf_id, desc = "Close this window" })

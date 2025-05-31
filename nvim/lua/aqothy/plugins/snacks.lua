@@ -172,7 +172,7 @@ return {
                 layouts = {
                     sidebar = {
                         layout = {
-                            width = 30,
+                            width = 25,
                         },
                     },
                 },

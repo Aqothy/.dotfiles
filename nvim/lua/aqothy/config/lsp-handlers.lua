@@ -2,8 +2,6 @@ local M = {}
 
 M._capabilities = nil
 
-local has_blink, blink = pcall(require, "blink.cmp")
-
 function M.get_capabilities()
     if M._capabilities then
         return M._capabilities
@@ -17,6 +15,8 @@ function M.get_capabilities()
             },
         },
     }
+
+    local has_blink, blink = pcall(require, "blink.cmp")
 
     M._capabilities = has_blink and blink.get_lsp_capabilities(M._capabilities, true) or {}
 
@@ -149,8 +149,6 @@ function M.get()
     end
     -- stylua: ignore
 	M._keys = {
-		{ "n", "K", vim.lsp.buf.hover, { desc = "Hover", has = "hover" } },
-		{ { "n", "x" }, "gra", vim.lsp.buf.code_action, { desc = "Code Action", has = "codeAction" } },
 		{ "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
 		{ "n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
 		{ "n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
@@ -158,14 +156,13 @@ function M.get()
 		{ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
 		{ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
 		{ { "i", "s", "n" }, "<c-s>", function()
+            local has_blink, blink = pcall(require, "blink.cmp")
 			if has_blink and blink.is_menu_visible() then
 				blink.hide()
 			end
 			vim.lsp.buf.signature_help()
 		end, { desc = "Signature Help", has = "signatureHelp" } },
 		{ "n", "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
-		{ "n", "grn", vim.lsp.buf.rename, { desc = "Rename", has = "rename" } },
-		{ "n", "<c-w>d", vim.diagnostic.open_float, { desc = "Float Diagnostics" } },
 		{ "n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
 		{ "n", "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
 		{ "n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },

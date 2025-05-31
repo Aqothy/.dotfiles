@@ -11,10 +11,6 @@ keymap("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
 keymap("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center screen" })
 keymap("n", "n", "nzvzz", { desc = "Next search result, open folds, and center screen" })
 keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
-keymap("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
-keymap("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
-keymap("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-keymap("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
 -- Line wrapping
 keymap({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -26,11 +22,15 @@ keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
 keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
--- Resize windows
+-- Windows
 keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 keymap("n", "<C-0>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 keymap("n", "<C-->", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap("n", "<C-=>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+keymap("n", "<Left>", "<C-w>h", { desc = "Go to Left Window" })
+keymap("n", "<Down>", "<C-w>j", { desc = "Go to Lower Window" })
+keymap("n", "<Up>", "<C-w>k", { desc = "Go to Upper Window" })
+keymap("n", "<Right>", "<C-w>l", { desc = "Go to Right Window" })
 
 -- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
@@ -45,13 +45,6 @@ keymap("x", "@", function()
 end, { silent = false })
 keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
 keymap("n", "<leader>sh", "<cmd>messages<cr>", { desc = "Show Message History" })
-keymap("n", "<leader>ld", function()
-    local success, err =
-        pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.diagnostic.setloclist)
-    if not success and err then
-        vim.notify(err, vim.log.levels.ERROR)
-    end
-end, { desc = "Toggle Diagnostic Loclist" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

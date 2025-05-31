@@ -126,6 +126,8 @@ return {
             },
         },
         config = function(_, opts)
+            vim.treesitter.language.register("bash", { "kitty", "ghostty", "dotenv", "zsh" })
+
             require("nvim-treesitter.configs").setup(opts)
 
             Snacks.toggle.treesitter():map("<leader>ts")

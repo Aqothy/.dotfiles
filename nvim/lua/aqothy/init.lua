@@ -9,19 +9,20 @@ require("aqothy.config.lazy")
 if not is_vscode then
     local function setup_config()
         require("aqothy.config.autocmds")
-        vim.filetype.add({
-            filename = {
-                [".env"] = "dotenv",
-            },
-            pattern = {
-                [".*/kitty/.+%.conf"] = "kitty",
-                [".*/ghostty/.+"] = "ghostty",
-                ["%.env%.[%w_.-]+"] = "dotenv",
-            },
-        })
-        vim.treesitter.language.register("bash", { "kitty", "ghostty", "dotenv", "zsh" })
         require("vim._extui").enable({ msg = { pos = "box" } })
     end
+
+    vim.filetype.add({
+        filename = {
+            [".env"] = "dotenv",
+        },
+        pattern = {
+            [".*/kitty/.+%.conf"] = "kitty",
+            [".*/ghostty/.+"] = "ghostty",
+            ["%.env%.[%w_.-]+"] = "dotenv",
+        },
+    })
+
     -- Load autocmds immediately if starting nvim with file
     if not LazyLoad then
         setup_config()
@@ -37,6 +38,7 @@ if not is_vscode then
             require("aqothy.config.keymaps")
             require("aqothy.config.commands")
             require("aqothy.config.statusline")
+            require("aqothy.config.utils").cowboy()
         end,
     })
 end
