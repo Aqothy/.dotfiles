@@ -29,6 +29,14 @@ vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 10000
 vim.opt.updatetime = 300
+vim.opt.list = true
+vim.opt.listchars = {
+    tab = "▏ ",
+    trail = "·",
+    extends = "»",
+    precedes = "«",
+    nbsp = "-",
+}
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true

@@ -158,43 +158,17 @@ return {
         opts = { use_default_keymaps = false, max_join_length = 300 },
     },
     {
-        "folke/flash.nvim",
-        opts = {
-            -- Disable enhanced f and t
-            modes = {
-                char = {
-                    enabled = false,
-                },
-            },
-            label = {
-                uppercase = false,
-            },
-        },
+        "ggandor/leap.nvim",
         keys = {
-            {
-                "<leader>;",
-                mode = { "n", "x", "o" },
-                function()
-                    require("flash").jump()
-                end,
-                desc = "Flash",
-            },
-            {
-                "<leader>S",
-                mode = { "n", "x", "o" },
-                function()
-                    require("flash").treesitter()
-                end,
-                desc = "Flash Treesitter",
-            },
-            {
-                "r",
-                mode = "o",
-                function()
-                    require("flash").remote()
-                end,
-                desc = "Remote Flash",
-            },
+            { "<leader>;", "<Plug>(leap)", mode = { "n", "x", "o" }, desc = "Leap" },
+        },
+        opts = {
+            preview_filter = function(ch0, ch1, ch2)
+                return not (ch1:match("%s") or ch0:match("%a") and ch1:match("%a") and ch2:match("%a"))
+            end,
+            equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" },
+            labels = "asdfghjklqwertyuiopzxcvbnm",
+            safe_labels = "",
         },
     },
 }
