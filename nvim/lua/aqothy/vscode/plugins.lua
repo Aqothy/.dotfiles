@@ -162,7 +162,9 @@ return {
         opts = {
             label = {
                 uppercase = false,
-                min_pattern_length = 2,
+                min_pattern_length = 1,
+                after = false,
+                before = { 0, 2 },
             },
             highlight = {
                 backdrop = false,
