@@ -48,7 +48,7 @@ vim.opt.infercase = true
 vim.opt.smartcase = true
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
+-- Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
 
@@ -120,8 +120,6 @@ vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
 vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " ", foldsep = " ", diff = "╱" }
--- vim.opt.foldexpr = "v:lua.require'aqothy.config.utils'.foldexpr()"
--- vim.opt.foldmethod = "expr"
 -- vim.opt.statuscolumn = "%!v:lua.require'aqothy.config.statuscolumn'.render()"
 -- vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
 
@@ -131,8 +129,3 @@ vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 vim.opt.background = "light"
-
-local is_windows = vim.fn.has("win32") ~= 0
-local sep = is_windows and "\\" or "/"
-local delim = is_windows and ";" or ":"
-vim.env.PATH = table.concat({ vim.fn.stdpath("data"), "mason", "bin" }, sep) .. delim .. vim.env.PATH

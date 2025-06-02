@@ -3,6 +3,9 @@ return {
     opts = {
         completions = { lsp = { enabled = true } },
         html = { comment = { conceal = false } },
+        sign = {
+            enabled = false,
+        },
     },
     ft = { "markdown" },
     config = function(_, opts)

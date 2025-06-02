@@ -7,7 +7,7 @@ return {
             function()
                 require("conform").format({ async = true })
             end,
-            mode = { "n", "v" },
+            mode = { "n", "x" },
             desc = "Format Buffer or Selection",
         },
     },
