@@ -55,6 +55,10 @@
         "path": "./tex.json"
       },
       {
+        "language": "markdown",
+        "path": "./markdown.json"
+      },
+      {
         "language": [
           "plaintext",
           "markdown",
