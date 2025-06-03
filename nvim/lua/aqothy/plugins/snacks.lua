@@ -2,7 +2,7 @@ return {
     "folke/snacks.nvim",
     lazy = vim.fn.argc(-1) == 0,
     event = "VeryLazy",
-    priority = 999,
+    priority = 1000,
     opts = function()
         local user = require("aqothy.config.user")
         local in_git = Snacks.git.get_root() ~= nil
@@ -32,7 +32,7 @@ return {
                     -- stylua: ignore
                     keys = {
                         { icon = " ", key = "b", desc = "Browse Repo", enabled = in_git, action = function() Snacks.gitbrowse() end },
-                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('smart')" },
+                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
                         { icon = " ", key = "g", desc = "Git status", enabled = in_git, action = function() Snacks.lazygit() end },
                         { icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
                         {
@@ -145,11 +145,13 @@ return {
                     input = {
                         keys = {
                             ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+                            ["<a-h>"] = false,
                         },
                     },
                     list = {
                         keys = {
                             ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+                            ["<a-h>"] = false,
                         },
                     },
                 },
@@ -192,6 +194,9 @@ return {
                     wo = {
                         winbar = "",
                     },
+                    keys = {
+                        term_normal = false
+                    }
                 },
                 lazygit = {
                     width = 0,
@@ -208,20 +213,7 @@ return {
         { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "v" },  },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
-        {
-            "<c-j>",
-            function()
-                Snacks.terminal(nil, {
-                    win = {
-                        keys = {
-                            term_normal = "",
-                        },
-                    },
-                })
-            end,
-            desc = "Toggle Terminal",
-            mode = { "n", "t" },
-        },
+        { "<c-j>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = { "n", "t" } },
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
             "<leader>no",
@@ -271,7 +263,8 @@ return {
             desc = "Buffers" },
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
-        { "<leader>ff", function() Snacks.picker.smart() end, desc = "Smart File Picker" },
+        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+        { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart File Picker" },
         { "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },

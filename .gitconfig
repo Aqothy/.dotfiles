@@ -1,10 +1,10 @@
 # This is Git's per-user configuration file.
 [user]
-	email = aq0335@gmail.com
-	name = Aqothy
+    email = aq0335@gmail.com
+    name = Aqothy
 # Please adapt and uncomment the following lines:
-#	name = Anthony Qiu
-#	email = aq0335@gmail.com
+#   name = Anthony Qiu
+#   email = aq0335@gmail.com
 
 [column]
     ui = auto
@@ -18,14 +18,14 @@
 [credential]
 
 [core]
-	excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore_global
 
 [fetch]
     prune = true
     all = true
 
 [push]
-	autoSetupRemote = true
+    autoSetupRemote = true
     followTags = true
 
 [pull]
@@ -41,7 +41,7 @@
     verbose = true
 
 [merge]
-	conflictstyle = diff3
+    conflictstyle = diff3
     tool = nvimdiff
 
 [mergetool]
