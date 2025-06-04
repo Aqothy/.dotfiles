@@ -1,6 +1,6 @@
 return {
     "lewis6991/gitsigns.nvim",
-    event = LazyLoad and "LazyFile" or "VeryLazy",
+    event = "LazyFile",
     opts = function()
         Snacks.toggle({
             name = "Git Signs",

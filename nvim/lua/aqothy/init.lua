@@ -2,11 +2,11 @@ local is_vscode = vim.g.vscode
 
 require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
-_G.LazyLoad = vim.fn.argc(-1) == 0
-
 require("aqothy.config.lazy")
 
 if not is_vscode then
+    local lazyLoad = vim.fn.argc(-1) == 0
+
     local function setup_config()
         require("aqothy.config.autocmds")
         require("vim._extui").enable({ msg = { pos = "box" } })
@@ -25,7 +25,7 @@ if not is_vscode then
     })
 
     -- Load autocmds immediately if starting nvim with file
-    if not LazyLoad then
+    if not lazyLoad then
         setup_config()
     end
 
@@ -33,7 +33,7 @@ if not is_vscode then
         pattern = "VeryLazy",
         group = vim.api.nvim_create_augroup("Lazyload_Config", { clear = true }),
         callback = function()
-            if LazyLoad then
+            if lazyLoad then
                 setup_config()
             end
             require("aqothy.config.keymaps")

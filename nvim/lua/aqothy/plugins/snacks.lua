@@ -1,7 +1,6 @@
 return {
     "folke/snacks.nvim",
-    lazy = vim.fn.argc(-1) == 0,
-    event = "VeryLazy",
+    lazy = false,
     priority = 1000,
     opts = function()
         local user = require("aqothy.config.user")

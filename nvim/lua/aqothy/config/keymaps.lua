@@ -23,10 +23,6 @@ keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 keymap("n", "<C-0>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 keymap("n", "<C-->", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap("n", "<C-=>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
-keymap("n", "<Left>", "<C-w>h", { desc = "Go to Left Window" })
-keymap("n", "<Down>", "<C-w>j", { desc = "Go to Lower Window" })
-keymap("n", "<Up>", "<C-w>k", { desc = "Go to Upper Window" })
-keymap("n", "<Right>", "<C-w>l", { desc = "Go to Right Window" })
 
 -- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
