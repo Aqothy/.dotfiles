@@ -20,6 +20,7 @@ if not is_vscode then
             [".*/kitty/.+%.conf"] = "kitty",
             [".*/ghostty/.+"] = "ghostty",
             ["%.env%.[%w_.-]+"] = "dotenv",
+            [".*/%.vscode/.*%.json"] = "json5", -- These json files frequently have comments
         },
     })
 

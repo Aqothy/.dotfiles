@@ -4,15 +4,15 @@ return {
     event = { "InsertEnter", "CmdLineEnter" },
     -- enabled = false,
     -- dependencies = {
-    -- 	-- enable if there is any cmp sources that you want blink to use from nvim cmp
-    -- 	{
-    -- 		"saghen/blink.compat",
-    -- 		version = "*",
-    -- 		lazy = true,
-    -- 		opts = {
-    -- 			impersonate_nvim_cmp = true,
-    -- 		},
-    -- 	},
+    --  -- enable if there is any cmp sources that you want blink to use from nvim cmp
+    --  {
+    --      "saghen/blink.compat",
+    --      version = "*",
+    --      lazy = true,
+    --      opts = {
+    --          impersonate_nvim_cmp = true,
+    --      },
+    --  },
     -- },
     opts_extend = { "sources.default" },
     opts = {

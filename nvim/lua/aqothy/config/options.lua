@@ -35,7 +35,7 @@ vim.opt.listchars = {
     trail = "·",
     extends = "»",
     precedes = "«",
-    nbsp = "-",
+    nbsp = "⦸",
 }
 
 vim.opt.splitright = true
@@ -102,11 +102,13 @@ vim.g.netrw_winsize = 25
 vim.opt.spelllang = { "en" }
 -- vim.opt.spell = true
 
-vim.opt.grepprg = "rg --vimgrep"
-vim.opt.grepformat = "%f:%l:%c:%m"
+if vim.fn.executable("rg") == 1 then
+    vim.opt.grepprg = "rg --vimgrep"
+    vim.opt.grepformat = "%f:%l:%c:%m"
+end
 
 vim.opt.confirm = true
-vim.opt.shortmess:append({ W = true, I = false, c = true, C = true })
+vim.opt.shortmess:append({ W = true, I = true, c = true, C = true, A = true, a = true })
 vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 

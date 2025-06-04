@@ -183,11 +183,11 @@ return {
                 },
                 zen = {
                     width = function()
-                        return math.floor(vim.o.columns * 0.7)
+                        return math.min(120, math.floor(vim.o.columns * 0.75))
                     end,
                     backdrop = {
                         transparent = false,
-                        blend = 95,
+                        blend = 99,
                     },
                 },
                 terminal = {
@@ -195,7 +195,7 @@ return {
                         winbar = "",
                     },
                     keys = {
-                        term_normal = false
+                        term_normal = false,
                     }
                 },
                 lazygit = {
@@ -298,6 +298,7 @@ return {
         Snacks.toggle.profiler():map("<leader>pp")
         Snacks.toggle.indent():map("<leader>id")
         Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
+        Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>rn")
         Snacks.toggle({
             id = "wrap",
             name = "Wrap",
