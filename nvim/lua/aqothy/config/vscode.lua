@@ -115,3 +115,5 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         (vim.hl or vim.highlight).on_yank({ timeout = 60 })
     end,
 })
+
+require("aqothy.config.utils").cowboy()

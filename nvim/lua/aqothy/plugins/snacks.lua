@@ -155,6 +155,11 @@ return {
                     },
                 },
                 layouts = {
+                    default = {
+                        layout = {
+                            backdrop = false,
+                        },
+                    },
                     sidebar = {
                         layout = {
                             width = 30,
@@ -173,8 +178,6 @@ return {
                     notify = false,
                 },
             },
-
-            scope = { enabled = true },
 
             styles = {
                 notification = {
@@ -195,7 +198,7 @@ return {
                     },
                     keys = {
                         term_normal = false,
-                    }
+                    },
                 },
                 lazygit = {
                     width = 0,
