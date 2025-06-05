@@ -53,43 +53,15 @@
   },
   {
     "key": "ctrl+u",
-    "command": "runCommands",
-    "when": "editorTextFocus",
-    "args": {
-      "commands": [
-        {
-          "command": "editorScroll",
-          "args": {
-            "to": "up",
-            "by": "halfPage"
-          }
-        },
-        {
-          "command": "cursorMove",
-          "args": { "to": "viewPortCenter" }
-        }
-      ]
-    }
+    "command": "vscode-neovim.send",
+    "args": "<C-u>",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
   },
   {
     "key": "ctrl+d",
-    "command": "runCommands",
-    "when": "editorTextFocus",
-    "args": {
-      "commands": [
-        {
-          "command": "editorScroll",
-          "args": {
-            "to": "down",
-            "by": "halfPage"
-          }
-        },
-        {
-          "command": "cursorMove",
-          "args": { "to": "viewPortCenter" }
-        }
-      ]
-    }
+    "command": "vscode-neovim.send",
+    "args": "<C-d>",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
   },
   {
     "key": "] r",
@@ -160,5 +132,15 @@
     "key": "tab",
     "command": "-insertNextSuggestion",
     "when": "hasOtherSuggestions && textInputFocus && !inSnippetMode && !suggestWidgetVisible && config.editor.tabCompletion == 'on'"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "-vscode-neovim.ctrl-u",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "-vscode-neovim.ctrl-d",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
   }
 ]

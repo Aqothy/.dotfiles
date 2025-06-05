@@ -39,15 +39,6 @@ autocmd("FileType", {
     end,
 })
 
--- check for spell in text filetypes
-autocmd("FileType", {
-    group = augroup("spell"),
-    pattern = { "text", "tex", "gitcommit", "markdown" },
-    callback = function()
-        vim.opt_local.spell = true
-    end,
-})
-
 -- go to last loc when opening a buffer
 autocmd("BufReadPost", {
     group = augroup("last_loc"),

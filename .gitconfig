@@ -21,7 +21,6 @@
     excludesfile = ~/.gitignore_global
 
 [fetch]
-    prune = true
     all = true
 
 [push]
@@ -30,9 +29,6 @@
 
 [pull]
     rebase = true
-
-[init]
-    defaultBranch = main
 
 [help]
     autocorrect = prompt

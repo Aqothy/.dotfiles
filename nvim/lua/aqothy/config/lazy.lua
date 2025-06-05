@@ -22,6 +22,18 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
 local is_vscode = vim.g.vscode
 
+local disabled_plugins = {
+    "gzip",
+    "tarPlugin",
+    "tohtml",
+    "tutor",
+    "zipPlugin",
+}
+
+if is_vscode then
+    disabled_plugins = vim.fn.extend(disabled_plugins, { "matchit", "matchparen", "netrwPlugin" })
+end
+
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
@@ -53,16 +65,7 @@ require("lazy").setup({
     performance = {
         rtp = {
             -- disable some rtp plugins
-            disabled_plugins = {
-                "gzip",
-                -- "matchit",
-                -- "matchparen",
-                -- "netrwPlugin",
-                "tarPlugin",
-                "tohtml",
-                "tutor",
-                "zipPlugin",
-            },
+            disabled_plugins = disabled_plugins,
         },
     },
 })

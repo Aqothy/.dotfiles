@@ -214,5 +214,5 @@ bindkey '^H' backward-delete-char
 bindkey '^[[3~' delete-char
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
-bindkey "^U" backward-kill-line
+bindkey "^K" kill-line
 bindkey '^f' fzf_append_dir_widget

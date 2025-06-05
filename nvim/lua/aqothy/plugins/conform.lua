@@ -33,7 +33,7 @@ return {
             lua = { "stylua" },
             go = { "goimports", "gofumpt" },
             python = { "ruff_format" },
-            swift = { name = "sourcekit", lsp_format = "prefer" },
+            swift = { "swift" },
             tex = { name = "texlab", lsp_format = "prefer" },
             -- For filetypes without a formatter:
             ["_"] = { "trim_whitespace", "trim_newlines" },
