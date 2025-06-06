@@ -9,7 +9,7 @@ if not is_vscode then
 
     local function setup_config()
         require("aqothy.config.autocmds")
-        require("vim._extui").enable({ msg = { pos = "box" } })
+        -- require("vim._extui").enable({ msg = { pos = "box" } })
     end
 
     vim.filetype.add({
@@ -39,7 +39,7 @@ if not is_vscode then
             require("aqothy.config.keymaps")
             require("aqothy.config.commands")
             require("aqothy.config.statusline")
-            require("aqothy.config.utils").cowboy()
+            -- require("aqothy.config.utils").cowboy()
         end,
     })
 end

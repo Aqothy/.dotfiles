@@ -116,4 +116,4 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
-require("aqothy.config.utils").cowboy()
+-- require("aqothy.config.utils").cowboy()

@@ -301,22 +301,6 @@ return {
         Snacks.toggle.indent():map("<leader>id")
         Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
         Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>rn")
-        Snacks.toggle({
-            id = "wrap",
-            name = "Wrap",
-            get = function()
-                return vim.opt.wrap:get()
-            end,
-            set = function(state)
-                if state then
-                    vim.keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-                    vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-                else
-                    vim.keymap.del({ "n", "x" }, "j")
-                    vim.keymap.del({ "n", "x" }, "k")
-                end
-                vim.opt.wrap = state
-            end,
-        }):map("<leader>tw")
+        Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
     end,
 }

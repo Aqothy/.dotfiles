@@ -31,7 +31,7 @@ local disabled_plugins = {
 }
 
 if is_vscode then
-    disabled_plugins = vim.fn.extend(disabled_plugins, { "matchit", "matchparen", "netrwPlugin" })
+    vim.list_extend(disabled_plugins, { "matchit", "matchparen", "netrwPlugin" })
 end
 
 -- Setup lazy.nvim
