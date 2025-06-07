@@ -20,6 +20,7 @@ return {
             vim.g.copilot_filetypes = {
                 ["*"] = true,
                 dotenv = false,
+                codecompanion = false,
             }
         end,
     },
@@ -51,6 +52,7 @@ return {
                 chat = {
                     window = {
                         opts = {
+                            breakindent = false,
                             number = false,
                             relativenumber = false,
                         },

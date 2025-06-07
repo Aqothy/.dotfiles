@@ -6,9 +6,6 @@ return {
             sign = {
                 enabled = false,
             },
-            code = {
-                disable_background = true,
-            },
         },
         ft = { "markdown", "codecompanion" },
         config = function(_, opts)
