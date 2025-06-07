@@ -9,8 +9,9 @@ brew "fzf"                    # Command-line fuzzy finder
 brew "lazygit"                # Terminal UI for git
 brew "gettext"                # Internationalization library
 brew "fd"                     # Simple, fast and user-friendly alternative to find
-brew "pyenv"                  # Python version manager
 brew "xcode-build-server"     # Xcode build server
+brew "fnm"                    # Fast Node.js version manager
+brew "uv"                     # Python
 
 # Development tools
 brew "postgresql@16", restart_service: true # PostgreSQL database

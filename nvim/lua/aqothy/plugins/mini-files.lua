@@ -20,7 +20,7 @@ return {
             width_focus = 20,
             width_nofocus = 20,
             width_preview = 20,
-            preview = false,
+            preview = true,
         },
     },
     keys = {

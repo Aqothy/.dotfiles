@@ -62,14 +62,6 @@ return {
                         show_hidden_files_by_default = true,
                     },
                 },
-                buffer = {
-                    opts = {
-                        -- Only current buf
-                        get_bufnrs = function()
-                            return { vim.api.nvim_get_current_buf() }
-                        end,
-                    },
-                },
             },
             -- adding any nvim-cmp sources here will enable them
             -- with blink.compat, need to uncomment compat in dependencies

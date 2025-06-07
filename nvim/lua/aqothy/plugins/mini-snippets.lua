@@ -11,10 +11,6 @@ return {
             return ms.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "󰉀" })
         end
 
-        local my_m = function(snippets)
-            return ms.default_match(snippets, { pattern_fuzzy = "%w*" })
-        end
-
         local autocmd = vim.api.nvim_create_autocmd
         local group = vim.api.nvim_create_augroup("stop_session", { clear = true })
 
@@ -62,18 +58,11 @@ return {
                     -- Close completion window and clear copilot ghost text on snippet select - vim.ui.select
                     local has_blink, blink = pcall(require, "blink.cmp")
                     if has_blink and blink.is_menu_visible() then
-                        blink.cancel()
+                        blink.hide()
                     end
-
-                    local has_copilot, copilot = pcall(require, "copilot.suggestion")
-                    if has_copilot and copilot.is_visible() then
-                        copilot.dismiss()
-                    end
-
                     ms.default_select(snippets, insert)
                 end,
                 insert = my_insert,
-                match = my_m,
             },
         }
     end,

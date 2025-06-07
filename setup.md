@@ -1,3 +1,5 @@
+# This is rarely updated at all
+
 # Steps to setup
 
 ### git clone this repo into home directory
@@ -29,17 +31,17 @@
 
 - vscode
 - kitty
-- app cleaner
-- firefox, arc
+- pear cleaner
+- zen, chrome
 - bruno
 - vpn
 - skim (set up sync and command: nvim, arguments: --headless --noplugin --server /tmp/nvim --remote-send "<cmd>e +%line %file | normal zz<cr>")
-- wblock
+- webshield
 - docker
 - karabiner element
 - ollama (already in external ssd)
 - vmware (already in external ssd)
-- go, lua, nvm, yt-dlp, basictex
+- go, lua, yt-dlp, basictex
 
 Then run the chmod the link.sh file and run it, also symlink stdc++, ollama, neovim manually
 
