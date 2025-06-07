@@ -8,6 +8,8 @@ return {
     config = function()
         local handlers = require("aqothy.config.lsp-handlers")
 
+        handlers.setup()
+
         local params = {
             capabilities = handlers.get_capabilities(),
         }

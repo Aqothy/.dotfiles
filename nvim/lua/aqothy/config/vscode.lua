@@ -43,8 +43,6 @@ keymap("n", "<leader>nn", vscode_action("notifications.clearAll"), { desc = "Cle
 
 keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
 
-keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
-
 keymap("n", "]d", vscode_action("editor.action.marker.next"), { desc = "Next diagnostic" })
 keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous diagnostic" })
 

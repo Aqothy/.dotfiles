@@ -16,7 +16,6 @@ keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and cent
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
-keymap({ "i", "n", "s" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 
 -- Windows
 keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
@@ -36,7 +35,6 @@ keymap("x", "@", function()
     end)
 end, { silent = false })
 keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
-keymap("n", "<leader>sh", "<cmd>messages<cr>", { desc = "Show Message History" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

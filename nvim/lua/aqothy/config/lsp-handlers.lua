@@ -23,98 +23,100 @@ function M.get_capabilities()
     return M._capabilities
 end
 
-local user = require("aqothy.config.user")
+function M.setup()
+    local user = require("aqothy.config.user")
 
-local s = vim.diagnostic.severity
+    local s = vim.diagnostic.severity
 
-local signs = {
-    text = {
-        [s.ERROR] = "",
-        [s.WARN] = "",
-        [s.HINT] = "",
-        [s.INFO] = "",
-    },
-    numhl = {
-        [s.ERROR] = "DiagnosticSignError",
-        [s.WARN] = "DiagnosticSignWarn",
-        [s.HINT] = "DiagnosticSignHint",
-        [s.INFO] = "DiagnosticSignInfo",
-    },
-}
+    local signs = {
+        text = {
+            [s.ERROR] = "",
+            [s.WARN] = "",
+            [s.HINT] = "",
+            [s.INFO] = "",
+        },
+        numhl = {
+            [s.ERROR] = "DiagnosticSignError",
+            [s.WARN] = "DiagnosticSignWarn",
+            [s.HINT] = "DiagnosticSignHint",
+            [s.INFO] = "DiagnosticSignInfo",
+        },
+    }
 
-local config = {
-    signs = signs,
-    virtual_text = {
-        prefix = function(diagnostic)
-            return " " .. user.signs[string.lower(s[diagnostic.severity])]
-        end,
-    },
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-        focusable = true,
-        style = "minimal",
-        source = "if_many",
-        header = "",
-        prefix = function(diag)
-            local level = string.lower(s[diag.severity])
-            local prefix = string.format(" %s ", user.signs[level])
-            return prefix, "Diagnostic" .. level:sub(1, 1):upper() .. level:sub(2)
-        end,
-    },
-}
+    local config = {
+        signs = signs,
+        virtual_text = {
+            prefix = function(diagnostic)
+                return " " .. user.signs[string.lower(s[diagnostic.severity])]
+            end,
+        },
+        update_in_insert = false,
+        underline = true,
+        severity_sort = true,
+        float = {
+            focusable = true,
+            style = "minimal",
+            source = "if_many",
+            header = "",
+            prefix = function(diag)
+                local level = string.lower(s[diag.severity])
+                local prefix = string.format(" %s ", user.signs[level])
+                return prefix, "Diagnostic" .. level:sub(1, 1):upper() .. level:sub(2)
+            end,
+        },
+    }
 
-vim.diagnostic.config(config)
+    vim.diagnostic.config(config)
 
-vim.lsp.log.set_level(vim.log.levels.OFF)
+    vim.lsp.log.set_level(vim.log.levels.OFF)
 
-local float_config = {
-    max_height = math.floor(vim.o.lines * 0.5),
-    max_width = math.floor(vim.o.columns * 0.4),
-}
+    local float_config = {
+        max_height = math.floor(vim.o.lines * 0.5),
+        max_width = math.floor(vim.o.columns * 0.4),
+    }
 
-local hover = vim.lsp.buf.hover
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.buf.hover = function()
-    return hover(float_config)
-end
-
-local signature_help = vim.lsp.buf.signature_help
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.buf.signature_help = function()
-    return signature_help(float_config)
-end
-
---- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
----@param bufnr integer
----@param contents string[]
----@param opts table
----@return string[]
----@diagnostic disable-next-line: duplicate-set-field
-vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
-    contents = vim.lsp.util._normalize_markdown(contents, {
-        width = vim.lsp.util._make_floating_popup_size(contents, opts),
-    })
-    vim.bo[bufnr].filetype = "markdown"
-    vim.treesitter.start(bufnr)
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
-
-    return contents
-end
-
-local register_capability = vim.lsp.handlers["client/registerCapability"]
-vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
-    local client = vim.lsp.get_client_by_id(ctx.client_id)
-    if not client then
-        return
+    local hover = vim.lsp.buf.hover
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.lsp.buf.hover = function()
+        return hover(float_config)
     end
 
-    for buffer in pairs(client.attached_buffers) do
-        M.on_attach(client, buffer)
+    local signature_help = vim.lsp.buf.signature_help
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.lsp.buf.signature_help = function()
+        return signature_help(float_config)
     end
 
-    return register_capability(err, res, ctx)
+    --- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
+    ---@param bufnr integer
+    ---@param contents string[]
+    ---@param opts table
+    ---@return string[]
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
+        contents = vim.lsp.util._normalize_markdown(contents, {
+            width = vim.lsp.util._make_floating_popup_size(contents, opts),
+        })
+        vim.bo[bufnr].filetype = "markdown"
+        vim.treesitter.start(bufnr)
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
+
+        return contents
+    end
+
+    local register_capability = vim.lsp.handlers["client/registerCapability"]
+    vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        if not client then
+            return
+        end
+
+        for buffer in pairs(client.attached_buffers) do
+            M.on_attach(client, buffer)
+        end
+
+        return register_capability(err, res, ctx)
+    end
 end
 
 local diagnostic_goto = function(next, severity)
