@@ -44,7 +44,7 @@ return {
                     require("debugmaster").mode.toggle()
                 end,
                 desc = "Toggle DebugMaster",
-                mode = { "n", "v" },
+                mode = { "n", "x" },
                 nowait = true,
             },
         },

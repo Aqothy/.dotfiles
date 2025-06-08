@@ -32,8 +32,8 @@ local function vscode_action(cmd)
     end
 end
 
-keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
-keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
+keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })
+keymap("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
@@ -74,7 +74,7 @@ keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go t
 
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 
-keymap({ "n", "v" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
+keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap("n", "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
 keymap("n", "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })

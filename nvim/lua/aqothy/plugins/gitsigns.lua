@@ -48,7 +48,7 @@ return {
                 nmap("<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
                 nmap("<leader>hr", gs.reset_hunk, "Reset hunk")
                 nmap("<leader>gg", gs.blame, "Blame")
-                vim.keymap.set("v", "<leader>hs", function()
+                vim.keymap.set("x", "<leader>hs", function()
                     gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
                 end, { desc = "Stage hunk" })
 

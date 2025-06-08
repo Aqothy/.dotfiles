@@ -14,8 +14,8 @@ keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and cent
 
 -- Editing and text manipulation
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-keymap("v", ">", ">gv", { desc = "Indent and maintain selection" })
-keymap("v", "<", "<gv", { desc = "Outdent and maintain selection" })
+keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })
+keymap("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 
 -- Windows
 keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
