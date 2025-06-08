@@ -2,6 +2,7 @@ return {
     {
         "github/copilot.vim",
         event = "BufReadPost",
+        cmd = "Copilot",
         init = function()
             vim.g.copilot_lsp_settings = {
                 telemetry = {
