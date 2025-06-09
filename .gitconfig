@@ -38,20 +38,9 @@
 
 [merge]
     conflictstyle = diff3
-    tool = nvimdiff
-
-[mergetool]
-    keepBackup = false
-
-[mergetool "nvimdiff"]
-    cmd = nvim -d $LOCAL $MERGED $REMOTE
 
 [diff]
     algorithm = histogram
     renames = true
     mnemonicPrefix = true
     colorMoved = plain
-    tool = nvimdiff
-
-[difftool "nvimdiff"]
-    cmd = nvim -d $LOCAL $REMOTE
