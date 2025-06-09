@@ -1,6 +1,6 @@
 return {
     "saghen/blink.cmp",
-    version = "*",
+    -- version = "*",
     event = { "InsertEnter", "CmdLineEnter" },
     -- enabled = false,
     -- dependencies = {
@@ -80,6 +80,7 @@ return {
                 "score",
                 "sort_text",
             },
+            implementation = "lua",
         },
         cmdline = {
             enabled = true,

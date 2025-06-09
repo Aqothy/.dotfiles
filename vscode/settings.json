@@ -25,8 +25,6 @@
     "**/.vscode": true,
     "**/.vs": true
   },
-  "terminal.integrated.defaultProfile.osx": "zsh",
-  "terminal.integrated.inheritEnv": true,
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },
@@ -36,9 +34,6 @@
   "telemetry.telemetryLevel": "off",
   "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 17,
-  "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
-  },
   "workbench.activityBar.location": "top",
   "python.terminal.shellIntegration.enabled": true,
   "terminal.integrated.cursorBlinking": true,
@@ -61,5 +56,8 @@
   "editor.cursorSurroundingLines": 4,
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.agent.enabled": true,
-  "github.copilot.chat.agent.thinkingTool": true
+  "github.copilot.chat.agent.thinkingTool": true,
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  }
 }

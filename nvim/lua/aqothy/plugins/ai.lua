@@ -51,6 +51,7 @@ return {
             },
             display = {
                 chat = {
+                    intro_message = "",
                     window = {
                         opts = {
                             breakindent = false,
@@ -64,7 +65,7 @@ return {
         keys = {
             { "<leader>ac", "<cmd>CodeCompanionActions<CR>", desc = "Open the action palette", mode = { "n", "x" } },
             { "<Leader>ai", "<cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle a chat buffer", mode = { "n", "x" } },
-            { "<leader>aa", "<cmd>CodeCompanionChat Add<CR>", desc = "Add code to a chat buffer", mode = { "x" } },
+            { "<leader>aa", "<cmd>CodeCompanionChat Add<CR>", desc = "Add code to a chat buffer", mode = "x" },
         },
     },
 }

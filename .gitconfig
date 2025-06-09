@@ -44,7 +44,7 @@
     keepBackup = false
 
 [mergetool "nvimdiff"]
-    cmd = nvim -d $MERGED $REMOTE $LOCAL -c 'wincmd J'
+    cmd = nvim -d $LOCAL $MERGED $REMOTE
 
 [diff]
     algorithm = histogram
@@ -54,4 +54,4 @@
     tool = nvimdiff
 
 [difftool "nvimdiff"]
-    cmd = nvim -d $REMOTE $LOCAL
+    cmd = nvim -d $LOCAL $REMOTE

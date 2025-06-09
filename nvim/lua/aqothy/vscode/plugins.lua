@@ -30,16 +30,6 @@ return {
         },
     },
     {
-        "folke/snacks.nvim",
-        opts = {},
-        -- stylua: ignore
-        keys = {
-            { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },
-            ---@diagnostic disable-next-line: missing-fields
-            { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "x" } },
-        },
-    },
-    {
         "ggandor/leap.nvim",
         keys = {
             { "<leader>;", "<Plug>(leap)", mode = { "n", "x", "o" }, desc = "Leap" },

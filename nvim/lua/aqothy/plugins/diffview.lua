@@ -22,12 +22,6 @@ return {
     },
     opts = function()
         return {
-            view = {
-                merge_tool = {
-                    layout = "diff3_mixed",
-                    disable_diagnostics = false,
-                },
-            },
             file_panel = {
                 win_config = {
                     width = 30,
