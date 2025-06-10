@@ -78,7 +78,7 @@ keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Q
 keymap("n", "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
 keymap("n", "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
-keymap("v", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Document" })
+keymap("v", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Selection" })
 
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })

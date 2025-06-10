@@ -107,7 +107,7 @@ if vim.fn.executable("rg") == 1 then
 end
 
 vim.opt.confirm = true
-vim.opt.shortmess:append({ W = true, I = true, c = true, C = true, A = true, a = true })
+vim.opt.shortmess:append({ W = true, I = false, c = true, C = true, A = true, a = true })
 vim.opt.ruler = false -- already handled by statusline
 vim.opt.jumpoptions = { "stack", "view", "clean" }
 

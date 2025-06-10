@@ -149,6 +149,9 @@ function M.get()
     if M._keys then
         return M._keys
     end
+
+    local has_blink, blink = pcall(require, "blink.cmp")
+
     -- stylua: ignore
     M._keys = {
         { "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
@@ -158,10 +161,9 @@ function M.get()
         { "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
         { "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
         {
-            { "i", "s", "n" },
+            { "i", "x", "n" },
             "<c-s>",
             function()
-                local has_blink, blink = pcall(require, "blink.cmp")
                 if has_blink and blink.is_menu_visible() then
                     blink.hide()
                 end

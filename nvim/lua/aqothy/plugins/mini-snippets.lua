@@ -55,12 +55,14 @@ return {
 
             expand = {
                 select = function(snippets, insert)
-                    -- Close completion window and clear copilot ghost text on snippet select - vim.ui.select
+                    -- Close completion window for snippet selection
                     local has_blink, blink = pcall(require, "blink.cmp")
-                    if has_blink and blink.is_menu_visible() then
-                        blink.hide()
+                    if has_blink then
+                        blink.cancel()
                     end
-                    ms.default_select(snippets, insert)
+                    vim.schedule(function()
+                        ms.default_select(snippets, insert)
+                    end)
                 end,
                 insert = my_insert,
             },
