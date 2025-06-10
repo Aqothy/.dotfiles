@@ -362,7 +362,7 @@ function M.render()
 
     local left_components = {}
     local left_candidates = {
-        M.os_component(),
+        -- M.os_component(),
         M.mode_component(),
         git_head,
         M.filetype_component(),
@@ -379,8 +379,8 @@ function M.render()
     local right_candidates = {
         M.diagnostics_component(),
         M.lsp_progress_component(),
-        M.file_info_component(),
         M.position_component(),
+        M.file_info_component(),
     }
     for i = 1, #right_candidates do
         local comp = right_candidates[i]
