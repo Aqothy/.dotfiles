@@ -22,6 +22,11 @@ return {
     },
     opts = function()
         return {
+            view = {
+                merge_tool = {
+                    layout = "diff1_plain",
+                },
+            },
             file_panel = {
                 win_config = {
                     width = 30,

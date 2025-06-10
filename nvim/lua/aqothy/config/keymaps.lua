@@ -17,12 +17,6 @@ keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking
 keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })
 keymap("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 
--- Windows
-keymap("n", "<C-9>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-keymap("n", "<C-0>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-keymap("n", "<C-->", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-keymap("n", "<C-=>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
-
 -- Utils
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], { silent = false, desc = "Open a new file in the same directory" })
