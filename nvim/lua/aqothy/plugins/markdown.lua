@@ -23,7 +23,7 @@ return {
                         m.disable()
                     end
                 end,
-            }):map("<leader>mp")
+            }):map("<leader>cp")
         end,
     },
 }
