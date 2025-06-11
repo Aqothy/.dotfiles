@@ -9,12 +9,10 @@ setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 
 # History
-HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 setopt INC_APPEND_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_VERIFY
@@ -132,18 +130,13 @@ bindkey -M vicmd gz add-surround
 bindkey -M visual gz add-surround
 
 # Completion
-zmodload zsh/complist
+zmodload -i zsh/complist
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
+autoload -Uz compinit && compinit
 
 _comp_options+=(globdots)
 
@@ -155,8 +148,12 @@ setopt CORRECT
 
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' use-cache on
+zstyle ':completion:*' matcher-list \
+  '' \
+  'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' \
+  'r:|[._-]=* r:|=*' \
+  'l:|=* r:|=*'
+zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 
 eval "$(fnm env --use-on-cd --shell zsh)"

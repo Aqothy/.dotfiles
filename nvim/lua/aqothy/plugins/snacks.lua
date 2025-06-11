@@ -133,7 +133,6 @@ return {
                     },
                     explorer = {
                         hidden = true,
-                        ignored = true,
                     },
                 },
                 icons = {

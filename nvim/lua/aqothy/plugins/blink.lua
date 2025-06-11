@@ -120,9 +120,6 @@ return {
                 selection = { auto_insert = false },
                 max_items = 50,
             },
-            trigger = {
-                prefetch_on_insert = false,
-            },
             menu = {
                 draw = {
                     treesitter = { "lsp" },

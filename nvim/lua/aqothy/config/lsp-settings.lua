@@ -42,6 +42,9 @@ local jsts_config = {
         propertyDeclarationTypes = { enabled = true },
         variableTypes = { enabled = false },
     },
+    tsserver = {
+        maxTsServerMemory = 6 * 1024,
+    },
 }
 
 M["vtsls"] = {
