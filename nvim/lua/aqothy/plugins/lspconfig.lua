@@ -31,11 +31,12 @@ return {
             group = vim.api.nvim_create_augroup("aqothy/lsp_attach", { clear = true }),
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
-                local file = ev.file
 
-                if not client then
+                if not client or client.name == "GitHub Copilot" then
                     return
                 end
+
+                local file = ev.file
 
                 if #file ~= 0 and not utils.bufname_valid(file) then
                     client:stop()

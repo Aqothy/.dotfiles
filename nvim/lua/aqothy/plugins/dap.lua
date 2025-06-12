@@ -45,7 +45,6 @@ return {
                 end,
                 desc = "Toggle DebugMaster",
                 mode = { "n", "x" },
-                nowait = true,
             },
         },
         config = function()
