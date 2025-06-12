@@ -17,8 +17,15 @@ function M.get_capabilities()
     }
 
     local has_blink, blink = pcall(require, "blink.cmp")
+    local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 
-    M._capabilities = has_blink and blink.get_lsp_capabilities(M._capabilities, true) or {}
+    M._capabilities = vim.tbl_deep_extend(
+        "force",
+        vim.lsp.protocol.make_client_capabilities(),
+        has_cmp_lsp and cmp_nvim_lsp.default_capabilities() or {},
+        has_blink and blink.get_lsp_capabilities() or {},
+        M._capabilities
+    )
 
     return M._capabilities
 end
@@ -151,6 +158,7 @@ function M.get()
     end
 
     local has_blink, blink = pcall(require, "blink.cmp")
+    local has_cmp, cmp = pcall(require, "cmp")
 
     -- stylua: ignore
     M._keys = {
@@ -166,6 +174,10 @@ function M.get()
             function()
                 if has_blink and blink.is_menu_visible() then
                     blink.hide()
+                end
+
+                if has_cmp and cmp.visible() then
+                    cmp.close()
                 end
                 vim.lsp.buf.signature_help()
             end,

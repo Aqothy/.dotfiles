@@ -54,16 +54,16 @@ return {
             },
 
             expand = {
-                select = function(snippets, insert)
-                    -- Close completion window for snippet selection
-                    local has_blink, blink = pcall(require, "blink.cmp")
-                    if has_blink then
-                        blink.cancel()
-                    end
-                    vim.schedule(function()
-                        ms.default_select(snippets, insert)
-                    end)
-                end,
+                -- select = function(snippets, insert)
+                --     -- Close completion window for snippet selection
+                --     local has_blink, blink = pcall(require, "blink.cmp")
+                --     if has_blink then
+                --         blink.cancel()
+                --     end
+                --     vim.schedule(function()
+                --         ms.default_select(snippets, insert)
+                --     end)
+                -- end,
                 insert = my_insert,
             },
         }
