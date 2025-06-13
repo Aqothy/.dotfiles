@@ -19,7 +19,6 @@ M["eslint"] = {
     },
     keys = {
         {
-            "n",
             "<leader>fa",
             "<cmd>LspEslintFixAll<cr>",
             {
@@ -66,7 +65,6 @@ M["vtsls"] = {
     },
     keys = {
         {
-            "n",
             "<leader>oi",
             function()
                 utils.action("source.addMissingImports.ts")
@@ -79,7 +77,6 @@ M["vtsls"] = {
             },
         },
         {
-            "n",
             "<leader>rm",
             function()
                 utils.action("source.removeUnused.ts")
@@ -157,7 +154,7 @@ M["clangd"] = {
         clangdFileStatus = true,
     },
     keys = {
-        { "n", "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" } },
+        { "<leader>ch", "<cmd>LspClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" } },
     },
 }
 
@@ -188,7 +185,6 @@ M["gopls"] = {
     },
     keys = {
         {
-            "n",
             "<leader>fi",
             function()
                 utils.action("refactor.rewrite.fillStruct")
@@ -231,10 +227,10 @@ M["cssls"] = {
 M["texlab"] = {
     enabled = true,
     keys = {
-        { "n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
-        { "n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
-        { "n", "<localleader>ce", "<cmd>LspTexlabChangeEnvironment<cr>", { desc = "Change Environment" } },
-        { "n", "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { desc = "Clean Aux" } },
+        { "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
+        { "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
+        { "<localleader>ce", "<cmd>LspTexlabChangeEnvironment<cr>", { desc = "Change Environment" } },
+        { "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { desc = "Clean Aux" } },
     },
     settings = {
         texlab = {
@@ -253,7 +249,6 @@ M["ruff"] = {
     enabled = true,
     keys = {
         {
-            "n",
             "<leader>oi",
             function()
                 utils.action("source.organizeImports")
