@@ -8,7 +8,7 @@ return {
 
         local my_insert = function(snippet)
             -- Empty tabstop chars
-            return ms.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "󰉀" })
+            return ms.default_insert(snippet, { empty_tabstop = "", empty_tabstop_final = "" })
         end
 
         local autocmd = vim.api.nvim_create_autocmd

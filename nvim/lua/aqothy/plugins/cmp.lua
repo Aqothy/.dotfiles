@@ -102,7 +102,9 @@ return {
                     end
 
                     item.abbr = utils.truncateString(completion_item.label, 30)
-                    item.kind = user.kinds[item.kind]
+                    if user.kinds[item.kind] then
+                        item.kind = user.kinds[item.kind]
+                    end
                     item.menu = utils.truncateString(label_detail, 30)
 
                     return item
