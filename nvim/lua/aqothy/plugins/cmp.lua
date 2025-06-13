@@ -120,11 +120,17 @@ return {
             performance = {
                 debounce = 0,
                 throttle = 1,
+                fetching_timeout = 2000,
                 confirm_resolve_timeout = 1,
                 max_view_entries = 50,
             },
 
             matching = {
+                disallow_fuzzy_matching = false,
+                disallow_fullfuzzy_matching = false,
+                disallow_partial_fuzzy_matching = false,
+                disallow_partial_matching = false,
+                disallow_prefix_unmatching = false,
                 disallow_symbol_nonprefix_matching = false,
             },
 
