@@ -29,19 +29,6 @@ keymap("x", "@", function()
     end)
 end, { silent = false })
 keymap("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
-keymap("n", "<leader>xx", function()
-    local success, err =
-        pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.diagnostic.setqflist)
-    if not success and err then
-        vim.notify(err, vim.log.levels.ERROR)
-    end
-end, { desc = "Toggle Diagnostic Quickfix List" })
-keymap("n", "<leader>qq", function()
-    local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
-    if not success and err then
-        vim.notify(err, vim.log.levels.ERROR)
-    end
-end, { desc = "Quickfix List" })
 
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
