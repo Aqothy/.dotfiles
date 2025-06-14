@@ -2,7 +2,7 @@ local is_vscode = vim.g.vscode
 
 require("aqothy.config." .. (is_vscode and "vscode" or "options"))
 
-require("aqothy.config.lazy")
+require("aqothy.config")
 
 if not is_vscode then
     local lazyLoad = vim.fn.argc(-1) == 0
