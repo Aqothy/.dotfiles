@@ -57,13 +57,3 @@ autocmd("BufReadPost", {
         end
     end,
 })
-
--- Check if we need to reload the file when it changed
-autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-    group = augroup("checktime"),
-    callback = function()
-        if vim.o.buftype ~= "nofile" then
-            vim.cmd("checktime")
-        end
-    end,
-})

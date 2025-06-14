@@ -8,9 +8,6 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.markdown_recommended_style = 0
 
-vim.g.projects_dir = vim.env.HOME .. "/Code"
-vim.g.dotfiles = vim.env.HOME .. "/.config"
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -19,10 +16,8 @@ vim.opt.expandtab = true
 vim.opt.shiftwidth = 0
 vim.opt.tabstop = 4
 vim.opt.softtabstop = -1
-vim.opt.autoindent = true
 
 vim.opt.swapfile = false
-vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.undofile = true
 vim.opt.undolevels = 10000
@@ -90,15 +85,12 @@ vim.opt.scrolloff = 4
 vim.opt.sidescrolloff = 8
 -- vim.opt.colorcolumn = "80"
 
-vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 vim.g.netrw_banner = 0
 vim.g.netrw_browse_split = 0
 vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 25
 
-vim.opt.spelllang = { "en" }
 -- vim.opt.spell = true
 
 if vim.fn.executable("rg") == 1 then
@@ -109,14 +101,13 @@ end
 vim.opt.confirm = true
 vim.opt.shortmess:append({ W = true, I = false, c = true, C = true, A = true, a = true })
 vim.opt.ruler = false -- already handled by statusline
-vim.opt.jumpoptions = { "stack", "view", "clean" }
+vim.opt.jumpoptions = "stack"
 
 -- command line
 vim.opt.showcmd = false
 vim.opt.showmode = false
 
 -- folds
-vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
