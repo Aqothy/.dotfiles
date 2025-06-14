@@ -87,7 +87,7 @@ function git_prompt_info() {
   branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 
   # Check for any changes (staged, unstaged, or untracked)
-  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+  if [[ -n $(git status --porcelain 2>/dev/null | head -n1) ]]; then
     dirty=" %F{red}✘%f"
   fi
 
