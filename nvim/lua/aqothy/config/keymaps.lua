@@ -12,6 +12,10 @@ keymap("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center screen" })
 keymap("n", "n", "nzvzz", { desc = "Next search result, open folds, and center screen" })
 keymap("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 
+-- Add to jumplist when jumping with j and k with count and wrap
+keymap("n", "j", [[(v:count > 1 ? "m'" . v:count . 'j' : 'gj')]], { desc = "Down", expr = true, silent = true })
+keymap("n", "k", [[(v:count > 1 ? "m'" . v:count . 'k' : 'gk')]], { desc = "Up", expr = true, silent = true })
+
 -- Editing and text manipulation
 keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })

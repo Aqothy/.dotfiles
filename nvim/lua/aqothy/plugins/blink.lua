@@ -1,9 +1,8 @@
 return {
     "saghen/blink.cmp",
     version = "*",
-    enabled = false,
     event = { "InsertEnter", "CmdLineEnter" },
-    -- enabled = false,
+    enabled = false,
     -- dependencies = {
     --  -- enable if there is any cmp sources that you want blink to use from nvim cmp
     --  {
@@ -31,32 +30,7 @@ return {
             ["<C-b>"] = { "scroll_documentation_up", "fallback" },
             ["<C-f>"] = { "scroll_documentation_down", "fallback" },
         },
-
         sources = {
-            default = function()
-                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-
-                row = row - 1 -- Convert to 0-indexed
-
-                -- Position to check either current position or one character before
-                local check_col = col > 0 and col - 1 or col
-
-                local success, node = pcall(vim.treesitter.get_node, {
-                    pos = { row, check_col },
-                })
-
-                if
-                    success
-                    and node
-                    and vim.tbl_contains({ "comment", "comment_content", "line_comment", "block_comment" }, node:type())
-                then
-                    return { "buffer" }
-                end
-
-                -- Default sources if not in a comment
-                return { "lsp", "path", "snippets", "buffer" }
-            end,
-            per_filetype = { ["dap-repl"] = { "omni" } },
             providers = {
                 path = {
                     opts = {
@@ -70,12 +44,6 @@ return {
         },
         fuzzy = {
             sorts = {
-                function(a, b)
-                    if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-                        return
-                    end
-                    return b.client_name == "emmet_language_server"
-                end,
                 "exact",
                 -- default sorts
                 "score",
@@ -120,11 +88,6 @@ return {
             list = {
                 selection = { auto_insert = false },
                 max_items = 50,
-            },
-            menu = {
-                draw = {
-                    treesitter = { "lsp" },
-                },
             },
         },
 

@@ -16,6 +16,7 @@ vim.opt.expandtab = true
 vim.opt.shiftwidth = 0
 vim.opt.tabstop = 4
 vim.opt.softtabstop = -1
+vim.opt.breakindent = true
 
 vim.opt.swapfile = false
 vim.opt.writebackup = false
@@ -116,7 +117,7 @@ vim.opt.fillchars = { eob = " ", foldopen = "", foldclose = "", fold = " "
 -- vim.opt.numberwidth = 5 -- 5 instead of 4 to make space for folds
 
 vim.opt.whichwrap:append("h,l") -- allow move to next line with the
-vim.opt.wrap = false
+vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
