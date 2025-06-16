@@ -50,7 +50,7 @@ return {
                     end
                     return b.client_name == "emmet_language_server"
                 end,
-                "exact",
+                -- "exact",
                 -- default sorts
                 "score",
                 "sort_text",

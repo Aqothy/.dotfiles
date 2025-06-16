@@ -130,6 +130,9 @@ return {
             group = group,
             pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
             callback = function(event)
+                vim.schedule(function()
+                    mf.close()
+                end)
                 Snacks.rename.on_rename_file(event.data.from, event.data.to)
             end,
         })

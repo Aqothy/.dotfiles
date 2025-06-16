@@ -44,6 +44,12 @@
         "path": "./react-es7.json"
       },
       {
+        "language": [
+          "html"
+        ],
+        "path": "./html.json"
+      },
+      {
         "language": "swift",
         "path": "./swift.json"
       },
