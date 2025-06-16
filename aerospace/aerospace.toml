@@ -44,6 +44,13 @@ automatically-unhide-macos-hidden-apps = false
     end if
     ' '''
 
+    alt-b = '''exec-and-forget osascript -e '
+    tell application "Safari"
+        make new document at end of documents
+        activate
+    end tell'
+    '''
+
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
