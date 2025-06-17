@@ -3,7 +3,7 @@ return {
     keys = {
         { "<C-g>s", mode = "i", desc = "Add Surround In Insert Mode" },
         { "<C-g>S", mode = "i", desc = "Add Surround On New Lines In Insert Mode" },
-        { "gz", mode = { "n", "v" }, desc = "Surround Normal And Visual" },
+        { "gz", mode = { "n", "x" }, desc = "Surround Normal And Visual" },
         { "gzz", desc = "Surround Current Line" },
         { "gZ", desc = "Surround On New Lines" },
         { "gZZ", desc = "Surround Current Line On New Lines" },

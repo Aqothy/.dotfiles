@@ -78,12 +78,12 @@ keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Q
 keymap("n", "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
 
 keymap("n", "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
-keymap("v", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Selection" })
+keymap("x", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Selection" })
 
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 
-keymap({ "n", "v" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
+keymap({ "n", "x" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 keymap("n", "<leader>k", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
 
 keymap("n", "'s", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
