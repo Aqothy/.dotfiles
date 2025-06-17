@@ -151,7 +151,11 @@ return {
                         get_bufnrs = function()
                             local bufs = {}
                             for _, win in ipairs(vim.api.nvim_list_wins()) do
-                                bufs[vim.api.nvim_win_get_buf(win)] = true
+                                local buf = vim.api.nvim_win_get_buf(win)
+                                local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+                                if byte_size <= 1.5 * 1024 * 1024 then -- 1.5 Megabyte max
+                                    bufs[buf] = true
+                                end
                             end
                             return vim.tbl_keys(bufs)
                         end,

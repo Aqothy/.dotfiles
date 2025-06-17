@@ -1,6 +1,6 @@
 return {
     "saghen/blink.cmp",
-    version = "*",
+    -- version = "*",
     event = { "InsertEnter", "CmdLineEnter" },
     enabled = false,
     -- dependencies = {
@@ -32,6 +32,9 @@ return {
         },
         sources = {
             providers = {
+                lsp = {
+                    fallbacks = { "snippets", "buffer" },
+                },
                 path = {
                     opts = {
                         show_hidden_files_by_default = true,
@@ -55,7 +58,7 @@ return {
                 "score",
                 "sort_text",
             },
-            -- implementation = "lua",
+            implementation = "lua",
         },
         cmdline = {
             enabled = true,

@@ -25,12 +25,7 @@
       {
         "language": [
           "javascript",
-          "javascriptreact"
-        ],
-        "path": "./javascript.json"
-      },
-      {
-        "language": [
+          "javascriptreact",
           "typescript",
           "typescriptreact"
         ],
@@ -38,7 +33,9 @@
       },
       {
         "language": [
+          "javascript",
           "javascriptreact",
+          "typescript",
           "typescriptreact"
         ],
         "path": "./react-es7.json"
