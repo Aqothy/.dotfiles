@@ -83,24 +83,24 @@ keymap("x", "<leader>F", vscode_action("editor.action.formatSelection"), { desc 
 keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 
-keymap({ "n", "x" }, "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
+keymap("n", "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 keymap("n", "<leader>k", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
 
-keymap("n", "'s", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
+keymap("n", "<leader>m", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
 
-keymap("n", "'e", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
+keymap("n", "<leader>M", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
 
-keymap("n", "'1", vscode_action("vscode-harpoon.gotoEditor1"), { desc = "Harpoon: Goto Editor 1" })
+keymap("n", "<leader>1", vscode_action("vscode-harpoon.gotoEditor1"), { desc = "Harpoon: Goto Editor 1" })
 
-keymap("n", "'2", vscode_action("vscode-harpoon.gotoEditor2"), { desc = "Harpoon: Goto Editor 2" })
+keymap("n", "<leader>2", vscode_action("vscode-harpoon.gotoEditor2"), { desc = "Harpoon: Goto Editor 2" })
 
-keymap("n", "'3", vscode_action("vscode-harpoon.gotoEditor3"), { desc = "Harpoon: Goto Editor 3" })
+keymap("n", "<leader>3", vscode_action("vscode-harpoon.gotoEditor3"), { desc = "Harpoon: Goto Editor 3" })
 
-keymap("n", "'4", vscode_action("vscode-harpoon.gotoEditor4"), { desc = "Harpoon: Goto Editor 4" })
+keymap("n", "<leader>4", vscode_action("vscode-harpoon.gotoEditor4"), { desc = "Harpoon: Goto Editor 4" })
 
-keymap("n", "'5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
+keymap("n", "<leader>5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
 
-keymap("n", "'5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
+keymap("n", "<leader>5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
 
 keymap("n", "<leader>zz", vscode_action("workbench.action.toggleZenMode"), { desc = "Toggle ZenMode" })
 
