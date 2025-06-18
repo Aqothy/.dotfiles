@@ -209,7 +209,7 @@ M["basedpyright"] = {
 }
 
 M["emmet_language_server"] = {
-    enabled = true,
+    enabled = false,
     init_options = {
         showSuggestionsAsSnippets = true,
     },

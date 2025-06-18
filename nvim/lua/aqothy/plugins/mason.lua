@@ -14,7 +14,6 @@ return {
         ensure_installed = {
             -- LSP servers
             "css-lsp",
-            "tailwindcss-language-server",
             "lua-language-server",
             "basedpyright",
             "clangd",
@@ -22,7 +21,6 @@ return {
             "eslint-lsp",
             "texlab",
             "vtsls",
-            "emmet-language-server",
             "ruff",
             "bash-language-server",
             "json-lsp",
