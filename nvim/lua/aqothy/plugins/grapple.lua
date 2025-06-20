@@ -50,7 +50,7 @@ return {
             { "<c-s-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
         }
 
-        for i = 1, 9 do
+        for i = 1, 5 do
             table.insert(keys, {
                 "<leader>" .. i,
                 "<cmd>Grapple select index=" .. i .. "<cr>",

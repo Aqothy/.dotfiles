@@ -246,9 +246,6 @@ return {
                     search = [[TODO:|todo!\(.*\)]],
                     live = false,
                     supports_live = false,
-                    on_show = function()
-                        vim.cmd("stopinsert")
-                    end,
                 })
             end,
             desc = "Grep TODOs"
@@ -257,16 +254,7 @@ return {
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
         { "<leader>pi", function() Snacks.picker.icons() end, desc = "Pick icons" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
-        {
-            "<leader>,",
-            function()
-                Snacks.picker.buffers({
-                    on_show = function()
-                        vim.cmd("stopinsert")
-                    end,
-                })
-            end,
-            desc = "Buffers" },
+        {"<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
         { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
