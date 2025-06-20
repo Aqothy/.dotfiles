@@ -214,7 +214,7 @@ M.on_attach = function(client, bufnr)
     local keys = vim.tbl_extend("force", {}, M.get())
 
     local lsp_config = settings[client.name]
-    if lsp_config and lsp_config.enabled and lsp_config.keys then
+    if lsp_config and lsp_config.enabled ~= false and lsp_config.keys then
         vim.list_extend(keys, lsp_config.keys)
     end
 

@@ -284,4 +284,41 @@ M["jsonls"] = {
     },
 }
 
+M["mpls"] = {
+    enabled = true,
+    cmd = {
+        "mpls",
+        "--no-auto",
+        "--code-style=catppuccin-latte",
+        "--enable-emoji",
+        "--enable-footnotes",
+    },
+    filetypes = { "markdown" },
+    on_attach = function(client, bufnr)
+        vim.api.nvim_buf_create_user_command(bufnr, "MplsOpenPreview", function()
+            local params = {
+                command = "open-preview",
+            }
+            client.request("workspace/executeCommand", params, function(err, _)
+                if err then
+                    vim.notify("Error executing command: " .. err.message, vim.log.levels.ERROR)
+                else
+                    vim.notify("Preview opened", vim.log.levels.INFO)
+                end
+            end)
+        end, {
+            desc = "Preview markdown with mpls",
+        })
+    end,
+    keys = {
+        {
+            "<leader>cp",
+            "<cmd>MplsOpenPreview<cr>",
+            {
+                desc = "Open Markdown Preview",
+            },
+        },
+    },
+}
+
 return M

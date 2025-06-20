@@ -2,6 +2,7 @@ return {
     "andrewferrier/debugprint.nvim",
     keys = {
         { "glj", mode = { "n", "x" }, desc = "Log Variable Below" },
+        { "<c-g>l", mode = { "i" }, desc = "Log Variable Below In Insert Mode" },
         { "gll", desc = "Log Plain Below" },
         { "gld", desc = "Delete Debug Prints" },
         { "glo", desc = "Operate Log Variable" },
@@ -26,7 +27,7 @@ return {
             },
             insert = {
                 plain = "",
-                variable = "",
+                variable = "<c-g>l",
             },
             visual = {
                 variable_below = "glj",

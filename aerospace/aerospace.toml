@@ -66,6 +66,8 @@ automatically-unhide-macos-hidden-apps = false
 
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
+    alt-shift-f = 'fullscreen'
+    alt-shift-space = 'layout floating tiling'
 
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'
@@ -95,7 +97,6 @@ automatically-unhide-macos-hidden-apps = false
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main']
-    f = ['layout floating tiling', 'mode main']
     backspace = ['close-all-windows-but-current', 'mode main']
 
     alt-shift-h = ['join-with left', 'mode main']

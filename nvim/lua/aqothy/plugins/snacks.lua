@@ -69,6 +69,8 @@ return {
 
             bigfile = { enabled = true },
 
+            scroll = { enabled = false },
+
             indent = {
                 enabled = false,
                 indent = { enabled = true, char = "▏" },
@@ -81,6 +83,9 @@ return {
                         and vim.b[buf].snacks_indent ~= false
                         and vim.bo[buf].buftype == ""
                 end,
+                animate = {
+                    enabled = false,
+                },
             },
 
             input = { enabled = true },
@@ -279,27 +284,28 @@ return {
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
     init = function()
-        vim.g.snacks_animate = false
-    end,
-    config = function(_, opts)
-        Snacks.setup(opts)
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "VeryLazy",
+            group = vim.api.nvim_create_augroup("snacks_lazyload", { clear = true }),
+            callback = function()
+                _G.dd = function(...)
+                    Snacks.debug.inspect(...)
+                end
+                _G.bt = function()
+                    Snacks.debug.backtrace()
+                end
+                vim.print = _G.dd
 
-        _G.dd = function(...)
-            Snacks.debug.inspect(...)
-        end
-        _G.bt = function()
-            Snacks.debug.backtrace()
-        end
-        vim.print = _G.dd
-
-        -- Toggle
-        Snacks.toggle.dim():map("<leader>sd")
-        Snacks.toggle.diagnostics():map("<leader>td")
-        Snacks.toggle.zen():map("<leader>zz")
-        Snacks.toggle.profiler():map("<leader>pp")
-        Snacks.toggle.indent():map("<leader>id")
-        Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
-        Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>rn")
-        Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+                -- Toggle
+                Snacks.toggle.dim():map("<leader>sd")
+                Snacks.toggle.diagnostics():map("<leader>td")
+                Snacks.toggle.zen():map("<leader>zz")
+                Snacks.toggle.profiler():map("<leader>pp")
+                Snacks.toggle.indent():map("<leader>id")
+                Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>sp")
+                Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>rn")
+                Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+            end,
+        })
     end,
 }

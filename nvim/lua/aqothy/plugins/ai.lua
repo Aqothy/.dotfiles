@@ -53,7 +53,6 @@ return {
                     intro_message = "",
                     window = {
                         opts = {
-                            breakindent = false,
                             number = false,
                             relativenumber = false,
                         },
