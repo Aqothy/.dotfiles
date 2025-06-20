@@ -286,7 +286,7 @@ return {
     init = function()
         vim.api.nvim_create_autocmd("User", {
             pattern = "VeryLazy",
-            group = vim.api.nvim_create_augroup("snacks_lazyload", { clear = true }),
+            group = vim.api.nvim_create_augroup("aqothy_snacks_lazyload", { clear = true }),
             callback = function()
                 _G.dd = function(...)
                     Snacks.debug.inspect(...)
