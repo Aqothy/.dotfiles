@@ -16,32 +16,6 @@ return {
             end,
             desc = "Toggle Loclist",
         },
-        {
-            "<leader>xx",
-            function()
-                local success, err =
-                    pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.diagnostic.setqflist)
-                if not success and err then
-                    vim.notify(err, vim.log.levels.ERROR)
-                end
-            end,
-            desc = "Toggle Diagnostic Quickfix",
-        },
-        {
-            "<leader>aq",
-            function()
-                vim.fn.setqflist({}, "a", {
-                    items = {
-                        {
-                            bufnr = vim.api.nvim_get_current_buf(),
-                            lnum = vim.api.nvim_win_get_cursor(0)[1],
-                            text = vim.api.nvim_get_current_line(),
-                        },
-                    },
-                })
-            end,
-            desc = "Add to Quickfix",
-        },
     },
     opts = {
         keys = {
