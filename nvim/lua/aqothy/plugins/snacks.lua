@@ -173,6 +173,7 @@ return {
             },
 
             explorer = {
+                enabled = true,
                 replace_netrw = true,
             },
 
@@ -254,7 +255,7 @@ return {
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
         { "<leader>pi", function() Snacks.picker.icons() end, desc = "Pick icons" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
-        {"<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
         { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
@@ -274,7 +275,7 @@ return {
     init = function()
         vim.api.nvim_create_autocmd("User", {
             pattern = "VeryLazy",
-            group = vim.api.nvim_create_augroup("aqothy_snacks_lazyload", { clear = true }),
+            group = vim.api.nvim_create_augroup("aqothy/snacks_lazyload", { clear = true }),
             callback = function()
                 _G.dd = function(...)
                     Snacks.debug.inspect(...)

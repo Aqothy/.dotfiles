@@ -132,6 +132,14 @@ return {
 
         autocmd("User", {
             group = group,
+            pattern = "MiniFilesExplorerOpen",
+            callback = function()
+                mf.set_bookmark("w", vim.fn.getcwd, { desc = "Working directory" })
+            end,
+        })
+
+        autocmd("User", {
+            group = group,
             pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
             callback = function(event)
                 vim.schedule(function()
