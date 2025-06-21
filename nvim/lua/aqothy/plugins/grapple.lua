@@ -46,8 +46,8 @@ return {
             { "<leader>m", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
             { "<leader>M", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
             { "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
-            { "<c-s-n>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
-            { "<c-s-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
+            { "<leader>]", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
+            { "<leader>[", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
         }
 
         for i = 1, 5 do
