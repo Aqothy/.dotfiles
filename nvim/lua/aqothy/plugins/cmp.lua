@@ -181,6 +181,24 @@ return {
         })
 
         local cmd_map = cmp.mapping.preset.cmdline({
+            ["<Tab>"] = {
+                c = function()
+                    if cmp.visible() then
+                        cmp.select_next_item(cmp_select)
+                    else
+                        cmp.complete()
+                    end
+                end,
+            },
+            ["<S-Tab>"] = {
+                c = function()
+                    if cmp.visible() then
+                        cmp.select_next_item(cmp_select)
+                    else
+                        cmp.complete()
+                    end
+                end,
+            },
             ["<C-n>"] = {
                 c = function(fallback)
                     if cmp.visible() then
