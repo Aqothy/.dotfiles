@@ -101,6 +101,10 @@ return {
             vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
         end
 
+        local nmap = function(buf_id, lhs, rhs, desc)
+            vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+        end
+
         local autocmd = vim.api.nvim_create_autocmd
         local group = vim.api.nvim_create_augroup("aqothy/mini_files", { clear = true })
 
@@ -110,14 +114,14 @@ return {
             callback = function(args)
                 local buf_id = args.data.buf_id
 
-                vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = buf_id, desc = "Toggle hidden files" })
-                vim.keymap.set("n", "cd", files_set_cwd, { buffer = buf_id, desc = "Set cwd" })
-                vim.keymap.set("n", "gx", ui_open, { buffer = buf_id, desc = "OS open" })
-                vim.keymap.set("n", "gy", yank_path, { buffer = buf_id, desc = "Yank path" })
-                vim.keymap.set("n", "q", function()
+                nmap(buf_id, "g.", toggle_dotfiles, "Toggle hidden files")
+                nmap(buf_id, "cd", files_set_cwd, "Set cwd")
+                nmap(buf_id, "gx", ui_open, "OS open")
+                nmap(buf_id, "gy", yank_path, "Yank path")
+                nmap(buf_id, "q", function()
                     show_dotfiles = show_dotfiles and false or true
                     mf.close()
-                end, { buffer = buf_id, desc = "Close this window" })
+                end, "Close this window")
 
                 map_split(buf_id, "<C-w>s", "horizontal", false)
                 map_split(buf_id, "<C-w>v", "vertical", false)
