@@ -119,7 +119,7 @@ return {
                 nmap(buf_id, "gx", ui_open, "OS open")
                 nmap(buf_id, "gy", yank_path, "Yank path")
                 nmap(buf_id, "q", function()
-                    show_dotfiles = show_dotfiles and false or true
+                    show_dotfiles = true
                     mf.close()
                 end, "Close this window")
 
