@@ -52,9 +52,7 @@ return {
         -- dont have cli installed locally so set to false also for some files I visit I dont need treesitter
         auto_install = false,
 
-        indent = {
-            enable = true,
-        },
+        indent = { enable = true },
 
         textobjects = {
             select = {

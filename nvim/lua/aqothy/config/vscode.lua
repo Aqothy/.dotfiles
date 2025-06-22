@@ -32,79 +32,62 @@ local function vscode_action(cmd)
     end
 end
 
-keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })
-keymap("x", "<", "<gv", { desc = "Outdent and maintain selection" })
-
 -- "Whole Buffer" text-object:
 keymap("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 keymap("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
-keymap("n", "<leader>nn", vscode_action("notifications.clearAll"), { desc = "Clear all notifications" })
-
-keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
-
 keymap("n", "]d", vscode_action("editor.action.marker.next"), { desc = "Next diagnostic" })
 keymap("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous diagnostic" })
-
 keymap("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
 keymap("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
+keymap("n", "[b", vscode_action("workbench.action.previousEditor"), { desc = "Previous buffer" })
+keymap("n", "]b", vscode_action("workbench.action.nextEditor"), { desc = "Next buffer" })
+
 keymap("n", "<leader>gs", vscode_action("workbench.view.scm"), { desc = "Source control" })
-
 keymap("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
-
 keymap("n", "<leader>\\", vscode_action("workbench.action.splitEditor"), { desc = "Split editor" })
-
 keymap("n", "<leader>-", vscode_action("workbench.action.splitEditorDown"), { desc = "Split editor down" })
+keymap("n", "<leader>ee", vscode_action("workbench.action.toggleSidebarVisibility"), { desc = "Toggle Explorer" })
+keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
+keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
+keymap("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
+keymap("n", "<leader>nn", vscode_action("notifications.clearAll"), { desc = "Clear all notifications" })
+keymap("x", ">", ">gv", { desc = "Indent and maintain selection" })
+keymap("x", "<", "<gv", { desc = "Outdent and maintain selection" })
+keymap("n", "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
+keymap("n", "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
+keymap("x", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Selection" })
+keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
+keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
+keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
+keymap("n", "<leader>zz", vscode_action("workbench.action.toggleZenMode"), { desc = "Toggle ZenMode" })
 
 keymap("n", "<leader>ff", vscode_action("workbench.action.quickOpen"), { desc = "Open file finder" })
 keymap("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc = "Search in files" })
-
-keymap("n", "<leader>ee", vscode_action("workbench.action.toggleSidebarVisibility"), { desc = "Toggle Explorer" })
-
-keymap("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
-keymap("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close buffer" })
-
-keymap("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
-keymap("n", "gy", vscode_action("editor.action.goToTypeDefinition"), { desc = "Goto Type Definition" })
+keymap("n", "<leader>pn", vscode_action("notifications.showList"), { desc = "Show Notifications" })
+keymap("n", "<leader>fw", function()
+    vscode.action("workbench.action.findInFiles", { args = { query = vim.fn.expand("<cword>") } })
+end, { desc = "Search word in files" })
 
 keymap("n", "u", "<Cmd>call VSCodeNotify('undo')<CR>", { desc = "Undo" })
 keymap("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
-keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
-
-keymap({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-
-keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
-keymap("n", "<leader>fd", vscode_action("workbench.actions.view.problems"), { desc = "View Problems" })
-
-keymap("n", "<leader>F", vscode_action("editor.action.formatDocument"), { desc = "Format Document" })
-keymap("x", "<leader>F", vscode_action("editor.action.formatSelection"), { desc = "Format Selection" })
-
-keymap("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
-keymap("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
-
 keymap("n", "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 keymap("n", "<leader>k", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
+keymap("n", "<leader>ls", vscode_action("workbench.action.gotoSymbol"), { desc = "Show Symbols" })
+keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
+keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
+keymap("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
+keymap("n", "gy", vscode_action("editor.action.goToTypeDefinition"), { desc = "Goto Type Definition" })
 
 keymap("n", "<leader>m", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
-
 keymap("n", "<leader>M", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
 
-keymap("n", "<leader>1", vscode_action("vscode-harpoon.gotoEditor1"), { desc = "Harpoon: Goto Editor 1" })
-
-keymap("n", "<leader>2", vscode_action("vscode-harpoon.gotoEditor2"), { desc = "Harpoon: Goto Editor 2" })
-
-keymap("n", "<leader>3", vscode_action("vscode-harpoon.gotoEditor3"), { desc = "Harpoon: Goto Editor 3" })
-
-keymap("n", "<leader>4", vscode_action("vscode-harpoon.gotoEditor4"), { desc = "Harpoon: Goto Editor 4" })
-
-keymap("n", "<leader>5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
-
-keymap("n", "<leader>5", vscode_action("vscode-harpoon.gotoEditor5"), { desc = "Harpoon: Goto Editor 5" })
-
-keymap("n", "<leader>zz", vscode_action("workbench.action.toggleZenMode"), { desc = "Toggle ZenMode" })
-
-keymap("n", "<leader>ls", vscode_action("workbench.action.gotoSymbol"), { desc = "Show Symbols" })
+for i = 1, 5 do
+    keymap("n", "<leader>" .. i, vscode_action("vscode-harpoon.gotoEditor" .. i), {
+        desc = "Harpoon: Goto Editor " .. i,
+    })
+end
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
