@@ -37,20 +37,22 @@ return {
                 end,
             },
         },
+        style = "basename",
         win_opts = {
             border = "rounded",
+            width = 35,
         },
     },
     keys = function()
         local keys = {
             { "<leader>m", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
-            { "<leader>M", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
+            { "<leader>k", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
             { "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
             { "<leader>]", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
             { "<leader>[", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
         }
 
-        for i = 1, 5 do
+        for i = 1, 4 do
             table.insert(keys, {
                 "<leader>" .. i,
                 "<cmd>Grapple select index=" .. i .. "<cr>",

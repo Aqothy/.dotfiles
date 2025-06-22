@@ -73,7 +73,7 @@ keymap("n", "u", "<Cmd>call VSCodeNotify('undo')<CR>", { desc = "Undo" })
 keymap("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
 keymap("n", "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
-keymap("n", "<leader>k", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
+keymap("n", "<leader>K", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
 keymap("n", "<leader>ls", vscode_action("workbench.action.gotoSymbol"), { desc = "Show Symbols" })
 keymap({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quick Fix" })
 keymap("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
@@ -81,9 +81,10 @@ keymap("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbo
 keymap("n", "gy", vscode_action("editor.action.goToTypeDefinition"), { desc = "Goto Type Definition" })
 
 keymap("n", "<leader>m", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
+keymap("n", "<leader>k", vscode_action("vscode-harpoon.editorQuickPick"), { desc = "Harpoon: Quick Pick" })
 keymap("n", "<leader>M", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
 
-for i = 1, 5 do
+for i = 1, 4 do
     keymap("n", "<leader>" .. i, vscode_action("vscode-harpoon.gotoEditor" .. i), {
         desc = "Harpoon: Goto Editor " .. i,
     })

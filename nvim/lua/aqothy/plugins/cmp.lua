@@ -7,7 +7,7 @@ return {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-cmdline",
-        "xzbdmw/cmp-mini-snippets",
+        -- "xzbdmw/cmp-mini-snippets",
     },
     config = function()
         local user = require("aqothy.config.user")
@@ -134,7 +134,6 @@ return {
                 disallow_symbol_nonprefix_matching = false,
             },
 
-            -- sources for autocompletion with dynamic snippet provider selection
             sources = cmp.config.sources({
                 {
                     name = "nvim_lsp",
@@ -142,7 +141,7 @@ return {
                         return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
                     end,
                 },
-                { name = "mini.snippets" },
+                -- { name = "mini.snippets" },
                 { name = "path" },
             }, {
                 {

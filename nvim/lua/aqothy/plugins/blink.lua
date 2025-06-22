@@ -31,10 +31,8 @@ return {
             ["<C-f>"] = { "scroll_documentation_down", "fallback" },
         },
         sources = {
+            default = { "lsp", "path", "buffer" },
             providers = {
-                lsp = {
-                    fallbacks = { "snippets", "buffer" },
-                },
                 path = {
                     opts = {
                         show_hidden_files_by_default = true,
@@ -95,7 +93,10 @@ return {
         },
 
         snippets = {
-            preset = "mini_snippets",
+            expand = function(snippet)
+                local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+                insert({ body = snippet })
+            end,
         },
 
         appearance = {

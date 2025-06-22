@@ -96,13 +96,6 @@ return {
                     ["<leader>ap"] = "@parameter.inner",
                 },
             },
-            lsp_interop = {
-                enable = true,
-                floating_preview_opts = {},
-                peek_definition_code = {
-                    ["<leader>k"] = "@*",
-                },
-            },
         },
 
         highlight = {

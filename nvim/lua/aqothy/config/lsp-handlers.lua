@@ -181,10 +181,11 @@ function M.get()
                 vim.lsp.buf.signature_help()
             end,
             { desc = "Signature Help", has = "signatureHelp" },
-            { "i", "x", "n" }
+            { "i", "s" },
         },
         { "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
         { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
+        { "<leader>K", function() Snacks.picker.lsp_definitions({ auto_confirm = false, on_show = function () vim.cmd("stopinsert") end }) end, { desc = "Peek Definition", has = "definition" } },
         { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
         { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
         { "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
