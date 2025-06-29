@@ -89,7 +89,7 @@ autocmd("User", {
     pattern = "DebugModeChanged",
     callback = function(args)
         dmode_enabled = args.data.enabled
-        cmd.redrawstatus()
+        cmd("redrawstatus")
     end,
 })
 
@@ -98,7 +98,7 @@ autocmd("ModeChanged", {
     group = stl_group,
     desc = "Update statusline on mode change",
     callback = vim.schedule_wrap(function()
-        cmd.redrawstatus()
+        cmd("redrawstatus")
     end),
 })
 
@@ -277,7 +277,7 @@ function M.lsp_progress_component()
     return M.progress_cache
 end
 
-autocmd({ "BufEnter", "WinEnter", "BufLeave", "BufWritePost", "TermLeave" }, {
+autocmd({ "BufEnter", "WinEnter", "BufWritePost", "TermLeave" }, {
     group = stl_group,
     callback = function()
         M.file_cache = nil
