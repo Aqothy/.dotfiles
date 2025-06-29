@@ -1,6 +1,5 @@
 return {
     "cbochs/grapple.nvim",
-    event = "LazyFile",
     opts = {
         scope = "cwd",
         default_scopes = {
@@ -46,8 +45,7 @@ return {
         style = "basename",
         win_opts = {
             border = "rounded",
-            width = 50,
-            row = 10,
+            width = 60,
         },
     },
     keys = function()
@@ -62,11 +60,11 @@ return {
             },
             { "<leader>'", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
             { "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
-            { "<c-n>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
-            { "<c-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
+            { "L", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
+            { "H", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
         }
 
-        for i = 1, 4 do
+        for i = 1, 5 do
             table.insert(keys, {
                 "<leader>" .. i,
                 "<cmd>Grapple select index=" .. i .. "<cr>",

@@ -2,14 +2,24 @@ local M = {}
 local grapple = require("grapple")
 local utils = require("aqothy.config.utils")
 local mini_icons = require("mini.icons")
+
+M.tag_cache = nil
 M.tab_cache = nil
+
 local group = vim.api.nvim_create_augroup("aqothy/tagged_bar", { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
 
-autocmd({ "BufEnter", "WinEnter", "BufWritePost", "TermLeave", "TabEnter", "TabLeave" }, {
+autocmd({ "BufEnter", "WinEnter", "BufWritePost", "TermLeave" }, {
     group = group,
     callback = function()
         M.calculate_tags()
+    end,
+})
+
+autocmd({ "TabEnter", "TabLeave" }, {
+    group = group,
+    callback = function()
+        M.calculate_tab_info()
     end,
 })
 
@@ -26,20 +36,8 @@ function M.calculate_tags()
     local current_file = vim.fn.expand("%:p")
     local tags = grapple.tags()
 
-    local current_tab = vim.fn.tabpagenr()
-    local total_tabs = vim.fn.tabpagenr("$")
-
-    local tab_info = ""
-    if total_tabs > 1 then
-        tab_info = string.format("[%d/%d] ", current_tab, total_tabs)
-    end
-
     if #tags == 0 then
-        if total_tabs > 1 then
-            M.tab_cache = "%=" .. tab_info
-        else
-            M.tab_cache = ""
-        end
+        M.tag_cache = ""
         return
     end
 
@@ -59,15 +57,39 @@ function M.calculate_tags()
         tagged_files[i] = entry
     end
 
-    local grapple_content = table.concat(tagged_files, "   ")
-    M.tab_cache = "%=" .. grapple_content .. "%=" .. tab_info
+    M.tag_cache = table.concat(tagged_files, "   ")
+end
+
+function M.calculate_tab_info()
+    local current_tab = vim.fn.tabpagenr()
+    local total_tabs = vim.fn.tabpagenr("$")
+
+    if total_tabs > 1 then
+        M.tab_cache = string.format("%%#TabLineSel#[%d/%d]%%* ", current_tab, total_tabs)
+    else
+        M.tab_cache = ""
+    end
 end
 
 function M.render()
-    if not M.tab_cache then
+    if M.tag_cache == nil then
         M.calculate_tags()
     end
-    return M.tab_cache
+    if M.tab_cache == nil then
+        M.calculate_tab_info()
+    end
+
+    if M.tag_cache == "" then
+        -- No tags, only show tab info if multiple tabs exist
+        if M.tab_cache ~= "" then
+            return "%=" .. M.tab_cache
+        else
+            return ""
+        end
+    else
+        -- Has tags, show tags centered with tab info on the right
+        return "%=" .. M.tag_cache .. "%=" .. M.tab_cache
+    end
 end
 
 vim.opt.tabline = "%!v:lua.require'aqothy.config.tagged_bar'.render()"

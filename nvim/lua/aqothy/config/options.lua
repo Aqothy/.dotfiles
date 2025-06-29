@@ -79,7 +79,6 @@ opt.wildmode = { "longest:full", "full" }
 opt.wildoptions:append({ "fuzzy" })
 
 opt.cursorline = false
--- opt.showtabline = 0
 opt.laststatus = 3
 opt.signcolumn = "yes"
 opt.winborder = "rounded"

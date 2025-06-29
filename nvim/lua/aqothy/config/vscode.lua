@@ -39,8 +39,8 @@ map("n", "]d", vscode_action("editor.action.marker.next"), { desc = "Next diagno
 map("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous diagnostic" })
 map("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
 map("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
-map("n", "[b", vscode_action("workbench.action.previousEditor"), { desc = "Previous buffer" })
-map("n", "]b", vscode_action("workbench.action.nextEditor"), { desc = "Next buffer" })
+map("n", "H", vscode_action("workbench.action.previousEditor"), { desc = "Previous buffer" })
+map("n", "L", vscode_action("workbench.action.nextEditor"), { desc = "Next buffer" })
 
 map("n", "<leader>gs", vscode_action("workbench.view.scm"), { desc = "Source control" })
 map("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
@@ -79,16 +79,6 @@ map({ "n", "x" }, "gra", vscode_action("editor.action.quickFix"), { desc = "Quic
 map("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
 map("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
 map("n", "grt", vscode_action("editor.action.goToTypeDefinition"), { desc = "Goto Type Definition" })
-
-map("n", "<leader>m", vscode_action("vscode-harpoon.addEditor"), { desc = "Harpoon: Add Editor" })
-map("n", "<leader>'", vscode_action("vscode-harpoon.editorQuickPick"), { desc = "Harpoon: Quick Pick" })
-map("n", "<leader>M", vscode_action("vscode-harpoon.editEditors"), { desc = "Harpoon: Edit Editors" })
-
-for i = 1, 4 do
-    map("n", "<leader>" .. i, vscode_action("vscode-harpoon.gotoEditor" .. i), {
-        desc = "Harpoon: Goto Editor " .. i,
-    })
-end
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {

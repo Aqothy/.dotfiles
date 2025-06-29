@@ -91,15 +91,15 @@ autocmd("User", {
         dmode_enabled = args.data.enabled
         cmd("redrawstatus")
     end,
+    desc = "Toggle debug mode in statusline",
 })
 
 -- For op-pending mode
 autocmd("ModeChanged", {
     group = stl_group,
+    pattern = { "*:*o", "*o:*" },
     desc = "Update statusline on mode change",
-    callback = vim.schedule_wrap(function()
-        cmd("redrawstatus")
-    end),
+    command = "redrawstatus",
 })
 
 function M.mode_component()
