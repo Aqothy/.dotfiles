@@ -58,7 +58,7 @@ autocmd("BufReadPost", {
     end,
 })
 
--- FileType procs too much
+-- Treesitter folding
 autocmd("BufWinEnter", {
     group = augroup("treesitter_folding"),
     callback = function(event)
