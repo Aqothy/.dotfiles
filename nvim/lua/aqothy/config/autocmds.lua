@@ -57,3 +57,23 @@ autocmd("BufReadPost", {
         end
     end,
 })
+
+-- FileType procs too much
+autocmd("BufWinEnter", {
+    group = augroup("treesitter_folding"),
+    callback = function(event)
+        local buf = event.buf
+
+        if vim.bo[buf].filetype == "" then
+            return
+        end
+
+        if pcall(vim.treesitter.get_parser, buf) then
+            vim.wo.foldmethod = "expr"
+            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        else
+            vim.wo.foldmethod = "manual"
+            vim.wo.foldexpr = "0"
+        end
+    end,
+})

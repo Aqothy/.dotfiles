@@ -33,6 +33,9 @@ return {
         sources = {
             default = { "lsp", "path", "buffer" },
             providers = {
+                lsp = {
+                    timeout_ms = 500,
+                },
                 path = {
                     opts = {
                         show_hidden_files_by_default = true,

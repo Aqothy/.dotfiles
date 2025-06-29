@@ -17,14 +17,19 @@ return {
             end,
             desc = "Toggle Diffview",
         },
-        { "<leader>gf", "<cmd>DiffviewFileHistory<cr>", desc = "File History" },
-        { "<leader>gm", "<cmd>DiffviewOpen remotes/origin/main..HEAD<cr>", desc = "Diff Main" },
+        { "<leader>gF", "<cmd>DiffviewFileHistory<cr>", desc = "File History" },
+        { "<leader>gf", "<cmd>DiffviewFileHistory %<cr>", desc = "File History Current File" },
+        { "<leader>gm", "<cmd>DiffviewOpen main..HEAD<cr>", desc = "Diff Main" },
+        { "<leader>gM", "<cmd>DiffviewOpen main...HEAD<cr>", desc = "Diff Merge Base Main" },
     },
     opts = function()
         return {
             view = {
+                default = {
+                    winbar_info = true,
+                },
                 merge_tool = {
-                    layout = "diff1_plain",
+                    layout = "diff3_mixed",
                 },
             },
             file_panel = {

@@ -37,6 +37,8 @@ M.kinds = {
     Null = "∅",
     Copilot = "",
     Control = " ",
+    Collapsed = " ",
+    Unknown = " ",
 }
 
 M.dap = {

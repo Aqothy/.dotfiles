@@ -3,21 +3,13 @@ local M = {}
 ---@type table<string,true>
 M.hl = {}
 
-local hipattern = false
-
 M.plugin = {
     "echasnovski/mini.hipatterns",
     keys = {
         {
             "<leader>th",
             function()
-                hipattern = not hipattern
                 MiniHipatterns.toggle()
-                vim.notify(
-                    "MiniHipatterns " .. (hipattern and "on" or "off"),
-                    vim.log.levels.INFO,
-                    { title = "MiniHipatterns" }
-                )
             end,
             desc = "Toggle MiniHipatterns",
         },
@@ -25,7 +17,6 @@ M.plugin = {
     opts = function()
         local hi = require("mini.hipatterns")
         return {
-            -- custom LazyVim option to enable the tailwind integration
             tailwind = {
                 enabled = true,
                 ft = {
@@ -84,7 +75,7 @@ M.plugin = {
         if type(opts.tailwind) == "table" and opts.tailwind.enabled then
             -- reset hl groups when colorscheme changes
             vim.api.nvim_create_autocmd("ColorScheme", {
-                group = vim.api.nvim_create_augroup("color_reload", { clear = true }),
+                group = vim.api.nvim_create_augroup("aqothy/color_reload", { clear = true }),
                 callback = function()
                     M.hl = {}
                 end,

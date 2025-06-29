@@ -12,6 +12,7 @@ brew "fd"                     # Simple, fast and user-friendly alternative to fi
 brew "xcode-build-server"     # Xcode build server
 brew "fnm"                    # Fast Node.js version manager
 brew "uv"                     # Python
+brew "gh"                     # GitHub CLI
 
 # Development tools
 brew "postgresql@16", restart_service: true # PostgreSQL database

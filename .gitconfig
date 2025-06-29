@@ -10,7 +10,7 @@
     ui = auto
 
 [color]
-  ui = auto
+    ui = auto
 
 [branch]
     sort = -committerdate

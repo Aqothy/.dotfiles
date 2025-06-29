@@ -2,6 +2,13 @@ return {
     "ggandor/leap.nvim",
     keys = {
         { "<leader>;", "<Plug>(leap)", mode = { "n", "x", "o" }, desc = "Leap" },
+        {
+            "gs",
+            function()
+                require("leap.treesitter").select({ opts = { safe_labels = "asdfghjklqwertyuiopzxcvbnm" } })
+            end,
+            mode = { "n", "x", "o" },
+        },
     },
     opts = {
         preview_filter = function(ch0, ch1, ch2)

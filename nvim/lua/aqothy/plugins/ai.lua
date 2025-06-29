@@ -11,17 +11,18 @@ return {
             }
             vim.g.copilot_settings = { selectedCompletionModel = "gpt-4o-copilot" }
             vim.g.copilot_no_tab_map = true
+            vim.g.copilot_filetypes = {
+                ["*"] = true,
+                dotenv = false,
+            }
         end,
         config = function()
             vim.keymap.set("i", "<M-a>", 'copilot#Accept("")', {
                 expr = true,
                 replace_keycodes = false,
+                silent = true,
                 desc = "Accept suggestions",
             })
-            vim.g.copilot_filetypes = {
-                ["*"] = true,
-                dotenv = false,
-            }
         end,
     },
     {
@@ -35,7 +36,7 @@ return {
                 chat = {
                     adapter = {
                         name = "copilot",
-                        model = "claude-3.7-sonnet",
+                        model = "claude-sonnet-4",
                     },
                     roles = {
                         user = "Aqothy",
@@ -61,9 +62,9 @@ return {
             },
         },
         keys = {
-            { "<leader>ac", "<cmd>CodeCompanionActions<CR>", desc = "Open the action palette", mode = { "n", "x" } },
-            { "<Leader>ai", ":CodeCompanionChat Toggle<CR>", desc = "Toggle a chat buffer" },
-            { "<leader>aa", ":CodeCompanionChat Add<CR>", desc = "Add code to a chat buffer", mode = "x" },
+            { "<leader>ac", ":CodeCompanionActions<CR>", desc = "Open the action palette", mode = { "n", "x" }, silent = true },
+            { "<Leader>ai", ":CodeCompanionChat Toggle<CR>", desc = "Toggle a chat buffer", silent = true },
+            { "<leader>aa", ":CodeCompanionChat Add<CR>", desc = "Add code to a chat buffer", mode = "x", silent = true },
         },
     },
 }

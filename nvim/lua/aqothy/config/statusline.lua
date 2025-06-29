@@ -156,7 +156,7 @@ M.diagnostic_levels = {
 M.diagnostic_counts = {}
 M.diagnostic_str_cache = {}
 
-M.get_diagnostic_count = function(buf_id)
+function M.get_diagnostic_count(buf_id)
     return vim.diagnostic.count(buf_id)
 end
 
@@ -277,7 +277,7 @@ function M.lsp_progress_component()
     return M.progress_cache
 end
 
-autocmd({ "BufEnter", "TermLeave", "BufLeave", "BufWritePre" }, {
+autocmd({ "BufEnter", "WinEnter", "BufLeave", "BufWritePost", "TermLeave" }, {
     group = stl_group,
     callback = function()
         M.file_cache = nil

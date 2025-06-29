@@ -6,7 +6,11 @@ function M.get_fold(lnum)
     if vim.fn.foldlevel(lnum) <= vim.fn.foldlevel(lnum - 1) then
         return " "
     end
-    return vim.fn.foldclosed(lnum) == -1 and fcs.foldopen or fcs.foldclose
+    if vim.fn.foldclosed(lnum) ~= -1 then
+        return fcs.foldclose
+    else
+        return " "
+    end
 end
 
 function M.render()

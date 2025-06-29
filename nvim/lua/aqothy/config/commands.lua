@@ -9,9 +9,9 @@ command("SI", function(opts)
     end
 
     vim.opt_local.expandtab = true
-    vim.opt_local.shiftwidth = 0
+    vim.opt_local.shiftwidth = size
     vim.opt_local.tabstop = size
-    vim.opt_local.softtabstop = -1
+    vim.opt_local.softtabstop = size
 
     vim.notify(string.format("Set indent to %d for current buffer", size), vim.log.levels.INFO)
 end, {

@@ -22,6 +22,7 @@ return {
                     LspReferenceText = { link = "Visual" },
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
+                    TreesitterContext = { bg = colors.dark1 },
                 }
 
                 groups = {
@@ -38,6 +39,7 @@ return {
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
+                    TreesitterContext = { bg = colors.light1 },
                 }
 
                 groups = {

@@ -120,7 +120,7 @@ return {
             performance = {
                 debounce = 0,
                 throttle = 1,
-                fetching_timeout = 2000,
+                fetching_timeout = 500,
                 confirm_resolve_timeout = 1,
                 max_view_entries = 50,
             },

@@ -1,7 +1,8 @@
 return {
     "cbochs/grapple.nvim",
+    event = "LazyFile",
     opts = {
-        scope = "cwd_branch",
+        scope = "cwd",
         default_scopes = {
             lsp = false,
             static = false,
@@ -37,19 +38,25 @@ return {
                 end,
             },
         },
+        command = function(path)
+            if vim.api.nvim_buf_get_name(0) ~= path then
+                vim.cmd.edit(path)
+            end
+        end,
         style = "basename",
         win_opts = {
             border = "rounded",
-            width = 35,
+            width = 50,
+            row = 10,
         },
     },
     keys = function()
         local keys = {
             { "<leader>m", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
-            { "<leader>k", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
+            { "<leader>'", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
             { "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
-            { "<leader>]", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
-            { "<leader>[", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
+            { "<c-n>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
+            { "<c-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
         }
 
         for i = 1, 4 do

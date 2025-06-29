@@ -58,7 +58,6 @@ return {
                     { section = "keys", padding = 1 },
                     {
                         section = "recent_files",
-                        cwd = true,
                         padding = 1,
                     },
                     {
@@ -149,14 +148,29 @@ return {
                         keys = {
                             ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
                             ["<a-h>"] = false,
+                            ["<a-c>"] = {
+                                "toggle_cwd",
+                                mode = { "n", "i" },
+                            },
                         },
                     },
                     list = {
                         keys = {
-                            ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+                            ["<a-.>"] = "toggle_hidden",
                             ["<a-h>"] = false,
+                            ["<a-c>"] = "toggle_cwd",
                         },
                     },
+                },
+                actions = {
+                    toggle_cwd = function(p)
+                        local buf_name = vim.api.nvim_buf_get_name(p.input.filter.current_buf)
+                        local cwd = vim.fn.fnamemodify(buf_name, ":p:h")
+                        local root = vim.fn.getcwd()
+                        local current = p:cwd()
+                        p:set_cwd(current == root and cwd or root)
+                        p:find()
+                    end,
                 },
                 layouts = {
                     default = {
@@ -194,7 +208,7 @@ return {
                     end,
                     backdrop = {
                         transparent = false,
-                        blend = 99,
+                        blend = 95,
                     },
                 },
                 terminal = {
@@ -207,14 +221,13 @@ return {
                 },
                 lazygit = {
                     width = 0,
-                    height = 0,
+                    height = 0.99,
                 },
             },
         }
     end,
     -- stylua: ignore
     keys = {
-        { "<leader>bl", function() Snacks.git.blame_line() end, desc = "Git blame Line", mode = { "n", "x" } },
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "x" },  },
@@ -256,9 +269,14 @@ return {
         { "<leader>pi", function() Snacks.picker.icons() end, desc = "Pick icons" },
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-        { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+        { "<leader>f.", function() Snacks.picker.files({ cwd = "~/.dotfiles" }) end, desc = "Find Dot Files" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
-        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files Root" },
+        { "<leader>fc", function()
+            local buf_name = vim.api.nvim_buf_get_name(0)
+            local cwd = vim.fn.fnamemodify(buf_name, ":p:h")
+            Snacks.picker.files({ cwd = cwd })
+        end, desc = "Find Files Cwd" },
         { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart File Picker" },
         { "<leader>of", function() Snacks.picker.recent() end, desc = "Recent" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
@@ -268,9 +286,26 @@ return {
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep Lines" },
         { "<leader>u", function() Snacks.picker.undo() end, desc = "undo tree" },
         { "<leader>fp", function() Snacks.picker.projects({ dev = { "~/Code/Personal" } }) end, desc = "Projects picker" },
-        { "<leader>ps", function() Snacks.picker.spelling() end, desc = "Spelling" },
+        { "z=", function() Snacks.picker.spelling() end, desc = "Spelling" },
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command history" },
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>ps", function() Snacks.picker.treesitter({
+            filter = {
+                default = {
+                    "Class",
+                    "Constructor",
+                    "Enum",
+                    "Function",
+                    "Interface",
+                    "Module",
+                    "Method",
+                    "Struct",
+                },
+                -- set to `true` to include all symbols
+                markdown = true,
+                help = true,
+            },
+        }) end, desc = "Document Symbols" },
     },
     init = function()
         vim.api.nvim_create_autocmd("User", {

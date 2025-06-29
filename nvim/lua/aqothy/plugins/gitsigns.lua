@@ -34,26 +34,23 @@ return {
             on_attach = function(bufnr)
                 local gs = package.loaded.gitsigns
 
-                -- Mappings.
-                ---@param lhs string
-                ---@param rhs function
-                ---@param desc string
-                local function nmap(lhs, rhs, desc)
-                    vim.keymap.set("n", lhs, rhs, { desc = desc, buffer = bufnr })
+                local function map(mode, l, r, desc)
+                    vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
                 end
-                nmap("[h", gs.prev_hunk, "Previous hunk")
-                nmap("]h", gs.next_hunk, "Next hunk")
-                nmap("<leader>hp", gs.preview_hunk, "Preview hunk")
-                nmap("<leader>hs", gs.stage_hunk, "Stage hunk")
-                nmap("<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
-                nmap("<leader>hr", gs.reset_hunk, "Reset hunk")
-                nmap("<leader>gg", gs.blame, "Blame")
-                vim.keymap.set("x", "<leader>hs", function()
-                    gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                end, { desc = "Stage hunk" })
+                map("n", "[h", gs.prev_hunk, "Previous hunk")
+                map("n", "]h", gs.next_hunk, "Next hunk")
+                map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
+                map({ "n", "x" }, "<leader>hs", gs.stage_hunk, "Stage hunk")
+                map({ "n", "x" }, "<leader>hr", gs.reset_hunk, "Reset hunk")
+                map("n", "<leader>hS", gs.stage_buffer, "Stage Buffer")
+                map("n", "<leader>hR", gs.reset_buffer, "Reset Buffer")
+                map("n", "<leader>gg", gs.blame, "Blame")
+                map("n", "<leader>gb", function()
+                    gs.blame_line({ full = true })
+                end, "Blame Line")
 
                 -- Text object:
-                vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<cr>")
+                map({ "o", "x" }, "ih", function() gs.select_hunk() end, "Select hunk")
             end,
         }
     end,

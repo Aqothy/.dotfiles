@@ -57,18 +57,6 @@
     ],
     "description": "Creates a React Functional Component with ES7 module system"
   },
-  "useCallback": {
-    "prefix": "useCallbackSnippet",
-    "body": [
-      "useCallback(",
-      "  () => {",
-      "    ${1:first}",
-      "  },",
-      "  [${2:second}],",
-      ")",
-      ""
-    ]
-  },
   "useEffect": {
     "prefix": "useEffectSnippet",
     "body": [

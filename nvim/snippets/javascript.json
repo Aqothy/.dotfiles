@@ -5,6 +5,6 @@
   },
   "console.log a variable": {
     "prefix": "cv",
-    "body": "console.log('${1}:', ${1})"
+    "body": "console.log(${1}, '${1}')"
   }
 }

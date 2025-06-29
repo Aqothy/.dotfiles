@@ -75,7 +75,7 @@ function M.setup()
 
     vim.diagnostic.config(config)
 
-    vim.lsp.log.set_level(vim.log.levels.OFF)
+    vim.lsp.set_log_level("OFF")
 
     local float_config = {
         max_height = math.floor(vim.o.lines * 0.5),
@@ -150,6 +150,24 @@ function M.has(method, client)
     return false
 end
 
+local symbol_opts = {
+    filter = {
+        default = {
+            "Class",
+            "Constructor",
+            "Enum",
+            "Function",
+            "Interface",
+            "Module",
+            "Method",
+            "Struct",
+        },
+        -- set to `true` to include all symbols
+        markdown = true,
+        help = true,
+    },
+}
+
 M._keys = nil
 
 function M.get()
@@ -188,12 +206,12 @@ function M.get()
         { "<leader>K", function() Snacks.picker.lsp_definitions({ auto_confirm = false, on_show = function () vim.cmd("stopinsert") end }) end, { desc = "Peek Definition", has = "definition" } },
         { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
         { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
-        { "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
-        { "<leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols", has = "documentSymbol" } },
-        { "<leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
+        { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
+        { "<leader>ls", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols", has = "documentSymbol" } },
+        { "<leader>lS", function() Snacks.picker.lsp_workspace_symbols(symbol_opts) end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
         { "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
-        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
-        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight", cond = function() return Snacks.words.is_enabled() end } },
+        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight" } },
+        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight" } },
         { "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
         { "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
     }
@@ -203,7 +221,7 @@ end
 
 local settings = require("aqothy.config.lsp-settings")
 
-M.on_attach = function(client, bufnr)
+function M.on_attach(client, bufnr)
     -- Inlay hints
     if client:supports_method("textDocument/inlayHint") then
         -- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

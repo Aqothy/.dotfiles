@@ -31,7 +31,7 @@ if not is_vscode then
 
     vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
-        group = vim.api.nvim_create_augroup("Lazyload_Config", { clear = true }),
+        group = vim.api.nvim_create_augroup("aqothy/lazyload_config", { clear = true }),
         callback = function()
             if lazyLoad then
                 setup_config()

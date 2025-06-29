@@ -32,9 +32,9 @@ return {
             markdown = { "prettier" },
             lua = { "stylua" },
             go = { "goimports", "gofumpt" },
-            python = { "ruff_format" },
+            python = { "ruff_organize_imports", "ruff_fix", "ruff_format" },
             swift = { "swift" },
-            tex = { name = "texlab", lsp_format = "prefer" },
+            tex = { "latexindent" },
             -- For filetypes without a formatter:
             ["_"] = { "trim_whitespace", "trim_newlines" },
         },
