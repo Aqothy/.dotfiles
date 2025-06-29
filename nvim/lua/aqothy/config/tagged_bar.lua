@@ -27,6 +27,9 @@ autocmd("User", {
     group = group,
     pattern = "GrappleTagToggled",
     callback = function()
+        if vim.o.showtabline ~= 2 then
+            vim.opt.showtabline = 2
+        end
         M.calculate_tags()
         vim.cmd("redrawtabline")
     end,
@@ -79,20 +82,30 @@ function M.render()
         M.calculate_tab_info()
     end
 
+    local res = ""
+
     if M.tag_cache == "" then
         -- No tags, only show tab info if multiple tabs exist
         if M.tab_cache ~= "" then
-            return "%=" .. M.tab_cache
+            res = "%=" .. M.tab_cache
         else
-            return ""
+            res = ""
         end
     else
         -- Has tags, show tags centered with tab info on the right
-        return "%=" .. M.tag_cache .. "%=" .. M.tab_cache
+        res = "%=" .. M.tag_cache .. "%=" .. M.tab_cache
     end
+
+    if res == "" then
+        vim.opt.showtabline = 1 -- Show only when more than one tab
+    else
+        vim.opt.showtabline = 2
+    end
+
+    return res
 end
 
 vim.opt.tabline = "%!v:lua.require'aqothy.config.tagged_bar'.render()"
-vim.opt.showtabline = 2
+vim.opt.showtabline = 2 -- Always show tabline at first to call the render function to see if we have tags or not
 
 return M
