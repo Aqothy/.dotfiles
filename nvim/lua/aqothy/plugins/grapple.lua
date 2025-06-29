@@ -50,14 +50,7 @@ return {
     },
     keys = function()
         local keys = {
-            {
-                "<leader>m",
-                function()
-                    require("grapple").toggle()
-                    vim.api.nvim_exec_autocmds("User", { pattern = "GrappleTagToggled" })
-                end,
-                desc = "Grapple toggle tag",
-            },
+            { "<leader>m", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
             { "<leader>'", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple toggle tags" },
             { "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
             { "L", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },

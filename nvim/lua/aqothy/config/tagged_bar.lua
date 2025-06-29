@@ -25,7 +25,7 @@ autocmd({ "TabEnter", "TabLeave" }, {
 
 autocmd("User", {
     group = group,
-    pattern = "GrappleTagToggled",
+    pattern = { "GrappleScopeChanged", "GrappleUpdate" },
     callback = function()
         if vim.o.showtabline ~= 2 then
             vim.opt.showtabline = 2
@@ -68,7 +68,7 @@ function M.calculate_tab_info()
     local total_tabs = vim.fn.tabpagenr("$")
 
     if total_tabs > 1 then
-        M.tab_cache = string.format("%%#TabLineSel#[%d/%d]%%* ", current_tab, total_tabs)
+        M.tab_cache = string.format("%%#TabLineSel#[%d/%d]%%*", current_tab, total_tabs)
     else
         M.tab_cache = ""
     end
