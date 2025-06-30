@@ -1,5 +1,9 @@
 local M = {}
 
+local has_blink, blink = pcall(require, "blink.cmp")
+local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+local has_cmp, cmp = pcall(require, "cmp")
+
 M._capabilities = nil
 
 function M.get_capabilities()
@@ -15,9 +19,6 @@ function M.get_capabilities()
             },
         },
     }
-
-    local has_blink, blink = pcall(require, "blink.cmp")
-    local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 
     M._capabilities = vim.tbl_deep_extend(
         "force",
@@ -76,40 +77,6 @@ function M.setup()
     vim.diagnostic.config(config)
 
     vim.lsp.set_log_level("OFF")
-
-    local float_config = {
-        max_height = math.floor(vim.o.lines * 0.5),
-        max_width = math.floor(vim.o.columns * 0.4),
-    }
-
-    local hover = vim.lsp.buf.hover
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.lsp.buf.hover = function()
-        return hover(float_config)
-    end
-
-    local signature_help = vim.lsp.buf.signature_help
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.lsp.buf.signature_help = function()
-        return signature_help(float_config)
-    end
-
-    --- HACK: Override `vim.lsp.util.stylize_markdown` to use Treesitter.
-    ---@param bufnr integer
-    ---@param contents string[]
-    ---@param opts table
-    ---@return string[]
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.lsp.util.stylize_markdown = function(bufnr, contents, opts)
-        contents = vim.lsp.util._normalize_markdown(contents, {
-            width = vim.lsp.util._make_floating_popup_size(contents, opts),
-        })
-        vim.bo[bufnr].filetype = "markdown"
-        vim.treesitter.start(bufnr)
-        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, contents)
-
-        return contents
-    end
 
     local register_capability = vim.lsp.handlers["client/registerCapability"]
     vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
@@ -174,9 +141,6 @@ function M.get()
     if M._keys then
         return M._keys
     end
-
-    local has_blink, blink = pcall(require, "blink.cmp")
-    local has_cmp, cmp = pcall(require, "cmp")
 
     -- stylua: ignore
     M._keys = {
