@@ -3,27 +3,28 @@ local vscode = require("vscode")
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 local map = vim.keymap.set
+local opt = vim.opt
 
 vim.notify = vscode.notify
 
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
-    vim.opt.clipboard = "unnamedplus"
+    opt.clipboard = "unnamedplus"
 end)
 
-vim.opt.virtualedit = "block"
-vim.opt.wildignore:append({ ".DS_Store" })
-vim.opt.wildignorecase = true
-vim.opt.wildmode = { "longest:full", "full" }
-vim.opt.wildoptions:append({ "fuzzy" })
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.whichwrap:append("h,l") -- allow move to next line with the
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.updatetime = 300
-vim.opt.jumpoptions = { "stack", "view", "clean" }
+opt.virtualedit = "block"
+opt.wildignore:append({ ".DS_Store" })
+opt.wildignorecase = true
+opt.wildmode = { "longest:full", "full" }
+opt.wildoptions:append({ "fuzzy" })
+opt.ignorecase = true
+opt.smartcase = true
+opt.whichwrap:append("h,l") -- allow move to next line with the
+opt.swapfile = false
+opt.backup = false
+opt.writebackup = false
+opt.updatetime = 300
+opt.jumpoptions = { "stack", "view", "clean" }
 
 local function vscode_action(cmd)
     return function()

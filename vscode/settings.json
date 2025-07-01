@@ -46,7 +46,7 @@
   "editor.hover.sticky": false,
   "terminal.integrated.fontSize": 17,
   "editor.stickyScroll.maxLineCount": 3,
-  "editor.cursorSurroundingLines": 4,
+  "editor.cursorSurroundingLines": 8,
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.agent.enabled": true,
   "github.copilot.chat.agent.thinkingTool": true,

@@ -36,7 +36,7 @@ return {
                 chat = {
                     adapter = {
                         name = "copilot",
-                        model = "claude-sonnet-4",
+                        model = "gemini-2.5-pro-preview-06-05",
                     },
                     roles = {
                         user = "Aqothy",

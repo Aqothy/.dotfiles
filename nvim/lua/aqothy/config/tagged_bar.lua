@@ -50,25 +50,26 @@ function M.calculate_tags()
         local filename = vim.fn.fnamemodify(tag.path, ":t")
         local truncated_name = utils.truncateString(filename, 15)
 
+        local display_name
         if tag.path == current_file then
-            filename = "[%#GrappleCurrent#" .. truncated_name .. "%*]"
+            display_name = "[%#GrappleCurrent#" .. truncated_name .. "%*]"
         else
-            filename = truncated_name
+            display_name = truncated_name
         end
 
-        local entry = string.format("%d %%#%s#%s%%* %s", i, icon_hl, icon, filename)
-        tagged_files[i] = entry
+        local entry = string.format("%d %%#%s#%s%%* %s", i, icon_hl, icon, display_name)
+        table.insert(tagged_files, entry)
     end
 
     M.tag_cache = table.concat(tagged_files, "   ")
 end
 
 function M.calculate_tab_info()
-    local current_tab = vim.fn.tabpagenr()
     local total_tabs = vim.fn.tabpagenr("$")
 
     if total_tabs > 1 then
-        M.tab_cache = string.format("%%#TabLineSel#[%d/%d]%%*", current_tab, total_tabs)
+        local current_tab = vim.fn.tabpagenr()
+        M.tab_cache = string.format("[%d/%d]  ", current_tab, total_tabs)
     else
         M.tab_cache = ""
     end

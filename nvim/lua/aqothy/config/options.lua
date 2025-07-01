@@ -17,7 +17,7 @@ opt.number = true
 opt.relativenumber = true
 
 -- indentation
-opt.expandtab = false
+opt.expandtab = true
 opt.shiftwidth = 4
 opt.tabstop = 4
 opt.softtabstop = 4
@@ -85,8 +85,8 @@ opt.winborder = "rounded"
 opt.diffopt = { "internal", "filler", "closeoff", "inline:none", "indent-heuristic", "algorithm:histogram" }
 opt.termguicolors = true
 -- opt.showbreak = "↪"
-opt.scrolloff = 4
-opt.sidescrolloff = 8
+opt.scrolloff = 8
+-- opt.sidescrolloff = 8
 -- opt.colorcolumn = "80"
 
 opt.fileencoding = "utf-8"
@@ -122,4 +122,4 @@ opt.virtualedit = "block" -- Allow cursor to move where there is no text in visu
 
 -- opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "winpos", "help", "globals", "folds", "terminal" }
 
-opt.background = "light"
+opt.background = "dark"
