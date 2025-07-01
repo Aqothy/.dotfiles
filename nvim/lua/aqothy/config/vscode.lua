@@ -24,7 +24,7 @@ opt.swapfile = false
 opt.backup = false
 opt.writebackup = false
 opt.updatetime = 300
-opt.jumpoptions = { "stack", "view", "clean" }
+opt.jumpoptions = "stack"
 
 local function vscode_action(cmd)
     return function()

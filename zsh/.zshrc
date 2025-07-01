@@ -159,7 +159,10 @@ zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(uv generate-shell-completion zsh)"
 
-export FZF_DEFAULT_OPTS="--layout=reverse --color=bg+:#d5c4a1,bg:#f2e5bc,spinner:#9d0006,hl:#928374,fg:#3c3836,header:#928374,info:#427b58,pointer:#9d0006,marker:#9d0006,fg+:#3c3836,prompt:#9d0006,hl+:#9d0006"
+# Light
+# export FZF_DEFAULT_OPTS="--layout=reverse --color=bg+:#d5c4a1,bg:#f2e5bc,spinner:#9d0006,hl:#928374,fg:#3c3836,header:#928374,info:#427b58,pointer:#9d0006,marker:#9d0006,fg+:#3c3836,prompt:#9d0006,hl+:#9d0006"
+# Dark
+export FZF_DEFAULT_OPTS="--layout=reverse --color=bg+:#504945,bg:#32302f,spinner:#d79921,hl:#d79921,fg:#ebdbb2,header:#b8bb26,info:#83a598,pointer:#fe8019,marker:#fe8019,fg+:#fbf1c7,prompt:#b8bb26,hl+:#fabd2f"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="
