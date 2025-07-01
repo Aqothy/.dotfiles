@@ -42,6 +42,12 @@ map("n", "<leader>om", function()
         vim.notify("append linematch", vim.log.levels.INFO)
     end
 end, { desc = "Toggle linematch in diffopt" })
+map("n", "<leader>si", function()
+    vim.ui.input({ prompt = "How many spaces of indent?" }, function(size)
+        local indent = tonumber(size) or 4
+        vim.cmd("SI " .. indent)
+    end)
+end)
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

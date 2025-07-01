@@ -40,7 +40,7 @@
   "terminal.integrated.suggest.enabled": true,
   "zenMode.hideLineNumbers": false,
   "zenMode.restore": false,
-  "workbench.colorTheme": "Gruvbox Light Soft",
+  "workbench.colorTheme": "Gruvbox Dark Soft",
   "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
   "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
   "editor.hover.sticky": false,
