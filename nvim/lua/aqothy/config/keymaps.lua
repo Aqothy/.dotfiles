@@ -44,6 +44,11 @@ map("n", "<leader>om", function()
 end, { desc = "Toggle linematch in diffopt" })
 map("n", "<leader>si", function()
     vim.ui.input({ prompt = "How many spaces of indent?" }, function(input)
+        -- User canceled the input
+        if input == nil then
+            return
+        end
+
         local size = tonumber(input) or 4
         if not size then
             vim.notify("Please provide a number for indent size", vim.log.levels.ERROR)
