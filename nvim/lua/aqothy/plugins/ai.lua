@@ -32,6 +32,15 @@ return {
         },
         cmd = { "CodeCompanion", "CodeCompanionChat" },
         opts = {
+            adapters = {
+                gemini = function()
+                    return require("codecompanion.adapters").extend("gemini", {
+                        env = {
+                            api_key = "cmd:cat ~/gemini_api.txt",
+                        },
+                    })
+                end,
+            },
             strategies = {
                 chat = {
                     adapter = {
