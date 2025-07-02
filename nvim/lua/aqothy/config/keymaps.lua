@@ -43,9 +43,19 @@ map("n", "<leader>om", function()
     end
 end, { desc = "Toggle linematch in diffopt" })
 map("n", "<leader>si", function()
-    vim.ui.input({ prompt = "How many spaces of indent?" }, function(size)
-        local indent = tonumber(size) or 4
-        vim.cmd("SI " .. indent)
+    vim.ui.input({ prompt = "How many spaces of indent?" }, function(input)
+        local size = tonumber(input) or 4
+        if not size then
+            vim.notify("Please provide a number for indent size", vim.log.levels.ERROR)
+            return
+        end
+
+        vim.opt_local.expandtab = true
+        vim.opt_local.shiftwidth = size
+        vim.opt_local.tabstop = size
+        vim.opt_local.softtabstop = size
+
+        vim.notify(string.format("Set indent to %d for current buffer", size), vim.log.levels.INFO)
     end)
 end)
 
