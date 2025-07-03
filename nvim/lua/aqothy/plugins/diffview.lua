@@ -19,7 +19,7 @@ return {
         },
         { "<leader>gF", "<cmd>DiffviewFileHistory<cr>", desc = "File History" },
         { "<leader>gf", "<cmd>DiffviewFileHistory %<cr>", desc = "File History Current File" },
-        { "<leader>gm", "<cmd>DiffviewOpen main..HEAD<cr>", desc = "Diff Main" },
+        { "<leader>gm", "<cmd>DiffviewOpen main<cr>", desc = "Diff Main" },
         { "<leader>gM", "<cmd>DiffviewOpen main...HEAD<cr>", desc = "Diff Merge Base Main" },
     },
     opts = function()
