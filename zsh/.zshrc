@@ -163,7 +163,7 @@ eval "$(uv generate-shell-completion zsh)"
 # export FZF_DEFAULT_OPTS="--layout=reverse --color=bg+:#d5c4a1,bg:#f2e5bc,spinner:#9d0006,hl:#928374,fg:#3c3836,header:#928374,info:#427b58,pointer:#9d0006,marker:#9d0006,fg+:#3c3836,prompt:#9d0006,hl+:#9d0006"
 # Dark
 export FZF_DEFAULT_OPTS="--layout=reverse --color=bg+:#504945,bg:#32302f,spinner:#d79921,hl:#d79921,fg:#ebdbb2,header:#b8bb26,info:#83a598,pointer:#fe8019,marker:#fe8019,fg+:#fbf1c7,prompt:#b8bb26,hl+:#fabd2f"
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="
 --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'
@@ -172,7 +172,7 @@ export FZF_CTRL_R_OPTS="
 --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)'
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
-export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
 
 export MANPAGER='nvim +Man!'
 
@@ -199,11 +199,11 @@ _fzf_comprun() {
 }
 
 _fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
+  fd --hidden --exclude ".git" . "$1"
 }
 
 _fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
+  fd --type d --hidden --exclude ".git" . "$1"
 }
 
 # Keybinds

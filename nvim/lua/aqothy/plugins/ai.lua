@@ -44,8 +44,10 @@ return {
             strategies = {
                 chat = {
                     adapter = {
-                        name = "copilot",
-                        model = "gemini-2.5-pro-preview-06-05",
+                        name = "gemini",
+                        model = "gemini-2.5-pro",
+                        -- name = "copilot",
+                        -- model = "gemini-2.5-pro-preview-06-05",
                     },
                     roles = {
                         user = "Aqothy",
