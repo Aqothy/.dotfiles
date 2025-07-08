@@ -172,6 +172,11 @@ return {
                         p:find()
                     end,
                 },
+                formatters = {
+                    file = {
+                        filename_first = true,
+                    },
+                },
                 layouts = {
                     default = {
                         layout = {

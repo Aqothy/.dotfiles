@@ -39,7 +39,7 @@ if not is_vscode then
             require("aqothy.config.keymaps")
             require("aqothy.config.commands")
             require("aqothy.config.statusline")
-            require("aqothy.config.tagged_bar")
+            -- require("aqothy.config.tagged_bar")
             -- require("aqothy.config.utils").cowboy()
         end,
     })

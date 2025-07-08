@@ -120,6 +120,6 @@ opt.wrap = true
 opt.linebreak = true
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
--- opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "winpos", "help", "globals", "folds", "terminal" }
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "winpos", "help", "globals", "folds", "terminal" }
 
 opt.background = "dark"

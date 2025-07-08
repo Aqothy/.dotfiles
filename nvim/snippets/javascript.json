@@ -6,5 +6,9 @@
   "console.log a variable": {
     "prefix": "cv",
     "body": "console.log(${1}, '${1}')"
+  },
+  "try/catch": {
+    "prefix": "tc",
+    "body": "try {\n\t${0}\n} catch (${1:err}) {\n\t\n}"
   }
 }
