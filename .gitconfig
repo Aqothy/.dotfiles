@@ -9,9 +9,6 @@
 [column]
     ui = auto
 
-[color]
-    ui = auto
-
 [branch]
     sort = -committerdate
 
