@@ -97,9 +97,10 @@ autocmd("User", {
 -- For op-pending mode
 autocmd("ModeChanged", {
     group = stl_group,
-    pattern = { "*:*o", "*o:*" },
     desc = "Update statusline on mode change",
-    command = "redrawstatus",
+    callback = vim.schedule_wrap(function()
+        cmd("redrawstatus")
+    end),
 })
 
 function M.mode_component()
