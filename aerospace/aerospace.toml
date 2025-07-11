@@ -29,28 +29,6 @@ automatically-unhide-macos-hidden-apps = false
     outer.right =      0
 
 [mode.main.binding]
-    # ref: https://gist.github.com/stecman/97bbe21b59613aa6c6c025ae85871438
-    alt-enter = '''exec-and-forget osascript -e '
-    on is_running(appName)
-        tell application "System Events" to (name of processes) contains appName
-    end is_running
-
-    if not is_running("kitty") then
-        tell application "kitty" to activate
-    else
-        tell application "System Events" to tell process "kitty"
-            click menu item "New OS Window" of menu 1 of menu bar item "Shell" of menu bar 1
-        end tell
-    end if
-    ' '''
-
-    alt-b = '''exec-and-forget osascript -e '
-    tell application "Safari"
-        make new document at end of documents
-        activate
-    end tell'
-    '''
-
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
@@ -73,20 +51,12 @@ automatically-unhide-macos-hidden-apps = false
     alt-3 = 'workspace 3'
     alt-4 = 'workspace 4'
     alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
-    alt-7 = 'workspace 7'
-    alt-8 = 'workspace 8'
-    alt-9 = 'workspace 9'
 
     alt-shift-1 = 'move-node-to-workspace 1'
     alt-shift-2 = 'move-node-to-workspace 2'
     alt-shift-3 = 'move-node-to-workspace 3'
     alt-shift-4 = 'move-node-to-workspace 4'
     alt-shift-5 = 'move-node-to-workspace 5'
-    alt-shift-6 = 'move-node-to-workspace 6'
-    alt-shift-7 = 'move-node-to-workspace 7'
-    alt-shift-8 = 'move-node-to-workspace 8'
-    alt-shift-9 = 'move-node-to-workspace 9'
 
     alt-tab = 'workspace-back-and-forth'
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
@@ -103,7 +73,3 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-j = ['join-with down', 'mode main']
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
-
-    down = 'volume down'
-    up = 'volume up'
-    shift-down = ['volume set 0', 'mode main']

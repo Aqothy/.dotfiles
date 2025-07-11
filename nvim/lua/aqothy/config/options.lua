@@ -26,7 +26,6 @@ opt.breakindent = true
 opt.swapfile = false
 opt.writebackup = false
 opt.undofile = true
-opt.undolevels = 10000
 opt.updatetime = 300
 opt.list = true
 opt.listchars = {

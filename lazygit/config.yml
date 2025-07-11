@@ -2,7 +2,6 @@ notARepository: "quit"
 os:
   editPreset: "nvim"
 gui:
-  scrollHeight: 10
   nerdFontsVersion: "3"
   filterMode: "fuzzy"
   mouseEvents: true
