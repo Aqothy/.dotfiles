@@ -1,8 +1,6 @@
 local M = {}
 
-local has_blink, blink = pcall(require, "blink.cmp")
 local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-local has_cmp, cmp = pcall(require, "cmp")
 
 M._capabilities = nil
 
@@ -24,7 +22,6 @@ function M.get_capabilities()
         "force",
         vim.lsp.protocol.make_client_capabilities(),
         has_cmp_lsp and cmp_nvim_lsp.default_capabilities() or {},
-        has_blink and blink.get_lsp_capabilities() or {},
         M._capabilities
     )
 
@@ -66,11 +63,6 @@ function M.setup()
             style = "minimal",
             source = "if_many",
             header = "",
-            prefix = function(diag)
-                local level = string.lower(s[diag.severity])
-                local prefix = string.format(" %s ", user.signs[level])
-                return prefix, "Diagnostic" .. level:sub(1, 1):upper() .. level:sub(2)
-            end,
         },
     }
 
@@ -150,21 +142,6 @@ function M.get()
         { "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
         { "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
         { "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
-        {
-            "<c-s>",
-            function()
-                if has_blink and blink.is_menu_visible() then
-                    blink.hide()
-                end
-
-                if has_cmp and cmp.visible() then
-                    cmp.close()
-                end
-                vim.lsp.buf.signature_help()
-            end,
-            { desc = "Signature Help", has = "signatureHelp" },
-            { "i", "s" },
-        },
         { "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
         { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
         { "<leader>K", function() Snacks.picker.lsp_definitions({ auto_confirm = false }) end, { desc = "Peek Definition", has = "definition" } },

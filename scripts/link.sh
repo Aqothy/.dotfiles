@@ -6,7 +6,6 @@ DOTFILES_DIR=~/.dotfiles
 FILES_TO_SYMLINK=(
     aerospace
     bits
-    ghostty
     karabiner
     kitty
     lazygit

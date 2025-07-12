@@ -1,7 +1,6 @@
 return {
     {
         "ellisonleao/gruvbox.nvim",
-        -- enabled = false,
         priority = 1001,
         config = function()
             local gruvbox = require("gruvbox")
@@ -22,8 +21,6 @@ return {
                     LspReferenceText = { link = "Visual" },
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
-                    -- TreesitterContext = { bg = colors.dark1 },
-                    TabLineFill = { fg = colors.light3, bg = colors.dark0_soft },
                 }
 
                 groups = {
@@ -40,8 +37,6 @@ return {
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
-                    -- TreesitterContext = { bg = colors.light1 },
-                    TabLineFill = { fg = colors.gray, bg = colors.light0_soft },
                 }
 
                 groups = {
@@ -56,7 +51,6 @@ return {
                 overrides = overrides,
             })
 
-            -- Extend the gruvbox hightlight groups
             local mode_colors = {
                 Normal = "gray",
                 Pending = "neutral_blue",

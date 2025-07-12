@@ -1,6 +1,6 @@
 return {
     "sindrets/diffview.nvim",
-    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+    cmd = { "DiffviewOpen", "DiffviewFileHistory" },
     keys = {
         {
             "<leader>gd",
@@ -25,21 +25,8 @@ return {
     opts = function()
         return {
             view = {
-                default = {
-                    winbar_info = true,
-                },
                 merge_tool = {
                     layout = "diff3_mixed",
-                },
-            },
-            file_panel = {
-                win_config = {
-                    width = 30,
-                },
-            },
-            file_history_panel = {
-                win_config = {
-                    height = 12,
                 },
             },
         }

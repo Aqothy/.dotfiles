@@ -1,8 +1,9 @@
 {
   "agent": {
+    "default_profile": "minimal",
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-sonnet-4"
+      "provider": "google",
+      "model": "gemini-2.5-pro"
     }
   },
   "base_keymap": "VSCode",

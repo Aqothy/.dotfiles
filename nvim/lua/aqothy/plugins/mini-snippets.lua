@@ -16,7 +16,7 @@ return {
 
         -- Stop session on esc
         local make_stop = function()
-            local au_opts = { pattern = "*:n", once = true, group = group }
+            local au_opts = { pattern = "i*:n", once = true, group = group }
             au_opts.callback = function()
                 while ms.session.get() do
                     ms.session.stop()

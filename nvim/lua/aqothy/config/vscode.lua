@@ -21,7 +21,6 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.whichwrap:append("h,l") -- allow move to next line with the
 opt.swapfile = false
-opt.backup = false
 opt.writebackup = false
 opt.updatetime = 300
 opt.jumpoptions = "stack"

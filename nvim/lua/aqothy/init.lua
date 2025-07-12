@@ -18,7 +18,6 @@ if not is_vscode then
         },
         pattern = {
             [".*/kitty/.+%.conf"] = "kitty",
-            [".*/ghostty/.+"] = "ghostty",
             ["%.env%.[%w_.-]+"] = "dotenv",
             [".*/%.vscode/.*%.json"] = "json5", -- These json files frequently have comments
         },
@@ -37,10 +36,7 @@ if not is_vscode then
                 setup_config()
             end
             require("aqothy.config.keymaps")
-            require("aqothy.config.commands")
             require("aqothy.config.statusline")
-            -- require("aqothy.config.tagged_bar")
-            -- require("aqothy.config.utils").cowboy()
         end,
     })
 end
