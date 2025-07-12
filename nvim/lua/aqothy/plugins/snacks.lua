@@ -226,7 +226,7 @@ return {
                 },
                 lazygit = {
                     width = 0,
-                    height = 0.99,
+                    height = 0,
                 },
             },
         }

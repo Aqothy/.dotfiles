@@ -9,7 +9,7 @@ if not is_vscode then
 
     local function setup_config()
         require("aqothy.config.autocmds")
-        require("vim._extui").enable({ msg = { pos = "box" } })
+        require("vim._extui").enable({})
     end
 
     vim.filetype.add({
