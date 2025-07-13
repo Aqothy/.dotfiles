@@ -30,26 +30,20 @@ local disabled_plugins = {
     "zipPlugin",
 }
 
+local lazy_spec = {
+    import = "aqothy.plugins",
+}
+
 if is_vscode then
     vim.list_extend(disabled_plugins, { "matchparen", "netrwPlugin" })
+    lazy_spec = {
+        import = "aqothy.vscode.plugins",
+    }
 end
 
 -- Setup lazy.nvim
 require("lazy").setup({
-    spec = {
-        {
-            import = "aqothy.plugins",
-            cond = function()
-                return not is_vscode
-            end,
-        },
-        {
-            import = "aqothy.vscode",
-            cond = function()
-                return is_vscode
-            end,
-        },
-    },
+    spec = lazy_spec,
     install = { colorscheme = { "gruvbox" } },
     defaults = {
         lazy = false,

@@ -38,5 +38,6 @@
   "github.copilot.chat.agent.thinkingTool": true,
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
-  }
+  },
+  "editor.stickyScroll.enabled": false
 }

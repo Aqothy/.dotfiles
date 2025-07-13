@@ -29,7 +29,7 @@ function M.get_capabilities()
 end
 
 function M.setup()
-    local user = require("aqothy.config.user")
+    local user = require("aqothy.config.icons")
 
     local s = vim.diagnostic.severity
 
@@ -163,7 +163,6 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
-    -- Inlay hints
     if client:supports_method("textDocument/inlayHint") then
         -- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         Snacks.toggle.inlay_hints():map("<leader>ti")

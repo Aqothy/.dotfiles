@@ -1,12 +1,20 @@
 [
+  // https://github.com/vscode-neovim/vscode-neovim/issues/2434
+  {
+    "key": "ctrl+u",
+    "command": "vscode-neovim.send",
+    "args": "<C-u>",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "vscode-neovim.send",
+    "args": "<C-d>",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
   {
     "key": "ctrl+l",
     "command": "jumpToNextSnippetPlaceholder",
-    "when": "hasNextTabstop && inSnippetMode && textInputFocus"
-  },
-  {
-    "key": "tab",
-    "command": "-jumpToNextSnippetPlaceholder",
     "when": "hasNextTabstop && inSnippetMode && textInputFocus"
   },
   {
@@ -15,28 +23,8 @@
     "when": "hasPrevTabstop && inSnippetMode && textInputFocus"
   },
   {
-    "key": "shift+tab",
-    "command": "-jumpToPrevSnippetPlaceholder",
-    "when": "hasPrevTabstop && inSnippetMode && textInputFocus"
-  },
-  {
-    "key": "] r",
-    "command": "editor.action.wordHighlight.next",
-    "when": "editorTextFocus && hasWordHighlights"
-  },
-  {
-    "key": "f7",
-    "command": "-editor.action.wordHighlight.next",
-    "when": "editorTextFocus && hasWordHighlights"
-  },
-  {
-    "key": "[ r",
-    "command": "editor.action.wordHighlight.prev",
-    "when": "editorTextFocus && hasWordHighlights"
-  },
-  {
-    "key": "shift+f7",
-    "command": "-editor.action.wordHighlight.prev",
-    "when": "editorTextFocus && hasWordHighlights"
+    "key": "ctrl+y",
+    "command": "acceptSelectedSuggestion",
+    "when": "acceptSuggestionOnEnter && suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus"
   }
 ]

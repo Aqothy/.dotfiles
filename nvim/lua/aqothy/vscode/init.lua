@@ -41,15 +41,14 @@ map("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc =
 map("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
 map("n", "H", vscode_action("workbench.action.previousEditor"), { desc = "Previous buffer" })
 map("n", "L", vscode_action("workbench.action.nextEditor"), { desc = "Next buffer" })
+map("n", "]r", vscode_action("editor.action.wordHighlight.next"), { desc = "Next Reference" })
+map("n", "[r", vscode_action("editor.action.wordHighlight.prev"), { desc = "Prev Reference" })
 
-map("n", "<leader>gs", vscode_action("workbench.view.scm"), { desc = "Source control" })
 map("n", "<leader>nf", vscode_action("workbench.action.files.newUntitledFile"), { desc = "New file" })
 map("n", "<leader>\\", vscode_action("workbench.action.splitEditor"), { desc = "Split editor" })
 map("n", "<leader>-", vscode_action("workbench.action.splitEditorDown"), { desc = "Split editor down" })
-map("n", "<leader>ee", vscode_action("workbench.action.toggleSidebarVisibility"), { desc = "Toggle Explorer" })
 map("n", "<leader>bd", vscode_action("workbench.action.closeActiveEditor"), { desc = "Close buffer" })
-map("n", "<leader>bo", vscode_action("workbench.action.closeAllEditors"), { desc = "Close all buffers" })
-map("n", "za", vscode_action("editor.toggleFold"), { desc = "Toggle fold" })
+map("n", "<leader>ba", vscode_action("workbench.action.closeAllEditors"), { desc = "Close all buffers" })
 map("n", "<leader>nn", vscode_action("notifications.clearAll"), { desc = "Clear all notifications" })
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
@@ -61,8 +60,6 @@ map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 map("n", "<leader>zz", vscode_action("workbench.action.toggleZenMode"), { desc = "Toggle ZenMode" })
 
-map("n", "<leader>ff", vscode_action("workbench.action.quickOpen"), { desc = "Open file finder" })
-map("n", "<leader>fs", vscode_action("workbench.action.findInFiles"), { desc = "Search in files" })
 map("n", "<leader>pn", vscode_action("notifications.showList"), { desc = "Show Notifications" })
 map("n", "<leader>fw", function()
     vscode.action("workbench.action.findInFiles", { args = { query = vim.fn.expand("<cword>") } })
@@ -87,5 +84,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         (vim.hl or vim.highlight).on_yank({ timeout = 60 })
     end,
 })
-
--- require("aqothy.config.utils").cowboy()

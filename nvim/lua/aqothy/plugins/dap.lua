@@ -4,7 +4,7 @@ return {
         lazy = true,
         config = function()
             local dap = require("dap")
-            local icons = require("aqothy.config.user").dap
+            local icons = require("aqothy.config.icons").dap
 
             vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 

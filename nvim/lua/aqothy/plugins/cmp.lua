@@ -8,7 +8,7 @@ return {
         "hrsh7th/cmp-cmdline",
     },
     config = function()
-        local user = require("aqothy.config.user")
+        local user = require("aqothy.config.icons")
         local cmp = require("cmp")
         local compare = cmp.config.compare
 

@@ -10,7 +10,6 @@ FILES_TO_SYMLINK=(
     kitty
     lazygit
     nvim
-    tmux
     vscode
     wallpapers
     zed

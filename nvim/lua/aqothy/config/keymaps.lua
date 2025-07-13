@@ -33,15 +33,6 @@ map("x", "@", function()
     end)
 end, { silent = false })
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "NETRW" })
-map("n", "<leader>om", function()
-    if vim.o.diffopt:find("linematch") ~= nil then
-        vim.opt.diffopt:remove({ "linematch:60" })
-        vim.notify("remove linematch", vim.log.levels.INFO)
-    else
-        vim.opt.diffopt:append({ "linematch:60" })
-        vim.notify("append linematch", vim.log.levels.INFO)
-    end
-end, { desc = "Toggle linematch in diffopt" })
 map("n", "<leader>si", function()
     vim.ui.input({ prompt = "How many spaces of indent?" }, function(input)
         -- User canceled the input

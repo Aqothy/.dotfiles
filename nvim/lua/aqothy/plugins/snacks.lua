@@ -2,139 +2,136 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
-    opts = {
-        dashboard = { enabled = false },
+    opts = function()
+        local icons = require("aqothy.config.icons")
+        return {
+            dashboard = { enabled = false },
 
-        bigfile = { enabled = true },
+            bigfile = { enabled = true },
 
-        scroll = { enabled = false },
+            scroll = { enabled = false },
 
-        indent = {
-            enabled = false,
-            indent = { enabled = true, char = "▏" },
-            chunk = { enabled = false },
-            scope = { enabled = false },
-            filter = function(buf)
-                return vim.bo[buf].filetype ~= "snacks_picker_preview"
-                    and vim.bo[buf].filetype ~= "bigfile"
-                    and vim.g.snacks_indent ~= false
-                    and vim.b[buf].snacks_indent ~= false
-                    and vim.bo[buf].buftype == ""
-            end,
-            animate = {
+            indent = {
                 enabled = false,
-            },
-        },
-
-        input = { enabled = true },
-
-        notifier = {
-            enabled = true,
-            icons = require("aqothy.config.user").signs,
-            level = vim.log.levels.INFO,
-        },
-
-        quickfile = { enabled = true },
-
-        words = {
-            enabled = true,
-            modes = { "n" },
-        },
-
-        zen = {
-            toggles = {
-                dim = false,
-            },
-        },
-
-        dim = {
-            scope = {
-                min_size = 1,
-            },
-            animate = {
-                enabled = false,
-            },
-        },
-
-        picker = {
-            enabled = true,
-            sources = {
-                files = {
-                    hidden = true,
-                },
-                grep = {
-                    hidden = true,
-                },
-                grep_word = {
-                    hidden = true,
-                },
-            },
-            icons = {
-                kinds = require("aqothy.config.user").kinds,
-            },
-            ui_select = true,
-            win = {
-                input = {
-                    keys = {
-                        ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
-                        ["<a-h>"] = false,
-                    },
-                },
-                list = {
-                    keys = {
-                        ["<a-.>"] = "toggle_hidden",
-                        ["<a-h>"] = false,
-                    },
-                },
-            },
-            formatters = {
-                file = {
-                    filename_first = true,
-                },
-            },
-            layouts = {
-                default = {
-                    layout = {
-                        backdrop = false,
-                    },
-                },
-            },
-        },
-
-        image = {
-            enabled = false,
-            convert = {
-                notify = false,
-            },
-        },
-
-        styles = {
-            notification = {
-                wo = { wrap = true },
-            },
-            zen = {
-                width = function()
-                    return math.min(120, math.floor(vim.o.columns * 0.75))
+                indent = { enabled = true, char = "▏" },
+                chunk = { enabled = false },
+                scope = { enabled = false },
+                filter = function(buf)
+                    return vim.bo[buf].filetype ~= "snacks_picker_preview"
+                        and vim.bo[buf].filetype ~= "bigfile"
+                        and vim.g.snacks_indent ~= false
+                        and vim.b[buf].snacks_indent ~= false
+                        and vim.bo[buf].buftype == ""
                 end,
-                backdrop = {
-                    transparent = false,
-                    blend = 95,
+                animate = {
+                    enabled = false,
                 },
             },
-            terminal = {
-                wo = {
-                    winbar = "",
-                },
-                keys = {
-                    term_normal = false,
+
+            input = { enabled = true },
+
+            notifier = {
+                enabled = true,
+                icons = icons.signs,
+                level = vim.log.levels.INFO,
+            },
+
+            quickfile = { enabled = true },
+
+            words = {
+                enabled = true,
+                modes = { "n" },
+            },
+
+            zen = {
+                toggles = {
+                    dim = false,
                 },
             },
-            lazygit = {
-                width = 0,
-                height = 0.99,
+
+            dim = {
+                scope = {
+                    min_size = 1,
+                },
+                animate = {
+                    enabled = false,
+                },
             },
-        },
-    },
+
+            picker = {
+                enabled = true,
+                sources = {
+                    files = {
+                        hidden = true,
+                    },
+                },
+                icons = {
+                    kinds = icons.kinds,
+                },
+                ui_select = true,
+                win = {
+                    input = {
+                        keys = {
+                            ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+                            ["<a-h>"] = false,
+                        },
+                    },
+                    list = {
+                        keys = {
+                            ["<a-.>"] = "toggle_hidden",
+                            ["<a-h>"] = false,
+                        },
+                    },
+                },
+                formatters = {
+                    file = {
+                        filename_first = true,
+                    },
+                },
+                layouts = {
+                    default = {
+                        layout = {
+                            backdrop = false,
+                        },
+                    },
+                },
+            },
+
+            image = {
+                enabled = false,
+                convert = {
+                    notify = false,
+                },
+            },
+
+            styles = {
+                notification = {
+                    wo = { wrap = true },
+                },
+                zen = {
+                    width = function()
+                        return math.min(120, math.floor(vim.o.columns * 0.75))
+                    end,
+                    backdrop = {
+                        transparent = false,
+                        blend = 95,
+                    },
+                },
+                terminal = {
+                    wo = {
+                        winbar = "",
+                    },
+                    keys = {
+                        term_normal = false,
+                    },
+                },
+                lazygit = {
+                    width = 0,
+                    height = 0.99,
+                },
+            },
+        }
+    end,
     -- stylua: ignore
     keys = {
         { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },

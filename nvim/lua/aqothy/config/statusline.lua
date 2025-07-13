@@ -9,7 +9,7 @@ local cmd = vim.cmd
 local stl_group = api.nvim_create_augroup("aqline", { clear = true })
 local autocmd = api.nvim_create_autocmd
 
-local user = require("aqothy.config.user")
+local user = require("aqothy.config.icons")
 local mini_icons = require("mini.icons")
 
 M.sysname = uv.os_uname().sysname or ""

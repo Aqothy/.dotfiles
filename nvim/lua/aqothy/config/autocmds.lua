@@ -53,26 +53,7 @@ autocmd("BufReadPost", {
         local lcount = vim.api.nvim_buf_line_count(buf)
         if mark[1] > 0 and mark[1] <= lcount then
             pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        end
-    end,
-})
-
--- Treesitter folding
-autocmd("BufWinEnter", {
-    group = augroup("treesitter_folding"),
-    callback = function(event)
-        local buf = event.buf
-
-        if vim.bo[buf].filetype == "" then
-            return
-        end
-
-        if pcall(vim.treesitter.get_parser, buf) then
-            vim.wo.foldmethod = "expr"
-            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-        else
-            vim.wo.foldmethod = "manual"
-            vim.wo.foldexpr = "0"
+            vim.cmd("normal! zz")
         end
     end,
 })
