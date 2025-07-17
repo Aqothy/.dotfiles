@@ -22,13 +22,5 @@ return {
         { "<leader>gm", "<cmd>DiffviewOpen main<cr>", desc = "Diff Main" },
         { "<leader>gM", "<cmd>DiffviewOpen main...HEAD<cr>", desc = "Diff Merge Base Main" },
     },
-    opts = function()
-        return {
-            view = {
-                merge_tool = {
-                    layout = "diff3_mixed",
-                },
-            },
-        }
-    end,
+    opts = {},
 }

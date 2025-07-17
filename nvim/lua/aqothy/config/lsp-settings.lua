@@ -6,10 +6,6 @@ local utils = require("aqothy.config.utils")
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
-M["tailwindcss"] = {
-    enabled = false,
-}
-
 M["eslint"] = {
     enabled = true,
     settings = {
@@ -178,13 +174,6 @@ M["basedpyright"] = {
                 typeCheckingMode = "standard",
             },
         },
-    },
-}
-
-M["emmet_language_server"] = {
-    enabled = false,
-    init_options = {
-        showSuggestionsAsSnippets = true,
     },
 }
 

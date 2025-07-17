@@ -38,6 +38,7 @@ return {
 
                 local file = ev.file
 
+                -- prevent lsp from attaching to artificial buffers, ref: https://github.com/neovim/neovim/issues/32074
                 if #file ~= 0 and not utils.bufname_valid(file) then
                     client:stop()
                     return

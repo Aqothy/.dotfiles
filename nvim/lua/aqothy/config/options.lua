@@ -61,7 +61,6 @@ opt.wildignorecase = true
 opt.wildmode = { "longest:full", "full" }
 opt.wildoptions:append({ "fuzzy" })
 
-opt.laststatus = 3
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt = { "internal", "filler", "closeoff", "inline:none", "indent-heuristic", "algorithm:histogram" }
@@ -79,12 +78,10 @@ end
 
 opt.confirm = true
 opt.shortmess:append({ W = true, I = false, c = true, C = true, A = true, a = true })
-opt.ruler = false -- already handled by statusline
-opt.jumpoptions = "stack"
+opt.jumpoptions = { "stack", "view" }
 
 -- command line
 opt.showcmd = false
-opt.showmode = false
 
 opt.fillchars = { eob = " ", diff = "╱" }
 

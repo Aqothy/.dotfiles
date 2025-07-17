@@ -39,5 +39,6 @@
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
-  "editor.stickyScroll.enabled": false
+  "editor.stickyScroll.enabled": false,
+  "chat.agent.maxRequests": 100
 }

@@ -1,10 +1,5 @@
 local map = vim.keymap.set
 
--- Window management
-map("n", "<leader>\\", "<C-w>v", { desc = "Split window vertically" })
-map("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" })
-map("n", "<leader>=", "<C-w>=", { desc = "Make window size equal" })
-
 -- Navigation and movement
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -24,9 +19,6 @@ map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 -- Utils
 map("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
 map("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], { silent = false, desc = "Open a new file in the same directory" })
-map("n", "<leader>ip", vim.show_pos, { desc = "Inspect Pos" })
-map("n", "<leader>it", function() vim.treesitter.inspect_tree() vim.api.nvim_input("I") end, { desc = "Inspect Tree" })
-map("n", "<leader>pm", "<cmd>Lazy<CR>", { desc = "Open package manager" })
 map("x", "@", function()
     vim.ui.input({ prompt = "Macro Register: " }, function(reg)
         vim.cmd([['<,'>normal @]] .. reg)

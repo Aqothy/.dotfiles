@@ -28,3 +28,10 @@ export PATH=$PATH:/usr/local/texlive/2024basic/bin/universal-darwin
 export PATH=$PATH:/usr/local/google-cloud-sdk/bin
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+
+# TODO: Delete this in the future
+export ANDROID_HOME="$HOME/.android_sdk"
+export ANDROID_SDK_ROOT="$HOME/.android_sdk"
+export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+export PATH="$ANDROID_SDK_ROOT/emulator:$PATH"

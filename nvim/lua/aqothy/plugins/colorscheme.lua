@@ -13,7 +13,7 @@ return {
 
             if is_dark then
                 overrides = {
-                    StatusLine = { fg = colors.light3, bg = colors.dark0_soft, reverse = false }, -- need reverse = false since default is true and it messes up the custom statusline
+                    StatusLine = { fg = colors.light3, bg = colors.dark0_soft },
                     NormalFloat = { bg = colors.dark0_soft },
                     GruvboxBg2 = { fg = colors.gray },
                     SignColumn = { bg = colors.dark0_soft },
@@ -29,7 +29,7 @@ return {
                 }
             else
                 overrides = {
-                    StatusLine = { fg = colors.gray, bg = colors.light0_soft, reverse = false },
+                    StatusLine = { fg = colors.gray, bg = colors.light0_soft },
                     NormalFloat = { bg = colors.light0_soft },
                     SignColumn = { bg = colors.light0_soft },
                     GruvboxBg2 = { fg = colors.gray },
@@ -46,8 +46,7 @@ return {
             end
 
             gruvbox.setup({
-                contrast = "soft", -- can be "hard", "soft" or empty string
-                transparent_mode = false,
+                contrast = "soft",
                 overrides = overrides,
             })
 

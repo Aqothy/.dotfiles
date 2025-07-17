@@ -397,6 +397,10 @@ function M.render()
         .. " "
 end
 
+vim.g.qf_disable_statusline = 1
+vim.opt.showmode = false
+vim.opt.ruler = false
+vim.opt.laststatus = 3
 vim.opt.statusline = "%!v:lua.require'aqothy.config.statusline'.render()"
 
 return M
