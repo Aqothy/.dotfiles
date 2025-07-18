@@ -76,6 +76,24 @@ return {
                 layout = {
                     preset = "vertical",
                 },
+                layouts = {
+                    vertical = {
+                        layout = {
+                            backdrop = false,
+                            width = 0.5,
+                            min_width = 80,
+                            height = 0.8,
+                            min_height = 30,
+                            box = "vertical",
+                            border = "rounded",
+                            title = "{title} {live} {flags}",
+                            title_pos = "center",
+                            { win = "input", height = 1, border = "bottom" },
+                            { win = "list", height = 12, border = "none" },
+                            { win = "preview", title = "{preview}", border = "top" },
+                        },
+                    },
+                },
             },
 
             image = {
@@ -121,7 +139,6 @@ return {
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         { "<c-j>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = { "n", "t" } },
-        { "<leader>nn", function() Snacks.notifier.hide() end, desc = "Hide Notifications" },
         {
             "<leader>no",
             function()
@@ -136,13 +153,9 @@ return {
             desc = "Todo List",
         },
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
-        { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log File" },
-        { "<leader>fl", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-        { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
         { "<leader>ff", function() Snacks.picker.pick("aqfiles", {
             multi = { "buffers", "recent", "files" },
             format = "file",
@@ -153,11 +166,8 @@ return {
             layout = { preview = false },
         }) end, desc = "Find Files Smart" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
-        { "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep Lines" },
         { "<leader>u", function() Snacks.picker.undo() end, desc = "undo tree" },
-        { "z=", function() Snacks.picker.spelling() end, desc = "Spelling" },
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
     init = function()
