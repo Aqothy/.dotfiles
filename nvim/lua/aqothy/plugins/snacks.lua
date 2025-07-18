@@ -14,18 +14,8 @@ return {
             indent = {
                 enabled = false,
                 indent = { enabled = true, char = "▏" },
-                chunk = { enabled = false },
-                scope = { enabled = false },
-                filter = function(buf)
-                    return vim.bo[buf].filetype ~= "snacks_picker_preview"
-                        and vim.bo[buf].filetype ~= "bigfile"
-                        and vim.g.snacks_indent ~= false
-                        and vim.b[buf].snacks_indent ~= false
-                        and vim.bo[buf].buftype == ""
-                end,
-                animate = {
-                    enabled = false,
-                },
+                scope = { enabled = true, char = "▎" },
+                animate = { enabled = false },
             },
 
             input = { enabled = true },
@@ -60,11 +50,6 @@ return {
 
             picker = {
                 enabled = true,
-                sources = {
-                    files = {
-                        hidden = true,
-                    },
-                },
                 icons = {
                     kinds = icons.kinds,
                 },
@@ -88,12 +73,8 @@ return {
                         filename_first = true,
                     },
                 },
-                layouts = {
-                    default = {
-                        layout = {
-                            backdrop = false,
-                        },
-                    },
+                layout = {
+                    preset = "vertical",
                 },
             },
 
@@ -162,7 +143,15 @@ return {
         { "<leader>pn", function() Snacks.picker.notifications() end, desc = "Pick Notifications" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>fk", function() Snacks.picker.keymaps() end, desc = "Find keymaps" },
-        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files Root" },
+        { "<leader>ff", function() Snacks.picker.pick("aqfiles", {
+            multi = { "buffers", "recent", "files" },
+            format = "file",
+            filter = { cwd = true },
+            hidden = true,
+            transform = "unique_file",
+            sort = { fields = { "score:desc", "idx" } },
+            layout = { preview = false },
+        }) end, desc = "Find Files Smart" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>ph", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },

@@ -18,6 +18,10 @@
   "terminal": {
     "line_height": { "custom": 1.15 }
   },
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
+  "vertical_scroll_margin": 8,
   "theme": {
     "mode": "system",
     "light": "Gruvbox Light Soft",
