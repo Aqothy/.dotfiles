@@ -6,6 +6,7 @@ return {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-cmdline",
+        "xzbdmw/cmp-mini-snippets",
     },
     config = function()
         local user = require("aqothy.config.icons")
@@ -107,6 +108,7 @@ return {
 
             sources = cmp.config.sources({
                 { name = "nvim_lsp" },
+                { name = "mini.snippets" },
                 { name = "path" },
             }, {
                 { name = "buffer" },

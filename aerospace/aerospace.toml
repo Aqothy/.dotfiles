@@ -44,7 +44,6 @@ automatically-unhide-macos-hidden-apps = false
 
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
-    alt-shift-f = 'fullscreen'
 
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'

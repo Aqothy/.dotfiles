@@ -69,5 +69,9 @@
       "}, [${3:third}])",
       ""
     ]
+  },
+  "useState": {
+    "prefix": "useStateSnippet",
+    "body": ["const [${1:state}, set${2:State}] = useState(${3:initValue})"]
   }
 }

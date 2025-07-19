@@ -40,5 +40,8 @@
     "asvetliakov.vscode-neovim": 1
   },
   "editor.stickyScroll.enabled": false,
-  "chat.agent.maxRequests": 100
+  "chat.agent.maxRequests": 100,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
