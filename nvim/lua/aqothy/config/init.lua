@@ -35,7 +35,7 @@ local lazy_spec = {
 }
 
 if is_vscode then
-    vim.list_extend(disabled_plugins, { "matchparen", "netrwPlugin" })
+    vim.list_extend(disabled_plugins, { "matchit", "matchparen", "netrwPlugin" })
     lazy_spec = {
         import = "aqothy.vscode.plugins",
     }

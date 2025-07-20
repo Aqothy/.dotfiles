@@ -49,7 +49,7 @@ M["vtsls"] = {
                 maxInlayHintLength = 30,
                 completion = {
                     enableServerSideFuzzyMatch = true,
-                    entriesLimit = 200,
+                    entriesLimit = 30,
                 },
             },
         },

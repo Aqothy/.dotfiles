@@ -69,8 +69,6 @@ opt.scrolloff = 8
 
 opt.fileencoding = "utf-8"
 
--- opt.spell = true
-
 if vim.fn.executable("rg") == 1 then
     opt.grepprg = "rg --vimgrep"
     opt.grepformat = "%f:%l:%c:%m"

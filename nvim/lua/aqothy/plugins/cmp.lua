@@ -71,6 +71,7 @@ return {
 
             formatting = {
                 fields = { "kind", "abbr", "menu" },
+                expandable_indicator = false,
                 format = function(_, item)
                     if user.kinds[item.kind] then
                         item.kind = user.kinds[item.kind]
@@ -90,7 +91,7 @@ return {
                 debounce = 0,
                 throttle = 1,
                 confirm_resolve_timeout = 1,
-                max_view_entries = 50,
+                max_view_entries = 30,
             },
 
             sorting = {
@@ -101,8 +102,6 @@ return {
                     compare.score,
                     compare.recently_used,
                     compare.locality,
-                    compare.sort_text,
-                    compare.length,
                 },
             },
 

@@ -73,6 +73,13 @@ return {
                         filename_first = true,
                     },
                 },
+                layouts = {
+                    default = {
+                        layout = {
+                            backdrop = false,
+                        },
+                    },
+                },
             },
 
             image = {

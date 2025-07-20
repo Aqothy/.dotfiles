@@ -23,7 +23,7 @@ opt.whichwrap:append("h,l") -- allow move to next line with the
 opt.swapfile = false
 opt.writebackup = false
 opt.updatetime = 300
-opt.jumpoptions = "stack"
+opt.jumpoptions = { "stack", "view" }
 
 local function vscode_action(cmd)
     return function()
