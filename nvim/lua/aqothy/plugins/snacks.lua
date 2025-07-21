@@ -68,15 +68,22 @@ return {
                         },
                     },
                 },
-                formatters = {
-                    file = {
-                        filename_first = true,
-                    },
+                layout = {
+                    preset = "vertical",
                 },
                 layouts = {
-                    default = {
+                    vertical = {
                         layout = {
                             backdrop = false,
+                            width = 0.5,
+                            height = 0.8,
+                            box = "vertical",
+                            border = "rounded",
+                            title = "{title} {live} {flags}",
+                            title_pos = "center",
+                            { win = "input", height = 1, border = "bottom" },
+                            { win = "list", border = "none" },
+                            { win = "preview", title = "{preview}", height = 0.6, border = "top" },
                         },
                     },
                 },
@@ -141,7 +148,7 @@ return {
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
         { "<leader>ff", function() Snacks.picker.pick("aqfiles", {
             multi = { "buffers", "recent", "files" },
             format = "file",

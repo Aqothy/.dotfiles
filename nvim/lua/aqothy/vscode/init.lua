@@ -15,8 +15,6 @@ end)
 opt.virtualedit = "block"
 opt.wildignore:append({ ".DS_Store" })
 opt.wildignorecase = true
-opt.wildmode = { "longest:full", "full" }
-opt.wildoptions:append({ "fuzzy" })
 opt.ignorecase = true
 opt.smartcase = true
 opt.whichwrap:append("h,l") -- allow move to next line with the

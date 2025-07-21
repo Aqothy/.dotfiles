@@ -2,8 +2,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        event = "VeryLazy",
-        lazy = vim.fn.argc(-1) == 0,
+        event = "LazyFile",
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },

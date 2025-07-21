@@ -45,13 +45,6 @@ M["vtsls"] = {
         vtsls = {
             enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
-            experimental = {
-                maxInlayHintLength = 30,
-                completion = {
-                    enableServerSideFuzzyMatch = true,
-                    entriesLimit = 30,
-                },
-            },
         },
         typescript = jsts_config,
         javascript = jsts_config,

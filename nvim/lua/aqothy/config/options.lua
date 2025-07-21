@@ -8,8 +8,6 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
 vim.g.netrw_banner = 0
-vim.g.netrw_browse_split = 0
-vim.g.netrw_liststyle = 3
 
 local opt = vim.opt
 
@@ -58,8 +56,6 @@ opt.completeopt = { "menuone", "noinsert", "fuzzy", "popup" }
 opt.completeitemalign = { "kind", "abbr", "menu" }
 opt.wildignore:append({ ".DS_Store" })
 opt.wildignorecase = true
-opt.wildmode = { "longest:full", "full" }
-opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"

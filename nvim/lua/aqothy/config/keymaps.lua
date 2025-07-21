@@ -18,7 +18,12 @@ map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 
 -- Utils
 map("n", "<leader>xc", "<cmd>!chmod +x %<cr>", { silent = true, desc = "Make current file executable" })
-map("n", "<leader>nf", [[:e <C-R>=expand("%:p:h") . "/" <CR>]], { silent = false, desc = "Open a new file in the same directory" })
+map(
+    "n",
+    "<leader>nf",
+    [[:e <C-R>=expand("%:p:h") . "/" <CR>]],
+    { silent = false, desc = "Open a new file in the same directory" }
+)
 map("x", "@", function()
     vim.ui.input({ prompt = "Macro Register: " }, function(reg)
         vim.cmd([['<,'>normal @]] .. reg)
@@ -50,3 +55,19 @@ end)
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
+
+-- Snippets
+map("s", "<BS>", "<C-o>s", { desc = "Backspace to delete placeholder" })
+
+map({ "i", "n", "s" }, "<esc>", function()
+    vim.cmd("noh")
+    vim.snippet.stop()
+    return "<esc>"
+end, { expr = true, desc = "Escape and Clear hlsearch" })
+
+map({ "i", "s" }, "<C-l>", function()
+    return vim.snippet.active({ direction = 1 }) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<C-l>"
+end, { expr = true, desc = "Jump Next" })
+map({ "i", "s" }, "<C-h>", function()
+    return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<C-h>"
+end, { expr = true, desc = "Jump Previous" })

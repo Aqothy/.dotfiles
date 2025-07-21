@@ -4,11 +4,6 @@
     "body": "print(\"$1\")\n$0",
     "description": "print(\"...\")"
   },
-  "print value": {
-    "prefix": "pv",
-    "body": "print(\"\\($1)\")\n$0",
-    "description": "print(\"\\(...)\")"
-  },
   "swiftui-view": {
     "prefix": "view",
     "body": [

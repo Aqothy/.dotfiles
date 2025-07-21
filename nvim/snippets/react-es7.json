@@ -1,33 +1,4 @@
 {
-  "reactArrowFunctionComponent": {
-    "prefix": "rafc",
-    "body": [
-      "import React from 'react'",
-      "",
-      "export const ${1:${TM_FILENAME_BASE}} = () => {",
-      "  return (",
-      "    <div>${1:first}</div>",
-      "  )",
-      "}",
-      ""
-    ],
-    "description": "Creates a React Arrow Function Component with ES7 module system"
-  },
-  "reactArrowFunctionExportComponent": {
-    "prefix": "rafce",
-    "body": [
-      "import React from 'react'",
-      "",
-      "const ${1:${TM_FILENAME_BASE}} = () => {",
-      "  return (",
-      "    <div>${1:first}</div>",
-      "  )",
-      "}",
-      "",
-      "export default ${1:${TM_FILENAME_BASE}}"
-    ],
-    "description": "Creates a React Arrow Function Component with ES7 module system"
-  },
   "reactFunctionalComponent": {
     "prefix": "rfc",
     "body": [
@@ -35,25 +6,9 @@
       "",
       "export default function ${1:${TM_FILENAME_BASE}}() {",
       "  return (",
-      "    <div>${1:first}</div>",
+      "    ${2}",
       "  )",
-      "}",
-      ""
-    ],
-    "description": "Creates a React Functional Component with ES7 module system"
-  },
-  "reactFunctionalExportComponent": {
-    "prefix": "rfce",
-    "body": [
-      "import React from 'react'",
-      "",
-      "function ${1:${TM_FILENAME_BASE}}() {",
-      "  return (",
-      "    <div>${1:first}</div>",
-      "  )",
-      "}",
-      "",
-      "export default ${1:${TM_FILENAME_BASE}}"
+      "}"
     ],
     "description": "Creates a React Functional Component with ES7 module system"
   },
