@@ -155,6 +155,7 @@ function M.get()
         { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight" } },
         { "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
         { "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
+        { "<leader>cr", vim.lsp.document_color.color_presentation, { desc = "Color Representation" } },
     }
 
     return M._keys

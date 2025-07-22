@@ -145,11 +145,11 @@ return {
             end,
             desc = "Todo List",
         },
-        { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
+        { "gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
         { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
-        { "<leader>ff", function() Snacks.picker.pick("aqfiles", {
+        { "<leader>;", function() Snacks.picker.pick("aqfiles", {
             multi = { "buffers", "recent", "files" },
             format = "file",
             filter = { cwd = true },
