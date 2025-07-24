@@ -63,6 +63,8 @@ return {
                         ["ic"] = "@class.inner",
                         ["aa"] = "@parameter.outer",
                         ["ia"] = "@parameter.inner",
+                        ["au"] = "@call.outer",
+                        ["iu"] = "@call.inner",
                     },
                 },
                 move = {
@@ -70,9 +72,13 @@ return {
                     set_jumps = true,
                     goto_next_start = {
                         ["]m"] = "@function.outer",
+                        ["]]"] = "@class.outer",
+                        ["]a"] = "@parameter.inner",
                     },
                     goto_previous_start = {
                         ["[m"] = "@function.outer",
+                        ["[["] = "@class.outer",
+                        ["[a"] = "@parameter.inner",
                     },
                 },
                 swap = {

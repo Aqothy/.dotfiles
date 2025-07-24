@@ -19,20 +19,11 @@ opt.expandtab = true
 opt.shiftwidth = 4
 opt.tabstop = 4
 opt.softtabstop = 4
-opt.breakindent = true
 
 opt.swapfile = false
 opt.writebackup = false
 opt.undofile = true
 opt.updatetime = 300
-opt.list = true
-opt.listchars = {
-    tab = "▏ ",
-    trail = "·",
-    extends = "»",
-    precedes = "«",
-    nbsp = "⦸",
-}
 
 opt.splitright = true
 opt.splitbelow = true
@@ -55,7 +46,6 @@ opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.completeopt = { "menuone", "noinsert", "fuzzy", "popup" }
 opt.completeitemalign = { "kind", "abbr", "menu" }
 opt.wildignore:append({ ".DS_Store" })
-opt.wildignorecase = true
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
@@ -71,7 +61,7 @@ if vim.fn.executable("rg") == 1 then
 end
 
 opt.confirm = true
-opt.shortmess:append({ W = true, I = false, c = true, C = true, A = true, a = true })
+opt.shortmess:append({ W = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
 
 -- command line
@@ -80,8 +70,6 @@ opt.showcmd = false
 opt.fillchars = { eob = " ", diff = "╱" }
 
 opt.whichwrap:append("h,l") -- allow move to next line with the
-opt.wrap = true
-opt.linebreak = true
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 opt.background = "dark"

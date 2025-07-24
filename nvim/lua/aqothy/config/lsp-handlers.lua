@@ -33,23 +33,8 @@ function M.setup()
 
     local s = vim.diagnostic.severity
 
-    local signs = {
-        text = {
-            [s.ERROR] = "",
-            [s.WARN] = "",
-            [s.HINT] = "",
-            [s.INFO] = "",
-        },
-        numhl = {
-            [s.ERROR] = "DiagnosticSignError",
-            [s.WARN] = "DiagnosticSignWarn",
-            [s.HINT] = "DiagnosticSignHint",
-            [s.INFO] = "DiagnosticSignInfo",
-        },
-    }
-
     local config = {
-        signs = signs,
+        signs = false,
         virtual_text = {
             prefix = function(diagnostic)
                 return " " .. user.signs[string.lower(s[diagnostic.severity])]
@@ -155,7 +140,6 @@ function M.get()
         { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight" } },
         { "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
         { "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
-        { "<leader>cr", vim.lsp.document_color.color_presentation, { desc = "Color Representation" } },
     }
 
     return M._keys

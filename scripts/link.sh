@@ -17,16 +17,15 @@ FILES_TO_SYMLINK=(
 )
 
 SCRIPTS_TO_LINK=(
-    ts.sh
     fzf_dir.sh
     build_nvim.sh
     link.sh
+    npc.sh
 )
 
 FILES_TO_SYMLINK_HOME=(
     .zshenv
     .gitconfig
-    .ignore
     .gitignore_global
 )
 

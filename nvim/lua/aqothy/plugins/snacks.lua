@@ -5,17 +5,38 @@ return {
     opts = function()
         local icons = require("aqothy.config.icons")
         return {
-            dashboard = { enabled = false },
+            dashboard = {
+                preset = {
+                    header = [[
+        ⣤⡀⠀⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣆⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠸⣷⣮⣿⣿⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⡠⠒⠉⠀⠀⠀⠀⠀⠀⠈⠁⠲⢖⠒⡀⠀⠀
+⠀⠀⠀⡠⠴⣏⠀⢀⡀⠀⢀⡀⠀⠀⠀⡀⠀⠀⡀⠱⡈⢄⠀
+⠀⠀⢠⠁⠀⢸⠐⠁⠀⠄⠀⢸⠀⠀⢎⠀⠂⠀⠈⡄⢡⠀⢣
+⠀⢀⠂⠀⠀⢸⠈⠢⠤⠤⠐⢁⠄⠒⠢⢁⣂⡐⠊⠀⡄⠀⠸
+⠀⡘⠀⠀⠀⢸⠀⢠⠐⠒⠈⠀⠀⠀⠀⠀⠀⠈⢆⠜⠀⠀⢸
+⠀⡇⠀⠀⠀⠀⡗⢺⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⡄⢀⠎
+⠀⢃⠀⠀⠀⢀⠃⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠷⡃⠀
+⠀⠈⠢⣤⠀⠈⠀⠀⠑⠠⠤⣀⣀⣀⣀⣀⡀⠤⠒⠁⠀⢡⠀
+⡀⣀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⠀
+⠑⢄⠉⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡸⠀
+⠀⠀⠑⠢⢱⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠁⠀
+⠀⠀⠀⠀⢀⠠⠓⠢⠤⣀⣀⡀⠀⠀⣀⣀⡀⠤⠒⠑⢄⠀⠀
+⠀⠀⠀⠰⠥⠤⢄⢀⡠⠄⡈⡀⠀⠀⣇⣀⠠⢄⠀⠒⠤⠣⠀
+⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀]],
+                },
+                sections = {
+                    { section = "header" },
+                },
+            },
 
             bigfile = { enabled = true },
-
-            scroll = { enabled = false },
 
             indent = {
                 enabled = false,
                 indent = { enabled = true, char = "▏" },
-                scope = { enabled = true, char = "▎" },
-                animate = { enabled = false },
+                scope = { enabled = false },
             },
 
             input = { enabled = true },
@@ -66,6 +87,17 @@ return {
                             ["<a-.>"] = "toggle_hidden",
                             ["<a-h>"] = false,
                         },
+                    },
+                },
+                sources = {
+                    aqfiles = {
+                        multi = { "buffers", "recent", "files" },
+                        format = "file",
+                        filter = { cwd = true },
+                        hidden = true,
+                        transform = "unique_file",
+                        sort = { fields = { "score:desc", "idx" } },
+                        layout = { preview = false },
                     },
                 },
                 layout = {
@@ -145,22 +177,13 @@ return {
             end,
             desc = "Todo List",
         },
-        { "gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
+        { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
-        { "<leader>;", function() Snacks.picker.pick("aqfiles", {
-            multi = { "buffers", "recent", "files" },
-            format = "file",
-            filter = { cwd = true },
-            hidden = true,
-            transform = "unique_file",
-            sort = { fields = { "score:desc", "idx" } },
-            layout = { preview = false },
-        }) end, desc = "Find Files Smart" },
+        { "<leader>ff", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>u", function() Snacks.picker.undo() end, desc = "undo tree" },
+        { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "sidebar" } }) end, desc = "undo tree" },
         { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
     },
     init = function()

@@ -7,7 +7,7 @@ local utils = require("aqothy.config.utils")
 -- since were not using mason-lspconfig it will not be initialized by default
 
 M["eslint"] = {
-    enabled = true,
+    enabled = false,
     settings = {
         -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
         workingDirectories = { mode = "auto" },
@@ -28,6 +28,9 @@ local jsts_config = {
         propertyDeclarationTypes = { enabled = true },
         variableTypes = { enabled = false },
     },
+    tsserver = {
+        nodePath = "~/.local/bin/npc",
+    },
 }
 
 M["vtsls"] = {
@@ -36,6 +39,13 @@ M["vtsls"] = {
         vtsls = {
             enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
+            experimental = {
+                maxInlayHintLength = 30,
+                completion = {
+                    enableServerSideFuzzyMatch = true,
+                    entriesLimit = 30,
+                },
+            },
         },
         typescript = jsts_config,
         javascript = jsts_config,
@@ -153,7 +163,6 @@ M["basedpyright"] = {
     enabled = true,
     settings = {
         basedpyright = {
-            disableOrganizeImports = true,
             analysis = {
                 typeCheckingMode = "standard",
             },
@@ -164,10 +173,6 @@ M["basedpyright"] = {
 M["sourcekit"] = {
     enabled = true,
     filetypes = { "swift", "objc", "objcpp" },
-}
-
-M["cssls"] = {
-    enabled = true,
 }
 
 M["texlab"] = {
@@ -187,34 +192,6 @@ M["texlab"] = {
                 executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
                 args = { "-g", "-r", "%l", "%p", "%f" },
             },
-        },
-    },
-}
-
-M["ruff"] = {
-    enabled = true,
-}
-
-M["bashls"] = {
-    enabled = true,
-    filetypes = { "bash", "sh", "zsh" },
-}
-
-M["jsonls"] = {
-    enabled = true,
-    settings = {
-        json = {
-            schemas = {
-                {
-                    fileMatch = { "package.json" },
-                    url = "https://json.schemastore.org/package.json",
-                },
-                {
-                    fileMatch = { "tsconfig.json" },
-                    url = "https://json.schemastore.org/tsconfig.json",
-                },
-            },
-            validate = { enable = true },
         },
     },
 }

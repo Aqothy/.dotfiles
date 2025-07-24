@@ -13,7 +13,6 @@ return {
     opts = {
         ensure_installed = {
             -- LSP servers
-            "css-lsp",
             "lua-language-server",
             "basedpyright",
             "clangd",
@@ -22,8 +21,6 @@ return {
             "texlab",
             "vtsls",
             "ruff",
-            "bash-language-server",
-            "json-lsp",
 
             -- Formatters/linters
             "stylua",

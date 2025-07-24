@@ -20,8 +20,6 @@ autocmd("FileType", {
         "checkhealth",
         "qf",
         "vim",
-        "dap*",
-        "gitsigns*",
         "query",
     },
     callback = function(event)
