@@ -14,20 +14,15 @@ return {
         ensure_installed = {
             -- LSP servers
             "lua-language-server",
-            "basedpyright",
             "clangd",
             "gopls",
-            "eslint-lsp",
             "texlab",
             "vtsls",
-            "ruff",
 
             -- Formatters/linters
             "stylua",
-            "prettier",
             "gofumpt",
             "goimports",
-            "latexindent",
 
             -- Dap
             "js-debug-adapter",

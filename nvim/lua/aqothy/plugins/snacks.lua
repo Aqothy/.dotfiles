@@ -180,6 +180,7 @@ return {
         { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
         { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
+        { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
         { "<leader>ff", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
         { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },

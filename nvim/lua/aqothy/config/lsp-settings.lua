@@ -6,15 +6,6 @@ local utils = require("aqothy.config.utils")
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
-M["eslint"] = {
-    enabled = false,
-    settings = {
-        -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
-        workingDirectories = { mode = "auto" },
-        format = false,
-    },
-}
-
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
     suggest = {

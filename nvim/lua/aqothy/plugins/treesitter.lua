@@ -22,17 +22,10 @@ return {
                 "javascript",
                 "typescript",
                 "cpp",
-                "python",
-                "java",
                 "go",
                 "bash",
-                "css",
-                "html",
                 "tsx",
-                "yaml",
                 "json5",
-                "dockerfile",
-                "regex",
             },
 
             incremental_selection = {

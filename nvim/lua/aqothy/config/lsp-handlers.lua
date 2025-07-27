@@ -53,8 +53,6 @@ function M.setup()
 
     vim.diagnostic.config(config)
 
-    vim.lsp.set_log_level("OFF")
-
     local register_capability = vim.lsp.handlers["client/registerCapability"]
     vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
         local client = vim.lsp.get_client_by_id(ctx.client_id)
@@ -133,8 +131,7 @@ function M.get()
         { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
         { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
         { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
-        { "<leader>ls", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols", has = "documentSymbol" } },
-        { "<leader>lS", function() Snacks.picker.lsp_workspace_symbols(symbol_opts) end, { desc = "LSP Workspace Symbols", has = "workspace/symbols" } },
+        { "gO", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols", has = "documentSymbol" } },
         { "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
         { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight" } },
         { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight" } },
