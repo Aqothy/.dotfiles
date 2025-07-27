@@ -53,12 +53,7 @@ end, { desc = "Search word in files" })
 map("n", "u", "<Cmd>call VSCodeNotify('undo')<CR>", { desc = "Undo" })
 map("n", "<C-r>", "<Cmd>call VSCodeNotify('redo')<CR>", { desc = "Redo" })
 
-map("n", "K", vscode_action("editor.action.showHover"), { desc = "Show Hover" })
 map("n", "<leader>K", vscode_action("editor.action.peekDefinition"), { desc = "Peek Definition" })
-map("n", "gO", vscode_action("workbench.action.gotoSymbol"), { desc = "Show Symbols" })
-map("n", "grr", vscode_action("editor.action.goToReferences"), { desc = "Go to references" })
-map("n", "grn", vscode_action("editor.action.rename"), { desc = "Rename symbol" })
-map("n", "grt", vscode_action("editor.action.goToTypeDefinition"), { desc = "Goto Type Definition" })
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
