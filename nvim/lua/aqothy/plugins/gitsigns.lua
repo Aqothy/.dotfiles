@@ -5,16 +5,16 @@ return {
         signs = {
             add = { text = "┃" },
             change = { text = "┃" },
-            delete = { text = "┃" },
-            topdelete = { text = "┃" },
+            delete = { text = "" },
+            topdelete = { text = "" },
             changedelete = { text = "┃" },
             untracked = { text = "┆" },
         },
         signs_staged = {
             add = { text = "┃" },
             change = { text = "┃" },
-            delete = { text = "┃" },
-            topdelete = { text = "┃" },
+            delete = { text = "" },
+            topdelete = { text = "" },
             changedelete = { text = "┃" },
             untracked = { text = "┆" },
         },
@@ -39,7 +39,7 @@ return {
             end, "Reset hunk (visual)")
             map("n", "<leader>hS", gs.stage_buffer, "Stage Buffer")
             map("n", "<leader>hR", gs.reset_buffer, "Reset Buffer")
-            map("n", "<leader>gg", gs.blame, "Blame")
+            map("n", "<leader>gB", gs.blame, "Blame")
             map("n", "<leader>gb", function()
                 gs.blame_line({ full = true })
             end, "Blame Line")

@@ -1,7 +1,6 @@
 return {
     "mason-org/mason.nvim",
     build = ":MasonUpdate",
-    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
     keys = { { "<leader>tm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts_extend = { "ensure_installed" },
     init = function()

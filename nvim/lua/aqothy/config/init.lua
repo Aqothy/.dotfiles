@@ -20,8 +20,6 @@ local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
 Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 
-local is_vscode = vim.g.vscode
-
 local disabled_plugins = {
     "gzip",
     "tarPlugin",
@@ -33,13 +31,6 @@ local disabled_plugins = {
 local lazy_spec = {
     import = "aqothy.plugins",
 }
-
-if is_vscode then
-    vim.list_extend(disabled_plugins, { "matchit", "matchparen", "netrwPlugin" })
-    lazy_spec = {
-        import = "aqothy.vscode.plugins",
-    }
-end
 
 -- Setup lazy.nvim
 require("lazy").setup({

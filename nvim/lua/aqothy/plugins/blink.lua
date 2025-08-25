@@ -19,6 +19,7 @@ return {
                 selection = { auto_insert = false },
             },
         },
+        sources = { default = { "lsp", "buffer", "path" } },
         fuzzy = {
             implementation = "lua",
             sorts = {

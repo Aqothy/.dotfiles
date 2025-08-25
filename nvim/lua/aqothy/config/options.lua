@@ -1,13 +1,12 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.mapleader = vim.keycode("<space>")
+vim.g.maplocalleader = vim.keycode("\\")
 
 -- Disable health checks for these providers.
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
-
-vim.g.netrw_banner = 0
+vim.g.tsc_makeprg = "npx tsc --noEmit"
 
 local opt = vim.opt
 
@@ -16,9 +15,10 @@ opt.relativenumber = true
 
 -- indentation
 opt.expandtab = true
-opt.shiftwidth = 4
+opt.shiftwidth = 0
 opt.tabstop = 4
 opt.softtabstop = 4
+opt.shiftround = true
 
 opt.swapfile = false
 opt.writebackup = false
@@ -29,6 +29,7 @@ opt.splitright = true
 opt.splitbelow = true
 opt.splitkeep = "screen"
 opt.inccommand = "split"
+opt.scrolloff = 8
 
 opt.ignorecase = true
 opt.smartcase = true
@@ -46,17 +47,18 @@ opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.completeopt = { "menuone", "noinsert", "fuzzy", "popup" }
 opt.completeitemalign = { "kind", "abbr", "menu" }
 opt.wildignore:append({ ".DS_Store" })
+opt.wildmode = "longest:full,full"
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
-opt.diffopt = { "internal", "filler", "closeoff", "inline:none", "indent-heuristic", "algorithm:histogram" }
+opt.diffopt =
+    { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
-opt.scrolloff = 8
 
 opt.fileencoding = "utf-8"
 
 if vim.fn.executable("rg") == 1 then
-    opt.grepprg = "rg --vimgrep"
+    opt.grepprg = "rg --vimgrep --hidden --glob !.git --smart-case"
     opt.grepformat = "%f:%l:%c:%m"
 end
 
@@ -69,7 +71,6 @@ opt.showcmd = false
 
 opt.fillchars = { eob = " ", diff = "╱" }
 
-opt.whichwrap:append("h,l") -- allow move to next line with the
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 opt.background = "dark"

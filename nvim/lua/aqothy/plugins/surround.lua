@@ -2,14 +2,15 @@ return {
     "kylechui/nvim-surround",
     keys = {
         { "ys", desc = "Surround Normal" },
-        { "S", mode = "x", desc = "Surround Visual" },
         { "yss", desc = "Surround Current Line" },
+        { "S", mode = "x", desc = "Surround Visual" },
         { "ds", desc = "Delete Surrounding" },
         { "cs", desc = "Change Surrounding" },
+        { "<c-t>", mode = "i", "<c-g>st", remap = true, desc = "Insert Tag" },
     },
     opts = {
         keymaps = {
-            insert = false,
+            insert = "<c-g>s",
             insert_line = false,
             normal = "ys",
             normal_cur = "yss",

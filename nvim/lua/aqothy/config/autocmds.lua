@@ -21,6 +21,7 @@ autocmd("FileType", {
         "qf",
         "vim",
         "query",
+        "dap*",
     },
     callback = function(event)
         vim.bo[event.buf].buflisted = false

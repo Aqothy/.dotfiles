@@ -8,17 +8,6 @@ local utils = require("aqothy.config.utils")
 
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
-    suggest = {
-        completeFunctionCalls = true,
-    },
-    inlayHints = {
-        enumMemberValues = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        parameterNames = { enabled = "literals" },
-        parameterTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        variableTypes = { enabled = false },
-    },
     tsserver = {
         nodePath = "~/.local/bin/npc",
     },
@@ -31,7 +20,6 @@ M["vtsls"] = {
             enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
             experimental = {
-                maxInlayHintLength = 30,
                 completion = {
                     enableServerSideFuzzyMatch = true,
                     entriesLimit = 30,
@@ -68,27 +56,6 @@ M["vtsls"] = {
 
 M["lua_ls"] = {
     enabled = true,
-    settings = {
-        Lua = {
-            doc = {
-                privateName = { "^_" },
-            },
-            hint = {
-                enable = true,
-                setType = false,
-                paramType = true,
-                paramName = "Disable",
-                semicolon = "Disable",
-                arrayIndex = "Disable",
-            },
-            completion = {
-                callSnippet = "Replace",
-            },
-        },
-        telemetry = {
-            enable = false,
-        },
-    },
 }
 
 M["clangd"] = {
@@ -98,12 +65,9 @@ M["clangd"] = {
         "--background-index",
         "--clang-tidy",
         "--header-insertion=iwyu",
-        "--completion-style=detailed",
-        "--function-arg-placeholders",
         "--fallback-style=Google",
     },
     init_options = {
-        usePlaceholders = true,
         completeUnimported = true,
         clangdFileStatus = true,
     },
@@ -117,29 +81,19 @@ M["gopls"] = {
     settings = {
         gopls = {
             gofumpt = true,
-            hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-            },
             analyses = {
                 nilness = true,
                 unusedparams = true,
                 unusedwrite = true,
                 useany = true,
             },
-            usePlaceholders = true,
             completeUnimported = true,
             staticcheck = true,
         },
     },
     keys = {
         {
-            "<leader>fi",
+            "<leader>rr",
             function()
                 utils.action("refactor.rewrite.fillStruct")
             end,
@@ -151,7 +105,7 @@ M["gopls"] = {
 }
 
 M["basedpyright"] = {
-    enabled = true,
+    enabled = false,
     settings = {
         basedpyright = {
             analysis = {

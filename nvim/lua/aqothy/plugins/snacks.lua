@@ -5,39 +5,7 @@ return {
     opts = function()
         local icons = require("aqothy.config.icons")
         return {
-            dashboard = {
-                preset = {
-                    header = [[
-        ⣤⡀⠀⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣆⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠸⣷⣮⣿⣿⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⡠⠒⠉⠀⠀⠀⠀⠀⠀⠈⠁⠲⢖⠒⡀⠀⠀
-⠀⠀⠀⡠⠴⣏⠀⢀⡀⠀⢀⡀⠀⠀⠀⡀⠀⠀⡀⠱⡈⢄⠀
-⠀⠀⢠⠁⠀⢸⠐⠁⠀⠄⠀⢸⠀⠀⢎⠀⠂⠀⠈⡄⢡⠀⢣
-⠀⢀⠂⠀⠀⢸⠈⠢⠤⠤⠐⢁⠄⠒⠢⢁⣂⡐⠊⠀⡄⠀⠸
-⠀⡘⠀⠀⠀⢸⠀⢠⠐⠒⠈⠀⠀⠀⠀⠀⠀⠈⢆⠜⠀⠀⢸
-⠀⡇⠀⠀⠀⠀⡗⢺⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⡄⢀⠎
-⠀⢃⠀⠀⠀⢀⠃⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠷⡃⠀
-⠀⠈⠢⣤⠀⠈⠀⠀⠑⠠⠤⣀⣀⣀⣀⣀⡀⠤⠒⠁⠀⢡⠀
-⡀⣀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⠀
-⠑⢄⠉⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡸⠀
-⠀⠀⠑⠢⢱⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠁⠀
-⠀⠀⠀⠀⢀⠠⠓⠢⠤⣀⣀⡀⠀⠀⣀⣀⡀⠤⠒⠑⢄⠀⠀
-⠀⠀⠀⠰⠥⠤⢄⢀⡠⠄⡈⡀⠀⠀⣇⣀⠠⢄⠀⠒⠤⠣⠀
-⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀]],
-                },
-                sections = {
-                    { section = "header" },
-                },
-            },
-
             bigfile = { enabled = true },
-
-            indent = {
-                enabled = false,
-                indent = { enabled = true, char = "▏" },
-                scope = { enabled = false },
-            },
 
             input = { enabled = true },
 
@@ -52,21 +20,6 @@ return {
             words = {
                 enabled = true,
                 modes = { "n" },
-            },
-
-            zen = {
-                toggles = {
-                    dim = false,
-                },
-            },
-
-            dim = {
-                scope = {
-                    min_size = 1,
-                },
-                animate = {
-                    enabled = false,
-                },
             },
 
             picker = {
@@ -91,32 +44,26 @@ return {
                 },
                 sources = {
                     aqfiles = {
-                        multi = { "buffers", "recent", "files" },
+                        layout = {
+                            preview = false,
+                        },
+                        multi = { "recent", "files" },
                         format = "file",
                         filter = { cwd = true },
                         hidden = true,
                         transform = "unique_file",
                         sort = { fields = { "score:desc", "idx" } },
-                        layout = { preview = false },
                     },
-                },
-                layout = {
-                    preset = "vertical",
-                },
-                layouts = {
-                    vertical = {
+                    buffers = {
                         layout = {
-                            backdrop = false,
-                            width = 0.5,
-                            height = 0.8,
-                            box = "vertical",
-                            border = "rounded",
-                            title = "{title} {live} {flags}",
-                            title_pos = "center",
-                            { win = "input", height = 1, border = "bottom" },
-                            { win = "list", border = "none" },
-                            { win = "preview", title = "{preview}", height = 0.6, border = "top" },
+                            preview = false,
                         },
+                    },
+                    grep = {
+                        hidden = true,
+                    },
+                    grep_word = {
+                        hidden = true,
                     },
                 },
             },
@@ -132,21 +79,9 @@ return {
                 notification = {
                     wo = { wrap = true },
                 },
-                zen = {
-                    width = function()
-                        return math.min(120, math.floor(vim.o.columns * 0.75))
-                    end,
-                    backdrop = {
-                        transparent = false,
-                        blend = 95,
-                    },
-                },
                 terminal = {
                     wo = {
                         winbar = "",
-                    },
-                    keys = {
-                        term_normal = false,
                     },
                 },
                 lazygit = {
@@ -158,9 +93,12 @@ return {
     end,
     -- stylua: ignore
     keys = {
-        { "<leader>gh", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },
+        { "<leader>go", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "x" },  },
+        { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+        { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+        { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         { "<c-j>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = { "n", "t" } },
@@ -177,36 +115,15 @@ return {
             end,
             desc = "Todo List",
         },
-        { "<leader>gs", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
-        { "<leader>pr", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
-        { "<leader>pa", function() Snacks.picker() end, desc = "All Pickers" },
-        { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
-        { "<leader>ff", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
-        { "<leader>fs", function() Snacks.picker.grep() end, desc = "Grep" },
-        { "<leader>fh", function() Snacks.picker.help() end, desc = "Help Pages" },
+        { "<leader>.", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
+        { "<leader><leader>", function() Snacks.picker({ layout = { preview = false } }) end, desc = "Pick" },
+        { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
+        { "<leader>s", function() Snacks.picker.grep() end, desc = "Grep" },
+        { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "sidebar" } }) end, desc = "undo tree" },
-        { "<leader>fw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profiler Picker" },
+        { "<leader>/", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
     },
-    init = function()
-        vim.api.nvim_create_autocmd("User", {
-            pattern = "VeryLazy",
-            group = vim.api.nvim_create_augroup("aqothy/snacks_lazyload", { clear = true }),
-            callback = function()
-                _G.dd = function(...)
-                    Snacks.debug.inspect(...)
-                end
-                _G.bt = function()
-                    Snacks.debug.backtrace()
-                end
-                vim.print = _G.dd
-
-                -- Toggle
-                Snacks.toggle.dim():map("<leader>sd")
-                Snacks.toggle.diagnostics():map("<leader>td")
-                Snacks.toggle.zen():map("<leader>zz")
-                Snacks.toggle.profiler():map("<leader>pp")
-                Snacks.toggle.indent():map("<leader>id")
-            end,
-        })
-    end,
 }

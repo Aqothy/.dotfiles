@@ -37,7 +37,7 @@
   "chat.agent.enabled": true,
   "github.copilot.chat.agent.thinkingTool": true,
   "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
+    "vscodevim.vim": 1
   },
   "editor.stickyScroll.enabled": false,
   "chat.agent.maxRequests": 100,

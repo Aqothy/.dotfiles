@@ -76,22 +76,6 @@ local diagnostic_goto = function(next, severity)
     end
 end
 
-function M.has(method, client)
-    if type(method) == "table" then
-        for _, m in ipairs(method) do
-            if M.has(m, client) then
-                return true
-            end
-        end
-        return false
-    end
-    method = method:find("/") and method or "textDocument/" .. method
-    if client:supports_method(method) then
-        return true
-    end
-    return false
-end
-
 local symbol_opts = {
     filter = {
         default = {
@@ -123,20 +107,14 @@ function M.get()
         { "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
         { "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
         { "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
-        { "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } },
-        { "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } },
-        { "<leader>fr", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
-        { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
-        { "<leader>K", function() Snacks.picker.lsp_definitions({ auto_confirm = false }) end, { desc = "Peek Definition", has = "definition" } },
-        { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
-        { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
-        { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
-        { "gO", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols", has = "documentSymbol" } },
-        { "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Lsp Declaration", has = "declaration" } },
-        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Reference", has = "documentHighlight" } },
-        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Reference", has = "documentHighlight" } },
-        { "<leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "Document Diagnostics" } },
-        { "<leader>fD", function() Snacks.picker.diagnostics() end, { desc = "Workspace Diagnostics" } },
+        { "<leader>rn", function() Snacks.rename.rename_file() end, { desc = "Rename File" } },
+        { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition" } },
+        { "grr", function() Snacks.picker.lsp_references() end, { desc = "References" } },
+        { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation" } },
+        { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition" } },
+        { "gO", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols" } },
+        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Word" } },
+        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Word" } },
     }
 
     return M._keys
@@ -145,13 +123,6 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
-    if client:supports_method("textDocument/inlayHint") then
-        -- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-        Snacks.toggle.inlay_hints():map("<leader>ti")
-    end
-
-    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
-
     local keys = vim.tbl_extend("force", {}, M.get())
 
     local lsp_config = settings[client.name]
@@ -163,16 +134,9 @@ function M.on_attach(client, bufnr)
         local lhs, rhs, opts, mode = unpack(key)
         mode = mode or "n"
 
-        local has_met = not opts.has or M.has(opts.has, client)
-        local cond_met = not (opts.cond == false or ((type(opts.cond) == "function") and not opts.cond()))
-
-        if has_met and cond_met then
-            opts.cond = nil
-            opts.has = nil
-            opts.silent = opts.silent ~= false
-            opts.buffer = bufnr
-            vim.keymap.set(mode, lhs, rhs, opts)
-        end
+        opts.silent = opts.silent ~= false
+        opts.buffer = bufnr
+        vim.keymap.set(mode, lhs, rhs, opts)
     end
 end
 

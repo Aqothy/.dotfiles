@@ -41,12 +41,10 @@ local function goModTag(operation)
     end)
 end
 
-local bufnr = vim.api.nvim_get_current_buf()
-
 vim.keymap.set("n", "<leader>aj", function()
     goModTag("add")
-end, { desc = "Add json tags to struct", buffer = bufnr })
+end, { desc = "Add json tags to struct", buffer = true })
 
 vim.keymap.set("n", "<leader>rj", function()
     goModTag("remove")
-end, { desc = "Remove json tags from struct", buffer = bufnr })
+end, { desc = "Remove json tags from struct", buffer = true })

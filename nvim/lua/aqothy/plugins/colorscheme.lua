@@ -25,7 +25,6 @@ return {
 
                 groups = {
                     StatuslineItalic = { fg = colors.gray, bg = colors.dark0_soft, italic = true },
-                    StatuslineTitle = { fg = colors.light3, bg = colors.dark0_soft, bold = true },
                 }
             else
                 overrides = {
@@ -41,7 +40,6 @@ return {
 
                 groups = {
                     StatuslineItalic = { fg = colors.dark0_soft, bg = colors.light0_soft, italic = true },
-                    StatuslineTitle = { fg = colors.gray, bg = colors.light0_soft, bold = true },
                 }
             end
 
@@ -58,7 +56,6 @@ return {
                 Insert = "bright_green",
                 Command = "neutral_yellow",
                 Other = "neutral_purple",
-                Debug = "neutral_red",
             }
 
             -- Add mode-specific groups

@@ -23,7 +23,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias py="python3"
-alias g="lazygit"
+alias gg="lazygit"
 alias cpp="clang++ -std=c++20"
 alias vi="nvim"
 alias svi="nvim --listen /tmp/nvim"
@@ -56,8 +56,6 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
 # Exact -> Case Insensitive -> Substring
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' use-cache yes
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 
 eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(uv generate-shell-completion zsh)"

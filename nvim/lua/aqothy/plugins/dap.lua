@@ -1,7 +1,28 @@
 return {
     {
         "mfussenegger/nvim-dap",
-        lazy = true,
+        -- stylua: ignore
+        keys = {
+            { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
+            { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+            { "<leader>dc", function() require("dap").continue() end, desc = "Run/Continue" },
+            { "<leader>di", function() require("dap").step_into() end, desc = "Step Into" },
+            { "<leader>dl", function() require("dap").run_last() end, desc = "Run Last" },
+            { "<leader>dO", function() require("dap").step_out() end, desc = "Step Out" },
+            { "<leader>do", function() require("dap").step_over() end, desc = "Step Over" },
+            { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+            { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
+            { "<leader>dh", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
+            { "<leader>dq", function() require("dap").list_breakpoints() end, desc = "List Breakpoints" },
+            { "<leader>ds", function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.scopes)
+            end, desc = "Dap Scopes" },
+            { "<leader>df", function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.frames)
+            end, desc = "Dap Frames" },
+        },
         config = function()
             local dap = require("dap")
             local icons = require("aqothy.config.icons").dap
@@ -30,25 +51,6 @@ return {
                     end
                 end
             end
-        end,
-    },
-    {
-        "miroshQa/debugmaster.nvim",
-        dependencies = {
-            "mfussenegger/nvim-dap",
-        },
-        keys = {
-            {
-                "<leader>D",
-                function()
-                    require("debugmaster").mode.toggle()
-                end,
-                desc = "Toggle DebugMaster",
-                mode = { "n", "x" },
-            },
-        },
-        config = function()
-            vim.api.nvim_set_hl(0, "dCursor", { bg = "#cc241d" })
         end,
     },
 }

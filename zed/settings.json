@@ -2,7 +2,7 @@
   "agent": {
     "default_profile": "write",
     "default_model": {
-      "provider": "zed.dev",
+      "provider": "copilot_chat",
       "model": "claude-sonnet-4"
     }
   },
