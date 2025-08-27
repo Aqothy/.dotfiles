@@ -51,6 +51,8 @@ function M.setup()
         },
     }
 
+    vim.lsp.log.set_level(vim.log.levels.OFF)
+
     vim.diagnostic.config(config)
 
     local register_capability = vim.lsp.handlers["client/registerCapability"]
