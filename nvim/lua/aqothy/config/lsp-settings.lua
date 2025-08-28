@@ -19,11 +19,6 @@ M["vtsls"] = {
         vtsls = {
             enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
-            experimental = {
-                completion = {
-                    enableServerSideFuzzyMatch = true,
-                },
-            },
         },
         typescript = jsts_config,
         javascript = jsts_config,

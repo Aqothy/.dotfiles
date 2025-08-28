@@ -63,6 +63,22 @@ local diagnostic_goto = function(next, severity)
     end
 end
 
+function M.has(method, client)
+    if type(method) == "table" then
+        for _, m in ipairs(method) do
+            if M.has(m, client) then
+                return true
+            end
+        end
+        return false
+    end
+    method = method:find("/") and method or "textDocument/" .. method
+    if client:supports_method(method) then
+        return true
+    end
+    return false
+end
+
 local symbol_opts = {
     filter = {
         default = {
@@ -94,14 +110,14 @@ function M.get()
         { "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
         { "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
         { "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
-        { "<leader>rn", function() Snacks.rename.rename_file() end, { desc = "Rename File" } },
-        { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition" } },
-        { "grr", function() Snacks.picker.lsp_references() end, { desc = "References" } },
-        { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation" } },
-        { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition" } },
-        { "gO", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols" } },
-        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Word" } },
-        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Word" } },
+        { "<leader>rn", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
+        { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
+        { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
+        { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
+        { "grt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto Type Definition", has = "typeDefinition" } },
+        { "gO", function() Snacks.picker.lsp_symbols(symbol_opts) end, { desc = "LSP Symbols", has = "documentSymbol" } },
+        { "]r", function() Snacks.words.jump(vim.v.count1, true) end, { desc = "Next Word", has = "documentHighlight" } },
+        { "[r", function() Snacks.words.jump(-vim.v.count1, true) end, { desc = "Prev Word", has = "documentHighlight" } },
     }
 
     return M._keys
@@ -161,9 +177,15 @@ function M.on_attach(client, bufnr)
         local lhs, rhs, opts, mode = unpack(key)
         mode = mode or "n"
 
-        opts.silent = opts.silent ~= false
-        opts.buffer = bufnr
-        vim.keymap.set(mode, lhs, rhs, opts)
+        local has_met = not opts.has or M.has(opts.has, client)
+
+        if has_met then
+            opts.cond = nil
+            opts.has = nil
+            opts.silent = opts.silent ~= false
+            opts.buffer = bufnr
+            vim.keymap.set(mode, lhs, rhs, opts)
+        end
     end
 end
 
