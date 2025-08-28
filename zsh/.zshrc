@@ -53,6 +53,9 @@ PROMPT='%B%(?:%F{green}➜%f:%F{red}!%f) %F{cyan}%c%f$(git_prompt_info)%b '
 
 autoload -Uz compinit && compinit
 
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+
 zstyle ':completion:*' menu select
 # Exact -> Case Insensitive -> Substring
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
