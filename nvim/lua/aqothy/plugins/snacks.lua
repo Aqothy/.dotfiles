@@ -101,7 +101,7 @@ return {
         { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         {"<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
-        { "<c-j>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = { "n", "t" } },
+        { "<c-j>", function() Snacks.terminal(nil, { win = { position = "float", border = "rounded", width = 0.7, height = 0.7 } }) end, desc = "Toggle Terminal", mode = { "n", "t" } },
         {
             "<leader>no",
             function()
