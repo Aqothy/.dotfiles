@@ -1,5 +1,5 @@
 local ecma_snippets = {
-    l = "console.log(${0})",
+    d = "console.log(${0})",
     fn = "function ${1:name} (${2:arguments}) {\n\t${0}\n}",
     afn = "async function ${1:name} (${2:arguments}) {\n\t${0}\n}",
     rfc = [[
@@ -25,10 +25,10 @@ useEffect(() => {
 
 local snippets_by_filetype = {
     lua = {
-        l = "print(${0})",
+        d = "print(${0})",
     },
     go = {
-        l = "fmt.Println($1)",
+        d = "fmt.Println($1)",
         ir = "if err != nil {\n\t$1\n}",
     },
     javascript = ecma_snippets,

@@ -10,21 +10,6 @@ return {
 
         handlers.setup()
 
-        local params = {
-            capabilities = handlers.get_capabilities(),
-        }
-
-        -- global capabilities, lspconfig, peronal config in order of increasing priority
-        vim.lsp.config("*", params)
-
-        local settings = require("aqothy.config.lsp-settings")
-        for lsp, opts in pairs(settings) do
-            if opts.enabled ~= false then
-                vim.lsp.config(lsp, opts)
-                vim.lsp.enable(lsp)
-            end
-        end
-
         ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
         local progress = vim.defaulttable()
         vim.api.nvim_create_autocmd("LspProgress", {
@@ -95,5 +80,20 @@ return {
                 handlers.on_attach(client, ev.buf)
             end,
         })
+
+        local params = {
+            capabilities = handlers.get_capabilities(),
+        }
+
+        -- global capabilities, lspconfig, peronal config in order of increasing priority
+        vim.lsp.config("*", params)
+
+        local settings = require("aqothy.config.lsp-settings")
+        for lsp, opts in pairs(settings) do
+            if opts.enabled ~= false then
+                vim.lsp.config(lsp, opts)
+                vim.lsp.enable(lsp)
+            end
+        end
     end,
 }
