@@ -2,95 +2,93 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
-    opts = function()
-        local icons = require("aqothy.config.icons")
-        return {
-            bigfile = { enabled = true },
+    opts = {
+        bigfile = { enabled = true },
 
-            input = { enabled = true },
+        input = { enabled = true },
 
-            notifier = {
-                enabled = true,
-                icons = icons.signs,
-                level = vim.log.levels.INFO,
-            },
+        notifier = {
+            enabled = true,
+            level = vim.log.levels.INFO,
+        },
 
-            quickfile = { enabled = true },
+        quickfile = { enabled = true },
 
-            words = {
-                enabled = true,
-                modes = { "n" },
-            },
+        words = {
+            enabled = true,
+            modes = { "n" },
+        },
 
-            picker = {
-                enabled = true,
-                icons = {
-                    kinds = icons.kinds,
+        picker = {
+            enabled = true,
+            icons = {
+                files = {
+                    enabled = false,
                 },
-                ui_select = true,
-                win = {
-                    input = {
-                        keys = {
-                            ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
-                            ["<a-h>"] = false,
-                        },
-                    },
-                    list = {
-                        keys = {
-                            ["<a-.>"] = "toggle_hidden",
-                            ["<a-h>"] = false,
-                        },
+            },
+            ui_select = true,
+            win = {
+                input = {
+                    keys = {
+                        ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+                        ["<a-h>"] = false,
                     },
                 },
-                sources = {
-                    aqfiles = {
-                        layout = {
-                            preview = false,
-                        },
-                        multi = { "recent", "files" },
-                        format = "file",
-                        filter = { cwd = true },
-                        hidden = true,
-                        transform = "unique_file",
-                        sort = { fields = { "score:desc", "idx" } },
-                    },
-                    buffers = {
-                        layout = {
-                            preview = false,
-                        },
-                    },
-                    grep = {
-                        hidden = true,
-                    },
-                    grep_word = {
-                        hidden = true,
+                list = {
+                    keys = {
+                        ["<a-.>"] = "toggle_hidden",
+                        ["<a-h>"] = false,
                     },
                 },
             },
-
-            image = {
-                enabled = false,
-                convert = {
-                    notify = false,
+            sources = {
+                aqfiles = {
+                    layout = {
+                        preview = false,
+                    },
+                    multi = { "recent", "files" },
+                    format = "file",
+                    filter = { cwd = true },
+                    hidden = true,
+                    transform = "unique_file",
+                    sort = { fields = { "score:desc", "idx" } },
                 },
-            },
-
-            styles = {
-                notification = {
-                    wo = { wrap = true },
-                },
-                terminal = {
-                    wo = {
-                        winbar = "",
+                buffers = {
+                    layout = {
+                        preview = false,
                     },
                 },
-                lazygit = {
-                    width = 0,
-                    height = 0.99,
+                grep = {
+                    hidden = true,
+                },
+                grep_word = {
+                    hidden = true,
                 },
             },
-        }
-    end,
+        },
+
+        image = {
+            enabled = false,
+            convert = {
+                notify = false,
+            },
+        },
+
+        styles = {
+            notification = {
+                wo = { wrap = true },
+            },
+            terminal = {
+                wo = {
+                    winbar = "",
+                },
+            },
+            lazygit = {
+                width = 0,
+                height = 0.99,
+            },
+        },
+    },
     -- stylua: ignore
     keys = {
         { "<leader>go", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },

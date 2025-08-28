@@ -34,3 +34,5 @@ end, { expr = true, desc = "Jump Next" })
 map({ "i", "s" }, "<C-h>", function()
     return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<C-h>"
 end, { expr = true, desc = "Jump Previous" })
+
+map("i", "<c-f>", "<c-x><c-f>", { desc = "Path completion" })

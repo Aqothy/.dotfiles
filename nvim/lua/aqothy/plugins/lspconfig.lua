@@ -25,8 +25,6 @@ return {
             end
         end
 
-        local utils = require("aqothy.config.utils")
-
         ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
         local progress = vim.defaulttable()
         vim.api.nvim_create_autocmd("LspProgress", {
@@ -75,12 +73,14 @@ return {
             end,
         })
 
+        local utils = require("aqothy.config.utils")
+
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("aqothy/lsp_attach", { clear = true }),
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
-                if not client or string.find(client.name:lower(), "copilot") then
+                if not client then
                     return
                 end
 

@@ -16,7 +16,6 @@ local lazyLoad = vim.fn.argc(-1) == 0
 -- Load autocmds immediately if starting nvim with file
 if not lazyLoad then
     require("aqothy.config.autocmds")
-    require("aqothy.config.winbar")
     require("aqothy.config.snippets")
 end
 
@@ -26,13 +25,10 @@ vim.api.nvim_create_autocmd("User", {
     callback = function()
         if lazyLoad then
             require("aqothy.config.autocmds")
-            require("aqothy.config.winbar")
             require("aqothy.config.snippets")
         end
         require("aqothy.config.keymaps")
         require("aqothy.config.commands")
-        require("aqothy.config.statusline")
-        require("aqothy.config.tabline")
     end,
 })
 require("vim._extui").enable({})

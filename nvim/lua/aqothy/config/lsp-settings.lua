@@ -22,7 +22,6 @@ M["vtsls"] = {
             experimental = {
                 completion = {
                     enableServerSideFuzzyMatch = true,
-                    entriesLimit = 30,
                 },
             },
         },
@@ -137,6 +136,20 @@ M["texlab"] = {
                 executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
                 args = { "-g", "-r", "%l", "%p", "%f" },
             },
+        },
+    },
+}
+
+M["copilot"] = {
+    enabled = true,
+    cmd = {
+        "/Users/aqothy/.local/bin/npc",
+        "/Users/aqothy/.local/share/nvim/mason/packages/copilot-language-server/node_modules/@github/copilot-language-server/dist/language-server.js",
+        "--stdio",
+    },
+    settings = {
+        telemetry = {
+            telemetryLevel = "off",
         },
     },
 }

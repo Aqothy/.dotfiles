@@ -43,16 +43,15 @@ end)
 opt.mouse = "a"
 
 -- completion
-opt.pumheight = 10 -- Maximum number of entries in a popup
+opt.pumheight = 10
 opt.completeopt = { "menuone", "noinsert", "fuzzy", "popup" }
-opt.completeitemalign = { "kind", "abbr", "menu" }
 opt.wildignore:append({ ".DS_Store" })
-opt.wildmode = "longest:full,full"
+opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt =
-    { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram", "linematch:60" }
+    { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
 
 opt.fileencoding = "utf-8"
