@@ -14,6 +14,7 @@ return {
                 overrides = {
                     NormalFloat = { bg = colors.dark0_soft },
                     SignColumn = { bg = colors.dark0_soft },
+                    Pmenu = { bg = colors.dark0_soft },
                     LspReferenceText = { link = "Visual" },
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
@@ -22,6 +23,7 @@ return {
                 overrides = {
                     NormalFloat = { bg = colors.light0_soft },
                     SignColumn = { bg = colors.light0_soft },
+                    Pmenu = { bg = colors.light0_soft },
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },

@@ -19,7 +19,6 @@ map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
--- Snippets
 map("s", "<BS>", "<C-o>s", { desc = "Backspace to delete placeholder" })
 
 map({ "i", "n", "s" }, "<esc>", function()
@@ -27,12 +26,3 @@ map({ "i", "n", "s" }, "<esc>", function()
     vim.snippet.stop()
     return "<esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
-
-map({ "i", "s" }, "<C-l>", function()
-    return vim.snippet.active({ direction = 1 }) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<C-l>"
-end, { expr = true, desc = "Jump Next" })
-map({ "i", "s" }, "<C-h>", function()
-    return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<C-h>"
-end, { expr = true, desc = "Jump Previous" })
-
-map("i", "<c-f>", "<c-x><c-f>", { desc = "Path completion" })

@@ -15,9 +15,7 @@
   },
   "diagnostics": {
     "globals": [
-      "MiniSnippets",
       "MiniFiles",
-      "MiniHipatterns",
       "Snacks"
     ]
   }

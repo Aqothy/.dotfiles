@@ -26,6 +26,7 @@ return {
                 "bash",
                 "tsx",
                 "json5",
+                "swift",
             },
 
             incremental_selection = {
@@ -43,7 +44,15 @@ return {
             -- dont have cli installed locally so set to false also for some files I visit I dont need treesitter
             auto_install = false,
 
-            indent = { enable = true },
+            indent = {
+                enable = true,
+                disable = function(lang)
+                    if lang == "swift" then
+                        return true
+                    end
+                    return false
+                end,
+            },
 
             textobjects = {
                 select = {
@@ -64,12 +73,12 @@ return {
                     enable = true,
                     set_jumps = true,
                     goto_next_start = {
-                        ["]m"] = "@function.outer",
+                        ["]f"] = "@function.outer",
                         ["]]"] = "@class.outer",
                         ["]a"] = "@parameter.inner",
                     },
                     goto_previous_start = {
-                        ["[m"] = "@function.outer",
+                        ["[f"] = "@function.outer",
                         ["[["] = "@class.outer",
                         ["[a"] = "@parameter.inner",
                     },

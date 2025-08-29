@@ -1,5 +1,7 @@
 local M = {}
 
+local has_blink, blink = pcall(require, "blink.cmp")
+
 M._capabilities = nil
 
 function M.get_capabilities()
@@ -16,7 +18,12 @@ function M.get_capabilities()
         },
     }
 
-    M._capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), M._capabilities)
+    M._capabilities = vim.tbl_deep_extend(
+        "force",
+        vim.lsp.protocol.make_client_capabilities(),
+        has_blink and blink.get_lsp_capabilities() or {},
+        M._capabilities
+    )
 
     return M._capabilities
 end
@@ -126,45 +133,7 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
-    if client:supports_method("textDocument/inlineCompletion") then
-        vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
-        vim.keymap.set("i", "<Tab>", function()
-            if not vim.lsp.inline_completion.get() then
-                return "<Tab>"
-            end
-        end, {
-            expr = true,
-            replace_keycodes = true,
-            desc = "Get the current inline completion",
-            buffer = bufnr,
-        })
-    end
-
-    if client:supports_method("textDocument/completion") then
-        local triggers = client.server_capabilities.completionProvider.triggerCharacters
-        for _, char in ipairs({ "a", "e", "i", "o", "u" }) do
-            if not vim.list_contains(triggers, char) then
-                table.insert(triggers, char)
-            end
-        end
-
-        vim.lsp.completion.enable(true, client.id, bufnr, {
-            autotrigger = true,
-            convert = function(item)
-                local label_details = item.labelDetails
-                local menu = (label_details and label_details.description) or item.detail or ""
-
-                return {
-                    abbr = item.label:gsub("%b()", ""),
-                    menu = menu,
-                }
-            end,
-        })
-
-        vim.keymap.set("i", "<c-space>", function()
-            vim.lsp.completion.get()
-        end, { buffer = bufnr, desc = "Get lsp completion" })
-    end
+    client.server_capabilities.semanticTokensProvider = nil
 
     local keys = vim.tbl_extend("force", {}, M.get())
 
@@ -180,7 +149,6 @@ function M.on_attach(client, bufnr)
         local has_met = not opts.has or M.has(opts.has, client)
 
         if has_met then
-            opts.cond = nil
             opts.has = nil
             opts.silent = opts.silent ~= false
             opts.buffer = bufnr

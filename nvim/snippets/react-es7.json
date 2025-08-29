@@ -1,0 +1,32 @@
+{
+  "reactFunctionalComponent": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react'",
+      "",
+      "export default function ${1:${TM_FILENAME_BASE}}() {",
+      "  return (",
+      "    ${2}",
+      "  )",
+      "}"
+    ],
+    "description": "Creates a React Functional Component with ES7 module system"
+  },
+  "useEffect": {
+    "prefix": "ue",
+    "body": [
+      "useEffect(() => {",
+      "  ${1:first}",
+      "",
+      "  return () => {",
+      "    ${2:second}",
+      "  }",
+      "}, [${3:third}])",
+      ""
+    ]
+  },
+  "useState": {
+    "prefix": "us",
+    "body": ["const [${1:state}, set${2:State}] = useState(${3:initValue})"]
+  }
+}

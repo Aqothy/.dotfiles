@@ -29,7 +29,6 @@ opt.splitright = true
 opt.splitbelow = true
 opt.splitkeep = "screen"
 opt.inccommand = "split"
-opt.scrolloff = 8
 
 opt.ignorecase = true
 opt.smartcase = true
@@ -53,6 +52,7 @@ opt.winborder = "rounded"
 opt.diffopt =
     { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
+opt.ruler = false
 
 opt.fileencoding = "utf-8"
 

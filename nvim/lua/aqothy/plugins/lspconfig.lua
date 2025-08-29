@@ -65,7 +65,7 @@ return {
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
-                if not client then
+                if not client or string.find(client.name:lower(), "copilot") then
                     return
                 end
 
