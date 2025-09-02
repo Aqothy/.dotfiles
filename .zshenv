@@ -11,15 +11,14 @@ export MANPAGER='nvim +Man!'
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
+export FZF_DEFAULT_COMMAND="rg --files --color=never --hidden -g "!.git""
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export SHELL_SESSIONS_DISABLE=1
-
-export GOBIN=$HOME/go/bin
-
-export PATH=$PATH:$GOBIN
 export PATH=$PATH:/usr/local/lua-5.4.7/src
 export PATH=$PATH:/usr/local/texlive/2024basic/bin/universal-darwin
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
+export PATH="$HOME/.nvim/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 
 # TODO: Delete this in the future

@@ -22,13 +22,12 @@ opt.shiftround = true
 
 opt.swapfile = false
 opt.writebackup = false
-opt.undofile = true
-opt.updatetime = 300
+opt.undofile = false
+opt.updatetime = 200
 
 opt.splitright = true
 opt.splitbelow = true
 opt.splitkeep = "screen"
-opt.inccommand = "split"
 
 opt.ignorecase = true
 opt.smartcase = true
@@ -57,7 +56,7 @@ opt.ruler = false
 opt.fileencoding = "utf-8"
 
 if vim.fn.executable("rg") == 1 then
-    opt.grepprg = "rg --vimgrep --hidden --glob !.git --smart-case"
+    opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
     opt.grepformat = "%f:%l:%c:%m"
 end
 

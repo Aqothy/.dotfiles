@@ -1,11 +1,9 @@
 #!/usr/bin/env zsh
 
 function build_nvim() {
-    local NVIM_DIR_DEFAULT="$HOME/Code/Personal/neovim"
-    read "NVIM_DIR?Enter your nvim directory path [$NVIM_DIR_DEFAULT]: "
-    local NVIM_DIR=${NVIM_DIR:-$NVIM_DIR_DEFAULT}
-    BRANCH="master"
-    INSTALL_DIR="/usr/local/share/nvim"
+    local NVIM_DIR="$HOME/Code/Personal/neovim"
+    local BRANCH="master"
+    local INSTALL_DIR="$HOME/.nvim"
 
     # Check if nvim directory exists
     if [ ! -d "$NVIM_DIR" ]; then
@@ -26,8 +24,7 @@ function build_nvim() {
     fi
 
     make distclean
-    make CMAKE_BUILD_TYPE=Release
-    make install
+    make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$INSTALL_DIR" install
 }
 
 build_nvim

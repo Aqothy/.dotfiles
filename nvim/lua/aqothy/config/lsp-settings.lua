@@ -9,7 +9,7 @@ local utils = require("aqothy.config.utils")
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
     tsserver = {
-        nodePath = "~/.local/bin/npc",
+        nodePath = "/Users/aqothy/.local/bin/npc",
     },
 }
 
@@ -122,14 +122,10 @@ M["texlab"] = {
     keys = {
         { "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
         { "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
-        { "<localleader>ce", "<cmd>LspTexlabChangeEnvironment<cr>", { desc = "Change Environment" } },
         { "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { desc = "Clean Aux" } },
     },
     settings = {
         texlab = {
-            build = {
-                onSave = true,
-            },
             forwardSearch = {
                 executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
                 args = { "-g", "-r", "%l", "%p", "%f" },

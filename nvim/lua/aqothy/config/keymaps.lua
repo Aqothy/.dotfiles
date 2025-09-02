@@ -14,6 +14,7 @@ map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, 
 -- Editing and text manipulation
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
+map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

@@ -22,6 +22,11 @@ return {
             "stylua",
             "gofumpt",
             "goimports",
+
+            -- Dap
+            "js-debug-adapter",
+            "delve",
+            "codelldb",
         },
 
         ui = {

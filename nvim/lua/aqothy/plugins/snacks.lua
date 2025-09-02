@@ -7,10 +7,7 @@ return {
 
         input = { enabled = true },
 
-        notifier = {
-            enabled = true,
-            level = vim.log.levels.INFO,
-        },
+        notifier = { enabled = true },
 
         quickfile = { enabled = true },
 

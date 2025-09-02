@@ -46,12 +46,7 @@ return {
 
             indent = {
                 enable = true,
-                disable = function(lang)
-                    if lang == "swift" then
-                        return true
-                    end
-                    return false
-                end,
+                disable = { "swift" },
             },
 
             textobjects = {

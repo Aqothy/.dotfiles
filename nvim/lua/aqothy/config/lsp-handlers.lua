@@ -71,14 +71,6 @@ local diagnostic_goto = function(next, severity)
 end
 
 function M.has(method, client)
-    if type(method) == "table" then
-        for _, m in ipairs(method) do
-            if M.has(m, client) then
-                return true
-            end
-        end
-        return false
-    end
     method = method:find("/") and method or "textDocument/" .. method
     if client:supports_method(method) then
         return true
@@ -98,9 +90,6 @@ local symbol_opts = {
             "Method",
             "Struct",
         },
-        -- set to `true` to include all symbols
-        markdown = true,
-        help = true,
     },
 }
 
@@ -117,7 +106,6 @@ function M.get()
         { "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
         { "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
         { "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
-        { "<leader>rn", function() Snacks.rename.rename_file() end, { desc = "Rename File", has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } } },
         { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
         { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
         { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
