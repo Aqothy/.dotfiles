@@ -30,6 +30,7 @@ alias svi="nvim --listen /tmp/nvim"
 alias gaa="git add -A"
 alias sb="git switch"
 alias sc="git switch -c"
+alias gd="git difftool --dir-diff"
 alias so="source $ZDOTDIR/.zshrc"
 
 function git_prompt_info() {

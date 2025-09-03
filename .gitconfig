@@ -36,3 +36,7 @@
 [diff]
     algorithm = histogram
     renames = true
+    tool = kitty
+
+[difftool "kitty"]
+    cmd = kitten diff $LOCAL $REMOTE
