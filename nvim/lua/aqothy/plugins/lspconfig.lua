@@ -23,7 +23,7 @@ return {
 
                 local is_end = value.kind == "end"
 
-                vim.notify(vim.lsp.status(), vim.log.levels.INFO, {
+                vim.notify(value.title, vim.log.levels.INFO, {
                     id = client.name .. client.id,
                     title = client.name,
                     timeout = is_end and 3000 or 0,
