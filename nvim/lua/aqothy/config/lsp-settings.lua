@@ -102,7 +102,7 @@ M["gopls"] = {
 }
 
 M["basedpyright"] = {
-    enabled = false,
+    enabled = true,
     settings = {
         basedpyright = {
             analysis = {

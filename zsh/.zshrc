@@ -32,6 +32,7 @@ alias sb="git switch"
 alias sc="git switch -c"
 alias gd="git difftool --dir-diff"
 alias so="source $ZDOTDIR/.zshrc"
+alias md='mkdir -p'
 
 function git_prompt_info() {
   if ! git rev-parse --is-inside-work-tree &>/dev/null; then

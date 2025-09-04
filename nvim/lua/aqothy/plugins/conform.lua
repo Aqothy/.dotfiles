@@ -30,6 +30,7 @@ return {
             lua = { "stylua" },
             go = { "goimports", "gofumpt" },
             swift = { "swift" },
+            python = { "ruff_organize_imports", "ruff_format" },
             -- For filetypes without a formatter:
             ["_"] = { "trim_whitespace", "trim_newlines" },
         },

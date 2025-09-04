@@ -52,6 +52,11 @@ opt.diffopt =
     { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
 opt.ruler = false
+opt.list = true
+opt.listchars = {
+    tab = "▏ ",
+    trail = "·",
+}
 
 opt.fileencoding = "utf-8"
 

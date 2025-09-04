@@ -27,6 +27,7 @@ return {
                 "tsx",
                 "json5",
                 "swift",
+                "python",
             },
 
             incremental_selection = {

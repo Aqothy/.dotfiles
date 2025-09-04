@@ -17,6 +17,8 @@ return {
             "gopls",
             "texlab",
             "vtsls",
+            "basedpyright",
+            "ruff",
 
             -- Formatters/linters
             "stylua",
