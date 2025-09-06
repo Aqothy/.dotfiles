@@ -7,6 +7,7 @@ return {
         { "ds", desc = "Delete Surrounding" },
         { "cs", desc = "Change Surrounding" },
         { "<c-t>", mode = "i", "<c-g>st", remap = true, desc = "Insert Tag" },
+        { "<c-g>s", mode = "i", desc = "Insert Tag" },
     },
     opts = {
         keymaps = {

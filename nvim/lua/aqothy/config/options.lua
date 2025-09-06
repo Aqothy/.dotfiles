@@ -22,7 +22,7 @@ opt.shiftround = true
 
 opt.swapfile = false
 opt.writebackup = false
-opt.undofile = false
+opt.undofile = true
 opt.updatetime = 200
 
 opt.splitright = true
@@ -57,19 +57,20 @@ opt.listchars = {
     tab = "▏ ",
     trail = "·",
 }
+opt.scrolloff = 8
+opt.whichwrap:append("h,l")
+opt.cursorline = true
 
 opt.fileencoding = "utf-8"
 
 if vim.fn.executable("rg") == 1 then
-    opt.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
-    opt.grepformat = "%f:%l:%c:%m"
+    opt.grepprg = "rg --vimgrep --smart-case -g '!.git' --hidden"
 end
 
 opt.confirm = true
 opt.shortmess:append({ W = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
 
--- command line
 opt.showcmd = false
 
 opt.fillchars = { eob = " ", diff = "╱" }

@@ -1,7 +1,7 @@
 return {
     {
         "github/copilot.vim",
-        event = { "BufReadPre", "BufNewFile", "BufWritePre" },
+        event = "InsertEnter",
         cmd = "Copilot",
         init = function()
             vim.g.copilot_lsp_settings = {

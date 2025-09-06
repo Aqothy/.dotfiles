@@ -33,7 +33,7 @@ function M.setup()
         signs = false,
         virtual_text = true,
         update_in_insert = false,
-        underline = true,
+        underline = { severity = vim.diagnostic.severity.ERROR },
         severity_sort = true,
         float = {
             focusable = true,
@@ -59,14 +59,6 @@ function M.setup()
         end
 
         return register_capability(err, res, ctx)
-    end
-end
-
-local diagnostic_goto = function(next, severity)
-    severity = severity and vim.diagnostic.severity[severity] or nil
-
-    return function()
-        vim.diagnostic.jump({ count = next and 1 or -1, float = true, severity = severity })
     end
 end
 
@@ -102,10 +94,6 @@ function M.get()
 
     -- stylua: ignore
     M._keys = {
-        { "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } },
-        { "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } },
-        { "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } },
-        { "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } },
         { "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition", has = "definition" } },
         { "grr", function() Snacks.picker.lsp_references() end, { desc = "References", has = "references" } },
         { "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation", has = "implementation" } },
@@ -121,6 +109,14 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
+    if client:supports_method("textDocument/linkedEditingRange") then
+        vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
+    end
+
+    if client:supports_method("textDocument/onTypeFormatting") then
+        vim.lsp.on_type_formatting.enable(true, { client_id = client.id })
+    end
+
     client.server_capabilities.semanticTokensProvider = nil
 
     local keys = vim.tbl_extend("force", {}, M.get())
