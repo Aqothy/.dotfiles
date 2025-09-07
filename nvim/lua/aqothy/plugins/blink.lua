@@ -4,7 +4,7 @@ return {
     opts_extend = { "sources.default" },
     opts = {
         keymap = {
-            preset = "enter"
+            preset = "enter",
         },
         cmdline = {
             completion = {

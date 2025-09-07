@@ -36,7 +36,6 @@ function M.setup()
         underline = { severity = vim.diagnostic.severity.ERROR },
         severity_sort = true,
         float = {
-            focusable = true,
             style = "minimal",
             source = "if_many",
             header = "",
@@ -111,10 +110,6 @@ local settings = require("aqothy.config.lsp-settings")
 function M.on_attach(client, bufnr)
     if client:supports_method("textDocument/linkedEditingRange") then
         vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
-    end
-
-    if client:supports_method("textDocument/onTypeFormatting") then
-        vim.lsp.on_type_formatting.enable(true, { client_id = client.id })
     end
 
     client.server_capabilities.semanticTokensProvider = nil

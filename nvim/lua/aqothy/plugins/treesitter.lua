@@ -63,6 +63,10 @@ return {
                         ["ia"] = "@parameter.inner",
                         ["au"] = "@call.outer",
                         ["iu"] = "@call.inner",
+                        ["al"] = "@loop.outer",
+                        ["il"] = "@loop.inner",
+                        ["ao"] = "@conditional.outer",
+                        ["io"] = "@conditional.inner",
                     },
                 },
                 move = {

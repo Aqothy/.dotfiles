@@ -59,7 +59,6 @@ opt.listchars = {
 }
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
-opt.cursorline = true
 
 opt.fileencoding = "utf-8"
 

@@ -15,14 +15,14 @@ map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 map("n", "<C-t>", "<cmd>tabnew<cr>", { desc = "New Tab" })
 map("n", "<C-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<C-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map({ 'n', 'x', 'o' }, 'H', '^', { desc = "Beginning of line" })
-map({ 'n', 'x', 'o' }, 'L', 'g_', { desc = "End of line" })
+map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
+map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
 
 -- Editing and text manipulation
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-map("n", "c.", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word" })
+map("n", "c,", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word" })
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
@@ -42,5 +42,7 @@ local diagnostic_goto = function(next, severity)
     end
 end
 
+map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
+map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
