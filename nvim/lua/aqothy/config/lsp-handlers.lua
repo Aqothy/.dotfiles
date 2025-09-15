@@ -74,7 +74,7 @@ end
 
 function M.has(method, client, bufnr)
     method = method:find("/") and method or "textDocument/" .. method
-    if client:supports_method(method, { bufnr = bufnr }) then
+    if client:supports_method(method, bufnr) then
         return true
     end
     return false
@@ -119,7 +119,7 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
-    if client:supports_method("textDocument/linkedEditingRange", { bufnr = bufnr }) then
+    if client:supports_method("textDocument/linkedEditingRange", bufnr) then
         vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
     end
 
