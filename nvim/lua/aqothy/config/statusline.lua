@@ -12,7 +12,32 @@ local autocmd = api.nvim_create_autocmd
 local has_icons, icons = pcall(require, "aqothy.config.icons")
 local has_mini_icons, mini_icons = pcall(require, "mini.icons")
 
+local groups = {}
+
+local mode_colors = {
+    Normal = "Cursor",
+    Pending = "PMenuSel",
+    Replace = "Substitute",
+    Visual = "Visual",
+    Insert = "DiffAdd",
+    Command = "IncSearch",
+    Other = "ErrorMsg",
+}
+
+for mode, color in pairs(mode_colors) do
+    groups["AqlineMode" .. mode] = { link = color }
+end
+
+groups["AqlineFileInfo"] = { link = "QuickFixLine" }
+
+for group, opts in pairs(groups) do
+    vim.api.nvim_set_hl(0, group, opts)
+end
+
+vim.opt.laststatus = 3
+
 local os_uname = uv.os_uname()
+
 M.sysname = fn.has("win32") == 1 and "windows" or (os_uname.sysname == "Darwin" and "macos" or os_uname.sysname:lower())
 
 M.os_cache = nil
@@ -89,34 +114,10 @@ for _, data in pairs(M.MODE_MAP) do
     local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
     M.mode_hl_cache.long[mode_str] = M.mode_hl_cache.long[mode_str]
-        or (
-            "%#StatusLineModeSeparator"
-            .. hl
-            .. "#"
-            .. "%#StatusLineMode"
-            .. hl
-            .. "# "
-            .. mode_str
-            .. " "
-            .. "%#StatusLineModeSeparator"
-            .. hl
-            .. "#"
-        )
+        or ("%#AqlineMode" .. hl .. "# " .. mode_str .. " %0*")
 
     M.mode_hl_cache.short[mode_str] = M.mode_hl_cache.short[mode_str]
-        or (
-            "%#StatusLineModeSeparator"
-            .. hl
-            .. "#"
-            .. "%#StatusLineMode"
-            .. hl
-            .. "# "
-            .. data.short
-            .. " "
-            .. "%#StatusLineModeSeparator"
-            .. hl
-            .. "#"
-        )
+        or ("%#AqlineMode" .. hl .. "# " .. data.short .. " %0*")
 end
 
 -- For op-pending mode
@@ -133,28 +134,19 @@ function M.mode_component()
     local mode_data = M.MODE_MAP[mode] or { long = "UNKNOWN", short = "U" }
     local mode_str = mode_data.long
 
-    local use_short = M.win_width and M.win_width < 100
+    local use_short = M.win_width and M.win_width < 120
     local cache = use_short and M.mode_hl_cache.short[mode_str] or M.mode_hl_cache.long[mode_str]
 
-    return cache
-        or (
-            "%#StatusLineModeSeparatorOther#%#StatusLineModeOther# "
-            .. (use_short and mode_data.short or mode_str)
-            .. " %#StatusLineModeSeparatorOther#"
-        )
+    return cache or ("%#AqlineModeOther# " .. (use_short and mode_data.short or mode_str) .. " %0*")
 end
 
-function M.git_components(trunc_width)
+function M.git_components()
     local git_info = vim.b.gitsigns_status_dict
-    if not git_info or git_info.head == "" then
-        return ""
+    if not git_info then
+        return "", ""
     end
 
-    local head = "%0* " .. git_info.head
-
-    if M.win_width and M.win_width < (trunc_width or 75) then
-        return head
-    end
+    local branch = (git_info.head and git_info.head ~= "") and ("%0* " .. git_info.head) or ""
 
     local status_parts = {}
     local git_icons = has_icons and icons.git or { added = "+", modified = "~", removed = "-" }
@@ -169,8 +161,9 @@ function M.git_components(trunc_width)
         status_parts[#status_parts + 1] = "%#GitSignsDelete#" .. git_icons.removed .. " " .. git_info.removed
     end
 
-    local status = (#status_parts > 0) and table.concat(status_parts, " ") or ""
-    return head .. (status ~= "" and " " .. status or "")
+    local changes = (#status_parts > 0) and table.concat(status_parts, " ") or ""
+
+    return branch, changes
 end
 
 M.file_cache = {}
@@ -188,7 +181,6 @@ autocmd({ "BufEnter", "WinEnter", "BufWritePost", "FileChangedShellPost" }, {
     desc = "Invalidate file cache",
 })
 
--- Garbage collect
 autocmd("BufDelete", {
     group = stl_group,
     callback = function(ev)
@@ -278,7 +270,6 @@ autocmd("DiagnosticChanged", {
         else
             M.diagnostic_counts[data.buf] = nil
         end
-        -- Invalidate string cache for this buffer
         M.diagnostic_str_cache[data.buf] = nil
     end,
     desc = "Track diagnostics",
@@ -336,9 +327,8 @@ end
 autocmd("OptionSet", {
     group = stl_group,
     pattern = { "fileencoding", "expandtab", "tabstop" },
-    callback = function()
-        local buf = api.nvim_get_current_buf()
-        M.file_info_cache[buf] = nil
+    callback = function(ev)
+        M.file_info_cache[ev.buf] = nil
     end,
     desc = "Invalidate file info cache on option change",
 })
@@ -349,7 +339,7 @@ function M.file_info_component()
         return M.file_info_cache[buf]
     end
 
-    M.file_info_cache[buf] = "%#StatusLineModeSeparatorOther#"
+    M.file_info_cache[buf] = "%#AqlineFileInfo#"
         .. bo.fileencoding
         .. (bo.expandtab and " Spaces:" or " Tab:")
         .. bo.tabstop
@@ -357,16 +347,37 @@ function M.file_info_component()
     return M.file_info_cache[buf]
 end
 
+function M.render_inactive()
+    local parts = {}
+
+    local file_comp = M.filetype_component()
+    if file_comp ~= "" then
+        parts[#parts + 1] = file_comp
+    end
+
+    parts[#parts + 1] = "%#StatusLineNC#%="
+
+    local diag = M.diagnostics_component()
+    if diag ~= "" then
+        parts[#parts + 1] = diag
+    end
+
+    return " " .. table.concat(parts, "  ") .. " "
+end
+
 function M.render()
     if not M.win_width then
-        M.win_width = api.nvim_win_get_width(0)
+        M.win_width = vim.o.laststatus == 3 and vim.o.columns or api.nvim_win_get_width(0)
     end
 
     local parts = { M.mode_component() }
 
-    local git_info = M.git_components(100)
-    if git_info ~= "" then
-        parts[#parts + 1] = git_info
+    local git_branch, git_changes = M.git_components()
+    if git_branch ~= "" then
+        parts[#parts + 1] = git_branch
+    end
+    if M.win_width > 100 and git_changes ~= "" then
+        parts[#parts + 1] = git_changes
     end
 
     local file_comp = M.filetype_component()
@@ -384,16 +395,16 @@ function M.render()
     end
 
     if M.win_width > 120 then
-        local filesize = M.filesize_component()
-        if filesize ~= "" then
-            parts[#parts + 1] = filesize
+        local os_comp = M.os_component()
+        if os_comp ~= "" then
+            parts[#parts + 1] = os_comp
         end
     end
 
     if M.win_width > 120 then
-        local os_comp = M.os_component()
-        if os_comp ~= "" then
-            parts[#parts + 1] = os_comp
+        local filesize = M.filesize_component()
+        if filesize ~= "" then
+            parts[#parts + 1] = filesize
         end
     end
 
@@ -407,21 +418,30 @@ function M.render()
     return table.concat(parts, "  ") .. " "
 end
 
-M.win_width = api.nvim_win_get_width(0)
+M.win_width = vim.o.laststatus == 3 and vim.o.columns or api.nvim_win_get_width(0)
 
-autocmd("WinResized", {
-    group = stl_group,
-    callback = function()
-        M.win_width = nil
-    end,
-    desc = "Invalidate window width cache",
-})
+if vim.o.laststatus == 3 then
+    autocmd("VimResized", {
+        group = stl_group,
+        callback = function()
+            M.win_width = nil
+        end,
+        desc = "Invalidate width cache on Vim resize",
+    })
+else
+    autocmd("WinResized", {
+        group = stl_group,
+        callback = function()
+            M.win_width = nil
+        end,
+        desc = "Invalidate window width cache",
+    })
+end
 
 vim.g.qf_disable_statusline = 1
 vim.opt.showmode = false
 vim.opt.ruler = false
-vim.opt.laststatus = 3
 vim.go.statusline =
-    "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'aqothy.config.statusline'.render() : '%#StatusLineNC#%F%='%}"
+    "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'aqothy.config.statusline'.render() : v:lua.require'aqothy.config.statusline'.render_inactive()%}"
 
 return M
