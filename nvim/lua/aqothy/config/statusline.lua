@@ -34,7 +34,7 @@ for group, opts in pairs(groups) do
     vim.api.nvim_set_hl(0, group, opts)
 end
 
-vim.opt.laststatus = 3
+-- vim.opt.laststatus = 3
 
 local os_uname = uv.os_uname()
 
@@ -418,25 +418,15 @@ function M.render()
     return table.concat(parts, "  ") .. " "
 end
 
-M.win_width = vim.o.laststatus == 3 and vim.o.columns or api.nvim_win_get_width(0)
+M.win_width = nil
 
-if vim.o.laststatus == 3 then
-    autocmd("VimResized", {
-        group = stl_group,
-        callback = function()
-            M.win_width = nil
-        end,
-        desc = "Invalidate width cache on Vim resize",
-    })
-else
-    autocmd("WinResized", {
-        group = stl_group,
-        callback = function()
-            M.win_width = nil
-        end,
-        desc = "Invalidate window width cache",
-    })
-end
+autocmd({ "VimResized", "WinResized" }, {
+    group = stl_group,
+    callback = function()
+        M.win_width = nil
+    end,
+    desc = "Invalidate window width cache",
+})
 
 vim.g.qf_disable_statusline = 1
 vim.opt.showmode = false

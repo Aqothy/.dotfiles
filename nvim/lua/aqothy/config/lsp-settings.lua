@@ -11,6 +11,9 @@ local jsts_config = {
     tsserver = {
         nodePath = "/Users/aqothy/.local/bin/npc",
     },
+    suggest = {
+        completeFunctionCalls = true,
+    },
 }
 
 M["vtsls"] = {
@@ -56,6 +59,19 @@ M["vtsls"] = {
 
 M["lua_ls"] = {
     enabled = true,
+    settings = {
+        Lua = {
+            workspace = {
+                checkThirdParty = false,
+            },
+            doc = {
+                privateName = { "^_" },
+            },
+            completion = {
+                callSnippet = "Replace",
+            },
+        },
+    },
 }
 
 M["clangd"] = {
@@ -65,9 +81,12 @@ M["clangd"] = {
         "--background-index",
         "--clang-tidy",
         "--header-insertion=iwyu",
-        "--fallback-style=Google",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=WebKit",
     },
     init_options = {
+        usePlaceholders = true,
         completeUnimported = true,
         clangdFileStatus = true,
     },
@@ -85,6 +104,7 @@ M["gopls"] = {
                 useany = true,
             },
             completeUnimported = true,
+            usePlaceholders = true,
             staticcheck = true,
         },
     },
@@ -132,6 +152,13 @@ M["texlab"] = {
             },
         },
     },
+}
+
+M["hls"] = {
+    enabled = true,
+    root_dir = function(_, on_dir)
+        on_dir(vim.fn.getcwd())
+    end,
 }
 
 return M

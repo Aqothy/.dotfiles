@@ -16,10 +16,12 @@ return {
             group = lsp_group,
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
-                local value = ev.data.params.value
+
                 if not client then
                     return
                 end
+
+                local value = ev.data.params.value
 
                 local is_end = value.kind == "end"
 
@@ -41,7 +43,7 @@ return {
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
-                if not client then
+                if not client or string.find(client.name:lower(), "copilot") then
                     return
                 end
 

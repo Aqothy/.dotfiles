@@ -14,6 +14,6 @@ require("aqothy.config")
 require("aqothy.config.autocmds")
 require("aqothy.config.keymaps")
 require("aqothy.config.commands")
-require("aqothy.config.tabline")
+require("aqothy.config.statusline")
 
 require("vim._extui").enable({})

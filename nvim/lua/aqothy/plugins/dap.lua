@@ -14,6 +14,18 @@ return {
         config = function()
             local dap = require("dap")
 
+            local icons = require("aqothy.config.icons").dap
+
+            for name, sign in pairs(icons) do
+                sign = type(sign) == "table" and sign or { sign }
+                vim.fn.sign_define("Dap" .. name, {
+                    text = sign[1] --[[@as string]],
+                    texthl = sign[2] or "DiagnosticInfo",
+                    linehl = sign[3],
+                    numhl = sign[3],
+                })
+            end
+
             local settings = require("aqothy.config.dap-settings")
 
             for adapter_name, opts in pairs(settings) do

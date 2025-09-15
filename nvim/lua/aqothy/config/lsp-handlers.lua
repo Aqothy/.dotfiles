@@ -29,9 +29,20 @@ function M.get_capabilities()
 end
 
 function M.setup()
+    local user = require("aqothy.config.icons")
+
     local config = {
         signs = false,
-        virtual_text = true,
+        virtual_text = {
+            prefix = function(diagnostic)
+                local icons = user.diagnostics
+                for d, icon in pairs(icons) do
+                    if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+                        return icon .. " "
+                    end
+                end
+            end,
+        },
         update_in_insert = false,
         underline = { severity = vim.diagnostic.severity.ERROR },
         severity_sort = true,
@@ -61,9 +72,9 @@ function M.setup()
     end
 end
 
-function M.has(method, client)
+function M.has(method, client, bufnr)
     method = method:find("/") and method or "textDocument/" .. method
-    if client:supports_method(method) then
+    if client:supports_method(method, { bufnr = bufnr }) then
         return true
     end
     return false
@@ -108,7 +119,7 @@ end
 local settings = require("aqothy.config.lsp-settings")
 
 function M.on_attach(client, bufnr)
-    if client:supports_method("textDocument/linkedEditingRange") then
+    if client:supports_method("textDocument/linkedEditingRange", { bufnr = bufnr }) then
         vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
     end
 
@@ -125,7 +136,7 @@ function M.on_attach(client, bufnr)
         local lhs, rhs, opts, mode = unpack(key)
         mode = mode or "n"
 
-        local has_met = not opts.has or M.has(opts.has, client)
+        local has_met = not opts.has or M.has(opts.has, client, bufnr)
 
         if has_met then
             opts.has = nil

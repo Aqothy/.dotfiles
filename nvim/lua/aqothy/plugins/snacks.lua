@@ -18,12 +18,10 @@ return {
 
         picker = {
             enabled = true,
-            icons = {
-                files = {
-                    enabled = false,
-                },
-            },
             ui_select = true,
+            icons = {
+                kinds = require("aqothy.config.icons").kinds,
+            },
             win = {
                 input = {
                     keys = {
@@ -64,6 +62,12 @@ return {
             },
         },
 
+        zen = {
+            toggles = {
+                dim = false,
+            },
+        },
+
         image = {
             enabled = false,
             convert = {
@@ -78,6 +82,15 @@ return {
             lazygit = {
                 width = 0,
                 height = 0.99,
+            },
+            zen = {
+                width = function()
+                    return math.min(120, math.floor(vim.o.columns * 0.65))
+                end,
+                backdrop = {
+                    transparent = false,
+                    blend = 95,
+                },
             },
         },
     },
@@ -113,7 +126,9 @@ return {
         { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "sidebar" } }) end, desc = "undo tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
         { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profiler Picker" },
+        { "<leader>zz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>ld", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
+        { "<leader>lD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
     },
 }

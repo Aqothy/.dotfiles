@@ -36,5 +36,8 @@ return {
                 enabled = false,
             },
         },
+        appearance = {
+            kind_icons = require("aqothy.config.icons").kinds,
+        },
     },
 }
