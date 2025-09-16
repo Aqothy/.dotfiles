@@ -170,7 +170,7 @@ M.file_cache = {}
 M.file_info_cache = {}
 M.file_size_cache = {}
 
-autocmd({ "BufEnter", "WinEnter", "BufWritePost", "FileChangedShellPost" }, {
+autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
     group = stl_group,
     callback = function(ev)
         local buf = ev.buf
@@ -188,6 +188,8 @@ autocmd("BufDelete", {
         M.file_cache[buf] = nil
         M.file_info_cache[buf] = nil
         M.file_size_cache[buf] = nil
+        M.diagnostic_counts[buf] = nil
+        M.diagnostic_str_cache[buf] = nil
     end,
     desc = "Cleanup buffer caches",
 })
@@ -195,11 +197,9 @@ autocmd("BufDelete", {
 autocmd("FileType", {
     group = stl_group,
     callback = function(ev)
-        -- Only invalidate cache for normal file buffers
-        if vim.bo[ev.buf].buftype == "" then
-            M.file_cache[ev.buf] = nil
-            M.file_info_cache[ev.buf] = nil
-        end
+        local buf = ev.buf
+        M.file_cache[buf] = nil
+        M.file_info_cache[buf] = nil
     end,
     desc = "Invalidate file cache on filetype change",
 })
@@ -248,8 +248,13 @@ function M.filetype_component()
         display_path = "%t" -- Use only the filename
     end
 
-    M.file_cache[buf] = icon_part .. "%0*" .. display_path .. "%m%r"
-    return M.file_cache[buf]
+    local result = icon_part .. "%0*" .. display_path .. "%m%r"
+
+    if bo.buftype == "" then
+        M.file_cache[buf] = result
+    end
+
+    return result
 end
 
 local diag_signs = has_icons and icons.diagnostics or { Error = "E", Warn = "W", Info = "I", Hint = "H" }
@@ -264,13 +269,18 @@ M.diagnostic_str_cache = {}
 
 autocmd("DiagnosticChanged", {
     group = stl_group,
-    callback = function(data)
-        if api.nvim_buf_is_valid(data.buf) then
-            M.diagnostic_counts[data.buf] = vim.diagnostic.count(data.buf)
+    callback = function(ev)
+        local buf = ev.buf
+        if api.nvim_buf_is_valid(buf) then
+            if vim.bo[buf].buftype == "" then
+                M.diagnostic_counts[buf] = vim.diagnostic.count(buf)
+            else
+                M.diagnostic_counts[buf] = nil
+            end
         else
-            M.diagnostic_counts[data.buf] = nil
+            M.diagnostic_counts[buf] = nil
         end
-        M.diagnostic_str_cache[data.buf] = nil
+        M.diagnostic_str_cache[buf] = nil
     end,
     desc = "Track diagnostics",
 })
@@ -284,7 +294,9 @@ function M.diagnostics_component()
 
     local count = M.diagnostic_counts[buf]
     if not count then
-        M.diagnostic_str_cache[buf] = ""
+        if bo.buftype == "" then
+            M.diagnostic_str_cache[buf] = ""
+        end
         return ""
     end
 
@@ -299,8 +311,13 @@ function M.diagnostics_component()
         end
     end
 
-    M.diagnostic_str_cache[buf] = (#parts > 0) and table.concat(parts, " ") or ""
-    return M.diagnostic_str_cache[buf]
+    local result = (#parts > 0) and table.concat(parts, " ") or ""
+
+    if bo.buftype == "" then
+        M.diagnostic_str_cache[buf] = result
+    end
+
+    return result
 end
 
 local function format_filesize(size)
@@ -319,16 +336,27 @@ M.filesize_component = function()
         return M.file_size_cache[buf]
     end
 
-    local size = math.max(fn.line2byte(fn.line("$") + 1) - 1, 0)
-    M.file_size_cache[buf] = "%0*" .. format_filesize(size)
-    return M.file_size_cache[buf]
+    local size = fn.getfsize(fn.expand("%:p"))
+    -- Handle new/unsaved files
+    if size < 0 then
+        size = 0
+    end
+
+    local result = "%0*" .. format_filesize(size)
+
+    if bo.buftype == "" then
+        M.file_size_cache[buf] = result
+    end
+
+    return result
 end
 
 autocmd("OptionSet", {
     group = stl_group,
     pattern = { "fileencoding", "expandtab", "tabstop" },
-    callback = function(ev)
-        M.file_info_cache[ev.buf] = nil
+    callback = function()
+        local buf = api.nvim_get_current_buf()
+        M.file_info_cache[buf] = nil
     end,
     desc = "Invalidate file info cache on option change",
 })
@@ -339,12 +367,13 @@ function M.file_info_component()
         return M.file_info_cache[buf]
     end
 
-    M.file_info_cache[buf] = "%#AqlineFileInfo#"
-        .. bo.fileencoding
-        .. (bo.expandtab and " Spaces:" or " Tab:")
-        .. bo.tabstop
+    local result = "%#AqlineFileInfo#" .. bo.fileencoding .. (bo.expandtab and " Spaces:" or " Tab:") .. bo.tabstop
 
-    return M.file_info_cache[buf]
+    if bo.buftype == "" then
+        M.file_info_cache[buf] = result
+    end
+
+    return result
 end
 
 function M.render_inactive()
@@ -371,12 +400,13 @@ function M.render()
     end
 
     local parts = { M.mode_component() }
+    local width = M.win_width
 
     local git_branch, git_changes = M.git_components()
     if git_branch ~= "" then
         parts[#parts + 1] = git_branch
     end
-    if M.win_width > 100 and git_changes ~= "" then
+    if width > 100 and git_changes ~= "" then
         parts[#parts + 1] = git_changes
     end
 
@@ -387,28 +417,24 @@ function M.render()
 
     parts[#parts + 1] = "%0*%="
 
-    if M.win_width > 75 then
+    if width > 75 then
         local diag = M.diagnostics_component()
         if diag ~= "" then
             parts[#parts + 1] = diag
         end
     end
 
-    if M.win_width > 120 then
+    if width > 120 then
         local os_comp = M.os_component()
         if os_comp ~= "" then
             parts[#parts + 1] = os_comp
         end
-    end
 
-    if M.win_width > 120 then
         local filesize = M.filesize_component()
         if filesize ~= "" then
             parts[#parts + 1] = filesize
         end
-    end
 
-    if M.win_width > 120 then
         local file_info = M.file_info_component()
         if file_info ~= "" then
             parts[#parts + 1] = file_info
