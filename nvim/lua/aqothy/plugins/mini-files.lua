@@ -97,6 +97,7 @@ return {
                     show_dotfiles = true
                     mf.close()
                 end, "Close this window")
+                MiniFiles.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
             end,
         })
 

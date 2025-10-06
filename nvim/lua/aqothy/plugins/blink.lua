@@ -1,10 +1,11 @@
 return {
     "saghen/blink.cmp",
     event = { "InsertEnter", "CmdLineEnter" },
-    opts_extend = { "sources.default" },
     opts = {
         keymap = {
             preset = "enter",
+            ["<Up>"] = false,
+            ["<Down>"] = false,
         },
         cmdline = {
             completion = {
@@ -28,12 +29,6 @@ return {
                 "exact",
                 "score",
                 "sort_text",
-            },
-        },
-        signature = {
-            enabled = true,
-            trigger = {
-                enabled = false,
             },
         },
         appearance = {

@@ -18,6 +18,7 @@ return {
                     LspReferenceText = { link = "Visual" },
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
+                    DiffText = { link = "DiffAdd" },
                 }
             else
                 overrides = {
@@ -27,6 +28,7 @@ return {
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
+                    DiffText = { link = "DiffAdd" },
                 }
             end
 

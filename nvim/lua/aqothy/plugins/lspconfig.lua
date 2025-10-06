@@ -1,11 +1,11 @@
 return {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile", "BufWritePre" },
+    event = "LazyFile",
     cmd = "LspInfo",
     keys = {
         { "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },
     },
-    config = function()
+    config = vim.schedule_wrap(function()
         local handlers = require("aqothy.config.lsp-handlers")
 
         handlers.setup()
@@ -43,7 +43,7 @@ return {
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
-                if not client or string.find(client.name:lower(), "copilot") then
+                if not client then
                     return
                 end
 
@@ -60,10 +60,10 @@ return {
         })
 
         local params = {
-            capabilities = handlers.get_capabilities(),
+            capabilities = handlers.capabilities,
         }
 
-        -- global capabilities, lspconfig, peronal config in order of increasing priority
+        -- global capabilities, lspconfig, personal config in order of increasing priority
         vim.lsp.config("*", params)
 
         local settings = require("aqothy.config.lsp-settings")
@@ -73,5 +73,5 @@ return {
                 vim.lsp.enable(lsp)
             end
         end
-    end,
+    end),
 }

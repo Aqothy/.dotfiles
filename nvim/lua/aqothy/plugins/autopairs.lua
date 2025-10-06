@@ -1,5 +1,10 @@
 return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
-    opts = {},
+    opts = {
+        fast_wrap = {
+            chars = { "{", "[", "(", '"', "'", "<" },
+            end_key = "e",
+        },
+    },
 }

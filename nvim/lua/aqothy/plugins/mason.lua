@@ -2,7 +2,6 @@ return {
     "mason-org/mason.nvim",
     build = ":MasonUpdate",
     keys = { { "<leader>tm", "<cmd>Mason<cr>", desc = "Mason" } },
-    opts_extend = { "ensure_installed" },
     init = function()
         local is_windows = vim.fn.has("win32") ~= 0
         local sep = is_windows and "\\" or "/"
@@ -24,11 +23,16 @@ return {
             "stylua",
             "gofumpt",
             "goimports",
+            "prettier",
 
             -- Dap
             "js-debug-adapter",
             "delve",
             "codelldb",
+
+            -- Tools
+            "tree-sitter-cli",
+            "gomodifytags",
         },
 
         ui = {

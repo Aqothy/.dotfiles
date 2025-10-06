@@ -30,9 +30,10 @@ return {
             lua = { "stylua" },
             go = { "goimports", "gofumpt" },
             swift = { "swift" },
-            python = { "ruff_organize_imports", "ruff_format" },
+            python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
+            haskell = { name = "hls", lsp_format = "prefer" },
             -- For filetypes without a formatter:
-            ["_"] = { "trim_whitespace", "trim_newlines" },
+            ["_"] = { "trim_whitespace", "trim_newlines", lsp_format = "last" },
         },
         default_format_opts = {
             lsp_format = "fallback",

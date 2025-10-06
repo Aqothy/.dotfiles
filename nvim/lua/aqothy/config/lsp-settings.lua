@@ -2,6 +2,8 @@ local M = {}
 
 local utils = require("aqothy.config.utils")
 
+local map = vim.keymap.set
+
 -- use enabled field to disable or enable a lsp
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
@@ -15,6 +17,8 @@ local jsts_config = {
         completeFunctionCalls = true,
     },
 }
+
+local base_vtsls_on_attach = vim.lsp.config.vtsls.on_attach
 
 M["vtsls"] = {
     enabled = true,
@@ -32,29 +36,22 @@ M["vtsls"] = {
         typescript = jsts_config,
         javascript = jsts_config,
     },
-    keys = {
-        {
-            "<leader>oi",
-            function()
-                utils.action("source.addMissingImports.ts")
-                vim.defer_fn(function()
-                    utils.action("source.organizeImports")
-                end, 100)
-            end,
-            {
-                desc = "Organize Imports",
-            },
-        },
-        {
-            "<leader>rm",
-            function()
-                utils.action("source.removeUnused.ts")
-            end,
-            {
-                desc = "Remove Unused",
-            },
-        },
-    },
+    on_attach = function(client, bufnr)
+        if base_vtsls_on_attach then
+            base_vtsls_on_attach(client, bufnr)
+        end
+
+        map("n", "<leader>oi", function()
+            utils.action("source.addMissingImports.ts")
+            vim.defer_fn(function()
+                utils.action("source.organizeImports")
+            end, 100)
+        end, { buffer = bufnr, desc = "Organize Imports", silent = true })
+
+        map("n", "<leader>rm", function()
+            utils.action("source.removeUnused.ts")
+        end, { buffer = bufnr, desc = "Remove Unused", silent = true })
+    end,
 }
 
 M["lua_ls"] = {
@@ -92,6 +89,8 @@ M["clangd"] = {
     },
 }
 
+local base_gopls_on_attach = vim.lsp.config.gopls.on_attach
+
 M["gopls"] = {
     enabled = true,
     settings = {
@@ -108,17 +107,15 @@ M["gopls"] = {
             staticcheck = true,
         },
     },
-    keys = {
-        {
-            "<leader>rr",
-            function()
-                utils.action("refactor.rewrite.fillStruct")
-            end,
-            {
-                desc = "Fill Struct",
-            },
-        },
-    },
+    on_attach = function(client, bufnr)
+        if base_gopls_on_attach then
+            base_gopls_on_attach(client, bufnr)
+        end
+
+        map("n", "<leader>rr", function()
+            utils.action("refactor.rewrite.fillStruct")
+        end, { buffer = bufnr, desc = "Fill Struct", silent = true })
+    end,
 }
 
 M["basedpyright"] = {
@@ -137,13 +134,10 @@ M["sourcekit"] = {
     filetypes = { "swift", "objc", "objcpp" },
 }
 
+local base_texlab_on_attach = vim.lsp.config.texlab.on_attach
+
 M["texlab"] = {
     enabled = true,
-    keys = {
-        { "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { desc = "Build Latex File" } },
-        { "<localleader>lv", "<cmd>LspTexlabForward<cr>", { desc = "Forward Search" } },
-        { "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { desc = "Clean Aux" } },
-    },
     settings = {
         texlab = {
             forwardSearch = {
@@ -152,6 +146,17 @@ M["texlab"] = {
             },
         },
     },
+    on_attach = function(client, bufnr)
+        if base_texlab_on_attach then
+            base_texlab_on_attach(client, bufnr)
+        end
+
+        -- stylua: ignore start
+        map("n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { buffer = bufnr, desc = "Build Latex File", silent = true })
+        map("n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { buffer = bufnr, desc = "Forward Search", silent = true })
+        map("n", "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { buffer = bufnr, desc = "Clean Aux", silent = true })
+        -- stylua: ignore end
+    end,
 }
 
 M["hls"] = {

@@ -1,12 +1,14 @@
-vim.g.mapleader = vim.keycode("<space>")
-vim.g.maplocalleader = vim.keycode("\\")
+local g = vim.g
+g.mapleader = vim.keycode("<space>")
+g.maplocalleader = vim.keycode("\\")
 
 -- Disable health checks for these providers.
-vim.g.loaded_python3_provider = 0
-vim.g.loaded_ruby_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_node_provider = 0
-vim.g.tsc_makeprg = "npx tsc --noEmit"
+g.loaded_python3_provider = 0
+g.loaded_ruby_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_node_provider = 0
+
+g.tsc_makeprg = "npx tsc --noEmit"
 
 local opt = vim.opt
 
@@ -51,7 +53,6 @@ opt.winborder = "rounded"
 opt.diffopt =
     { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
-opt.ruler = false
 opt.list = true
 opt.listchars = {
     tab = "▏ ",
@@ -59,21 +60,17 @@ opt.listchars = {
 }
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
+opt.showcmd = false
+opt.fillchars = { eob = " ", diff = "╱" }
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.background = "dark"
 
 opt.fileencoding = "utf-8"
 
 if vim.fn.executable("rg") == 1 then
-    opt.grepprg = "rg --vimgrep --smart-case -g '!.git' --hidden"
+    opt.grepprg = 'rg --vimgrep --smart-case -g "!.git" --hidden'
 end
 
 opt.confirm = true
 opt.shortmess:append({ W = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-
-opt.showcmd = false
-
-opt.fillchars = { eob = " ", diff = "╱" }
-
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-
-opt.background = "dark"

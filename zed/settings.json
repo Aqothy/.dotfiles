@@ -12,11 +12,9 @@
     "diagnostics": false
   },
   "vim_mode": true,
-  "ui_font_size": 15,
-  "buffer_font_size": 15,
   "buffer_font_family": "Hack Nerd Font Mono",
   "terminal": {
-    "line_height": { "custom": 1.15 }
+    "line_height": { "custom": 1.2 }
   },
   "vim": {
     "toggle_relative_line_numbers": true

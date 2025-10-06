@@ -204,6 +204,14 @@ autocmd("FileType", {
     desc = "Invalidate file cache on filetype change",
 })
 
+autocmd("DirChanged", {
+    group = stl_group,
+    callback = function(ev)
+        M.file_cache[ev.buf] = nil
+    end,
+    desc = "Invalidate file cache on directory change",
+})
+
 local path_sep = M.sysname == "windows" and "\\" or "/"
 
 function M.truncate_path(path, max_len)
@@ -271,12 +279,8 @@ autocmd("DiagnosticChanged", {
     group = stl_group,
     callback = function(ev)
         local buf = ev.buf
-        if api.nvim_buf_is_valid(buf) then
-            if vim.bo[buf].buftype == "" then
-                M.diagnostic_counts[buf] = vim.diagnostic.count(buf)
-            else
-                M.diagnostic_counts[buf] = nil
-            end
+        if api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "" then
+            M.diagnostic_counts[buf] = vim.diagnostic.count(buf)
         else
             M.diagnostic_counts[buf] = nil
         end
@@ -321,12 +325,12 @@ function M.diagnostics_component()
 end
 
 local function format_filesize(size)
-    if size < 1024 then
+    if size < 1000 then
         return string.format("%db", size)
-    elseif size < 1048576 then
-        return string.format("%.2fkb", size / 1024)
+    elseif size < 1000000 then
+        return string.format("%.2fkb", size / 1000)
     else
-        return string.format("%.2fmb", size / 1048576)
+        return string.format("%.2fmb", size / 1000000)
     end
 end
 
@@ -406,22 +410,21 @@ function M.render()
     if git_branch ~= "" then
         parts[#parts + 1] = git_branch
     end
-    if width > 100 and git_changes ~= "" then
-        parts[#parts + 1] = git_changes
-    end
 
     local file_comp = M.filetype_component()
     if file_comp ~= "" then
         parts[#parts + 1] = file_comp
     end
 
+    if width > 100 and git_changes ~= "" then
+        parts[#parts + 1] = git_changes
+    end
+
     parts[#parts + 1] = "%0*%="
 
-    if width > 75 then
-        local diag = M.diagnostics_component()
-        if diag ~= "" then
-            parts[#parts + 1] = diag
-        end
+    local diag = M.diagnostics_component()
+    if diag ~= "" then
+        parts[#parts + 1] = diag
     end
 
     if width > 120 then
@@ -446,7 +449,7 @@ end
 
 M.win_width = nil
 
-autocmd({ "VimResized", "WinResized" }, {
+autocmd({ "VimResized", "WinResized", "WinEnter" }, {
     group = stl_group,
     callback = function()
         M.win_width = nil
@@ -457,7 +460,7 @@ autocmd({ "VimResized", "WinResized" }, {
 vim.g.qf_disable_statusline = 1
 vim.opt.showmode = false
 vim.opt.ruler = false
-vim.go.statusline =
+vim.opt.statusline =
     "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'aqothy.config.statusline'.render() : v:lua.require'aqothy.config.statusline'.render_inactive()%}"
 
 return M

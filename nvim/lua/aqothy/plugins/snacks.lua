@@ -82,6 +82,16 @@ return {
             lazygit = {
                 width = 0,
                 height = 0.99,
+                keys = {
+                    quit = {
+                        "q",
+                        function()
+                            vim.cmd("close")
+                        end,
+                        mode = "t",
+                        desc = "Quit Lazygit Persistent",
+                    },
+                },
             },
             zen = {
                 width = function()

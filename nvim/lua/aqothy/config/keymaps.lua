@@ -8,21 +8,33 @@ map("n", "n", "nzvzz", { desc = "Next search result, open folds, and center scre
 map("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map("i", "<c-e>", "<c-o>A", { desc = "End" })
+map("n", "<leader>\\", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
-map("n", "<C-t>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-map("n", "<C-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<C-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
-map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
+map("n", "c.", ":%s/<C-r><C-w>//gc<Left><Left><Left>", { desc = "Replace instances of word" })
+map("n", "c,", ":%s/", { desc = "Find and Replace" })
 
 -- Editing and text manipulation
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-map("n", "c,", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word" })
+
+if vim.fn.has("mac") == 1 then
+    map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
+else
+    map({ "i", "x", "n", "s" }, "<C-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
+end
+map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+
+map(
+    "n",
+    "<leader>R",
+    "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+    { desc = "Redraw / Clear hlsearch / Diff Update" }
+)
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
@@ -46,3 +58,6 @@ map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
+map("n", "<localleader>d", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
+
+map("n", "<leader>pm", "<cmd>Lazy<cr>", { desc = "Package Manager" })
