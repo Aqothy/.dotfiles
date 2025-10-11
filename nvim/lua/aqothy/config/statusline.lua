@@ -31,6 +31,7 @@ end
 groups["AqlineFileInfo"] = { link = "QuickFixLine" }
 
 for group, opts in pairs(groups) do
+    opts.default = true
     vim.api.nvim_set_hl(0, group, opts)
 end
 
@@ -194,16 +195,6 @@ autocmd("BufDelete", {
     desc = "Cleanup buffer caches",
 })
 
-autocmd("FileType", {
-    group = stl_group,
-    callback = function(ev)
-        local buf = ev.buf
-        M.file_cache[buf] = nil
-        M.file_info_cache[buf] = nil
-    end,
-    desc = "Invalidate file cache on filetype change",
-})
-
 autocmd("DirChanged", {
     group = stl_group,
     callback = function(ev)
@@ -242,7 +233,7 @@ function M.filetype_component()
 
     local relative_path = fn.expand("%:.")
 
-    local icon_part = "%0*󰈙 "
+    local icon_part = "%0*󰈔 "
     if has_mini_icons then
         local icon, icon_hl = mini_icons.get("file", relative_path)
         icon_part = "%#" .. icon_hl .. "#" .. icon .. " "
