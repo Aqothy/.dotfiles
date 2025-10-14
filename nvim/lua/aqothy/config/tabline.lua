@@ -1,12 +1,16 @@
 local M = {}
 
-local api, fn = vim.api, vim.fn
+local api = vim.api
+local fn = vim.fn
 local has_icons, mini_icons = pcall(require, "mini.icons")
 
 local tab_names = {}
 local loaded = false
 local title_cache = {}
 local icon_cache = {}
+local pick_mode = false
+local pick_labels = {}
+local pick_targets = {}
 
 local autocmd = api.nvim_create_autocmd
 local group = api.nvim_create_augroup("AqTabline", { clear = true })
@@ -55,14 +59,17 @@ local function get_title(buf)
     end
 
     local name = api.nvim_buf_get_name(buf)
+    local buftype = vim.bo[buf].buftype
     local value
     if name == "" then
-        value = "[No Name]"
+        value = buftype ~= "" and buftype or "No Name"
     else
-        value = fn.pathshorten(fn.fnamemodify(name, ":p:~:t"))
+        local basename = vim.fs.basename(name)
+        value = basename == "" and name or basename
     end
 
-    if vim.bo[buf].buftype == "" then
+    -- Cache only normal buffers
+    if buftype == "" then
         title_cache[buf] = value
     end
     return value
@@ -70,13 +77,11 @@ end
 
 local function get_icon(buf, hl)
     local cached = icon_cache[buf]
-
     if cached then
         return "%#" .. cached.hl .. "#" .. cached.icon .. hl .. " "
     end
 
     local name = api.nvim_buf_get_name(buf)
-
     local icon, icon_hl
 
     if has_icons then
@@ -93,19 +98,88 @@ local function get_icon(buf, hl)
     return "%#" .. icon_hl .. "#" .. icon .. hl .. " "
 end
 
+local function label_seed_from_name(name)
+    if not name or name == "" then
+        return "a"
+    end
+
+    local char = name:sub(1, 1):lower()
+    if char:match("%l") then
+        return char
+    end
+
+    local fallback = name:match("%a")
+    return fallback and fallback:lower() or "a"
+end
+
+local function next_letter(letter)
+    local byte = letter:byte()
+    byte = byte and byte + 1 or string.byte("a")
+    if byte > string.byte("z") then
+        byte = string.byte("a")
+    end
+    return string.char(byte)
+end
+
+local function compute_pick_labels(tabs)
+    local assigned = {}
+    local labels_for_tab = {}
+    local targets = {}
+    local primary = {}
+    local remaining_primary = {}
+
+    for _, tab in ipairs(tabs) do
+        local win = api.nvim_tabpage_get_win(tab)
+        local buf = api.nvim_win_get_buf(win)
+        local custom = tab_names[tab]
+        local name = custom or get_title(buf)
+        local seed = label_seed_from_name(name)
+
+        primary[tab] = seed
+        remaining_primary[seed] = (remaining_primary[seed] or 0) + 1
+    end
+
+    for _, tab in ipairs(tabs) do
+        local seed = primary[tab]
+        remaining_primary[seed] = remaining_primary[seed] - 1
+
+        local label = seed
+        local attempts = 0
+        while attempts < 26 do
+            local reserved_elsewhere = remaining_primary[label] and remaining_primary[label] > 0
+            if not assigned[label] and (not reserved_elsewhere or label == seed) then
+                break
+            end
+            label = next_letter(label)
+            attempts = attempts + 1
+        end
+
+        assigned[label] = tab
+        labels_for_tab[tab] = label
+        targets[label] = tab
+    end
+
+    return labels_for_tab, targets
+end
+
 local function build_tab(tab, index, is_current)
     local hl = is_current and "%#TabLineSel#" or "%#TabLine#"
     local win = api.nvim_tabpage_get_win(tab)
     local buf = api.nvim_win_get_buf(win)
 
     local custom = tab_names[tab]
-
     local icon = custom and " " or get_icon(buf, hl)
     local label = custom or get_title(buf)
 
-    local modified = api.nvim_get_option_value("modified", { buf = buf }) and " %m " or " "
+    local modified = api.nvim_get_option_value("modified", { buf = buf }) and " ● " or " "
 
     local parts = { hl, "%" .. index .. "T", " " }
+    if pick_mode then
+        local pick = pick_labels[tab]
+        if pick then
+            parts[#parts + 1] = "%#ModeMsg#" .. pick .. hl .. " "
+        end
+    end
     parts[#parts + 1] = icon
     parts[#parts + 1] = label
     parts[#parts + 1] = modified
@@ -114,9 +188,31 @@ local function build_tab(tab, index, is_current)
     return table.concat(parts)
 end
 
+function M.pick_tab()
+    local tabs = api.nvim_list_tabpages()
+
+    pick_mode = true
+    pick_labels, pick_targets = compute_pick_labels(tabs)
+    vim.cmd.redrawtabline()
+
+    local ok, char = pcall(fn.getcharstr)
+    local tab
+    if ok and char then
+        char = char:lower()
+        tab = pick_targets[char]
+    end
+
+    pick_mode = false
+    pick_labels = {}
+    pick_targets = {}
+
+    if tab and api.nvim_tabpage_is_valid(tab) then
+        api.nvim_set_current_tabpage(tab)
+    end
+end
+
 function M.render()
     load_names()
-
     local tabs = api.nvim_list_tabpages()
     local current = api.nvim_get_current_tabpage()
     local chunks = {}
@@ -167,6 +263,8 @@ autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
 })
 
 vim.keymap.set("n", "<leader>tr", M.rename_tab, { desc = "Rename tab" })
+vim.keymap.set("n", "<leader>k", M.pick_tab, { desc = "Pick tab" })
+
 vim.opt.tabline = "%!v:lua.require('aqothy.config.tabline').render()"
 
 return M
