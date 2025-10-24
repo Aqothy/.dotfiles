@@ -1,3 +1,27 @@
+local ensure_installed = {
+    -- Neovim
+    "c",
+    "lua",
+    "vim",
+    "vimdoc",
+    "query",
+    "markdown",
+    "markdown_inline",
+
+    -- extras
+    "javascript",
+    "typescript",
+    "cpp",
+    "go",
+    "bash",
+    "tsx",
+    "json",
+    "swift",
+    "python",
+    "haskell",
+    "regex",
+}
+
 return {
     {
         "nvim-treesitter/nvim-treesitter",
@@ -5,29 +29,6 @@ return {
         build = ":TSUpdate",
         event = "VeryLazy",
         opts = {
-            ensure_installed = {
-                -- Neovim
-                "c",
-                "lua",
-                "vim",
-                "vimdoc",
-                "query",
-                "markdown",
-                "markdown_inline",
-
-                -- extras
-                "javascript",
-                "typescript",
-                "cpp",
-                "go",
-                "bash",
-                "tsx",
-                "json5",
-                "swift",
-                "python",
-                "haskell",
-            },
-
             indent = {
                 disable = { "swift", "python" },
             },
@@ -40,7 +41,12 @@ return {
             local TS = require("nvim-treesitter")
             local ts_utils = require("aqothy.config.utils")
 
-            local function is_disabled(disable, lang, buf)
+            local function is_disabled(lang, feat, buf)
+                local f = opts[feat] or {}
+                if f.enabled == false then
+                    return true
+                end
+                local disable = f.disable
                 if type(disable) == "function" then
                     return disable(lang, buf)
                 end
@@ -55,106 +61,63 @@ return {
 
             local missing_parsers = vim.tbl_filter(function(lang)
                 return not ts_utils.have(lang)
-            end, opts.ensure_installed or {})
+            end, ensure_installed or {})
 
             if #missing_parsers > 0 then
-                TS.install(missing_parsers, { summary = true }):await(function()
-                    ts_utils.get_installed_parsers(true)
-                end)
+                TS.install(missing_parsers, { summary = true }):wait(60000)
             end
+
+            ts_utils.get_installed_parsers(true)
+
+            local filetypes = ts_utils.filetypes_from_langs(ensure_installed)
 
             vim.api.nvim_create_autocmd("FileType", {
                 group = vim.api.nvim_create_augroup("aqothy/treesitter", { clear = true }),
+                pattern = filetypes,
                 callback = function(ev)
-                    if not ts_utils.have(ev.match) then
+                    local ft = ev.match
+                    local buf = ev.buf
+
+                    if not ts_utils.have(ft) then
                         return
                     end
 
-                    local lang = vim.treesitter.language.get_lang(ev.match)
+                    local lang = vim.treesitter.language.get_lang(ft)
 
-                    if not is_disabled(opts.highlight.disable, lang, ev.buf) then
-                        pcall(vim.treesitter.start, ev.buf, lang)
-                    end
-
-                    if not is_disabled(opts.indent.disable, lang, ev.buf) then
-                        if ts_utils.have(ev.match, "indents") then
-                            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    if not is_disabled(lang, "highlight", buf) then
+                        if ts_utils.have(ft, "highlights") then
+                            pcall(vim.treesitter.start, buf, lang)
                         end
                     end
-                end,
-            })
-        end,
-    },
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        branch = "main",
-        event = "LazyFile",
-        opts = {
-            select = { lookahead = true },
-            move = {
-                set_jumps = true,
-            },
-        },
-        config = function(_, opts)
-            local TS = require("nvim-treesitter-textobjects")
-            TS.setup(opts)
 
-            local ts_utils = require("aqothy.config.utils")
+                    if not is_disabled(lang, "indent", buf) then
+                        if ts_utils.have(ft, "indents") then
+                            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                        end
+                    end
 
-            vim.api.nvim_create_autocmd("FileType", {
-                group = vim.api.nvim_create_augroup("aqothy/treesitter_textobjects", { clear = true }),
-                callback = function(ev)
-                    if not ts_utils.have(ev.match, "textobjects") then
+                    if not ts_utils.have(ft, "textobjects") then
                         return
                     end
 
-                    local select = require("nvim-treesitter-textobjects.select")
-                    local move = require("nvim-treesitter-textobjects.move")
-                    local swap = require("nvim-treesitter-textobjects.swap")
-
                     local function map(modes, lhs, rhs, desc)
-                        vim.keymap.set(modes, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })
+                        vim.keymap.set(modes, lhs, rhs, { buffer = buf, silent = true, desc = desc })
                     end
 
-                    map({ "x", "o" }, "af", function()
-                        select.select_textobject("@function.outer", "textobjects")
-                    end, "Treesitter select function outer")
-                    map({ "x", "o" }, "if", function()
-                        select.select_textobject("@function.inner", "textobjects")
-                    end, "Treesitter select function inner")
-                    map({ "x", "o" }, "ac", function()
-                        select.select_textobject("@class.outer", "textobjects")
-                    end, "Treesitter select class outer")
-                    map({ "x", "o" }, "ic", function()
-                        select.select_textobject("@class.inner", "textobjects")
-                    end, "Treesitter select class inner")
-                    map({ "x", "o" }, "aa", function()
-                        select.select_textobject("@parameter.outer", "textobjects")
-                    end, "Treesitter select parameter outer")
-                    map({ "x", "o" }, "ia", function()
-                        select.select_textobject("@parameter.inner", "textobjects")
-                    end, "Treesitter select parameter inner")
-                    map({ "x", "o" }, "au", function()
-                        select.select_textobject("@call.outer", "textobjects")
-                    end, "Treesitter select call outer")
-                    map({ "x", "o" }, "iu", function()
-                        select.select_textobject("@call.inner", "textobjects")
-                    end, "Treesitter select call inner")
-                    map({ "x", "o" }, "al", function()
-                        select.select_textobject("@loop.outer", "textobjects")
-                    end, "Treesitter select loop outer")
-                    map({ "x", "o" }, "il", function()
-                        select.select_textobject("@loop.inner", "textobjects")
-                    end, "Treesitter select loop inner")
-                    map({ "x", "o" }, "ao", function()
-                        select.select_textobject("@conditional.outer", "textobjects")
-                    end, "Treesitter select conditional outer")
-                    map({ "x", "o" }, "io", function()
-                        select.select_textobject("@conditional.inner", "textobjects")
-                    end, "Treesitter select conditional inner")
-                    map({ "x", "o" }, "a/", function()
-                        select.select_textobject("@comment.outer", "textobjects")
-                    end, "Treesitter select comment outer")
+                    local function smap(key, query)
+                        local outer = "@" .. query .. ".outer"
+                        local inner = "@" .. query .. ".inner"
+                        local desc = "Selection for " .. query .. " text objects"
+                        map({ "x", "o" }, "a" .. key, function()
+                            require("nvim-treesitter-textobjects.select").select_textobject(outer, "textobjects")
+                        end, desc .. " (a)")
+                        map({ "x", "o" }, "i" .. key, function()
+                            require("nvim-treesitter-textobjects.select").select_textobject(inner, "textobjects")
+                        end, desc .. " (i)")
+                    end
+
+                    local move = require("nvim-treesitter-textobjects.move")
+                    local swap = require("nvim-treesitter-textobjects.swap")
 
                     map("n", "<leader>an", function()
                         swap.swap_next("@parameter.inner", "textobjects")
@@ -169,8 +132,30 @@ return {
                     map({ "n", "x", "o" }, "[m", function()
                         move.goto_previous_start({ "@function.outer", "@class.outer" }, "textobjects")
                     end, "Treesitter prev function or class start")
+
+                    smap("f", "function")
+                    smap("c", "class")
+                    smap("a", "parameter")
+                    smap("u", "call")
+                    smap("/", "comment")
                 end,
             })
         end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+        event = "LazyFile",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
+        opts = {
+            move = {
+                set_jumps = true,
+            },
+            select = {
+                lookahead = true,
+            },
+        },
     },
 }

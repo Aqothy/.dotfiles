@@ -21,7 +21,6 @@ local jsts_config = {
 local base_vtsls_on_attach = vim.lsp.config.vtsls.on_attach
 
 M["vtsls"] = {
-    enabled = true,
     settings = {
         vtsls = {
             enableMoveToFileCodeAction = true,
@@ -55,7 +54,31 @@ M["vtsls"] = {
 }
 
 M["lua_ls"] = {
-    enabled = true,
+    on_init = function(client)
+        if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc") then
+                return
+            end
+        end
+
+        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+            runtime = {
+                version = "LuaJIT",
+                path = {
+                    "lua/?.lua",
+                    "lua/?/init.lua",
+                },
+            },
+            workspace = {
+                library = {
+                    vim.env.VIMRUNTIME,
+                    "${3rd}/luv/library",
+                },
+            },
+        })
+    end,
+
     settings = {
         Lua = {
             workspace = {
@@ -72,7 +95,6 @@ M["lua_ls"] = {
 }
 
 M["clangd"] = {
-    enabled = true,
     cmd = {
         "clangd",
         "--background-index",
@@ -92,7 +114,6 @@ M["clangd"] = {
 local base_gopls_on_attach = vim.lsp.config.gopls.on_attach
 
 M["gopls"] = {
-    enabled = true,
     settings = {
         gopls = {
             gofumpt = true,
@@ -119,9 +140,9 @@ M["gopls"] = {
 }
 
 M["basedpyright"] = {
-    enabled = true,
     settings = {
         basedpyright = {
+            disableOrganizeImports = true,
             analysis = {
                 typeCheckingMode = "standard",
             },
@@ -130,14 +151,12 @@ M["basedpyright"] = {
 }
 
 M["sourcekit"] = {
-    enabled = true,
     filetypes = { "swift", "objc", "objcpp" },
 }
 
 local base_texlab_on_attach = vim.lsp.config.texlab.on_attach
 
 M["texlab"] = {
-    enabled = true,
     settings = {
         texlab = {
             forwardSearch = {
@@ -160,10 +179,11 @@ M["texlab"] = {
 }
 
 M["hls"] = {
-    enabled = true,
     root_dir = function(_, on_dir)
         on_dir(vim.fn.getcwd())
     end,
 }
+
+M["ruff"] = {}
 
 return M

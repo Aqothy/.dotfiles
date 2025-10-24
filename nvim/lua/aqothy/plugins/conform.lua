@@ -16,8 +16,6 @@ return {
         notify_on_error = false,
         quiet = true,
         formatters_by_ft = {
-            c = { name = "clangd", lsp_format = "prefer" },
-            cpp = { name = "clangd", lsp_format = "prefer" },
             javascript = { "prettier" },
             typescript = { "prettier" },
             javascriptreact = { "prettier" },
@@ -30,9 +28,8 @@ return {
             lua = { "stylua" },
             go = { "goimports", "gofumpt" },
             swift = { "swift" },
-            python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
-            haskell = { name = "hls", lsp_format = "prefer" },
-            -- For filetypes without a formatter:
+            python = { name = "ruff", lsp_format = "prefer" },
+            -- For filetypes without a formatter, use trim and lsp:
             ["_"] = { "trim_whitespace", "trim_newlines", lsp_format = "last" },
         },
         default_format_opts = {

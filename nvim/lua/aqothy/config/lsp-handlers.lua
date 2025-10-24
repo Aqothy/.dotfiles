@@ -20,11 +20,13 @@ M.capabilities = vim.tbl_deep_extend(
 
 local icons = require("aqothy.config.icons")
 
-local diagnostic_ui = {
-    [vim.diagnostic.severity.ERROR] = { icons.diagnostics.Error .. " ", "DiagnosticError" },
-    [vim.diagnostic.severity.WARN] = { icons.diagnostics.Warn .. " ", "DiagnosticWarn" },
-    [vim.diagnostic.severity.INFO] = { icons.diagnostics.Info .. " ", "DiagnosticInfo" },
-    [vim.diagnostic.severity.HINT] = { icons.diagnostics.Hint .. " ", "DiagnosticHint" },
+local s = vim.diagnostic.severity
+
+local sev_list = {
+    ["ERROR"] = "Error",
+    ["WARN"] = "Warn",
+    ["INFO"] = "Info",
+    ["HINT"] = "Hint",
 }
 
 function M.setup()
@@ -32,21 +34,16 @@ function M.setup()
         signs = false,
         virtual_text = {
             prefix = function(diagnostic)
-                return diagnostic_ui[diagnostic.severity][1] or "● "
+                return (icons.diagnostics[sev_list[s[diagnostic.severity]]] or "●") .. " "
             end,
         },
         update_in_insert = false,
-        underline = { severity = vim.diagnostic.severity.ERROR },
+        underline = { severity = { min = vim.diagnostic.severity.WARN } },
         severity_sort = true,
         float = {
             style = "minimal",
             source = "if_many",
             header = "",
-            prefix = function(diagnostic)
-                local severity = diagnostic.severity
-                local icon = diagnostic_ui[severity][1] or "● "
-                return " " .. icon, diagnostic_ui[severity][2]
-            end,
         },
     }
 
@@ -92,24 +89,26 @@ local symbol_opts = {
 -- stylua: ignore
 M.keys = {
     { lhs = "<c-k>", rhs = vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp", mode = { "i", "s" } },
+    { lhs = "gK", rhs = vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp" },
     { lhs = "gd", rhs = function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
     { lhs = "grr", rhs = function() Snacks.picker.lsp_references() end, desc = "References", has = "references" },
     { lhs = "gri", rhs = function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation", has = "implementation" },
     { lhs = "grt", rhs = function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition", has = "typeDefinition" },
     { lhs = "gO", rhs = function() Snacks.picker.lsp_symbols(symbol_opts) end, desc = "LSP Symbols", has = "documentSymbol" },
-    { lhs = "]r", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
-    { lhs = "[r", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
+    { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols(symbol_opts) end, desc = "Workspace Symbols", has = "documentSymbol" },
+    { lhs = "<a-n>", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
+    { lhs = "<a-p>", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
+    { lhs = "grc", rhs = vim.lsp.document_color.color_presentation, desc = "Change Color Presentation", has = "documentColor" },
 }
 
 function M.on_attach(client, bufnr)
     client.server_capabilities.semanticTokensProvider = nil
 
-    if client:supports_method("textDocument/linkedEditingRange", bufnr) then
-        vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
-    end
+    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
 
     for _, key in ipairs(M.keys) do
-        if M.has(key.has, client, bufnr) then
+        local has = not key.has or M.has(key.has, client, bufnr)
+        if has then
             vim.keymap.set(key.mode or "n", key.lhs, key.rhs, {
                 buffer = bufnr,
                 silent = key.silent ~= false,

@@ -21,6 +21,8 @@ opt.shiftwidth = 0
 opt.tabstop = 4
 opt.softtabstop = 4
 opt.shiftround = true
+opt.breakindent = true
+opt.smartindent = true
 
 opt.swapfile = false
 opt.writebackup = false
@@ -51,7 +53,7 @@ opt.wildoptions:append({ "fuzzy" })
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt =
-    { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "algorithm:histogram", "linematch:60" }
+    { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram", "linematch:60" }
 opt.termguicolors = true
 opt.list = true
 opt.listchars = {

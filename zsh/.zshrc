@@ -28,11 +28,32 @@ alias cpp="clang++ -std=c++20"
 alias vi="nvim"
 alias svi="nvim --listen /tmp/nvim"
 alias gaa="git add -A"
-alias sb="git switch"
 alias sc="git switch -c"
 alias gd="git difftool --dir-diff"
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
+
+sb() {
+  if [[ -n "$1" ]]; then
+      git switch $1
+      return
+  fi
+  local branches branch
+  branches=$(git --no-pager branch -vv) &&
+  branch=$(echo "$branches" | fzf +m) &&
+  git switch $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+co() {
+  if [[ -n "$1" ]]; then
+      git checkout $1
+      return
+  fi
+  local commits commit
+  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
+  commit=$(echo "$commits" | fzf --tac +s +m -e) &&
+  git checkout $(echo "$commit" | sed "s/ .*//")
+}
 
 export MANPAGER='nvim +Man!'
 
@@ -98,6 +119,8 @@ add-zsh-hook chpwd prompt_chpwd
 PROMPT='%B%(?:%F{green}➜%f:%F{red}!%f) %F{cyan}%~%f${_git_status_prompt}%b '
 
 autoload -Uz compinit && compinit
+compdef _git sb=git-switch
+compdef _git co=git-checkout
 
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"

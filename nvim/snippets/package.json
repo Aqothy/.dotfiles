@@ -44,6 +44,12 @@
           "cpp"
         ],
         "path": "./cpp.json"
+      },
+      {
+        "language": [
+          "all"
+        ],
+        "path": "./global.json"
       }
     ]
   }

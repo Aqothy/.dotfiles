@@ -24,7 +24,7 @@ return {
             local line = vim.fn.line
 
             local function map(mode, l, r, desc)
-                vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
+                vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc, silent = true })
             end
             map("n", "[h", gs.prev_hunk, "Previous hunk")
             map("n", "]h", gs.next_hunk, "Next hunk")
@@ -43,12 +43,6 @@ return {
             map("n", "gb", function()
                 gs.blame_line({ full = true })
             end, "Blame Line")
-            map("n", "<leader>gd", function()
-                gs.diffthis("~")
-            end, "Diff This ~")
-            map("n", "<leader>gD", function()
-                gs.diffthis("main")
-            end, "Diff This main")
             map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         end,
     },

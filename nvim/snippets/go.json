@@ -8,5 +8,10 @@
     "prefix": "ie",
     "body": "if err != nil {\n\t$1\n}",
     "description": "Snippet for if err != nil"
+  },
+  "goimpl": {
+    "prefix": "gi",
+    "body": "var impl $1 = &$2{}",
+    "description": "Snippet for tricking gopls impl interface code action"
   }
 }

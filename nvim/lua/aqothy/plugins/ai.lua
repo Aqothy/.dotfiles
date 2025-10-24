@@ -14,46 +14,70 @@ return {
                 ["*"] = true,
                 dotenv = false,
             }
-        end,
-        config = function()
-            vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<C-l>")', {
-                expr = true,
-                replace_keycodes = false,
-                desc = "Accept Copilot Suggestion",
-            })
+            local copilot_enabled = true
+            vim.keymap.set("n", "<leader>tc", function()
+                if copilot_enabled then
+                    local client = vim.lsp.get_clients({ name = "GitHub Copilot" })[1]
+                    if client then
+                        vim.lsp.stop_client(client.id)
+                    end
+                    vim.notify("Copilot disabled")
+                else
+                    vim.cmd("Copilot restart")
+                    vim.notify("Copilot enabled")
+                end
+                copilot_enabled = not copilot_enabled
+            end, { desc = "Toggle Copilot" })
         end,
     },
     {
-
         "folke/sidekick.nvim",
         opts = {
             signs = {
                 enabled = false,
+            },
+            cli = {
+                win = {
+                    layout = "float",
+                    wo = {
+                        scrolloff = 8,
+                    },
+                    float = {
+                        width = vim.o.columns,
+                        height = vim.o.lines,
+                        border = "none",
+                    },
+                },
             },
         },
         event = "VeryLazy",
         -- stylua: ignore
         keys = {
             {
-                "<Tab>",
+                "<tab>",
                 function()
                     if not require("sidekick").nes_jump_or_apply() then
-                        return "<Tab>"
+                        return "<tab>"
                     end
                 end,
                 expr = true,
                 desc = "Goto/Apply Next Edit Suggestion",
             },
             {
-                "<leader>aa",
+                "<c-.>",
                 function() require("sidekick.cli").toggle() end,
-                desc = "Sidekick Toggle CLI",
+                desc = "Sidekick Toggle",
+                mode = { "n", "t", "i" },
             },
             {
-                "<c-.>",
-                function() require("sidekick.cli").focus() end,
-                mode = { "n", "x", "i", "t" },
-                desc = "Sidekick Switch Focus",
+                "<leader>as",
+                function() require("sidekick.cli").select() end,
+                desc = "Select CLI",
+            },
+            {
+                "<leader>ac",
+                function() require("sidekick.cli").close() end,
+                desc = "Close a CLI Session",
             },
         },
     },

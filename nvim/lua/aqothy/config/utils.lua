@@ -28,10 +28,11 @@ end
 
 M._installed = nil
 M._queries = {}
+M._filetypes = nil
 
 function M.get_installed_parsers(update)
     if update then
-        M._installed, M._queries = {}, {}
+        M._installed, M._queries, M._filetypes = {}, {}, nil
         for _, lang in ipairs(require("nvim-treesitter").get_installed("parsers")) do
             M._installed[lang] = true
         end
@@ -56,6 +57,21 @@ function M.have(ft, query)
         return false
     end
     return true
+end
+
+function M.filetypes_from_langs(langs)
+    if M._filetypes then
+        return M._filetypes
+    end
+    local ft_set = {}
+    for _, lang in ipairs(langs or {}) do
+        for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang) or {}) do
+            ft_set[ft] = true
+        end
+    end
+    local filetypes = vim.tbl_keys(ft_set)
+    M._filetypes = filetypes
+    return M._filetypes
 end
 
 return M
