@@ -28,7 +28,7 @@ return {
                 vim.notify(value.title, vim.log.levels.INFO, {
                     id = client.name .. client.id,
                     title = client.name,
-                    timeout = is_end and 3000 or 0,
+                    timeout = is_end and 1000 or 0,
                     opts = function(notif)
                         notif.icon = is_end and "" or "󱥸"
                     end,

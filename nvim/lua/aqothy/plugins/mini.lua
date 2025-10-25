@@ -113,14 +113,14 @@ return {
 
             autocmd("User", {
                 group = group,
-                pattern = "MiniFilesBufferCreate",
-                callback = function(args)
-                    local buf_id = args.data.buf_id
+                pattern = "MiniFilesExplorerOpen",
+                callback = function(event)
+                    local buf = event.buf
 
-                    nmap(buf_id, "g.", toggle_dotfiles, "Toggle hidden files")
-                    nmap(buf_id, "gx", ui_open, "OS open")
-                    nmap(buf_id, "gy", yank_path, "Yank path")
-                    nmap(buf_id, "q", function()
+                    nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
+                    nmap(buf, "gx", ui_open, "OS open")
+                    nmap(buf, "gy", yank_path, "Yank path")
+                    nmap(buf, "q", function()
                         show_dotfiles = true
                         mf.close()
                     end, "Close this window")
@@ -136,6 +136,18 @@ return {
                     vim.schedule(function()
                         mf.close()
                     end)
+                end,
+            })
+
+            autocmd("User", {
+                group = group,
+                pattern = "MiniFilesActionDelete",
+                callback = function(event)
+                    local from = event.data.to
+                    local ok, ret = pcall(vim.fn.system, { "trash", from })
+                    if not ok or vim.v.shell_error ~= 0 then
+                        vim.notify("Failed to trash file: " .. from .. "\n" .. ret, vim.log.levels.ERROR)
+                    end
                 end,
             })
         end,

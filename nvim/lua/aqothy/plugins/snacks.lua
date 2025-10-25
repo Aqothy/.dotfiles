@@ -253,5 +253,7 @@ return {
         { "<leader>lD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
         { "z=", function() Snacks.picker.spelling() end, desc = "Spelling" },
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+        { "<leader>nh", function() Snacks.notifier.show_history() end, desc = "Notification History" },
+        { "<leader>nn", function() Snacks.notifier.hide() end, desc = "No Notifications" },
     },
 }

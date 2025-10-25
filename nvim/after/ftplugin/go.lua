@@ -28,7 +28,7 @@ local function goModTag(operation)
             cmd = cmd .. " -all"
         end
 
-        cmd = cmd .. " -" .. fn.shellescape(operation) .. "-tags json -transform camelcase -w --quiet"
+        cmd = cmd .. " -" .. operation .. "-tags json -transform camelcase -w --quiet"
 
         local output = fn.system(cmd)
 

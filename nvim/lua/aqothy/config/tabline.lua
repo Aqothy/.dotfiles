@@ -24,7 +24,7 @@ local function get_title(buf)
     local buftype = vim.bo[buf].buftype
     local value
     if name == "" then
-        value = buftype ~= "" and buftype or "No Name"
+        value = buftype ~= "" and buftype or "[No Name]"
     else
         local basename = vim.fs.basename(name)
         value = basename == "" and name or basename
@@ -40,7 +40,7 @@ end
 local function get_icon(buf, hl)
     local cached = icon_cache[buf]
     if cached then
-        return "%#" .. cached.hl .. "#" .. cached.icon .. hl .. " "
+        return cached.hl .. cached.icon .. hl .. " "
     end
 
     local name = api.nvim_buf_get_name(buf)
@@ -51,13 +51,13 @@ local function get_icon(buf, hl)
     end
 
     icon = icon or "󰈔"
-    icon_hl = icon_hl or "%0*"
+    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%0*"
 
     if vim.bo[buf].buftype == "" then
         icon_cache[buf] = { icon = icon, hl = icon_hl }
     end
 
-    return "%#" .. icon_hl .. "#" .. icon .. hl .. " "
+    return icon_hl .. icon .. hl .. " "
 end
 
 local function build_tab(tab, index, is_current)
