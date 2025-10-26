@@ -14,9 +14,6 @@
 
 [credential]
 
-[core]
-    excludesfile = ~/.gitignore_global
-
 [fetch]
     all = true
 

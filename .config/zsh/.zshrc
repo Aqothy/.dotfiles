@@ -23,7 +23,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias py="python3"
-alias gg="lazygit"
+alias lg="lazygit"
 alias cpp="clang++ -std=c++20"
 alias vi="nvim"
 alias svi="nvim --listen /tmp/nvim"
@@ -32,6 +32,11 @@ alias sc="git switch -c"
 alias gd="git difftool --dir-diff"
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
+alias ld='lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+d() {
+   git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+}
 
 sb() {
   if [[ -n "$1" ]]; then
@@ -136,7 +141,7 @@ source <(fzf --zsh)
 
 fzf_append_dir_widget() {
   local dir
-  dir=$(fzf_dir) || return
+  dir=$(fzf_dir.sh) || return
   if [[ -n "$dir" ]]; then
     LBUFFER+="\"$dir\""
   fi

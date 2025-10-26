@@ -2,9 +2,8 @@
 
 select_dir() {
     (
-        echo "$HOME/.dotfiles"
-        echo "$HOME/Code"
         echo "$HOME/.config"
+        echo "$HOME/Code"
         find "$HOME/Code" "$HOME/Code/School" "$HOME/Code/Personal" \
             "$HOME/Documents/documents-mac" "$HOME/Documents/documents-mac/school" \
             "$HOME/Documents" \

@@ -11,7 +11,7 @@ local map = vim.keymap.set
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
     tsserver = {
-        nodePath = "/Users/aqothy/.local/bin/npc",
+        nodePath = "/Users/aqothy/.local/bin/npc.sh",
     },
     suggest = {
         completeFunctionCalls = true,

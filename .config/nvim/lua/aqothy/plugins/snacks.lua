@@ -71,11 +71,6 @@ return {
                     },
                 },
             },
-            formatters = {
-                file = {
-                    filename_first = true,
-                },
-            },
             layout = {
                 preset = "default",
             },
@@ -119,7 +114,7 @@ return {
                     },
                     hidden = true,
                     show_empty = false,
-                    exclude = { ".DS_Store" },
+                    -- exclude = { ".DS_Store" },
                     supports_live = false,
                 },
                 buffers = {

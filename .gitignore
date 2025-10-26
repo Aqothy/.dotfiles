@@ -1,5 +1,2 @@
-zsh/.zcompdump*
-zsh/.zsh_history
-zed/*
-!zed/keymap.json
-!zed/settings.json
+.DS_Store
+.dotfiles
