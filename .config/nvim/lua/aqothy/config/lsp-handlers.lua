@@ -44,6 +44,7 @@ function M.setup()
             style = "minimal",
             source = "if_many",
             header = "",
+            prefix = "",
         },
     }
 

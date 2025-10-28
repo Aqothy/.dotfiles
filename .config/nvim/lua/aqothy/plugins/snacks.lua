@@ -170,7 +170,7 @@ return {
     },
     -- stylua: ignore
     keys = {
-        { "<leader>go", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "x" } },
+        { "<leader>go", function() Snacks.gitbrowse({ notify = false }) end, desc = "Git Browse", mode = { "n", "x" } },
         ---@diagnostic disable-next-line: missing-fields
         { "<leader>gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "x" },  },
         { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },

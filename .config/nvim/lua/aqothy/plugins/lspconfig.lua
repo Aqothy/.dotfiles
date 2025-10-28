@@ -21,12 +21,13 @@ return {
                     return
                 end
 
-                local value = ev.data.params.value
+                local params = ev.data.params
+                local value = params.value
 
                 local is_end = value.kind == "end"
 
                 vim.notify(value.title, vim.log.levels.INFO, {
-                    id = client.name .. client.id,
+                    id = client.id .. "-" .. params.token,
                     title = client.name,
                     timeout = is_end and 1000 or 0,
                     opts = function(notif)
