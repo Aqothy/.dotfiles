@@ -6,6 +6,9 @@
 #   name = Anthony Qiu
 #   email = aq0335@gmail.com
 
+[core]
+    excludesfile = ~/.gitignore_global
+
 [column]
     ui = auto
 
