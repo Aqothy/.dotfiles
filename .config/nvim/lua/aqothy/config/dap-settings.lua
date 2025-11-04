@@ -3,7 +3,6 @@ local M = {}
 local dap_utils = require("dap.utils")
 
 M["delve"] = {
-    enabled = true,
     filetypes = { "go" },
     adapter = function(callback, config)
         if config.mode == "remote" and config.request == "attach" then
@@ -49,7 +48,6 @@ M["delve"] = {
 }
 
 M["pwa-node"] = {
-    enabled = true,
     filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
     adapter = {
         type = "server",
@@ -96,7 +94,6 @@ M["pwa-node"] = {
 }
 
 M["node"] = {
-    enabled = true,
     adapter = function(callback, config)
         if config.type == "node" then
             config.type = "pwa-node"
@@ -106,7 +103,6 @@ M["node"] = {
 }
 
 M["codelldb"] = {
-    enabled = true,
     filetypes = { "c", "cpp", "swift" },
     adapter = {
         type = "server",

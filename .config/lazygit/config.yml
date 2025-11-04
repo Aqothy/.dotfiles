@@ -5,4 +5,8 @@ gui:
   nerdFontsVersion: "3"
   filterMode: "fuzzy"
   mouseEvents: true
-  mainPanelSplitMode: "horizontal"
+  sidePanelWidth: 0.25
+git:
+  paging:
+    colorArg: "always"
+    pager: "delta --paging=never"

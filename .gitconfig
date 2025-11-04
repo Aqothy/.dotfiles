@@ -8,6 +8,17 @@
 
 [core]
     excludesfile = ~/.gitignore_global
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    syntax-theme = gruvbox-dark
+
+[merge]
+    conflictStyle = zdiff3
 
 [column]
     ui = auto
@@ -36,7 +47,3 @@
 [diff]
     algorithm = histogram
     renames = true
-    tool = kitty
-
-[difftool "kitty"]
-    cmd = kitten diff $LOCAL $REMOTE

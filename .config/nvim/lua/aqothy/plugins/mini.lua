@@ -113,17 +113,20 @@ return {
 
             autocmd("User", {
                 group = group,
-                pattern = "MiniFilesExplorerOpen",
+                pattern = "MiniFilesBufferCreate",
                 callback = function(event)
                     local buf = event.buf
 
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")
                     nmap(buf, "gy", yank_path, "Yank path")
-                    nmap(buf, "q", function()
-                        show_dotfiles = true
-                        mf.close()
-                    end, "Close this window")
+                end,
+            })
+
+            autocmd("User", {
+                group = group,
+                pattern = "MiniFilesExplorerOpen",
+                callback = function()
                     MiniFiles.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
                 end,
             })
@@ -176,10 +179,10 @@ return {
 
             return {
                 highlighters = {
-                    fixme = hi_words({ "FIXME", "Fixme", "fixme" }, "MiniHipatternsFixme"),
-                    hack = hi_words({ "HACK", "Hack", "hack" }, "MiniHipatternsHack"),
-                    todo = hi_words({ "TODO", "Todo", "todo" }, "MiniHipatternsTodo"),
-                    note = hi_words({ "NOTE", "Note", "note" }, "MiniHipatternsNote"),
+                    fixme = hi_words({ "FIXME", "FIX" }, "MiniHipatternsFixme"),
+                    hack = hi_words({ "HACK" }, "MiniHipatternsHack"),
+                    todo = hi_words({ "TODO" }, "MiniHipatternsTodo"),
+                    note = hi_words({ "NOTE" }, "MiniHipatternsNote"),
                     hex_color = hi.gen_highlighter.hex_color(),
                 },
             }

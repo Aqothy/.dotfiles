@@ -51,6 +51,13 @@ return {
                 selection = { auto_insert = false },
             },
         },
+        sources = {
+            providers = {
+                lsp = {
+                    timeout_ms = 500,
+                },
+            },
+        },
         fuzzy = {
             implementation = "lua",
             sorts = {

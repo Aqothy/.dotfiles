@@ -91,8 +91,6 @@ local symbol_opts = {
 
 -- stylua: ignore
 M.keys = {
-    { lhs = "<c-k>", rhs = vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp", mode = { "i", "s" } },
-    { lhs = "gK", rhs = vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp" },
     { lhs = "gd", rhs = function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
     { lhs = "grr", rhs = function() Snacks.picker.lsp_references() end, desc = "References", has = "references" },
     { lhs = "gri", rhs = function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation", has = "implementation" },
@@ -105,8 +103,6 @@ M.keys = {
 }
 
 function M.on_attach(client, bufnr)
-    client.server_capabilities.semanticTokensProvider = nil
-
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
 
     for _, key in ipairs(M.keys) do

@@ -25,19 +25,62 @@ local git_options = {
     },
 }
 
--- { lua pattern, rg --glob alternate files pattern }
-local alternate_patterns = {
-    { "(.*)_test%.go$", "%1.go" },
-    { "(.*)%.go$", "%1_test.go" },
-    { "(.*)%.cpp$", "%1.hpp" },
-    { "(.*)%.hpp$", "%1.cpp" },
-}
-
 return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
     opts = {
+        dashboard = {
+            preset = {
+                header = [[
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢠⣿⣄⣤⣤⣤⣤⣼⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⣠⣾⣿⣻⡵⠖⠛⠛⠛⢿⣿⣶⣴⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⢷⡄⠀⠀⠀
+⠀⣤⣤⡾⣯⣿⡿⠋⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣷⣤⣴⣾⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠏⠀⠈⢻⣦⡀⠀
+⠀⢹⣿⣴⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣄⡀⢀⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣶⠀⠈⠻⣦⠀⠀⣼⠋⠀⠀
+⠀⣼⢉⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣥⠤⠴⣶⣶⣶⣶⣶⣶⣶⣶⣾⣿⠿⣿⣿⣿⣿⡇⣸⠋⠻⣿⣷
+⢰⡏⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣶⣶⣿⣟⣿⣟⣛⣭⣉⣩⣿⣿⡀⣼⣿⣿⣿⣿⣿⣄⠀⣸⣿
+⢿⡇⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⣿⣿⣿⠿⠿⠛⠛⠛⠛⠛⠻⣿⣿⣭⣉⢉⣿⣿⠟⣰⣿⡟
+⠈⣷⠸⣇⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠞⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠀⠀⠉⣿⣿⡏⢀⣿⡟⠀
+⠀⠹⣦⣿⣿⣿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠞⠋⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠀⠀⠀⠀⣼⣿⡿⢫⣿⣿⡁⠀
+⠀⠀⠀⠙⣿⡿⣿⣿⣷⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀⠀⣀⣤⠶⠿⢯⡈⠙⣧⡀⠀⠀⣿⣄⣴⣿⣿⠉⠻⣦
+⠀⠀⠀⠰⠿⠛⠛⠻⣿⣿⣿⣷⣦⣀⠀⠀⠀⠀⠀⠀⣴⠏⠀⠀⠀⠀⠀⠀⠀⣰⣿⠉⠀⠀⠀⠚⣷⠀⠘⡇⠀⠀⠀⠙⠛⠉⠁⠀⠀⠈
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⣿⣽⡿⣿⣷⣦⣀⠀⠀⢰⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⠽⣄⠀⠀⠀⣠⠟⠀⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠙⠻⣿⣿⣟⣷⣦⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠛⢧⡉⠛⠛⠛⠁⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟⢉⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠳⠶⠶⠶⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠈⠉⠉⠉⣻⣿⣇⡀⠀⠀⠀⠀⠀⣤⡶⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⣄⠀⣠⣾⡿⠁⠙⢷⣦⣦⣤⣴⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣴⠶⣆⠀⠀⠀⣾⠉⢻⣿⣿⡀⠀⠀⢿⣿⢉⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣿⠁⢠⡟⠀⠀⠀⣿⠀⠘⣯⠉⠃⠀⠀⠈⢁⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣼⡿⠀⠘⣷⠀⠀⠀⣿⠀⠀⢻⡶⠞⢛⡶⠚⢻⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⡾⠋⠁⣀⠀⠀⠈⠳⣄⠀⢸⡆⠀⠈⢷⣄⠟⢁⣠⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢸⡇⠀⠀⠈⢻⡄⠀⠀⠘⢷⣤⣷⡀⠀⠀⠙⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣧⠀⠀⠀⠀⣿⡀⠀⠀⠀⠈⢻⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢹⣄⠀⠀⢀⣿⠁⡀⠀⠀⠀⠀⠻⢷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠉⠛⠛⠛⠉⠻⣿⡦⠀⠀⠀⠀⠈⢻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡇⠀⠀⠀⠀⠀⠀]],
+                keys = {
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
+                    { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                    {
+                        icon = " ",
+                        key = "g",
+                        desc = "Git",
+                        action = ":lua Snacks.lazygit()",
+                        enabled = function()
+                            return Snacks.git.get_root() ~= nil
+                        end,
+                    },
+                    { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                },
+            },
+            sections = {
+                { section = "header", padding = 1 },
+                { section = "keys", padding = 1 },
+                { section = "startup" },
+            },
+        },
+
         bigfile = { enabled = true },
 
         input = { enabled = true },
@@ -51,11 +94,22 @@ return {
             modes = { "n" },
         },
 
+        gh = {
+            wo = {
+                foldexpr = "0",
+                foldmethod = "manual",
+            },
+        },
+
         picker = {
             enabled = true,
             ui_select = true,
             icons = {
                 kinds = require("aqothy.config.icons").kinds,
+            },
+            previewers = {
+                diff = { builtin = false },
+                git = { builtin = false },
             },
             win = {
                 input = {
@@ -71,11 +125,8 @@ return {
                     },
                 },
             },
-            layout = {
-                preset = "default",
-            },
             layouts = {
-                default = {
+                vscode = {
                     layout = {
                         backdrop = false,
                         width = 0.5,
@@ -99,6 +150,7 @@ return {
             sources = {
                 aqfiles = {
                     layout = {
+                        preset = "vscode",
                         hidden = { "preview" },
                     },
                     multi = { "recent", "files" },
@@ -109,16 +161,12 @@ return {
                     sort = { fields = { "score:desc", "idx" } },
                 },
                 files = {
-                    layout = {
-                        hidden = { "preview" },
-                    },
-                    hidden = true,
                     show_empty = false,
-                    -- exclude = { ".DS_Store" },
-                    supports_live = false,
+                    exclude = { ".DS_Store" },
                 },
                 buffers = {
                     layout = {
+                        preset = "vscode",
                         hidden = { "preview" },
                     },
                     filter = {
@@ -144,20 +192,13 @@ return {
             },
         },
 
-        image = {
-            enabled = false,
-            convert = {
-                notify = false,
-            },
-        },
-
         styles = {
             notification = {
                 wo = { wrap = true },
             },
             lazygit = {
                 width = vim.o.columns,
-                height = vim.o.lines,
+                height = vim.o.lines - 1,
             },
             zen = {
                 width = 120,
@@ -191,50 +232,8 @@ return {
             end,
             desc = "Todo List",
         },
-        {
-            "<leader><tab>",
-            function()
-                local rel = vim.fn.expand("%:.")
-                local cwd = vim.uv.cwd()
-                local name = vim.fn.expand("%:t:r")
-                local filename = vim.fn.expand("%:t")
-                if name == "" or rel == "" then
-                    return
-                end
-
-                local alternate_glob
-                for _, mapping in ipairs(alternate_patterns) do
-                    local replaced, count = filename:gsub(mapping[1], mapping[2], 1)
-                    if count > 0 then
-                        alternate_glob = "**/" .. replaced
-                        break
-                    end
-                end
-
-                alternate_glob = alternate_glob or ("**/*" .. name .. "*")
-
-                Snacks.picker.pick("files", {
-                    auto_confirm = true,
-                    finder = function(opts, ctx)
-                        return require("snacks.picker.source.proc").proc({
-                            opts,
-                            {
-                                cmd = "rg",
-                                args = { "--files", "--no-messages", "--color", "never", "-g", "!.git", "--hidden", "--glob", alternate_glob, "--glob", "!" .. rel },
-                                notify = false,
-                                transform = function(item)
-                                    item.cwd = cwd
-                                    item.file = item.text
-                                end,
-                            },
-                        }, ctx)
-                    end,
-                })
-            end,
-            desc = "Alternate Files",
-        },
         { "<leader>.", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
-        { "<leader><leader>", function() Snacks.picker({ layout = { hidden = { "preview" }, } }) end, desc = "Pick" },
+        { "<leader><leader>", function() Snacks.picker({ layout = { preset = "vscode" } }) end, desc = "Pick" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
         { "<leader>s", function() Snacks.picker.grep() end, desc = "Grep" },
@@ -250,5 +249,9 @@ return {
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
         { "<leader>nh", function() Snacks.notifier.show_history() end, desc = "Notification History" },
         { "<leader>nn", function() Snacks.notifier.hide() end, desc = "No Notifications" },
+        { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
+        { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+        { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
+        { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
     },
 }

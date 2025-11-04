@@ -36,6 +36,11 @@ return {
             signs = {
                 enabled = false,
             },
+            nes = {
+                diff = {
+                    inline = "chars",
+                },
+            },
             cli = {
                 win = {
                     layout = "float",

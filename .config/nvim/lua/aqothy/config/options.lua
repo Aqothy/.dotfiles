@@ -23,6 +23,7 @@ opt.softtabstop = 4
 opt.shiftround = true
 opt.breakindent = true
 opt.smartindent = true
+opt.linebreak = true
 
 opt.swapfile = false
 opt.writebackup = false
@@ -52,8 +53,7 @@ opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
-opt.diffopt =
-    { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram", "linematch:60" }
+opt.diffopt = { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram" }
 opt.termguicolors = true
 opt.list = true
 opt.listchars = {
@@ -74,5 +74,5 @@ if vim.fn.executable("rg") == 1 then
 end
 
 opt.confirm = true
-opt.shortmess:append({ W = true, c = true, C = true, a = true })
+opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }

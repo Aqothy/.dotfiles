@@ -27,6 +27,9 @@ return {
                 layout = "diff3_mixed",
             },
         },
+        file_panel = {
+            listing_style = "list",
+        },
         file_history_panel = {
             win_config = {
                 height = 12,

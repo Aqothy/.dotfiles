@@ -3,16 +3,6 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
--- Check if we need to reload the file when it changed
-autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-    group = augroup("checktime"),
-    callback = function(ev)
-        if vim.bo[ev.buf].buftype ~= "nofile" then
-            vim.cmd("checktime")
-        end
-    end,
-})
-
 -- Highlight on yank
 autocmd("TextYankPost", {
     group = augroup("highlight_yank"),
@@ -64,4 +54,27 @@ autocmd("BufReadPost", {
             vim.cmd("normal! zz")
         end
     end,
+})
+
+local function setup_git_env()
+    local home = vim.fn.expand("~")
+    local cwd = vim.fn.getcwd()
+    local result = vim.fn.system(
+        string.format("git --git-dir=%s/.dotfiles --work-tree=%s ls-files %s", home, home, vim.fn.shellescape(cwd))
+    )
+
+    if result ~= "" then
+        vim.env.GIT_DIR = home .. "/.dotfiles"
+        vim.env.GIT_WORK_TREE = home
+    else
+        vim.env.GIT_DIR = nil
+        vim.env.GIT_WORK_TREE = nil
+    end
+end
+
+setup_git_env()
+
+autocmd("DirChanged", {
+    group = augroup("git_env_on_dir_change"),
+    callback = setup_git_env,
 })

@@ -43,7 +43,7 @@ return {
             map("n", "gb", function()
                 gs.blame_line({ full = true })
             end, "Blame Line")
-            map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+            map({ "o", "x" }, "ih", gs.select_hunk, "Select Hunk")
         end,
     },
 }

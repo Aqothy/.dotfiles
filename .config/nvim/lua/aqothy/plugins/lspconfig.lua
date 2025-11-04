@@ -14,6 +14,7 @@ return {
 
         vim.api.nvim_create_autocmd("LspProgress", {
             group = lsp_group,
+            pattern = { "begin", "end" },
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
@@ -68,8 +69,23 @@ return {
         vim.lsp.config("*", params)
 
         local settings = require("aqothy.config.lsp-settings")
-        for lsp, opts in pairs(settings) do
-            if opts.enabled ~= false then
+        for lsp, user_opts in pairs(settings) do
+            if user_opts.enabled ~= false then
+                local opts = vim.deepcopy(user_opts)
+
+                local user_on_attach = opts.on_attach
+
+                if user_on_attach then
+                    local default_on_attach = vim.lsp.config[lsp].on_attach
+
+                    opts.on_attach = function(client, bufnr)
+                        if default_on_attach then
+                            default_on_attach(client, bufnr)
+                        end
+                        user_on_attach(client, bufnr)
+                    end
+                end
+
                 vim.lsp.config(lsp, opts)
                 vim.lsp.enable(lsp)
             end

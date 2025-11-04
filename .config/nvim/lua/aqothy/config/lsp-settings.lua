@@ -18,8 +18,6 @@ local jsts_config = {
     },
 }
 
-local base_vtsls_on_attach = vim.lsp.config.vtsls.on_attach
-
 M["vtsls"] = {
     settings = {
         vtsls = {
@@ -35,11 +33,7 @@ M["vtsls"] = {
         typescript = jsts_config,
         javascript = jsts_config,
     },
-    on_attach = function(client, bufnr)
-        if base_vtsls_on_attach then
-            base_vtsls_on_attach(client, bufnr)
-        end
-
+    on_attach = function(_, bufnr)
         map("n", "<leader>oi", function()
             utils.action("source.addMissingImports.ts")
             vim.defer_fn(function()
@@ -111,8 +105,6 @@ M["clangd"] = {
     },
 }
 
-local base_gopls_on_attach = vim.lsp.config.gopls.on_attach
-
 M["gopls"] = {
     settings = {
         gopls = {
@@ -128,11 +120,7 @@ M["gopls"] = {
             staticcheck = true,
         },
     },
-    on_attach = function(client, bufnr)
-        if base_gopls_on_attach then
-            base_gopls_on_attach(client, bufnr)
-        end
-
+    on_attach = function(_, bufnr)
         map("n", "<leader>rr", function()
             utils.action("refactor.rewrite.fillStruct")
         end, { buffer = bufnr, desc = "Fill Struct", silent = true })
@@ -154,8 +142,6 @@ M["sourcekit"] = {
     filetypes = { "swift", "objc", "objcpp" },
 }
 
-local base_texlab_on_attach = vim.lsp.config.texlab.on_attach
-
 M["texlab"] = {
     settings = {
         texlab = {
@@ -165,11 +151,7 @@ M["texlab"] = {
             },
         },
     },
-    on_attach = function(client, bufnr)
-        if base_texlab_on_attach then
-            base_texlab_on_attach(client, bufnr)
-        end
-
+    on_attach = function(_, bufnr)
         -- stylua: ignore start
         map("n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { buffer = bufnr, desc = "Build Latex File", silent = true })
         map("n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { buffer = bufnr, desc = "Forward Search", silent = true })

@@ -4,9 +4,6 @@ return {
         jump = {
             autojump = true,
         },
-        search = {
-            mode = "search",
-        },
         label = {
             uppercase = false,
             after = false,

@@ -1,5 +1,4 @@
 local map = vim.keymap.set
-
 -- Navigation and movement
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -8,6 +7,9 @@ map("n", "n", "nzvzz", { desc = "Next search result, open folds, and center scre
 map("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
+map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
+map({ "n", "x", "o" }, "M", "%", { desc = "Match" })
 
 -- Tabs
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
@@ -35,7 +37,6 @@ map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | terminal<CR>", { desc = "Open terminal in new tab" })
 map("n", "<leader>x", "<cmd>tabclose<CR>", { desc = "Close tab" })
-map("n", "<c-t>", "<cmd>tabnew<cr>", { desc = "New tab" })
 map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
 
 -- Editing and text manipulation
@@ -50,16 +51,21 @@ map("i", "<c-e>", "<c-o>$", { desc = "End" })
 map("i", "<c-a>", "<c-o>^", { desc = "Home" })
 map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
+map("n", "<leader>om", function()
+    if vim.o.diffopt:find("linematch") ~= nil then
+        vim.opt.diffopt:remove({ "linematch:60" })
+        vim.notify("remove linematch", vim.log.levels.INFO)
+    else
+        vim.opt.diffopt:append({ "linematch:60" })
+        vim.notify("append linematch", vim.log.levels.INFO)
+    end
+end, { desc = "Toggle linematch diff algorithm" })
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
-if vim.fn.has("mac") == 1 then
-    map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
-else
-    map({ "i", "x", "n", "s" }, "<C-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
-end
+map("n", "<leader>w", "<cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
@@ -81,6 +87,5 @@ map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-map("n", "<c-e>", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
 
 map("n", "<leader>pm", "<cmd>Lazy<cr>", { desc = "Package Manager" })
