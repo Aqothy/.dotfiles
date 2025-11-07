@@ -117,7 +117,6 @@ M["gopls"] = {
             },
             completeUnimported = true,
             usePlaceholders = true,
-            staticcheck = true,
         },
     },
     on_attach = function(_, bufnr)

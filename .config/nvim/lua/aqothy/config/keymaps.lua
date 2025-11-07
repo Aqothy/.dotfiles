@@ -1,4 +1,5 @@
 local map = vim.keymap.set
+
 -- Navigation and movement
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -10,6 +11,10 @@ map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, 
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
 map({ "n", "x", "o" }, "M", "%", { desc = "Match" })
+map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
+map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 -- Tabs
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
@@ -36,7 +41,7 @@ end, { desc = "New Horizontal Split", expr = true })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | terminal<CR>", { desc = "Open terminal in new tab" })
-map("n", "<leader>x", "<cmd>tabclose<CR>", { desc = "Close tab" })
+map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
 
 -- Editing and text manipulation
@@ -60,6 +65,13 @@ map("n", "<leader>om", function()
         vim.notify("append linematch", vim.log.levels.INFO)
     end
 end, { desc = "Toggle linematch diff algorithm" })
+map("n", "<leader>rl", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
+map("n", "<localleader>q", function()
+    local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+    if not success and err then
+        vim.notify(err, vim.log.levels.ERROR)
+    end
+end, { desc = "Toggle qf" })
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

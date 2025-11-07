@@ -5,7 +5,6 @@ gui:
   nerdFontsVersion: "3"
   filterMode: "fuzzy"
   mouseEvents: true
-  sidePanelWidth: 0.25
 git:
   paging:
     colorArg: "always"

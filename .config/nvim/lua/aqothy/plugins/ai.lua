@@ -48,8 +48,8 @@ return {
                         scrolloff = 8,
                     },
                     float = {
-                        width = vim.o.columns,
-                        height = vim.o.lines,
+                        width = 1,
+                        height = 0.99,
                         border = "none",
                     },
                 },
@@ -62,7 +62,7 @@ return {
                 "<tab>",
                 function()
                     if not require("sidekick").nes_jump_or_apply() then
-                        return "<tab>"
+                        return "<c-^>"
                     end
                 end,
                 expr = true,

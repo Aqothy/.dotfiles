@@ -15,7 +15,6 @@ return {
             filetype = {
                 dotenv = { glyph = "", hl = "MiniIconsYellow" },
                 go = { glyph = "", hl = "MiniIconsAzure" },
-                kitty = { glyph = "󰄛", hl = "MiniIconsOrange" },
             },
         },
         init = function()

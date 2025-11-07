@@ -20,6 +20,7 @@ local ensure_installed = {
     "python",
     "haskell",
     "regex",
+    "zsh",
 }
 
 return {
@@ -32,7 +33,6 @@ return {
             indent = {
                 disable = { "swift", "python" },
             },
-
             highlight = {
                 disable = {},
             },
@@ -53,7 +53,7 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
-            vim.treesitter.language.register("bash", { "kitty", "dotenv", "zsh" })
+            vim.treesitter.language.register("bash", { "dotenv" })
 
             TS.setup(opts)
 

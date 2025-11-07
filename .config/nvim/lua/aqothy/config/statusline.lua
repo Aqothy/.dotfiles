@@ -35,8 +35,6 @@ for group, opts in pairs(groups) do
     vim.api.nvim_set_hl(0, group, opts)
 end
 
-vim.opt.laststatus = 3
-
 local os_uname = uv.os_uname()
 
 M.sysname = fn.has("win32") == 1 and "windows" or (os_uname.sysname == "Darwin" and "macos" or os_uname.sysname:lower())
@@ -448,6 +446,7 @@ autocmd({ "VimResized", "WinResized", "WinEnter" }, {
     desc = "Invalidate window width cache",
 })
 
+-- vim.opt.laststatus = 3
 vim.g.qf_disable_statusline = 1
 vim.opt.showmode = false
 vim.opt.ruler = false

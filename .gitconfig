@@ -47,3 +47,12 @@
 [diff]
     algorithm = histogram
     renames = true
+
+[merge]
+    tool = nvimdiff3
+
+[mergetool]
+    prompt = true
+    keepBackup = false
+    trustExitCode = true
+    hideResolved = true

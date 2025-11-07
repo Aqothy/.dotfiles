@@ -1,11 +1,14 @@
-local git_options = {
+local git_ref_opts = {
     actions = {
-        ["diffview"] = function(picker)
+        ["diff_base"] = function(picker)
             local currentCommit = picker:current().commit
-            if currentCommit then
-                local args = { currentCommit .. "^" .. "!" }
-                require("diffview").open(args)
-            end
+            picker:close()
+            Snacks.picker.git_diff({ base = currentCommit })
+        end,
+        ["diff_commit"] = function(picker)
+            local currentCommit = picker:current().commit
+            picker:close()
+            Snacks.picker.git_diff({ cmd_args = { currentCommit .. "^!" }, staged = false })
         end,
         ["copy_commit"] = function(picker)
             local currentCommit = picker:current().commit
@@ -18,10 +21,57 @@ local git_options = {
     win = {
         input = {
             keys = {
-                ["<c-o>"] = { "diffview", desc = "Diffview this commit", mode = { "n", "i" } },
+                ["<a-o>"] = { "diff_commit", desc = "Diff this commit", mode = { "n", "i" } },
+                ["<c-o>"] = { "diff_base", desc = "Diff base", mode = { "n", "i" } },
                 ["<c-y>"] = { "copy_commit", desc = "Copy commit", mode = { "n", "i" } },
             },
         },
+    },
+}
+
+local git_diff_opts = {
+    group = true,
+    layout = {
+        preset = "diff",
+    },
+    formatters = {
+        file = {
+            filename_first = true,
+        },
+    },
+    win = {
+        input = {
+            keys = {
+                ["<c-l>"] = { "toggle_staged", mode = { "n", "i" } },
+                ["<c-g>"] = { "toggle_group", mode = { "n", "i" } },
+            },
+        },
+        preview = {
+            keys = {
+                ["<tab>"] = { "list_down" },
+                ["<s-tab>"] = { "list_up" },
+            },
+        },
+    },
+    actions = {
+        toggle_staged = function(p)
+            local opts = p.opts
+            if opts.staged == nil then
+                opts.staged = false
+            else
+                opts.staged = nil
+            end
+            p:find()
+        end,
+        toggle_group = function(p)
+            local opts = p.opts
+            if opts.group == nil then
+                opts.group = true
+            else
+                opts.group = not opts.group
+            end
+            p:find()
+        end,
     },
 }
 
@@ -32,32 +82,6 @@ return {
     opts = {
         dashboard = {
             preset = {
-                header = [[
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢠⣿⣄⣤⣤⣤⣤⣼⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⣠⣾⣿⣻⡵⠖⠛⠛⠛⢿⣿⣶⣴⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⢷⡄⠀⠀⠀
-⠀⣤⣤⡾⣯⣿⡿⠋⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣷⣤⣴⣾⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠏⠀⠈⢻⣦⡀⠀
-⠀⢹⣿⣴⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣄⡀⢀⣤⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣶⠀⠈⠻⣦⠀⠀⣼⠋⠀⠀
-⠀⣼⢉⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣥⠤⠴⣶⣶⣶⣶⣶⣶⣶⣶⣾⣿⠿⣿⣿⣿⣿⡇⣸⠋⠻⣿⣷
-⢰⡏⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣶⣶⣿⣟⣿⣟⣛⣭⣉⣩⣿⣿⡀⣼⣿⣿⣿⣿⣿⣄⠀⣸⣿
-⢿⡇⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⣿⣿⣿⠿⠿⠛⠛⠛⠛⠛⠻⣿⣿⣭⣉⢉⣿⣿⠟⣰⣿⡟
-⠈⣷⠸⣇⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠞⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠀⠀⠉⣿⣿⡏⢀⣿⡟⠀
-⠀⠹⣦⣿⣿⣿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠞⠋⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠀⠀⠀⠀⣼⣿⡿⢫⣿⣿⡁⠀
-⠀⠀⠀⠙⣿⡿⣿⣿⣷⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀⠀⣀⣤⠶⠿⢯⡈⠙⣧⡀⠀⠀⣿⣄⣴⣿⣿⠉⠻⣦
-⠀⠀⠀⠰⠿⠛⠛⠻⣿⣿⣿⣷⣦⣀⠀⠀⠀⠀⠀⠀⣴⠏⠀⠀⠀⠀⠀⠀⠀⣰⣿⠉⠀⠀⠀⠚⣷⠀⠘⡇⠀⠀⠀⠙⠛⠉⠁⠀⠀⠈
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⣿⣽⡿⣿⣷⣦⣀⠀⠀⢰⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⠽⣄⠀⠀⠀⣠⠟⠀⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠙⠻⣿⣿⣟⣷⣦⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠛⢧⡉⠛⠛⠛⠁⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟⢉⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠳⠶⠶⠶⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠈⠉⠉⠉⣻⣿⣇⡀⠀⠀⠀⠀⠀⣤⡶⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⣄⠀⣠⣾⡿⠁⠙⢷⣦⣦⣤⣴⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⣴⠶⣆⠀⠀⠀⣾⠉⢻⣿⣿⡀⠀⠀⢿⣿⢉⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢀⣿⠁⢠⡟⠀⠀⠀⣿⠀⠘⣯⠉⠃⠀⠀⠈⢁⣸⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣀⣼⡿⠀⠘⣷⠀⠀⠀⣿⠀⠀⢻⡶⠞⢛⡶⠚⢻⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⢀⡾⠋⠁⣀⠀⠀⠈⠳⣄⠀⢸⡆⠀⠈⢷⣄⠟⢁⣠⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡇⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⢸⡇⠀⠀⠈⢻⡄⠀⠀⠘⢷⣤⣷⡀⠀⠀⠙⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣧⠀⠀⠀⠀⣿⡀⠀⠀⠀⠈⢻⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣇⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢹⣄⠀⠀⢀⣿⠁⡀⠀⠀⠀⠀⠻⢷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠉⠛⠛⠛⠉⠻⣿⡦⠀⠀⠀⠀⠈⢻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡇⠀⠀⠀⠀⠀⠀]],
                 keys = {
                     { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
                     { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
@@ -70,17 +94,26 @@ return {
                             return Snacks.git.get_root() ~= nil
                         end,
                     },
-                    { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },
             },
             sections = {
-                { section = "header", padding = 1 },
+                { text = string.format("NVIM %s", vim.version()), align = "center", padding = 2 },
                 { section = "keys", padding = 1 },
-                { section = "startup" },
+                {
+                    text = {
+                        { "The ", hl = "footer" },
+                        { "I ", hl = "special" },
+                        { "in ", hl = "footer" },
+                        { "LLM ", hl = "special" },
+                        { "stands for ", hl = "footer" },
+                        { "intelligence", hl = "special" },
+                    },
+                    align = "center",
+                },
             },
         },
-
         bigfile = { enabled = true },
 
         input = { enabled = true },
@@ -94,13 +127,6 @@ return {
             modes = { "n" },
         },
 
-        gh = {
-            wo = {
-                foldexpr = "0",
-                foldmethod = "manual",
-            },
-        },
-
         picker = {
             enabled = true,
             ui_select = true,
@@ -108,8 +134,9 @@ return {
                 kinds = require("aqothy.config.icons").kinds,
             },
             previewers = {
-                diff = { builtin = false },
-                git = { builtin = false },
+                diff = {
+                    style = "terminal",
+                },
             },
             win = {
                 input = {
@@ -130,9 +157,8 @@ return {
                     layout = {
                         backdrop = false,
                         width = 0.5,
-                        min_width = 80,
+                        min_width = 60,
                         height = 0.95,
-                        row = 1,
                         border = "none",
                         box = "vertical",
                         {
@@ -142,8 +168,60 @@ return {
                             title = "{title} {live} {flags}",
                             title_pos = "center",
                         },
-                        { win = "list", height = 15, border = "none" },
+                        { win = "list", height = 0.4, border = "none" },
                         { win = "preview", title = "{preview}", border = "rounded" },
+                    },
+                },
+                default = {
+                    fullscreen = true,
+                    layout = {
+                        backdrop = false,
+                        box = "horizontal",
+                        {
+                            box = "vertical",
+                            {
+                                win = "input",
+                                height = 1,
+                                border = "rounded",
+                                title = "{title} {live} {flags}",
+                                title_pos = "center",
+                            },
+                            { win = "list", border = "none" },
+                        },
+                        { win = "preview", title = "{preview}", border = true, width = 0.6 },
+                    },
+                },
+                diff = {
+                    fullscreen = true,
+                    layout = {
+                        backdrop = false,
+                        box = "horizontal",
+                        {
+                            box = "vertical",
+                            width = 0.25,
+                            min_width = 20,
+                            {
+                                win = "input",
+                                height = 1,
+                                border = "rounded",
+                                title = "{title} {live} {flags}",
+                                title_pos = "center",
+                            },
+                            { win = "list", border = "none" },
+                        },
+                        { win = "preview", title = "{preview}", border = true },
+                    },
+                },
+                vertical = {
+                    fullscreen = true,
+                    layout = {
+                        border = true,
+                        title = "{title} {live} {flags}",
+                        title_pos = "center",
+                        box = "vertical",
+                        { win = "input", height = 1, border = "bottom" },
+                        { win = "list", border = "none" },
+                        { win = "preview", title = "{preview}", height = 0.6, border = "top" },
                     },
                 },
             },
@@ -160,6 +238,7 @@ return {
                     transform = "unique_file",
                     sort = { fields = { "score:desc", "idx" } },
                 },
+                git_diff = git_diff_opts,
                 files = {
                     show_empty = false,
                     exclude = { ".DS_Store" },
@@ -181,8 +260,10 @@ return {
                 grep_word = {
                     hidden = true,
                 },
-                git_log = git_options,
-                git_log_file = git_options,
+                git_log = git_ref_opts,
+                git_log_file = git_ref_opts,
+                git_branches = git_ref_opts,
+                gh_diff = git_diff_opts,
             },
         },
 
@@ -197,8 +278,8 @@ return {
                 wo = { wrap = true },
             },
             lazygit = {
-                width = vim.o.columns,
-                height = vim.o.lines - 1,
+                width = 0,
+                height = 0.99,
             },
             zen = {
                 width = 120,
@@ -217,6 +298,9 @@ return {
         { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
         { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+        { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
+        { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+        { "<leader>gs", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         { "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         {
@@ -238,7 +322,7 @@ return {
         { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
         { "<leader>s", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "sidebar" } }) end, desc = "undo tree" },
+        { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "undo tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
         { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profiler Picker" },
         { "<leader>zz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
