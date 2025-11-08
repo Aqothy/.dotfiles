@@ -274,6 +274,9 @@ autocmd("DiagnosticChanged", {
             M.diagnostic_counts[buf] = nil
         end
         M.diagnostic_str_cache[buf] = nil
+        vim.schedule(function()
+            vim.cmd("redrawstatus")
+        end)
     end,
     desc = "Track diagnostics",
 })

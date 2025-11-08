@@ -55,11 +55,6 @@ opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt = { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram" }
 opt.termguicolors = true
-opt.list = true
-opt.listchars = {
-    tab = "▏ ",
-    trail = "·",
-}
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
 opt.showcmd = false

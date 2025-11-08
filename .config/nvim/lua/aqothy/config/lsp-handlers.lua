@@ -99,10 +99,12 @@ M.keys = {
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols(symbol_opts) end, desc = "Workspace Symbols", has = "documentSymbol" },
     { lhs = "<a-n>", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
     { lhs = "<a-p>", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
-    { lhs = "grc", rhs = vim.lsp.document_color.color_presentation, desc = "Change Color Presentation", has = "documentColor" },
+    { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls", has = "callHierarchy/incomingCalls" },
+    { lhs = "gro", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls", has = "callHierarchy/outgoingCalls" },
 }
 
 function M.on_attach(client, bufnr)
+    vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
 
     for _, key in ipairs(M.keys) do

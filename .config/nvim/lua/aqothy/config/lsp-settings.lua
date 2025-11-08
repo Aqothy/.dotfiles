@@ -13,9 +13,6 @@ local jsts_config = {
     tsserver = {
         nodePath = "/Users/aqothy/.local/bin/npc.sh",
     },
-    suggest = {
-        completeFunctionCalls = true,
-    },
 }
 
 M["vtsls"] = {
@@ -81,9 +78,6 @@ M["lua_ls"] = {
             doc = {
                 privateName = { "^_" },
             },
-            completion = {
-                callSnippet = "Replace",
-            },
         },
     },
 }
@@ -95,11 +89,9 @@ M["clangd"] = {
         "--clang-tidy",
         "--header-insertion=iwyu",
         "--completion-style=detailed",
-        "--function-arg-placeholders",
         "--fallback-style=WebKit",
     },
     init_options = {
-        usePlaceholders = true,
         completeUnimported = true,
         clangdFileStatus = true,
     },
@@ -116,7 +108,6 @@ M["gopls"] = {
                 useany = true,
             },
             completeUnimported = true,
-            usePlaceholders = true,
         },
     },
     on_attach = function(_, bufnr)

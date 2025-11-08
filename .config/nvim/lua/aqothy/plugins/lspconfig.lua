@@ -3,7 +3,7 @@ return {
     event = "LazyFile",
     cmd = "LspInfo",
     keys = {
-        { "<leader>li", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },
+        { "<leader>lc", function() Snacks.picker.lsp_config() end, desc = "Lsp config" },
     },
     config = vim.schedule_wrap(function()
         local handlers = require("aqothy.config.lsp-handlers")

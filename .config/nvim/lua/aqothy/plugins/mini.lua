@@ -114,7 +114,7 @@ return {
                 group = group,
                 pattern = "MiniFilesBufferCreate",
                 callback = function(event)
-                    local buf = event.buf
+                    local buf = event.data.buf_id
 
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")

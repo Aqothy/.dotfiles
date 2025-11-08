@@ -3,10 +3,7 @@ return {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
         opts = {
-            fast_wrap = {
-                chars = { "{", "[", "(", '"', "'", "<" },
-                end_key = "e",
-            },
+            enable_afterquote = false,
         },
         config = function(_, opts)
             require("nvim-autopairs").setup(opts)

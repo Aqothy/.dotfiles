@@ -44,6 +44,8 @@ local git_diff_opts = {
             keys = {
                 ["<c-l>"] = { "toggle_staged", mode = { "n", "i" } },
                 ["<c-g>"] = { "toggle_group", mode = { "n", "i" } },
+                ["<c-x>"] = { "git_restore", mode = { "n", "i" } },
+                ["<c-r>"] = false,
             },
         },
         preview = {
