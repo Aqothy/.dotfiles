@@ -62,7 +62,7 @@ return {
                 "<tab>",
                 function()
                     if not require("sidekick").nes_jump_or_apply() then
-                        return "<c-^>"
+                        return "<tab>"
                     end
                 end,
                 expr = true,

@@ -59,12 +59,13 @@ autocmd("BufReadPost", {
 local function setup_git_env()
     local home = vim.fn.expand("~")
     local cwd = vim.fn.getcwd()
+    local git_dir = home .. "/.dotfiles"
     local result = vim.fn.system(
-        string.format("git --git-dir=%s/.dotfiles --work-tree=%s ls-files %s", home, home, vim.fn.shellescape(cwd))
+        string.format("git --git-dir=%s --work-tree=%s ls-files %s", git_dir, home, vim.fn.shellescape(cwd))
     )
 
     if result ~= "" then
-        vim.env.GIT_DIR = home .. "/.dotfiles"
+        vim.env.GIT_DIR = git_dir
         vim.env.GIT_WORK_TREE = home
     else
         vim.env.GIT_DIR = nil

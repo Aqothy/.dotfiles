@@ -77,6 +77,21 @@ local git_diff_opts = {
     },
 }
 
+local symbol_filter = {
+    filter = {
+        default = {
+            "Class",
+            "Constructor",
+            "Enum",
+            "Function",
+            "Interface",
+            "Module",
+            "Method",
+            "Struct",
+        },
+    },
+}
+
 return {
     "folke/snacks.nvim",
     lazy = false,
@@ -84,6 +99,7 @@ return {
     opts = {
         dashboard = {
             preset = {
+                -- stylua: ignore
                 keys = {
                     { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
                     { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
@@ -266,6 +282,8 @@ return {
                 git_log_file = git_ref_opts,
                 git_branches = git_ref_opts,
                 gh_diff = git_diff_opts,
+                lsp_symbols = symbol_filter,
+                treesitter = symbol_filter,
             },
         },
 

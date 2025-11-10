@@ -1,5 +1,6 @@
 local fn = vim.fn
 
+-- go install github.com/fatih/gomodifytags@latest
 local function goModTag(operation)
     if fn.executable("gomodifytags") == 0 then
         vim.notify("gomodifytags not found", vim.log.levels.ERROR)

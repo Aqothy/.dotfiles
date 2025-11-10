@@ -46,5 +46,6 @@
   },
   "workbench.editor.languageDetection": false,
   "chat.mcp.gallery.enabled": true,
-  "editor.linkedEditing": true
+  "editor.linkedEditing": true,
+  "python.analysis.typeCheckingMode": "standard"
 }

@@ -1,11 +1,10 @@
-notARepository: "quit"
+notARepository: quit
 os:
-  editPreset: "nvim"
+  editPreset: nvim
 gui:
-  nerdFontsVersion: "3"
-  filterMode: "fuzzy"
+  nerdFontsVersion: 3
+  filterMode: fuzzy
   mouseEvents: true
 git:
-  paging:
-    colorArg: "always"
-    pager: "delta --paging=never"
+  pagers:
+    - pager: delta --dark --paging=never

@@ -23,6 +23,7 @@ local ensure_installed = {
     "zsh",
 }
 
+-- npm install -g tree-sitter-cli
 return {
     {
         "nvim-treesitter/nvim-treesitter",
@@ -71,6 +72,8 @@ return {
 
             local filetypes = ts_utils.filetypes_from_langs(ensure_installed)
 
+            local disable_symbols = { "markdown", "help" }
+
             vim.api.nvim_create_autocmd("FileType", {
                 group = vim.api.nvim_create_augroup("aqothy/treesitter", { clear = true }),
                 pattern = filetypes,
@@ -96,12 +99,19 @@ return {
                         end
                     end
 
-                    if not ts_utils.have(ft, "textobjects") then
-                        return
-                    end
-
                     local function map(modes, lhs, rhs, desc)
                         vim.keymap.set(modes, lhs, rhs, { buffer = buf, silent = true, desc = desc })
+                    end
+
+                    if not vim.tbl_contains(disable_symbols, ft) then
+                        vim.b[buf].ts_symbols = true
+                        map("n", "gO", function()
+                            Snacks.picker.treesitter()
+                        end, "Treesitter symbols")
+                    end
+
+                    if not ts_utils.have(ft, "textobjects") then
+                        return
                     end
 
                     local function smap(key, query)
@@ -136,6 +146,8 @@ return {
                     smap("f", "function")
                     smap("c", "class")
                     smap("a", "parameter")
+                    smap("L", "loop")
+                    smap("C", "conditional")
                     smap("u", "call")
                     smap("/", "comment")
                 end,

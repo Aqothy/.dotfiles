@@ -15,6 +15,7 @@ local jsts_config = {
     },
 }
 
+-- npm install -g @vtsls/language-server
 M["vtsls"] = {
     settings = {
         vtsls = {
@@ -44,6 +45,7 @@ M["vtsls"] = {
     end,
 }
 
+-- brew install lua-language-server
 M["lua_ls"] = {
     on_init = function(client)
         if client.workspace_folders then
@@ -82,6 +84,7 @@ M["lua_ls"] = {
     },
 }
 
+-- comes with xcode cmdline tools
 M["clangd"] = {
     cmd = {
         "clangd",
@@ -97,6 +100,7 @@ M["clangd"] = {
     },
 }
 
+-- go install golang.org/x/tools/gopls@latest
 M["gopls"] = {
     settings = {
         gopls = {
@@ -117,6 +121,7 @@ M["gopls"] = {
     end,
 }
 
+-- uv tool install basedpyright
 M["basedpyright"] = {
     settings = {
         basedpyright = {
@@ -128,26 +133,9 @@ M["basedpyright"] = {
     },
 }
 
+-- comes with macos
 M["sourcekit"] = {
     filetypes = { "swift", "objc", "objcpp" },
-}
-
-M["texlab"] = {
-    settings = {
-        texlab = {
-            forwardSearch = {
-                executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
-                args = { "-g", "-r", "%l", "%p", "%f" },
-            },
-        },
-    },
-    on_attach = function(_, bufnr)
-        -- stylua: ignore start
-        map("n", "<localleader>ll", "<cmd>LspTexlabBuild<cr>", { buffer = bufnr, desc = "Build Latex File", silent = true })
-        map("n", "<localleader>lv", "<cmd>LspTexlabForward<cr>", { buffer = bufnr, desc = "Forward Search", silent = true })
-        map("n", "<localleader>lc", "<cmd>LspTexlabCleanAuxiliary<cr>", { buffer = bufnr, desc = "Clean Aux", silent = true })
-        -- stylua: ignore end
-    end,
 }
 
 M["hls"] = {
@@ -156,6 +144,7 @@ M["hls"] = {
     end,
 }
 
+-- uv tool install ruff@latest
 M["ruff"] = {}
 
 return M

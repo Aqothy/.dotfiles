@@ -15,6 +15,7 @@ map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+map("n", "<s-tab>", "<c-^>", { desc = "Alternate buffer" })
 
 -- Tabs
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
@@ -77,7 +78,7 @@ end, { desc = "Toggle qf" })
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
-map("n", "<leader>w", "<cmd>update<cr>", { desc = "Save File" })
+map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
@@ -99,5 +100,6 @@ map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
+map("n", "<localleader>d", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
 
 map("n", "<leader>pm", "<cmd>Lazy<cr>", { desc = "Package Manager" })

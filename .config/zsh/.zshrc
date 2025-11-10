@@ -63,7 +63,7 @@ co() {
 export MANPAGER='nvim +Man!'
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
-export FZF_DEFAULT_COMMAND='rg --files --hidden -g "!.git"'
+export FZF_DEFAULT_COMMAND='rg --files --no-messages --hidden --color=never -g "!.git" -g "!.DS_Store"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 typeset -g __git_async_fd

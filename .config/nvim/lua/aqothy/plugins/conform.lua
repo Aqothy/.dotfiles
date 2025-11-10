@@ -16,6 +16,7 @@ return {
         notify_on_error = false,
         quiet = true,
         formatters_by_ft = {
+            -- npm install -g prettier
             javascript = { "prettier" },
             typescript = { "prettier" },
             javascriptreact = { "prettier" },
@@ -25,8 +26,12 @@ return {
             json = { "prettier" },
             yaml = { "prettier" },
             markdown = { "prettier" },
+            -- brew install stylua
             lua = { "stylua" },
+            -- go install mvdan.cc/gofumpt@latest
+            -- go install golang.org/x/tools/cmd/goimports@latest
             go = { "goimports", "gofumpt" },
+            -- comes with mac
             swift = { "swift" },
             python = { name = "ruff", lsp_format = "prefer" },
             -- For filetypes without a formatter, use trim and lsp:
