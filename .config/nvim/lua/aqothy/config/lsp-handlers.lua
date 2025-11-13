@@ -81,6 +81,7 @@ M.keys = {
     { lhs = "grr", rhs = function() Snacks.picker.lsp_references() end, desc = "References", has = "references" },
     { lhs = "gri", rhs = function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation", has = "implementation" },
     { lhs = "grt", rhs = function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition", has = "typeDefinition" },
+    { lhs = "gO", rhs = function() Snacks.picker.lsp_symbols() end, desc = "Lsp Symbols", has = "documentSymbol" },
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
     { lhs = "<a-n>", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
     { lhs = "<a-p>", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
@@ -91,16 +92,6 @@ M.keys = {
 function M.on_attach(client, bufnr)
     vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
-
-    if not vim.b[bufnr].ts_symbols and M.has("documentSymbol", client, bufnr) then
-        vim.keymap.set("n", "gO", function()
-            Snacks.picker.lsp_symbols()
-        end, {
-            buffer = bufnr,
-            silent = true,
-            desc = "LSP symbols",
-        })
-    end
 
     for _, key in ipairs(M.keys) do
         local has = not key.has or M.has(key.has, client, bufnr)

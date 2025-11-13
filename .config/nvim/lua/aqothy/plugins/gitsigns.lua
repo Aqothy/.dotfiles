@@ -38,6 +38,7 @@ return {
                 gs.reset_hunk({ line("."), line("v") })
             end, "Reset hunk (visual)")
             map("n", "<leader>hS", gs.stage_buffer, "Stage Buffer")
+            map("n", "<leader>hU", gs.reset_buffer_index, "Unstage Buffer")
             map("n", "<leader>hR", gs.reset_buffer, "Reset Buffer")
             map("n", "gB", gs.blame, "Blame")
             map("n", "gb", function()

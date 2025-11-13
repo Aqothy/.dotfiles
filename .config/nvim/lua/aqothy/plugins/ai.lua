@@ -44,9 +44,6 @@ return {
             cli = {
                 win = {
                     layout = "float",
-                    wo = {
-                        scrolloff = 8,
-                    },
                     float = {
                         width = 1,
                         height = 0.99,

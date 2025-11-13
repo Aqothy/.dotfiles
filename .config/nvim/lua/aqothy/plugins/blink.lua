@@ -50,6 +50,11 @@ return {
                 max_items = 30,
                 selection = { auto_insert = false },
             },
+            documentation = {
+                window = {
+                    scrollbar = false,
+                },
+            },
         },
         sources = {
             providers = {

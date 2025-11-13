@@ -5,9 +5,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-export EDITOR="nvim"
-export VISUAL="nvim"
-
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
 export PATH="$HOME/.nvim/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"

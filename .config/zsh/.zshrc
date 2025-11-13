@@ -2,8 +2,6 @@
 # https://thevaluable.dev/zsh-completion-guide-examples/
 # https://thevaluable.dev/zsh-install-configure-mouseless/
 
-bindkey -e
-
 # Zsh Options
 setopt AUTO_CD
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -16,8 +14,6 @@ setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
 setopt CORRECT
 setopt GLOB_COMPLETE
-
-autoload -Uz colors && colors
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -60,61 +56,64 @@ co() {
   git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
+export EDITOR="nvim"
+export VISUAL="nvim"
 export MANPAGER='nvim +Man!'
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
 export FZF_DEFAULT_COMMAND='rg --files --no-messages --hidden --color=never -g "!.git" -g "!.DS_Store"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+autoload -Uz vcs_info
+
 typeset -g __git_async_fd
 typeset -g _git_status_prompt=""
 
+# VCS styling
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats ' %F{yellow}%f %F{blue}%b%f%c%u'
+zstyle ':vcs_info:git:*' actionformats ' %F{yellow}%f %F{blue}%b%f %F{red}[%a]%f%c%u'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' stagedstr ' %F{green}%f'
+zstyle ':vcs_info:*' unstagedstr ' %F{red}✘%f'
+
 __async_git_start() {
-  # Close previous file descriptor
+  # remove any existing handler and close the previous fd
   if [[ -n "$__git_async_fd" ]] && { true <&$__git_async_fd } 2>/dev/null; then
-    exec {__git_async_fd}<&-
     zle -F $__git_async_fd
+    exec {__git_async_fd}<&-
   fi
+  # fork a process to fetch the vcs status and open a pipe to read from it
+  exec {__git_async_fd}< <(__async_git_info "$PWD")
 
-  # Fork process to fetch git status
-  exec {__git_async_fd}< <(__async_git_info $PWD)
-
-  # Call __async_git_done when data is ready
+  # When the fd is readable, call the response handler
   zle -F "$__git_async_fd" __async_git_done
 }
 
 __async_git_info() {
-  cd -q "$1"
-  git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local branch
-  local dirty=""
-
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-  [[ -z "$branch" ]] && return
-
-  if ! git diff --quiet --no-ext-diff 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
-    dirty=" %F{red}✘%f"
-  fi
-
-  echo " %F{yellow}%f %F{blue}${branch}%f${dirty}"
+  emulate -L zsh
+  cd -q "$1" || return
+  vcs_info
+  [[ -n ${vcs_info_msg_0_} ]] || return
+  echo "${vcs_info_msg_0_}"
 }
 
+# Called when new data is ready to be read from the pipe
 __async_git_done() {
-  # Read git status from file descriptor
+  # Read everything from the fd
   _git_status_prompt="$(<&$1)"
-  # Remove handler and close file descriptor
+  # remove the handler and close the file descriptor
   zle -F "$1"
   exec {1}<&-
   zle && zle reset-prompt
 }
 
 prompt_precmd() {
-  __async_git_start
+  __async_git_start # start async job to populate git info
 }
 
 prompt_chpwd() {
-  _git_status_prompt=""
+  _git_status_prompt="" # clear current vcs_info
 }
 
 autoload -Uz add-zsh-hook
@@ -123,16 +122,15 @@ add-zsh-hook chpwd prompt_chpwd
 
 PROMPT='%B%(?:%F{green}➜%f:%F{red}!%f) %F{cyan}%~%f${_git_status_prompt}%b '
 
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' menu select
+# Case Insensitive -> Substring
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+
 autoload -Uz compinit && compinit
 compdef _git sb=git-switch
 compdef _git co=git-checkout
-
-zstyle ':completion:*' use-cache yes
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
-
-zstyle ':completion:*' menu select
-# Exact -> Case Insensitive -> Substring
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
 
 eval "$(fnm env --use-on-cd --shell zsh)"
 eval "$(uv generate-shell-completion zsh)"
