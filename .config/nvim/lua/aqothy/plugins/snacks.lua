@@ -42,10 +42,17 @@ local git_diff_opts = {
     win = {
         input = {
             keys = {
-                ["<c-l>"] = { "toggle_staged", mode = { "n", "i" } },
+                ["<c-i>"] = { "toggle_staged", mode = { "n", "i" } },
                 ["<c-g>"] = { "toggle_group", mode = { "n", "i" } },
                 ["<c-x>"] = { "git_restore", mode = { "n", "i" } },
                 ["<c-r>"] = false,
+            },
+        },
+        list = {
+            keys = {
+                ["<c-i>"] = { "toggle_staged" },
+                ["<c-g>"] = { "toggle_group" },
+                ["<c-x>"] = { "git_restore" },
             },
         },
         preview = {
@@ -113,6 +120,7 @@ return {
                         end,
                     },
                     { icon = " ", key = "l", desc = "Load Session", section = "session" },
+                    { icon = " ", key = "t", desc = "New Tab", action = ":tabnew" },
                     { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },
@@ -120,17 +128,6 @@ return {
             sections = {
                 { text = string.format("NVIM %s", vim.version()), align = "center", padding = 2 },
                 { section = "keys", padding = 1 },
-                {
-                    text = {
-                        { "The ", hl = "footer" },
-                        { "I ", hl = "special" },
-                        { "in ", hl = "footer" },
-                        { "LLM ", hl = "special" },
-                        { "stands for ", hl = "footer" },
-                        { "Intelligence", hl = "special" },
-                    },
-                    align = "center",
-                },
             },
         },
         bigfile = { enabled = true },
@@ -283,6 +280,8 @@ return {
                 git_log_file = git_ref_opts,
                 git_branches = git_ref_opts,
                 gh_diff = git_diff_opts,
+                gh_pr = { live = false },
+                gh_issue = { live = false },
                 lsp_symbols = symbol_filter,
                 treesitter = symbol_filter,
             },
@@ -301,6 +300,15 @@ return {
             lazygit = {
                 width = 0,
                 height = 0.99,
+                keys = {
+                    hide = {
+                        "<c-[>",
+                        "hide",
+                        mode = "t",
+                        expr = true,
+                        desc = "Hide LazyGit",
+                    },
+                },
             },
             zen = {
                 width = 120,

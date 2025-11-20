@@ -14,20 +14,17 @@ return {
                 ["*"] = true,
                 dotenv = false,
             }
-            local copilot_enabled = true
-            vim.keymap.set("n", "<leader>tc", function()
-                if copilot_enabled then
-                    local client = vim.lsp.get_clients({ name = "GitHub Copilot" })[1]
-                    if client then
-                        vim.lsp.stop_client(client.id)
-                    end
-                    vim.notify("Copilot disabled")
-                else
-                    vim.cmd("Copilot restart")
-                    vim.notify("Copilot enabled")
-                end
-                copilot_enabled = not copilot_enabled
-            end, { desc = "Toggle Copilot" })
+            vim.keymap.set("i", "<s-tab>", 'copilot#Accept("\\<s-tab>")', {
+                expr = true,
+                replace_keycodes = false,
+                desc = "Accept Copilot Suggestion",
+            })
+            vim.keymap.set({ "i", "s" }, "<c-c>", function()
+                vim.fn["copilot#Dismiss"]()
+                require("sidekick.nes").clear()
+            end, {
+                desc = "Dismiss Copilot Suggestion",
+            })
         end,
     },
     {

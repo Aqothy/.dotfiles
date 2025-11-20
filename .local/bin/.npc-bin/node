@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+
+exec "$HOME/.local/bin/npc.sh" "$@"

@@ -10,7 +10,6 @@ map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
-map({ "n", "x", "o" }, "M", "%", { desc = "Match" })
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
@@ -18,7 +17,6 @@ map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 map("n", "<s-tab>", "<c-^>", { desc = "Alternate buffer" })
 
 -- Tabs
-map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map("t", "<c-[>", "<c-\\><c-n>", { desc = "Esc Terminal" })
@@ -43,6 +41,7 @@ map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | terminal<CR>", { desc = "Open terminal in new tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
+map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
 
 -- Editing and text manipulation

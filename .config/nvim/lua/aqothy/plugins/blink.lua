@@ -4,6 +4,7 @@ return {
     opts = {
         keymap = {
             preset = "enter",
+            ["<C-y>"] = { "select_and_accept" },
             ["<Tab>"] = {
                 function()
                     local ok, suggestion = pcall(vim.fn["copilot#GetDisplayedSuggestion"])

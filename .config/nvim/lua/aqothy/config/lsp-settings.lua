@@ -1,6 +1,7 @@
 local M = {}
 
 local utils = require("aqothy.config.utils")
+local lsp_util = require("lspconfig.util")
 
 local map = vim.keymap.set
 
@@ -12,6 +13,9 @@ local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
     tsserver = {
         nodePath = "/Users/aqothy/.local/bin/npc.sh",
+    },
+    preferences = {
+        useAliasesForRenames = false,
     },
 }
 
@@ -92,6 +96,7 @@ M["clangd"] = {
         "--clang-tidy",
         "--header-insertion=iwyu",
         "--completion-style=detailed",
+        "--function-arg-placeholders=0",
         "--fallback-style=WebKit",
     },
     init_options = {
@@ -146,5 +151,49 @@ M["hls"] = {
 
 -- uv tool install ruff@latest
 M["ruff"] = {}
+
+-- npm i -g @tailwindcss/language-server
+M["tailwindcss"] = {
+    root_dir = function(bufnr, on_dir)
+        local root_files = {
+            "tailwind.config.js",
+            "tailwind.config.cjs",
+            "tailwind.config.mjs",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "postcss.config.cjs",
+            "postcss.config.mjs",
+            "postcss.config.ts",
+        }
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        root_files = lsp_util.insert_package_json(root_files, "tailwindcss", fname)
+        on_dir(vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1]))
+    end,
+}
+
+-- npm i -g vscode-langservers-extracted
+M["eslint"] = {
+    cmd = { "use_npc.sh", "vscode-eslint-language-server", "--stdio" },
+}
+
+M["jsonls"] = {
+    settings = {
+        json = {
+            schemas = {
+                {
+                    fileMatch = { "package.json" },
+                    url = "https://json.schemastore.org/package.json",
+                },
+                {
+                    fileMatch = { "tsconfig.json" },
+                    url = "https://json.schemastore.org/tsconfig.json",
+                },
+            },
+            validate = { enable = true },
+        },
+    },
+}
+
+M["cssls"] = {}
 
 return M

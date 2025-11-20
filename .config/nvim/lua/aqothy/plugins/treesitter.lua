@@ -1,28 +1,3 @@
-local ensure_installed = {
-    -- Neovim
-    "c",
-    "lua",
-    "vim",
-    "vimdoc",
-    "query",
-    "markdown",
-    "markdown_inline",
-
-    -- extras
-    "javascript",
-    "typescript",
-    "cpp",
-    "go",
-    "bash",
-    "tsx",
-    "json",
-    "swift",
-    "python",
-    "haskell",
-    "regex",
-    "zsh",
-}
-
 -- npm install -g tree-sitter-cli
 return {
     {
@@ -42,6 +17,30 @@ return {
             local TS = require("nvim-treesitter")
             local ts_utils = require("aqothy.config.utils")
 
+            local ensure_installed = {
+                -- Built into Neovim but need to install for other features like textobjects, etc
+                "c",
+                "lua",
+                "vim",
+                "vimdoc",
+                "query",
+                "markdown",
+                "markdown_inline",
+
+                -- extras
+                "javascript",
+                "typescript",
+                "cpp",
+                "go",
+                "bash",
+                "tsx",
+                "json",
+                "swift",
+                "python",
+                "haskell",
+                "regex",
+            }
+
             local function is_disabled(lang, feat, buf)
                 local f = opts[feat] or {}
                 if f.enabled == false then
@@ -54,7 +53,7 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
-            vim.treesitter.language.register("bash", { "dotenv" })
+            vim.treesitter.language.register("bash", { "dotenv", "zsh" })
 
             TS.setup(opts)
 
