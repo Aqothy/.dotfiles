@@ -69,4 +69,3 @@ end
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-opt.sessionoptions = { "curdir", "tabpages", "terminal", "winsize" }

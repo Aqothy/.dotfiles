@@ -17,5 +17,19 @@
     "bindings": {
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
+  },
+  {
+    "context": "VimControl",
+    "bindings": {
+      "j": ["vim::Down", { "display_lines": true }],
+      "k": ["vim::Up", { "display_lines": true }]
+    }
+  },
+  {
+    "context": "VimCount",
+    "bindings": {
+      "j": ["vim::Down", { "display_lines": false }],
+      "k": ["vim::Up", { "display_lines": false }]
+    }
   }
 ]

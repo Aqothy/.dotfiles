@@ -65,8 +65,8 @@ map("n", "<leader>om", function()
         vim.notify("append linematch", vim.log.levels.INFO)
     end
 end, { desc = "Toggle linematch diff algorithm" })
-map("n", "<localleader>r", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
-map("n", "<localleader>q", function()
+map("n", "gl", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
+map("n", "<c-q>", function()
     local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
     if not success and err then
         vim.notify(err, vim.log.levels.ERROR)
@@ -99,6 +99,6 @@ map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-map("n", "<localleader>d", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
+map("n", "gh", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
 
 map("n", "<leader>pm", "<cmd>Lazy<cr>", { desc = "Package Manager" })

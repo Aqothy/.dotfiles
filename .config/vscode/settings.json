@@ -27,7 +27,6 @@
   "terminal.integrated.suggest.enabled": true,
   "zenMode.hideLineNumbers": false,
   "zenMode.restore": false,
-  "workbench.colorTheme": "Gruvbox Dark Soft",
   "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
   "editor.hover.sticky": false,
   "terminal.integrated.fontSize": 15,

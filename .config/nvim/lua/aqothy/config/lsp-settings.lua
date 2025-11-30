@@ -11,9 +11,6 @@ local map = vim.keymap.set
 
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
-    tsserver = {
-        nodePath = "/Users/aqothy/.local/bin/npc.sh",
-    },
     preferences = {
         useAliasesForRenames = false,
     },
@@ -99,10 +96,6 @@ M["clangd"] = {
         "--function-arg-placeholders=0",
         "--fallback-style=WebKit",
     },
-    init_options = {
-        completeUnimported = true,
-        clangdFileStatus = true,
-    },
 }
 
 -- go install golang.org/x/tools/gopls@latest
@@ -172,9 +165,7 @@ M["tailwindcss"] = {
 }
 
 -- npm i -g vscode-langservers-extracted
-M["eslint"] = {
-    cmd = { "use_npc.sh", "vscode-eslint-language-server", "--stdio" },
-}
+M["eslint"] = {}
 
 M["jsonls"] = {
     settings = {

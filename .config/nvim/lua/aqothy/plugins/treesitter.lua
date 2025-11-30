@@ -53,7 +53,7 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
-            vim.treesitter.language.register("bash", { "dotenv", "zsh" })
+            vim.treesitter.language.register("bash", { "kitty", "dotenv", "zsh" })
 
             TS.setup(opts)
 
