@@ -1,13 +1,32 @@
 local M = {}
 
 local api = vim.api
-local has_icons, mini_icons = pcall(require, "mini.icons")
+local has_mini_icons, mini_icons = pcall(require, "mini.icons")
+local has_icons, icons = pcall(require, "aqothy.config.icons")
 
 local title_cache = {}
 local icon_cache = {}
 
 local autocmd = api.nvim_create_autocmd
 local group = api.nvim_create_augroup("AqTabline", { clear = true })
+
+local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
+
+local diag_severity_map = {
+    [vim.diagnostic.severity.ERROR] = { sign = diag_signs.Error, hl = "DiagnosticError" },
+    [vim.diagnostic.severity.WARN] = { sign = diag_signs.Warn, hl = "DiagnosticWarn" },
+    [vim.diagnostic.severity.INFO] = { sign = diag_signs.Info, hl = "DiagnosticInfo" },
+    [vim.diagnostic.severity.HINT] = { sign = diag_signs.Hint, hl = "DiagnosticHint" },
+}
+
+autocmd("DiagnosticChanged", {
+    group = group,
+    callback = function()
+        vim.schedule(function()
+            vim.cmd("redrawtabline")
+        end)
+    end,
+})
 
 local function clear_buffer_cache(buf)
     title_cache[buf] = nil
@@ -46,7 +65,7 @@ local function get_icon(buf, hl)
     local name = api.nvim_buf_get_name(buf)
     local icon, icon_hl
 
-    if has_icons then
+    if has_mini_icons then
         icon, icon_hl = mini_icons.get("file", name)
     end
 
@@ -60,6 +79,23 @@ local function get_icon(buf, hl)
     return icon_hl .. icon .. hl .. " "
 end
 
+local function get_diagnostic_indicator(buf)
+    local counts = vim.diagnostic.count(buf)
+
+    if next(counts) == nil then
+        return ""
+    end
+
+    for _, severity in ipairs({ vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN }) do
+        local count = counts[severity]
+        if count and count > 0 then
+            local info = diag_severity_map[severity]
+            return "%#" .. info.hl .. "#" .. info.sign
+        end
+    end
+    return ""
+end
+
 local function build_tab(tab, index, is_current)
     local hl = is_current and "%#TabLineSel#" or "%#TabLine#"
     local win = api.nvim_tabpage_get_win(tab)
@@ -67,14 +103,22 @@ local function build_tab(tab, index, is_current)
 
     local icon = get_icon(buf, hl)
     local label = get_title(buf)
+    local diag = get_diagnostic_indicator(buf)
 
     local modified = api.nvim_get_option_value("modified", { buf = buf }) and " %m " or " "
 
-    local parts = { hl, "%" .. index .. "T", " " }
-    parts[#parts + 1] = icon
-    parts[#parts + 1] = label
-    parts[#parts + 1] = modified
-    parts[#parts + 1] = "%T"
+    local parts = {
+        hl,
+        "%" .. index .. "T", -- Clickable region start
+        " ",
+        icon,
+        label,
+        modified,
+        diag,
+        " ",
+        "%T", -- Clickable region end
+        "%#TabLineFill#", -- Reset to fill color between tabs
+    }
 
     return table.concat(parts)
 end

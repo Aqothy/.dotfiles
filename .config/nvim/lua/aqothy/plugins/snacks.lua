@@ -133,7 +133,12 @@ return {
 
         input = { enabled = true },
 
-        notifier = { enabled = true, sort = { "added" } },
+        notifier = {
+            enabled = true,
+            sort = { "added" },
+            top_down = false,
+            margin = { top = 0, right = 1, bottom = 1 },
+        },
 
         quickfile = { enabled = true },
 

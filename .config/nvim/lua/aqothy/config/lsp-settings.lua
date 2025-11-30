@@ -9,6 +9,9 @@ local map = vim.keymap.set
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
+-- npm install -g @typescript/native-preview
+M["tsgo"] = {}
+
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
     preferences = {
@@ -18,6 +21,7 @@ local jsts_config = {
 
 -- npm install -g @vtsls/language-server
 M["vtsls"] = {
+    enabled = false,
     settings = {
         vtsls = {
             enableMoveToFileCodeAction = true,

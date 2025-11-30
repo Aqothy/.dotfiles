@@ -29,6 +29,8 @@ for mode, color in pairs(mode_colors) do
 end
 
 groups["AqlineFileInfo"] = { link = "QuickFixLine" }
+groups["AqlineLspLoading"] = { link = "DiagnosticInfo" }
+groups["AqlineLspDone"] = { link = "DiagnosticOk" }
 
 for group, opts in pairs(groups) do
     opts.default = true
@@ -254,7 +256,7 @@ function M.filetype_component()
     return result
 end
 
-local diag_signs = has_icons and icons.diagnostics or { Error = "E", Warn = "W", Info = "I", Hint = "H" }
+local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
 M.diagnostic_levels = {
     { name = "ERROR", sign = diag_signs.Error, hl = "DiagnosticError" },
     { name = "WARN", sign = diag_signs.Warn, hl = "DiagnosticWarn" },
@@ -314,6 +316,65 @@ function M.diagnostics_component()
     end
 
     return result
+end
+
+M.lsp_progress_state = {}
+M.lsp_progress_cached_str = ""
+
+local function update_lsp_progress_str()
+    local parts = {}
+    -- sort so that the order is consistent
+    local keys = vim.tbl_keys(M.lsp_progress_state)
+    table.sort(keys)
+
+    for _, k in ipairs(keys) do
+        local state = M.lsp_progress_state[k]
+        local icon = state.is_done and "" or "󱥸"
+        local hl = state.is_done and "%#AqlineLspDone#" or "%#AqlineLspLoading#"
+        parts[#parts + 1] = hl .. state.name .. " " .. icon .. "%0*"
+    end
+    M.lsp_progress_cached_str = table.concat(parts, " ")
+end
+
+autocmd("LspProgress", {
+    group = stl_group,
+    pattern = { "begin", "end" },
+    callback = function(ev)
+        local client_id = ev.data.client_id
+        local client = vim.lsp.get_client_by_id(client_id)
+        if not client then
+            return
+        end
+
+        local value = ev.data.params.value
+        local is_end = value.kind == "end"
+
+        -- cancel existing cleanup timers
+        if M.lsp_progress_state[client_id] and M.lsp_progress_state[client_id].timer then
+            M.lsp_progress_state[client_id].timer:close()
+        end
+
+        M.lsp_progress_state[client_id] = {
+            name = client.name,
+            is_done = is_end,
+            timer = nil,
+        }
+
+        if is_end then
+            M.lsp_progress_state[client_id].timer = vim.defer_fn(function()
+                M.lsp_progress_state[client_id] = nil
+                update_lsp_progress_str()
+                vim.cmd("redrawstatus")
+            end, 3000)
+        end
+
+        update_lsp_progress_str()
+        vim.cmd("redrawstatus")
+    end,
+})
+
+function M.lsp_progress_component()
+    return M.lsp_progress_cached_str
 end
 
 local function format_filesize(size)
@@ -413,6 +474,11 @@ function M.render()
     end
 
     parts[#parts + 1] = "%0*%="
+
+    local lsp_progress = M.lsp_progress_component()
+    if lsp_progress ~= "" then
+        parts[#parts + 1] = lsp_progress
+    end
 
     local diag = M.diagnostics_component()
     if diag ~= "" then

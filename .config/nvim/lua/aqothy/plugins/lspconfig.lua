@@ -13,32 +13,6 @@ return {
 
         local lsp_group = vim.api.nvim_create_augroup("aqothy/lspconfig", { clear = true })
 
-        vim.api.nvim_create_autocmd("LspProgress", {
-            group = lsp_group,
-            pattern = { "begin", "end" },
-            callback = function(ev)
-                local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-                if not client then
-                    return
-                end
-
-                local params = ev.data.params
-                local value = params.value
-
-                local is_end = value.kind == "end"
-
-                vim.notify(value.title, vim.log.levels.INFO, {
-                    id = client.id .. "-" .. params.token,
-                    title = client.name,
-                    timeout = is_end and 1000 or 0,
-                    opts = function(notif)
-                        notif.icon = is_end and "" or "󱥸"
-                    end,
-                })
-            end,
-        })
-
         vim.api.nvim_create_autocmd("LspAttach", {
             group = lsp_group,
             callback = function(ev)
