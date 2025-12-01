@@ -22,6 +22,8 @@ opt.tabstop = 4
 opt.softtabstop = 4
 opt.shiftround = true
 opt.smartindent = true
+opt.breakindent = true
+opt.linebreak = true
 
 opt.swapfile = false
 opt.writebackup = false
@@ -53,6 +55,7 @@ opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt = { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram" }
 opt.termguicolors = true
+opt.scrolloff = 8
 opt.whichwrap:append("h,l")
 opt.showcmd = false
 opt.fillchars = { eob = " ", diff = "╱" }

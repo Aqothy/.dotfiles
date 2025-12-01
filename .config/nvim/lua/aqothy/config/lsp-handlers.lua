@@ -48,7 +48,7 @@ function M.setup()
         },
     }
 
-    -- vim.lsp.log.set_level(vim.log.levels.OFF)
+    vim.lsp.log.set_level(vim.log.levels.OFF)
 
     vim.diagnostic.config(config)
 

@@ -249,7 +249,6 @@ return {
                 aqfiles = {
                     layout = {
                         preset = "vscode",
-                        hidden = { "preview" },
                     },
                     multi = { "recent", "files" },
                     format = "file",
@@ -266,7 +265,6 @@ return {
                 buffers = {
                     layout = {
                         preset = "vscode",
-                        hidden = { "preview" },
                     },
                     filter = {
                         filter = function(item)

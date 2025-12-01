@@ -19,6 +19,7 @@ return {
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
                     DiffText = { link = "DiffAdd" },
+                    TreesitterContext = { bg = colors.dark1 },
                 }
             else
                 overrides = {
@@ -29,6 +30,7 @@ return {
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
                     DiffText = { link = "DiffAdd" },
+                    TreesitterContext = { bg = colors.light1 },
                 }
             end
 

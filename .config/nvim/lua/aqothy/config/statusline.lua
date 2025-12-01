@@ -247,7 +247,7 @@ function M.filetype_component()
         display_path = "%t" -- Use only the filename
     end
 
-    local result = icon_part .. "%0*" .. display_path .. "%m%r"
+    local result = icon_part .. "%0*" .. display_path .. " %m%r"
 
     if bo.buftype == "" then
         M.file_cache[buf] = result

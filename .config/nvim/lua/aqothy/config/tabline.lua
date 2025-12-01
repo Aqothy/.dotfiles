@@ -90,7 +90,7 @@ local function get_diagnostic_indicator(buf)
         local count = counts[severity]
         if count and count > 0 then
             local info = diag_severity_map[severity]
-            return "%#" .. info.hl .. "#" .. info.sign
+            return "%#" .. info.hl .. "# " .. info.sign
         end
     end
     return ""
@@ -105,7 +105,8 @@ local function build_tab(tab, index, is_current)
     local label = get_title(buf)
     local diag = get_diagnostic_indicator(buf)
 
-    local modified = api.nvim_get_option_value("modified", { buf = buf }) and " %m " or " "
+    local is_modified = api.nvim_get_option_value("modified", { buf = buf })
+    local modified = is_modified and " [+]" or ""
 
     local parts = {
         hl,
