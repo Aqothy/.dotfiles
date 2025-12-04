@@ -15,6 +15,8 @@ map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 map("n", "<s-tab>", "<c-^>", { desc = "Alternate buffer" })
+map("n", "<C-i>", "<C-i>zz", { desc = "Jump forward in jump list and center" })
+map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward in jump list and center" })
 
 -- Tabs
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
@@ -43,6 +45,9 @@ map("n", "<leader>tt", "<cmd>tabnew | terminal<CR>", { desc = "Open terminal in 
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
+map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })
+map("n", "cdu", "<cmd>lcd .. | pwd<cr>", { desc = "Change directory to parent directory" })
+map("n", "cd-", "<cmd>lcd - | pwd<cr>", { desc = "Change directory to previous directory" })
 
 -- Editing and text manipulation
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
@@ -51,7 +56,7 @@ map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" }
 map("x", "il", "^og_", { desc = "Select line without whitespace" })
 map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
 map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
-map("n", "c.", ":%s///gc<Left><Left><Left><Left>", { desc = "Replace" })
+map("n", "c.", ":%s/<c-r><c-w>//gc<Left><Left><Left>", { desc = "Replace word" })
 map("i", "<c-e>", "<c-o>$", { desc = "End" })
 map("i", "<c-a>", "<c-o>^", { desc = "Home" })
 map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
@@ -72,6 +77,9 @@ map("n", "<c-q>", function()
         vim.notify(err, vim.log.levels.ERROR)
     end
 end, { desc = "Toggle qf" })
+map("n", "y<c-g>", function()
+    vim.fn.setreg("+", vim.fn.expand("%:."))
+end, { desc = "Yank relative file path to clipboard" })
 
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })

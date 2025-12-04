@@ -61,7 +61,7 @@ export VISUAL="nvim"
 export MANPAGER='nvim +Man!'
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
-export FZF_DEFAULT_COMMAND='rg --files --no-messages --hidden --color=never -g "!.git" -g "!.DS_Store"'
+export FZF_DEFAULT_COMMAND='rg --files --no-messages --color=never -g "!.git" -g "!.DS_Store" --hidden'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 autoload -Uz vcs_info

@@ -45,6 +45,9 @@ return {
                 gs.blame_line({ full = true })
             end, "Blame Line")
             map({ "o", "x" }, "ih", gs.select_hunk, "Select Hunk")
+            map("n", "<leader>hd", function()
+                gs.diffthis("HEAD")
+            end, "Diff HEAD")
         end,
     },
 }

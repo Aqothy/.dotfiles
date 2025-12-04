@@ -99,6 +99,16 @@ return {
                 vim.notify("Yanked path: " .. path)
             end
 
+            local files_set_cwd = function()
+                local path = (mf.get_fs_entry() or {}).path
+                if path == nil then
+                    return vim.notify("Cursor is not on valid entry")
+                end
+                local dir = vim.fs.dirname(path)
+                vim.fn.chdir(dir)
+                vim.notify("Set CWD to: " .. dir)
+            end
+
             local ui_open = function()
                 vim.ui.open(mf.get_fs_entry().path)
             end
@@ -119,6 +129,7 @@ return {
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")
                     nmap(buf, "gy", yank_path, "Yank path")
+                    nmap(buf, "cg", files_set_cwd, "Set CWD")
                 end,
             })
 

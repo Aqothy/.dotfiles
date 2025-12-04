@@ -24,6 +24,15 @@ return {
             end, {
                 desc = "Dismiss Copilot Suggestion",
             })
+            vim.keymap.set("n", "<leader>tc", function()
+                if vim.fn["copilot#Enabled"]() == 1 then
+                    vim.cmd("Copilot disable")
+                else
+                    vim.cmd("Copilot enable")
+                end
+                vim.cmd("Copilot status")
+                vim.cmd("Sidekick nes toggle")
+            end, { desc = "Toggle Copilot" })
         end,
     },
     {
@@ -40,6 +49,9 @@ return {
             cli = {
                 win = {
                     layout = "float",
+                    wo = {
+                        scrolloff = 8,
+                    },
                     float = {
                         width = 1,
                         height = 0.99,

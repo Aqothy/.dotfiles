@@ -1,6 +1,7 @@
 return {
     "saghen/blink.cmp",
     event = { "InsertEnter", "CmdLineEnter" },
+    version = "*",
     opts = {
         keymap = {
             preset = "enter",
@@ -62,10 +63,14 @@ return {
                 lsp = {
                     timeout_ms = 500,
                 },
+                path = {
+                    opts = {
+                        show_hidden_files_by_default = true,
+                    },
+                },
             },
         },
         fuzzy = {
-            implementation = "lua",
             sorts = {
                 "exact",
                 "score",

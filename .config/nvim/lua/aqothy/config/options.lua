@@ -8,8 +8,6 @@ g.loaded_ruby_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
 
-g.tsc_makeprg = "npx tsc --noEmit"
-
 local opt = vim.opt
 
 opt.number = true
@@ -29,6 +27,8 @@ opt.swapfile = false
 opt.writebackup = false
 opt.undofile = true
 opt.updatetime = 200
+opt.history = 100
+opt.lazyredraw = true
 
 opt.splitright = true
 opt.splitbelow = true
@@ -53,7 +53,7 @@ opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
-opt.diffopt = { "internal", "filler", "closeoff", "inline:word", "indent-heuristic", "algorithm:histogram" }
+opt.diffopt = { "internal", "filler", "closeoff", "inline:char", "indent-heuristic" }
 opt.termguicolors = true
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
@@ -62,13 +62,20 @@ opt.fillchars = { eob = " ", diff = "╱" }
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.background = "dark"
 opt.foldlevel = 99
+opt.cursorline = true
+opt.list = true
+opt.listchars = {
+    tab = "▏ ",
+    trail = "·",
+}
 
 opt.fileencoding = "utf-8"
 
 if vim.fn.executable("rg") == 1 then
-    opt.grepprg = 'rg --vimgrep --smart-case -g "!.git" --hidden'
+    opt.grepprg = 'rg --vimgrep --smart-case --color=never -g "!.git" --hidden'
 end
 
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
+opt.sessionoptions = { "curdir", "tabpages", "winsize", "terminal" }

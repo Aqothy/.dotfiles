@@ -42,7 +42,6 @@
     verbose = true
 
 [diff]
-    algorithm = histogram
     renames = true
 
 [merge]
@@ -55,4 +54,4 @@
     hideResolved = true
 
 [mergetool "nvimdiff"]
-	cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'windo set foldcolumn=0 signcolumn=no wrap' -c 'wincmd J'
+    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'windo set foldcolumn=0 signcolumn=no wrap' -c 'wincmd J'

@@ -119,6 +119,7 @@ return {
                             return Snacks.git.get_root() ~= nil
                         end,
                     },
+                    { icon = " ", key = "l", desc = "Load Session", action = ":lua require('aqothy.config.utils').load_session()" },
                     { icon = " ", key = "t", desc = "New Tab", action = ":tabnew" },
                     { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
