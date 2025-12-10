@@ -2,6 +2,8 @@
 # https://thevaluable.dev/zsh-completion-guide-examples/
 # https://thevaluable.dev/zsh-install-configure-mouseless/
 
+bindkey -e
+
 # Zsh Options
 setopt AUTO_CD
 setopt HIST_EXPIRE_DUPS_FIRST

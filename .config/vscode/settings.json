@@ -10,12 +10,10 @@
     "*": true,
     "plaintext": true,
     "markdown": true,
-    "properties": false
+    "dotenv": false
   },
-  "github.copilot.editor.enableAutoCompletions": true,
   "settingsSync.ignoredSettings": [],
   "settingsSync.ignoredExtensions": [],
-  "C_Cpp.default.cppStandard": "c++20",
   "editor.stickyScroll.scrollWithEditor": false,
   "security.workspace.trust.untrustedFiles": "open",
   "editor.lineNumbers": "relative",
@@ -23,28 +21,13 @@
   "editor.fontFamily": "'Hack Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 15,
   "workbench.activityBar.location": "top",
-  "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.suggest.enabled": true,
-  "zenMode.hideLineNumbers": false,
   "zenMode.restore": false,
-  "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
   "editor.hover.sticky": false,
   "terminal.integrated.fontSize": 15,
   "editor.stickyScroll.maxLineCount": 3,
   "editor.cursorSurroundingLines": 8,
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.agent.enabled": true,
-  "github.copilot.chat.agent.thinkingTool": true,
-  "extensions.experimental.affinity": {
-    "vscodevim.vim": 1
-  },
-  "editor.stickyScroll.enabled": false,
-  "chat.agent.maxRequests": 100,
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "workbench.editor.languageDetection": false,
-  "chat.mcp.gallery.enabled": true,
-  "editor.linkedEditing": true,
-  "python.analysis.typeCheckingMode": "standard"
+  "chat.agent.maxRequests": 999,
+  "editor.linkedEditing": true
 }

@@ -11,6 +11,7 @@ local autocmd = api.nvim_create_autocmd
 
 local has_icons, icons = pcall(require, "aqothy.config.icons")
 local has_mini_icons, mini_icons = pcall(require, "mini.icons")
+local has_sidekick, sidekick = pcall(require, "sidekick.status")
 
 local groups = {}
 
@@ -377,6 +378,30 @@ function M.lsp_progress_component()
     return M.lsp_progress_cached_str
 end
 
+M.copilot_icons = {
+    Error = { text = "", hl = "DiagnosticError" },
+    Inactive = { text = "", hl = "Comment" },
+    Warning = { text = "", hl = "DiagnosticWarn" },
+    Normal = { text = "", hl = "Special" },
+}
+
+function M.copilot_component()
+    if not has_sidekick then
+        return ""
+    end
+
+    local status = sidekick.get()
+    if not status then
+        return ""
+    end
+
+    local config = M.copilot_icons[status.kind] or M.copilot_icons.Normal
+
+    local hl = status.busy and "DiagnosticWarn" or config.hl
+
+    return "%#" .. hl .. "#" .. config.text .. "%0*"
+end
+
 local function format_filesize(size)
     if size < 1000 then
         return string.format("%db", size)
@@ -483,6 +508,11 @@ function M.render()
     local diag = M.diagnostics_component()
     if diag ~= "" then
         parts[#parts + 1] = diag
+    end
+
+    local copilot_status = M.copilot_component()
+    if copilot_status ~= "" then
+        parts[#parts + 1] = copilot_status
     end
 
     if width > 120 then

@@ -1,14 +1,12 @@
 local git_ref_opts = {
     actions = {
-        ["diff_base"] = function(picker)
-            local currentCommit = picker:current().commit
-            picker:close()
-            Snacks.picker.git_diff({ base = currentCommit })
-        end,
         ["diff_commit"] = function(picker)
             local currentCommit = picker:current().commit
-            picker:close()
-            Snacks.picker.git_diff({ cmd_args = { currentCommit .. "^!" }, staged = false })
+            if currentCommit then
+                picker:close()
+                local args = { currentCommit .. "^" .. "!" }
+                require("diffview").open(args)
+            end
         end,
         ["copy_commit"] = function(picker)
             local currentCommit = picker:current().commit
@@ -21,8 +19,7 @@ local git_ref_opts = {
     win = {
         input = {
             keys = {
-                ["<a-o>"] = { "diff_commit", desc = "Diff this commit", mode = { "n", "i" } },
-                ["<c-o>"] = { "diff_base", desc = "Diff base", mode = { "n", "i" } },
+                ["<c-o>"] = { "diff_commit", desc = "Diff this commit", mode = { "n", "i" } },
                 ["<c-y>"] = { "copy_commit", desc = "Copy commit", mode = { "n", "i" } },
             },
         },
@@ -30,7 +27,6 @@ local git_ref_opts = {
 }
 
 local git_diff_opts = {
-    group = true,
     layout = {
         preset = "diff",
     },
@@ -119,7 +115,6 @@ return {
                             return Snacks.git.get_root() ~= nil
                         end,
                     },
-                    { icon = " ", key = "l", desc = "Load Session", action = ":lua require('aqothy.config.utils').load_session()" },
                     { icon = " ", key = "t", desc = "New Tab", action = ":tabnew" },
                     { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
@@ -262,15 +257,11 @@ return {
                 files = {
                     show_empty = false,
                     exclude = { ".DS_Store" },
+                    hidden = true,
                 },
                 buffers = {
                     layout = {
                         preset = "vscode",
-                    },
-                    filter = {
-                        filter = function(item)
-                            return vim.bo[item.buf].buftype == ""
-                        end,
                     },
                 },
                 grep = {
@@ -305,19 +296,23 @@ return {
                 height = 0.99,
                 keys = {
                     hide = {
-                        "<c-[>",
+                        "<esc><esc>",
                         "hide",
                         mode = "t",
-                        expr = true,
                         desc = "Hide LazyGit",
                     },
                 },
             },
             zen = {
-                width = 120,
+                width = 0.65,
                 backdrop = {
                     transparent = false,
                     blend = 95,
+                },
+            },
+            terminal = {
+                keys = {
+                    term_normal = false,
                 },
             },
         },
@@ -330,7 +325,7 @@ return {
         { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
         { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
-        { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
+        { "<leader>hd", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
         { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
         { "<leader>gs", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },

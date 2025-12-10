@@ -7,6 +7,7 @@ return {
                     telemetryLevel = "off",
                 },
             }
+            vim.g.copilot_npx = "latest"
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_proxy_strict_ssl = false
             vim.g.copilot_filetypes = {
@@ -48,14 +49,11 @@ return {
             },
             cli = {
                 win = {
-                    layout = "float",
                     wo = {
                         scrolloff = 8,
                     },
-                    float = {
-                        width = 1,
-                        height = 0.99,
-                        border = "none",
+                    split = {
+                        width = 60,
                     },
                 },
             },
@@ -85,9 +83,20 @@ return {
                 desc = "Select CLI",
             },
             {
-                "<leader>ac",
+                "<leader>ad",
                 function() require("sidekick.cli").close() end,
-                desc = "Close a CLI Session",
+                desc = "Detach a CLI Session",
+            },
+            {
+                "<leader>af",
+                function() require("sidekick.cli").send({ msg = "{file}" }) end,
+                desc = "Send File",
+            },
+            {
+                "<leader>av",
+                function() require("sidekick.cli").send({ msg = "{this}" }) end,
+                mode = { "x", "n" },
+                desc = "Send This",
             },
         },
     },

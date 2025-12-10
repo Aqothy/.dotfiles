@@ -64,7 +64,7 @@ return {
             end, ensure_installed or {})
 
             if #missing_parsers > 0 then
-                TS.install(missing_parsers, { summary = true }):wait(60000)
+                TS.install(missing_parsers, { summary = true }):wait(30000)
             end
 
             ts_utils.get_installed_parsers(true)

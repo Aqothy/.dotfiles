@@ -13,12 +13,21 @@ return {
 
         local lsp_group = vim.api.nvim_create_augroup("aqothy/lspconfig", { clear = true })
 
+        local utils = require("aqothy.config.utils")
+
         vim.api.nvim_create_autocmd("LspAttach", {
             group = lsp_group,
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
                 if not client then
+                    return
+                end
+
+                local file = ev.file
+                -- prevent lsp from attaching to artificial buffers, ref: https://github.com/neovim/neovim/issues/32074
+                if #file ~= 0 and not utils.bufname_valid(file) then
+                    client:stop()
                     return
                 end
 

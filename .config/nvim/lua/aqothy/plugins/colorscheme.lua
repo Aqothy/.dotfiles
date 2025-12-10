@@ -41,7 +41,9 @@ return {
 
             vim.cmd("colorscheme gruvbox")
 
-            local custom_hls = {}
+            local custom_hls = {
+                DiffviewChangeDelete = { bg = "#5a332f" },
+            }
 
             for name, opts in pairs(custom_hls) do
                 vim.api.nvim_set_hl(0, name, opts)

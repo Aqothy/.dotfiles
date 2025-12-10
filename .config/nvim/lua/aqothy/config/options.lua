@@ -53,7 +53,7 @@ opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
-opt.diffopt = { "internal", "filler", "closeoff", "inline:char", "indent-heuristic" }
+opt.diffopt = { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "linematch:60" }
 opt.termguicolors = true
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
@@ -62,12 +62,14 @@ opt.fillchars = { eob = " ", diff = "╱" }
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.background = "dark"
 opt.foldlevel = 99
+opt.foldlevelstart = 99
 opt.cursorline = true
 opt.list = true
 opt.listchars = {
     tab = "▏ ",
     trail = "·",
 }
+opt.formatoptions = "jcroqlnt"
 
 opt.fileencoding = "utf-8"
 
@@ -78,4 +80,4 @@ end
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-opt.sessionoptions = { "curdir", "tabpages", "winsize", "terminal" }
+opt.sessionoptions = { "curdir", "tabpages", "winsize", "skiprtp" }

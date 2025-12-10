@@ -12,6 +12,18 @@ function M.action(action)
     })
 end
 
+function M.bufname_valid(bufname)
+    if
+        bufname:match("^/")
+        or bufname:match("^[a-zA-Z]:")
+        or bufname:match("^zipfile://")
+        or bufname:match("^tarfile:")
+    then
+        return true
+    end
+    return false
+end
+
 -- treesitter
 
 M._installed = nil
@@ -62,42 +74,6 @@ function M.filetypes_from_langs(langs)
     return M._filetypes
 end
 
--- session
-
-local session_dir = vim.fn.stdpath("state") .. "/sessions/"
-
-local e = vim.fn.fnameescape
-
-local cwd = vim.fn.getcwd()
-
-if vim.fn.isdirectory(session_dir) == 0 then
-    vim.fn.mkdir(session_dir, "p")
-end
-
-function M.get_session_name()
-    -- Turn the path into a filename (replace slashes with %)
-    local filename = cwd:gsub("[\\/:]+", "%%") .. ".vim"
-
-    return session_dir .. filename
-end
-
-function M.save_session()
-    local file = M.get_session_name()
-    vim.cmd("mks! " .. e(file))
-    vim.notify("Session saved for directory: " .. cwd)
-end
-
-function M.load_session()
-    local file = M.get_session_name()
-    if vim.fn.filereadable(file) == 1 then
-        vim.cmd("source " .. e(file))
-    end
-end
-
-vim.keymap.set("n", "<leader>ps", M.save_session, { silent = true, desc = "Save Session" })
-
-vim.keymap.set("n", "<leader>rl", M.load_session, { silent = true, desc = "Restore Session" })
-
 -- async
 
 function M.run_async(cmd, efm, title, opts)
@@ -109,7 +85,9 @@ function M.run_async(cmd, efm, title, opts)
     opts = opts or {}
     local lines = {}
 
-    vim.notify("Started: " .. title, vim.log.levels.INFO)
+    if not opts.silent then
+        vim.notify("Started: " .. title, vim.log.levels.INFO)
+    end
 
     local function on_event(_, data)
         -- sometimes data can have emtpy lines, so dont use vim.list_extend
@@ -128,6 +106,9 @@ function M.run_async(cmd, efm, title, opts)
         on_stdout = on_event,
         on_stderr = on_event,
         on_exit = function(_, exit_code)
+            if opts.silent then
+                return
+            end
             if opts.no_qf then
                 local output = table.concat(lines, "\n")
 

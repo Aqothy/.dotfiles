@@ -10,10 +10,6 @@ map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
-map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 map("n", "<s-tab>", "<c-^>", { desc = "Alternate buffer" })
 map("n", "<C-i>", "<C-i>zz", { desc = "Jump forward in jump list and center" })
 map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward in jump list and center" })
@@ -21,27 +17,12 @@ map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward in jump list and center" })
 -- Tabs
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map("t", "<c-[>", "<c-\\><c-n>", { desc = "Esc Terminal" })
-map("t", "<esc>", function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
-end, { desc = "Feed esc" })
-map("n", "<leader>\\", function()
-    if vim.bo.buftype == "terminal" then
-        return "<cmd>vs | term<cr>"
-    else
-        return "<cmd>vs<cr>"
-    end
-end, { desc = "New Vertical Split", expr = true })
-map("n", "<leader><cr>", function()
-    if vim.bo.buftype == "terminal" then
-        return "<cmd>sp | term<cr>"
-    else
-        return "<cmd>sp<cr>"
-    end
-end, { desc = "New Horizontal Split", expr = true })
+map("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Esc Terminal" })
+map("n", "<leader>\\", "<C-W>v", { desc = "New Vertical Split" })
+map("n", "<leader><cr>", "<C-W>s", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
-map("n", "<leader>tt", "<cmd>tabnew | terminal<CR>", { desc = "Open terminal in new tab" })
+map("n", "<leader>tt", "<cmd>tabnew<CR>", { desc = "New tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
@@ -59,18 +40,10 @@ map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
 map("n", "c.", ":%s/<c-r><c-w>//gc<Left><Left><Left>", { desc = "Replace word" })
 map("i", "<c-e>", "<c-o>$", { desc = "End" })
 map("i", "<c-a>", "<c-o>^", { desc = "Home" })
-map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
-map("n", "<leader>om", function()
-    if vim.o.diffopt:find("linematch") ~= nil then
-        vim.opt.diffopt:remove({ "linematch:60" })
-        vim.notify("remove linematch", vim.log.levels.INFO)
-    else
-        vim.opt.diffopt:append({ "linematch:60" })
-        vim.notify("append linematch", vim.log.levels.INFO)
-    end
-end, { desc = "Toggle linematch diff algorithm" })
-map("n", "gl", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
+
+-- utils
+map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
 map("n", "<c-q>", function()
     local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
     if not success and err then
