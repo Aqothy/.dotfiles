@@ -32,10 +32,10 @@ automatically-unhide-macos-hidden-apps = false
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
-    alt-h = 'focus left'
-    alt-j = 'focus down'
-    alt-k = 'focus up'
-    alt-l = 'focus right'
+    alt-h = 'focus left --boundaries-action wrap-around-the-workspace'
+    alt-j = 'focus down --boundaries-action wrap-around-the-workspace'
+    alt-k = 'focus up --boundaries-action wrap-around-the-workspace'
+    alt-l = 'focus right --boundaries-action wrap-around-the-workspace'
 
     alt-shift-h = 'move left'
     alt-shift-j = 'move down'

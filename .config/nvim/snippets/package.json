@@ -34,13 +34,6 @@
       },
       {
         "language": [
-          "plaintex",
-          "tex"
-        ],
-        "path": "./tex.json"
-      },
-      {
-        "language": [
           "cpp"
         ],
         "path": "./cpp.json"

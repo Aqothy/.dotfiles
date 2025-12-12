@@ -53,7 +53,8 @@ opt.wildoptions:append({ "fuzzy" })
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
-opt.diffopt = { "internal", "filler", "closeoff", "inline:char", "indent-heuristic", "linematch:60" }
+opt.diffopt =
+    { "internal", "filler", "closeoff", "inline:char", "algorithm:histogram", "indent-heuristic", "linematch:60" }
 opt.termguicolors = true
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
@@ -70,6 +71,7 @@ opt.listchars = {
     trail = "·",
 }
 opt.formatoptions = "jcroqlnt"
+opt.wrap = false
 
 opt.fileencoding = "utf-8"
 
@@ -80,4 +82,4 @@ end
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-opt.sessionoptions = { "curdir", "tabpages", "winsize", "skiprtp" }
+opt.sessionoptions = { "curdir", "tabpages", "winsize", "terminal", "skiprtp" }

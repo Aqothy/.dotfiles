@@ -7,7 +7,6 @@ return {
                     telemetryLevel = "off",
                 },
             }
-            vim.g.copilot_npx = "latest"
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_proxy_strict_ssl = false
             vim.g.copilot_filetypes = {
@@ -53,7 +52,7 @@ return {
                         scrolloff = 8,
                     },
                     split = {
-                        width = 60,
+                        width = 0.4,
                     },
                 },
             },

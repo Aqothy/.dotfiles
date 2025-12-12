@@ -59,8 +59,12 @@ return {
         vim.api.nvim_create_autocmd("VimEnter", {
             group = group,
             callback = function()
+                local lazy_view = require("lazy.view")
+
                 if vim.fn.argc() == 0 then
-                    require("persistence").load()
+                    if not lazy_view.visible() then
+                        require("persistence").load()
+                    end
                 end
             end,
             once = true,

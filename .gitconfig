@@ -43,6 +43,8 @@
 
 [diff]
     renames = true
+    algorithm = histogram
+    indentHeuristic = true
 
 [merge]
     tool = nvimdiff

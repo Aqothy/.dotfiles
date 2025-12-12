@@ -159,6 +159,8 @@ return {
                     keys = {
                         ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
                         ["<a-h>"] = false,
+                        ["<Down>"] = { "history_forward", mode = { "i", "n" } },
+                        ["<Up>"] = { "history_back", mode = { "i", "n" } },
                     },
                 },
                 list = {
@@ -258,6 +260,9 @@ return {
                     show_empty = false,
                     exclude = { ".DS_Store" },
                     hidden = true,
+                    layout = {
+                        preset = "vscode",
+                    },
                 },
                 buffers = {
                     layout = {
@@ -296,9 +301,10 @@ return {
                 height = 0.99,
                 keys = {
                     hide = {
-                        "<esc><esc>",
+                        "<c-[>",
                         "hide",
                         mode = "t",
+                        expr = true,
                         desc = "Hide LazyGit",
                     },
                 },
@@ -308,11 +314,6 @@ return {
                 backdrop = {
                     transparent = false,
                     blend = 95,
-                },
-            },
-            terminal = {
-                keys = {
-                    term_normal = false,
                 },
             },
         },
@@ -347,6 +348,7 @@ return {
         { "<leader><leader>", function() Snacks.picker({ layout = { preset = "vscode" } }) end, desc = "Pick" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
+        { "<leader>F", function() Snacks.picker.pick("aqfiles", { cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Smart cwd" },
         { "<leader>s", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "undo tree" },
@@ -364,5 +366,6 @@ return {
         { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
         { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
         { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
+        { "gO", function() Snacks.picker.treesitter() end, desc = "Treesitter symbols" },
     },
 }

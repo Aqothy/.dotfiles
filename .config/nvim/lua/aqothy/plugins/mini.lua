@@ -90,6 +90,27 @@ return {
                 mf.refresh({ content = { filter = new_filter } })
             end
 
+            local map_split = function(buf_id, lhs, direction)
+                local rhs = function()
+                    local cur_target = mf.get_explorer_state().target_window
+
+                    if cur_target == nil or mf.get_fs_entry().fs_type == "directory" then
+                        return
+                    end
+
+                    local new_target = vim.api.nvim_win_call(cur_target, function()
+                        vim.cmd(direction .. " split")
+                        return vim.api.nvim_get_current_win()
+                    end)
+
+                    mf.set_target_window(new_target)
+                    mf.go_in({ close_on_file = true })
+                end
+
+                local desc = "Split " .. direction
+                vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+            end
+
             local yank_path = function()
                 local path = (mf.get_fs_entry() or {}).path
                 if path == nil then
@@ -130,6 +151,10 @@ return {
                     nmap(buf, "gx", ui_open, "OS open")
                     nmap(buf, "gy", yank_path, "Yank path")
                     nmap(buf, "cg", files_set_cwd, "Set CWD")
+
+                    map_split(buf, "<C-w>s", "horizontal")
+                    map_split(buf, "<C-w>v", "vertical")
+                    map_split(buf, "<C-t>", "tab")
                 end,
             })
 
@@ -137,7 +162,7 @@ return {
                 group = group,
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
-                    MiniFiles.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
+                    mf.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
                 end,
             })
 
