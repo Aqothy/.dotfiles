@@ -79,19 +79,6 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr ' %F{green}%f'
 zstyle ':vcs_info:*' unstagedstr ' %F{red}✘%f'
 
-__async_git_start() {
-  # remove any existing handler and close the previous fd
-  if [[ -n "$__git_async_fd" ]] && { true <&$__git_async_fd } 2>/dev/null; then
-    zle -F $__git_async_fd
-    exec {__git_async_fd}<&-
-  fi
-  # fork a process to fetch the vcs status and open a pipe to read from it
-  exec {__git_async_fd}< <(__async_git_info "$PWD")
-
-  # When the fd is readable, call the response handler
-  zle -F "$__git_async_fd" __async_git_done
-}
-
 __async_git_info() {
   emulate -L zsh
   cd -q "$1" || return
@@ -110,6 +97,23 @@ __async_git_done() {
   zle && zle reset-prompt
 }
 
+__async_git_start() {
+  # remove any existing handler and close the previous fd
+  if [[ -n "$__git_async_fd" ]] && { true <&$__git_async_fd } 2>/dev/null; then
+    zle -F $__git_async_fd
+    exec {__git_async_fd}<&-
+  fi
+  # fork a process to fetch the vcs status and open a pipe to read from it
+  exec {__git_async_fd}< <(__async_git_info "$PWD")
+
+  # When the fd is readable, call the response handler
+  zle -F "$__git_async_fd" __async_git_done
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd prompt_precmd
+add-zsh-hook chpwd prompt_chpwd
+
 prompt_precmd() {
   __async_git_start # start async job to populate git info
 }
@@ -117,10 +121,6 @@ prompt_precmd() {
 prompt_chpwd() {
   _git_status_prompt="" # clear current vcs_info
 }
-
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd prompt_precmd
-add-zsh-hook chpwd prompt_chpwd
 
 PROMPT='%B%(?:%F{green}➜%f:%F{red}!%f) %F{cyan}%~%f${_git_status_prompt}%b '
 
@@ -149,5 +149,3 @@ fzf_append_dir_widget() {
 zle -N fzf_append_dir_widget
 
 bindkey '^f' fzf_append_dir_widget
-
-[ -f "/Users/aqothy/.ghcup/env" ] && . "/Users/aqothy/.ghcup/env" # ghcup-env

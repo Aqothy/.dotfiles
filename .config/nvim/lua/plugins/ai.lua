@@ -2,13 +2,7 @@ return {
     {
         "github/copilot.vim",
         init = function()
-            vim.g.copilot_lsp_settings = {
-                telemetry = {
-                    telemetryLevel = "off",
-                },
-            }
             vim.g.copilot_no_tab_map = true
-            vim.g.copilot_proxy_strict_ssl = false
             vim.g.copilot_filetypes = {
                 ["*"] = true,
                 dotenv = false,
@@ -48,9 +42,6 @@ return {
             },
             cli = {
                 win = {
-                    wo = {
-                        scrolloff = 8,
-                    },
                     split = {
                         width = 0.4,
                     },

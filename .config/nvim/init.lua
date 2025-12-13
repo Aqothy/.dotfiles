@@ -1,5 +1,6 @@
 vim.loader.enable()
-require("aqothy.config.options")
+
+require("config.options")
 vim.filetype.add({
     filename = {
         [".env"] = "dotenv",
@@ -9,13 +10,20 @@ vim.filetype.add({
     },
 })
 
-require("aqothy.config")
+require("config")
 
-require("aqothy.config.autocmds")
-require("aqothy.config.keymaps")
-require("aqothy.config.commands")
-require("aqothy.config.statusline")
-require("aqothy.config.tabline")
-require("aqothy.config.alternate").setup()
+if not vim.g.vscode then
+    require("config.keymaps")
+    require("config.commands")
+    require("config.autocmds")
+    require("custom.statusline")
+    require("custom.tabline")
+    require("custom.session").setup({
+        allowed_dirs = {
+            "~/Code/Personal",
+        },
+    })
+    require("custom.alternate").setup()
 
-require("vim._extui").enable({})
+    require("vim._extui").enable({})
+end

@@ -4,8 +4,6 @@ return {
     version = "*",
     opts = {
         keymap = {
-            preset = "enter",
-            ["<C-y>"] = { "select_and_accept" },
             ["<Tab>"] = {
                 function()
                     local ok, suggestion = pcall(vim.fn["copilot#GetDisplayedSuggestion"])
@@ -26,7 +24,6 @@ return {
                             return accept
                         end
                     end
-
                     return nil
                 end,
                 "snippet_forward",
@@ -52,11 +49,6 @@ return {
                 max_items = 30,
                 selection = { auto_insert = false },
             },
-            documentation = {
-                window = {
-                    scrollbar = false,
-                },
-            },
         },
         sources = {
             providers = {
@@ -78,7 +70,7 @@ return {
             },
         },
         appearance = {
-            kind_icons = require("aqothy.config.icons").kinds,
+            kind_icons = require("config.icons").kinds,
         },
     },
 }

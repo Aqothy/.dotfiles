@@ -57,7 +57,7 @@ function M.jump(cmd)
         vim.cmd((cmd or M.options.open_cmd) .. " " .. vim.fn.fnameescape(path))
     end
 
-    if #choices == 1 then
+    if not is_creation_mode and #choices == 1 then
         open(choices[1])
     else
         vim.ui.select(choices, {

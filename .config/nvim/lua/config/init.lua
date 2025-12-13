@@ -29,8 +29,29 @@ local disabled_plugins = {
 }
 
 local lazy_spec = {
-    import = "aqothy.plugins",
+    { import = "plugins" },
 }
+
+local cond = nil
+
+if vim.g.vscode then
+    vim.list_extend(disabled_plugins, { "matchparen", "netrwPlugin" })
+    vim.list_extend(lazy_spec, {
+        { import = "config.vscode" },
+    })
+
+    local enabled = {
+        "nvim-surround",
+        "nvim-treesitter",
+        "nvim-treesitter-textobjects",
+        "flash.nvim",
+        "treesj",
+    }
+
+    cond = function(plugin)
+        return vim.tbl_contains(enabled, plugin.name)
+    end
+end
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -39,6 +60,7 @@ require("lazy").setup({
     defaults = {
         lazy = false,
         version = false, -- always use the latest git commit
+        cond = cond,
         -- version = "*", -- try installing the latest stable version for plugins that support semver
     },
     -- automatically check for plugin updates

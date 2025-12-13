@@ -32,26 +32,13 @@ map("t", "<c-[>", "<c-\\><c-n>", { desc = "Esc Terminal" })
 map("t", "<esc>", function()
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
 end, { desc = "Feed esc" })
-map("n", "<leader>\\", function()
-    if vim.bo.buftype == "terminal" then
-        return "<cmd>vs | term<cr>"
-    else
-        return "<cmd>vs<cr>"
-    end
-end, { desc = "New Vertical Split", expr = true })
-map("n", "<leader><cr>", function()
-    if vim.bo.buftype == "terminal" then
-        return "<cmd>sp | term<cr>"
-    else
-        return "<cmd>sp<cr>"
-    end
-end, { desc = "New Horizontal Split", expr = true })
+map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
+map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
-map("n", "<leader>tt", "<cmd>tabnew | term<CR>", { desc = "New terminal tab" })
+map("n", "<leader>tt", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
-map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
 map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })
 map("n", "cdu", "<cmd>lcd .. | pwd<cr>", { desc = "Change directory to parent directory" })
 map("n", "cd-", "<cmd>lcd - | pwd<cr>", { desc = "Change directory to previous directory" })
@@ -70,6 +57,7 @@ map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
 map("i", "<C-A>", "<C-O>^", { desc = "Beginning of line" })
 map("c", "<C-A>", "<Home>", { desc = "Beginning of line" })
 map("i", "<C-E>", "<End>", { desc = "End of line" })
+map("i", "<C-;>", "<End>", { desc = "End of line" })
 map("c", "<C-E>", "<End>", { desc = "End of line" })
 map("i", "<M-f>", "<S-Right>", { desc = "Forward a word" })
 map("c", "<M-f>", "<S-Right>", { desc = "Forward a word" })
@@ -107,7 +95,7 @@ end, { desc = "Toggle qf" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
-map("n", "gl", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
+map("n", "<M-r>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
 map("n", "<M-z>", function()
     vim.wo.wrap = not vim.wo.wrap
 end, { desc = "Toggle word wrap" })

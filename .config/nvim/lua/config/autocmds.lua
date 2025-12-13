@@ -13,14 +13,6 @@ autocmd({ "TermClose", "TermLeave" }, {
     end,
 })
 
--- Settings for terminal buffers
-autocmd("TermOpen", {
-    group = augroup("term_settings"),
-    callback = function(ev)
-        vim.bo[ev.buf].buflisted = false
-    end,
-})
-
 -- Highlight on yank
 autocmd("TextYankPost", {
     group = augroup("highlight_yank"),

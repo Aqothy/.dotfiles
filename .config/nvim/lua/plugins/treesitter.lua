@@ -4,7 +4,7 @@ return {
         "nvim-treesitter/nvim-treesitter",
         branch = "main",
         build = ":TSUpdate",
-        event = "VeryLazy",
+        lazy = true,
         opts = {
             indent = {
                 disable = { "swift", "python" },
@@ -15,7 +15,7 @@ return {
         },
         config = function(_, opts)
             local TS = require("nvim-treesitter")
-            local ts_utils = require("aqothy.config.utils")
+            local ts_utils = require("custom.utils")
 
             local ensure_installed = {
                 -- Built into Neovim but need to install for other features like textobjects, etc
@@ -37,7 +37,6 @@ return {
                 "json",
                 "swift",
                 "python",
-                "haskell",
                 "regex",
             }
 
@@ -147,7 +146,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
-        event = "LazyFile",
+        event = { "LazyFile", "VeryLazy" },
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
         },
@@ -162,7 +161,7 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
-        event = { "LazyFile" },
+        event = "LazyFile",
         keys = {
             {
                 "[g",

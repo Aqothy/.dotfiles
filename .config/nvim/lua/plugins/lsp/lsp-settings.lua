@@ -1,6 +1,6 @@
 local M = {}
 
-local utils = require("aqothy.config.utils")
+local utils = require("custom.utils")
 local lsp_util = require("lspconfig.util")
 
 local map = vim.keymap.set
@@ -147,12 +147,6 @@ M["basedpyright"] = {
 -- comes with macos
 M["sourcekit"] = {
     filetypes = { "swift", "objc", "objcpp" },
-}
-
-M["hls"] = {
-    root_dir = function(_, on_dir)
-        on_dir(vim.fn.getcwd())
-    end,
 }
 
 -- uv tool install ruff@latest

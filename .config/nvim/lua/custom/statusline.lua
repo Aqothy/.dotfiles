@@ -9,7 +9,7 @@ local uv = vim.uv or vim.loop
 local stl_group = api.nvim_create_augroup("aqline", { clear = true })
 local autocmd = api.nvim_create_autocmd
 
-local has_icons, icons = pcall(require, "aqothy.config.icons")
+local has_icons, icons = pcall(require, "config.icons")
 local has_mini_icons, mini_icons = pcall(require, "mini.icons")
 local has_sidekick, sidekick = pcall(require, "sidekick.status")
 
@@ -550,6 +550,6 @@ autocmd({ "VimResized", "WinResized", "WinEnter" }, {
 vim.opt.showmode = false
 vim.opt.ruler = false
 vim.opt.statusline =
-    "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'aqothy.config.statusline'.render() : v:lua.require'aqothy.config.statusline'.render_inactive()%}"
+    "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'custom.statusline'.render() : v:lua.require'custom.statusline'.render_inactive()%}"
 
 return M

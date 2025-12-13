@@ -1,4 +1,4 @@
-local utils = require("aqothy.config.utils")
+local utils = require("custom.utils")
 
 local command = vim.api.nvim_create_user_command
 

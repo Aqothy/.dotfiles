@@ -14,7 +14,7 @@ return {
         config = function()
             local dap = require("dap")
 
-            local icons = require("aqothy.config.icons").dap
+            local icons = require("config.icons").dap
 
             for name, sign in pairs(icons) do
                 sign = type(sign) == "table" and sign or { sign }
@@ -26,7 +26,7 @@ return {
                 })
             end
 
-            local settings = require("aqothy.config.dap-settings")
+            local settings = require("plugins.dap.dap-settings")
 
             for adapter_name, opts in pairs(settings) do
                 if opts.enabled ~= false then

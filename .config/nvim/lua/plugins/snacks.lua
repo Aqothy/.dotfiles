@@ -147,7 +147,7 @@ return {
             enabled = true,
             ui_select = true,
             icons = {
-                kinds = require("aqothy.config.icons").kinds,
+                kinds = require("config.icons").kinds,
             },
             previewers = {
                 diff = {

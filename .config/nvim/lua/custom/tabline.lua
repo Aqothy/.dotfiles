@@ -2,7 +2,7 @@ local M = {}
 
 local api = vim.api
 local has_mini_icons, mini_icons = pcall(require, "mini.icons")
-local has_icons, icons = pcall(require, "aqothy.config.icons")
+local has_icons, icons = pcall(require, "config.icons")
 
 local title_cache = {}
 local icon_cache = {}
@@ -151,6 +151,6 @@ autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
     end,
 })
 
-vim.opt.tabline = "%!v:lua.require('aqothy.config.tabline').render()"
+vim.opt.tabline = "%!v:lua.require('custom.tabline').render()"
 
 return M

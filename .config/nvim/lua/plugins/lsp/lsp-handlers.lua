@@ -18,7 +18,7 @@ M.capabilities = vim.tbl_deep_extend(
     M.capabilities
 )
 
-local icons = require("aqothy.config.icons")
+local icons = require("config.icons")
 
 local s = vim.diagnostic.severity
 

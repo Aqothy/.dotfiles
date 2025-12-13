@@ -2,7 +2,6 @@
   "editor.minimap.enabled": false,
   "explorer.compactFolders": false,
   "emmet.preferences": {},
-  "editor.wordWrap": "on",
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   },
@@ -29,5 +28,8 @@
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.agent.enabled": true,
   "chat.agent.maxRequests": 999,
-  "editor.linkedEditing": true
+  "editor.linkedEditing": true,
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  }
 }

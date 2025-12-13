@@ -7,13 +7,13 @@ return {
         { "<leader>lc", function() Snacks.picker.lsp_config() end, desc = "Lsp config" },
     },
     config = vim.schedule_wrap(function()
-        local handlers = require("aqothy.config.lsp-handlers")
+        local handlers = require("plugins.lsp.lsp-handlers")
 
         handlers.setup()
 
         local lsp_group = vim.api.nvim_create_augroup("aqothy/lspconfig", { clear = true })
 
-        local utils = require("aqothy.config.utils")
+        local utils = require("custom.utils")
 
         vim.api.nvim_create_autocmd("LspAttach", {
             group = lsp_group,
@@ -42,7 +42,7 @@ return {
         -- global capabilities, lspconfig, personal config in order of increasing priority
         vim.lsp.config("*", params)
 
-        local settings = require("aqothy.config.lsp-settings")
+        local settings = require("plugins.lsp.lsp-settings")
         for lsp, user_opts in pairs(settings) do
             if user_opts.enabled ~= false then
                 local opts = vim.deepcopy(user_opts)
