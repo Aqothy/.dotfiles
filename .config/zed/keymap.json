@@ -15,21 +15,44 @@
   {
     "context": "Editor",
     "bindings": {
+      "alt-n": "editor::GoToNextDocumentHighlight",
+      "alt-p": "editor::GoToPreviousDocumentHighlight"
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
   },
   {
-    "context": "VimControl",
+    "context": "VimControl && !menu",
     "bindings": {
+      "h": "vim::WrappingLeft",
+      "l": "vim::WrappingRight",
       "j": ["vim::Down", { "display_lines": true }],
-      "k": ["vim::Up", { "display_lines": true }]
+      "k": ["vim::Up", { "display_lines": true }],
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
     }
   },
   {
-    "context": "VimCount",
+    "context": "Dock",
     "bindings": {
-      "j": ["vim::Down", { "display_lines": false }],
-      "k": ["vim::Up", { "display_lines": false }]
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-j": "workspace::ActivatePaneDown"
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": "vim::PushAddSurrounds"
+    }
+  },
+  {
+    "context": "(Editor && showing_completions)",
+    "bindings": {
+      "ctrl-y": "editor::ConfirmCompletion",
+      "enter": "editor::Newline"
     }
   }
 ]

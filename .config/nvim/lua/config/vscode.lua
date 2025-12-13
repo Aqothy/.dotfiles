@@ -25,6 +25,10 @@ map("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Ne
 map({ "n", "x" }, "<leader>hs", vscode_action("git.stageSelectedRanges"), { desc = "Stage hunk" })
 map({ "n", "x" }, "<leader>hr", vscode_action("git.revertSelectedRanges"), { desc = "Revert hunk" })
 map("n", "/", vscode_action("actions.find"), { desc = "Find in file" })
+map("n", "<C-h>", vscode_action("workbench.action.navigateLeft"), { desc = "Go to Left Window" })
+map("n", "<C-j>", vscode_action("workbench.action.navigateDown"), { desc = "Go to Lower Window" })
+map("n", "<C-k>", vscode_action("workbench.action.navigateUp"), { desc = "Go to Upper Window" })
+map("n", "<C-l>", vscode_action("workbench.action.navigateRight"), { desc = "Go to Right Window" })
 
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })

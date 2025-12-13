@@ -31,5 +31,6 @@
   "editor.linkedEditing": true,
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
-  }
+  },
+  "workbench.colorTheme": "Gruvbox Dark Medium"
 }
