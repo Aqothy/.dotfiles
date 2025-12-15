@@ -11,8 +11,7 @@ g.loaded_node_provider = 0
 local opt = vim.opt
 
 opt.number = true
--- setting relativenumber causes flicker in vscode neovim extension?
-opt.relativenumber = not vim.g.vscode
+opt.relativenumber = true
 
 -- indentation
 opt.expandtab = true

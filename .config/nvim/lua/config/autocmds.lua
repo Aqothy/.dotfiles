@@ -3,6 +3,18 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Highlight on yank
+autocmd("TextYankPost", {
+    group = augroup("highlight_yank"),
+    callback = function()
+        (vim.hl or vim.highlight).on_yank({ timeout = 60 })
+    end,
+})
+
+if vim.g.vscode then
+    return
+end
+
 -- Check file changes after using term
 autocmd({ "TermClose", "TermLeave" }, {
     group = augroup("checktime"),
@@ -10,14 +22,6 @@ autocmd({ "TermClose", "TermLeave" }, {
         if vim.bo[ev.buf].buftype ~= "nofile" then
             vim.cmd("checktime")
         end
-    end,
-})
-
--- Highlight on yank
-autocmd("TextYankPost", {
-    group = augroup("highlight_yank"),
-    callback = function()
-        (vim.hl or vim.highlight).on_yank({ timeout = 60 })
     end,
 })
 

@@ -12,10 +12,11 @@ vim.filetype.add({
 
 require("config")
 
+require("config.keymaps")
+require("config.commands")
+require("config.autocmds")
+
 if not vim.g.vscode then
-    require("config.keymaps")
-    require("config.commands")
-    require("config.autocmds")
     require("custom.statusline")
     require("custom.tabline")
     require("custom.session").setup({

@@ -26,6 +26,7 @@ local disabled_plugins = {
     "tohtml",
     "tutor",
     "zipPlugin",
+    "netrwPlugin",
 }
 
 local lazy_spec = {
@@ -35,7 +36,6 @@ local lazy_spec = {
 local cond = nil
 
 if vim.g.vscode then
-    vim.list_extend(disabled_plugins, { "matchparen", "netrwPlugin" })
     vim.list_extend(lazy_spec, {
         { import = "config.vscode" },
     })
@@ -46,6 +46,8 @@ if vim.g.vscode then
         "nvim-treesitter-textobjects",
         "flash.nvim",
         "treesj",
+        "mini.ai",
+        "blink.indent",
     }
 
     cond = function(plugin)

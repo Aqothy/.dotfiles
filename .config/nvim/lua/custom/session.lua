@@ -6,12 +6,12 @@ M.options = {
     dir = vim.fn.stdpath("state") .. "/sessions/",
 }
 
-local cwd = vim.fn.expand(vim.fn.getcwd())
+M.root_dir = vim.fn.getcwd()
 
 local function is_allowed()
     for _, dir in ipairs(M.options.allowed_dirs) do
         local expanded_dir = vim.fn.expand(dir)
-        if string.find(cwd, expanded_dir, 1, true) == 1 then
+        if string.find(M.root_dir, expanded_dir, 1, true) == 1 then
             return true
         end
     end
@@ -19,8 +19,7 @@ local function is_allowed()
 end
 
 local function get_session_path()
-    -- Replace slashes/colons with % to make a valid filename
-    local filename = cwd:gsub("[\\/:]+", "%%") .. ".vim"
+    local filename = M.root_dir:gsub("[\\/:]+", "%%") .. ".vim"
     return M.options.dir .. filename
 end
 
@@ -31,13 +30,26 @@ function M.setup(opts)
         vim.fn.mkdir(M.options.dir, "p")
     end
 
-    if is_allowed() then
-        M.create_autocmds()
+    local arg = vim.fn.argv(0)
+    ---@cast arg string
+    local argc = vim.fn.argc()
+    local should_start = false
+
+    if argc == 0 then
+        if is_allowed() then
+            should_start = true
+        end
+    elseif argc == 1 and vim.fn.isdirectory(arg) == 1 then
+        M.root_dir = vim.fn.fnamemodify(arg, ":p:h")
+        should_start = true
+    end
+
+    if should_start then
+        M.start()
     end
 end
 
 function M.save()
-    -- will save even not whitelisted dirs
     local file = get_session_path()
     vim.cmd("mks! " .. vim.fn.fnameescape(file))
 end
@@ -51,12 +63,10 @@ end
 
 function M.start()
     M.create_autocmds()
-    vim.notify("Session recording started.", vim.log.levels.INFO)
 end
 
 function M.stop()
-    vim.api.nvim_clear_autocmds({ group = "aqothy/session" })
-    vim.notify("Session recording stopped.", vim.log.levels.WARN)
+    pcall(vim.api.nvim_clear_autocmds, { group = "aqothy/session" })
 end
 
 function M.create_autocmds()
@@ -67,8 +77,7 @@ function M.create_autocmds()
         nested = true,
         callback = function()
             local lazy_view = require("lazy.view")
-
-            if vim.fn.argc(-1) == 0 and not vim.g.using_stdin and not lazy_view.visible() then
+            if not vim.g.using_stdin and not lazy_view.visible() then
                 M.load()
             end
         end,
@@ -82,9 +91,15 @@ function M.create_autocmds()
                 return
             end
 
-            -- Only save if we have enough real buffers open
             local bufs = vim.tbl_filter(function(b)
-                return vim.bo[b].buftype == "" and vim.bo[b].buflisted and vim.api.nvim_buf_get_name(b) ~= ""
+                local name = vim.api.nvim_buf_get_name(b)
+
+                return vim.bo[b].buftype == ""
+                    and vim.fn.buflisted(b) == 1
+                    and name ~= ""
+                    -- When opening `nvim .`, buffer 1 is named the CWD path.
+                    -- exclude this to prevent saving empty sessions.
+                    and vim.fn.isdirectory(name) == 0
             end, vim.api.nvim_list_bufs())
 
             if #bufs < M.options.need then

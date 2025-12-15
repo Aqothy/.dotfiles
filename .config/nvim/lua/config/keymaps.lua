@@ -1,7 +1,33 @@
 local map = vim.keymap.set
 
--- Navigation and movement
+-- "Whole Buffer" text-object:
+map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
+map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
+
+map("x", ">", ">gv", { desc = "Indent and maintain selection" })
+map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
+map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
+map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
+map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
+map("x", "iL", "^og_", { desc = "Select line without whitespace" })
+map("o", "iL", "<cmd>normal viL<cr>", { desc = "Operate line" })
+map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
+map("n", "g/", ":%s/\\<<c-r><c-w>\\>/<c-r><c-w>/gIc<left><left><left><left>", { desc = "Replace word in buffer" })
+map("x", "g/", '"sy:%s/\\V<C-r>s/<C-r>s/gIc<left><left><left><left>', { desc = "Replace visual word" })
+map("n", "g.", "*``cgn", { desc = "Search and replace word under cursor" })
+map("x", "g.", [[y<cmd>let @/ = '\V' . escape(@", '/\')<cr>cgn]], { desc = "Search & Replace selection" })
+map("x", "Q", "<cmd>norm @q<CR>", { desc = "Run macro 'q' on selection" })
+map("c", "<c-j>", [[\(.*\)]], { desc = "Fighting Kirby!" })
+map("n", "y<c-g>", function()
+    vim.fn.setreg("+", vim.fn.expand("%:."))
+end, { desc = "Yank relative file path to clipboard" })
+
+if vim.g.vscode then
+    return
+end
+
+-- Navigation and movement
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center screen" })
 map("n", "n", "nzvzz", { desc = "Next search result, open folds, and center screen" })
@@ -10,8 +36,6 @@ map("n", "<C-i>", "<C-i>zz", { desc = "Jump forward in jump list and center" })
 map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward in jump list and center" })
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
-map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
@@ -44,15 +68,6 @@ map("n", "cdu", "<cmd>lcd .. | pwd<cr>", { desc = "Change directory to parent di
 map("n", "cd-", "<cmd>lcd - | pwd<cr>", { desc = "Change directory to previous directory" })
 
 -- Editing
-map("x", ">", ">gv", { desc = "Indent and maintain selection" })
-map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
-map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
-map("x", "il", "^og_", { desc = "Select line without whitespace" })
-map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
-map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
-map("n", "c.", ":%s/<c-r><c-w>//gc<Left><Left><Left>", { desc = "Replace word" })
-map("n", "g.", ":%s///gc<Left><Left><Left><Left>", { desc = "Replace" })
-map("x", "g.", ":s///gc<Left><Left><Left><Left>", { desc = "Replace" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
 map("i", "<C-A>", "<C-O>^", { desc = "Beginning of line" })
 map("c", "<C-A>", "<Home>", { desc = "Beginning of line" })
@@ -92,6 +107,12 @@ map("n", "<c-q>", function()
         vim.notify(err, vim.log.levels.ERROR)
     end
 end, { desc = "Toggle qf" })
+map("n", "<localleader>q", function()
+    local success, err = pcall(vim.fn.getloclist(0, { all = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+    if not success and err then
+        vim.notify(err, vim.log.levels.ERROR)
+    end
+end, { desc = "Toggle loclist" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
@@ -99,10 +120,6 @@ map("n", "<M-r>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redr
 map("n", "<M-z>", function()
     vim.wo.wrap = not vim.wo.wrap
 end, { desc = "Toggle word wrap" })
-
--- "Whole Buffer" text-object:
-map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
-map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
 map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })

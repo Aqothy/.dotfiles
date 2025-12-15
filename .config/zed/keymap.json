@@ -34,7 +34,7 @@
     }
   },
   {
-    "context": "Dock",
+    "context": "Dock && !Terminal",
     "bindings": {
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-l": "workspace::ActivatePaneRight",

@@ -28,7 +28,7 @@ return {
         "nvim-mini/mini.files",
         opts = {
             options = {
-                use_as_default_explorer = false,
+                use_as_default_explorer = true,
                 permanent_delete = false,
             },
             mappings = {
@@ -49,6 +49,8 @@ return {
                 preview = true,
             },
         },
+        ---@diagnostic disable-next-line
+        lazy = vim.fn.isdirectory(vim.fn.argv(0)) ~= 1,
         keys = {
             {
                 "<leader>ee",
@@ -191,12 +193,73 @@ return {
         end,
     },
     {
+        "nvim-mini/mini.ai",
+        event = "VeryLazy",
+        opts = function()
+            local ai = require("mini.ai")
+            local gen_spec = ai.gen_spec
+            local ts_arg = gen_spec.treesitter({
+                a = { "@parameter.outer", "@attribute.outer" },
+                i = { "@parameter.inner", "@attribute.inner" },
+            })
+            local ts_call = gen_spec.treesitter({ a = "@call.outer", i = "@call.inner" })
+            local fb_call = gen_spec.function_call()
+            local fb_arg = gen_spec.argument()
+            return {
+                n_lines = 500,
+                silent = true,
+                mappings = {
+                    around_next = "a;",
+                    inside_next = "i;",
+                    around_last = "a,",
+                    inside_last = "i,",
+                },
+                custom_textobjects = {
+                    o = gen_spec.treesitter({
+                        a = { "@block.outer", "@conditional.outer", "@loop.outer" },
+                        i = { "@block.inner", "@conditional.inner", "@loop.inner" },
+                    }),
+                    f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+                    c = gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+                    a = function(...)
+                        local ok, res = pcall(ts_arg, ...)
+                        if not ok or vim.tbl_isempty(res) then
+                            return fb_arg
+                        end
+                        return res
+                    end,
+                    u = function(...)
+                        local ok, res = pcall(ts_call, ...)
+                        if not ok or vim.tbl_isempty(res) then
+                            return fb_call
+                        end
+                        return res
+                    end,
+                    U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+                    ["/"] = gen_spec.treesitter({ a = "@comment.outer", i = "@comment.inner" }),
+                    e = {
+                        {
+                            "%u[%l%d]+%f[^%l%d]",
+                            "%f[%S][%l%d]+%f[^%l%d]",
+                            "%f[%P][%l%d]+%f[^%l%d]",
+                            "^[%l%d]+%f[^%l%d]",
+                        },
+                        "^().*()$",
+                    },
+                    d = { "%f[%d]%d+" }, -- digits
+                    t = "",
+                },
+            }
+        end,
+    },
+    {
         "echasnovski/mini.hipatterns",
         event = "LazyFile",
         keys = {
             {
                 "<leader>th",
                 function()
+                    ---@diagnostic disable-next-line
                     MiniHipatterns.toggle()
                 end,
                 desc = "Toggle MiniHipatterns",

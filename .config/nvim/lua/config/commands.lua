@@ -4,6 +4,10 @@ local command = vim.api.nvim_create_user_command
 
 local get_option = vim.api.nvim_get_option_value
 
+if vim.g.vscode then
+    return
+end
+
 command("Make", function(opts)
     local bufnr = vim.api.nvim_get_current_buf()
     local cmd = ""

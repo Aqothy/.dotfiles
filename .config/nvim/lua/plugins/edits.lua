@@ -1,12 +1,9 @@
 return {
     {
-        "altermo/ultimate-autopair.nvim",
-        event = { "InsertEnter", "CmdlineEnter" },
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
         opts = {
-            extensions = {
-                suround = false,
-                utf8 = false,
-            },
+            enable_afterquote = false,
         },
     },
     {

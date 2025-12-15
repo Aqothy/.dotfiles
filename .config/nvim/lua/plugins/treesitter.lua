@@ -4,7 +4,10 @@ return {
         "nvim-treesitter/nvim-treesitter",
         branch = "main",
         build = ":TSUpdate",
-        lazy = true,
+        event = { "LazyFile", "VeryLazy" },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         opts = {
             indent = {
                 disable = { "swift", "python" },
@@ -103,18 +106,6 @@ return {
                         vim.keymap.set(modes, lhs, rhs, { buffer = buf, silent = true, desc = desc })
                     end
 
-                    local function smap(key, query)
-                        local outer = "@" .. query .. ".outer"
-                        local inner = "@" .. query .. ".inner"
-                        local desc = "Selection for " .. query .. " text objects"
-                        map({ "x", "o" }, "a" .. key, function()
-                            require("nvim-treesitter-textobjects.select").select_textobject(outer, "textobjects")
-                        end, desc .. " (a)")
-                        map({ "x", "o" }, "i" .. key, function()
-                            require("nvim-treesitter-textobjects.select").select_textobject(inner, "textobjects")
-                        end, desc .. " (i)")
-                    end
-
                     local move = require("nvim-treesitter-textobjects.move")
                     local swap = require("nvim-treesitter-textobjects.swap")
 
@@ -132,13 +123,12 @@ return {
                         move.goto_previous_start({ "@function.outer", "@class.outer" }, "textobjects")
                     end, "Treesitter prev function or class start")
 
-                    smap("f", "function")
-                    smap("c", "class")
-                    smap("a", "parameter")
-                    smap("L", "loop")
-                    smap("C", "conditional")
-                    smap("u", "call")
-                    smap("/", "comment")
+                    map({ "n", "x", "o" }, "]a", function()
+                        move.goto_next_start("@parameter.inner", "textobjects")
+                    end, "Treesitter next parameter start")
+                    map({ "n", "x", "o" }, "[a", function()
+                        move.goto_previous_start("@parameter.inner", "textobjects")
+                    end, "Treesitter prev parameter start")
                 end,
             })
         end,
@@ -146,10 +136,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
-        event = { "LazyFile", "VeryLazy" },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
+        lazy = true,
         opts = {
             move = {
                 set_jumps = true,
