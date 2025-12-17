@@ -29,7 +29,7 @@ local function file_exists(path)
 end
 
 function M.jump(cmd)
-    local current_file = vim.fn.expand("%")
+    local current_file = vim.fn.expand("%:.")
     if current_file == "" then
         return vim.notify("Buffer has no file path", vim.log.levels.WARN)
     end
@@ -62,7 +62,7 @@ function M.jump(cmd)
     local choices = is_creation_mode and candidates or existing
 
     local function open(path)
-        vim.cmd((cmd or M.options.open_cmd) .. " " .. vim.fn.fnameescape(path))
+        vim.cmd((cmd or M.options.open_cmd) .. " " .. path)
     end
 
     if not is_creation_mode and #choices == 1 then
@@ -71,8 +71,7 @@ function M.jump(cmd)
         vim.ui.select(choices, {
             prompt = is_creation_mode and "Create Alternate:" or "Select Alternate:",
             format_item = function(item)
-                local name = vim.fn.fnamemodify(item, ":.")
-                return is_creation_mode and (name .. " (New)") or name
+                return is_creation_mode and (item .. " (New)") or item
             end,
         }, function(choice)
             if choice then

@@ -9,6 +9,7 @@ vim.filetype.add({
         ["%.env%.[%w_.-]+"] = "dotenv",
     },
 })
+vim.treesitter.language.register("bash", { "kitty", "dotenv", "zsh" })
 
 require("config")
 

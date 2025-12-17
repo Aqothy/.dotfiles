@@ -16,7 +16,12 @@ map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
 map("n", "g/", ":%s/\\<<c-r><c-w>\\>/<c-r><c-w>/gIc<left><left><left><left>", { desc = "Replace word in buffer" })
 map("x", "g/", '"sy:%s/\\V<C-r>s/<C-r>s/gIc<left><left><left><left>', { desc = "Replace visual word" })
 map("n", "g.", "*``cgn", { desc = "Search and replace word under cursor" })
-map("x", "g.", [[y<cmd>let @/ = '\V' . escape(@", '/\')<cr>cgn]], { desc = "Search & Replace selection" })
+map(
+    "x",
+    "g.",
+    [["sy:let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')<CR>:set hls<CR>cgn]],
+    { desc = "Search & Replace selection" }
+)
 map("x", "Q", "<cmd>norm @q<CR>", { desc = "Run macro 'q' on selection" })
 map("c", "<c-j>", [[\(.*\)]], { desc = "Fighting Kirby!" })
 map("n", "y<c-g>", function()
@@ -43,8 +48,8 @@ map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
 map("n", "<s-tab>", "<c-^>", { desc = "Alternate buffer" })
 map("n", "<M-s-,>", "<c-w>3<", { desc = "Resize window left" })
 map("n", "<M-s-.>", "<c-w>3>", { desc = "Resize window right" })
-map("n", "<M-t>", "3<C-W>+", { desc = "Resize window up" })
-map("n", "<M-s>", "3<C-W>-", { desc = "Resize window down" })
+map("n", "<M-s-->", "3<C-W>+", { desc = "Resize window up" })
+map("n", "<M-s-=>", "3<C-W>-", { desc = "Resize window down" })
 
 -- Tabs
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
@@ -60,7 +65,8 @@ map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
-map("n", "<leader>tt", "<cmd>tab split<cr>", { desc = "Clone window in new tab" })
+map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
+map("n", "<M-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })

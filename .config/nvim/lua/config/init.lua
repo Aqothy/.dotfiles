@@ -48,6 +48,8 @@ if vim.g.vscode then
         "treesj",
         "mini.ai",
         "blink.indent",
+        "multicursor.nvim",
+        "nvim-spider",
     }
 
     cond = function(plugin)

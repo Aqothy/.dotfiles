@@ -20,29 +20,6 @@ return {
             local TS = require("nvim-treesitter")
             local ts_utils = require("custom.utils")
 
-            local ensure_installed = {
-                -- Built into Neovim but need to install for other features like textobjects, etc
-                "c",
-                "lua",
-                "vim",
-                "vimdoc",
-                "query",
-                "markdown",
-                "markdown_inline",
-
-                -- extras
-                "javascript",
-                "typescript",
-                "cpp",
-                "go",
-                "bash",
-                "tsx",
-                "json",
-                "swift",
-                "python",
-                "regex",
-            }
-
             local function is_disabled(lang, feat, buf)
                 local f = opts[feat] or {}
                 if f.enabled == false then
@@ -55,23 +32,20 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
-            vim.treesitter.language.register("bash", { "kitty", "dotenv", "zsh" })
-
             TS.setup(opts)
 
             ts_utils.get_installed_parsers(true)
 
             local missing_parsers = vim.tbl_filter(function(lang)
                 return not ts_utils.have(lang)
-            end, ensure_installed or {})
+            end, ts_utils.ensure_installed)
 
             if #missing_parsers > 0 then
-                TS.install(missing_parsers, { summary = true }):wait(30000)
+                TS.install(missing_parsers, { summary = true }):wait()
+                vim.cmd("restart")
             end
 
-            ts_utils.get_installed_parsers(true)
-
-            local filetypes = ts_utils.filetypes_from_langs(ensure_installed)
+            local filetypes = ts_utils.get_ensured_parsers_fts()
 
             vim.api.nvim_create_autocmd("FileType", {
                 group = vim.api.nvim_create_augroup("aqothy/treesitter", { clear = true }),

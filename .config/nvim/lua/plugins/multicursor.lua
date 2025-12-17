@@ -15,12 +15,12 @@ return {
     "jake-stewart/multicursor.nvim",
     -- stylua: ignore
     keys = {
-        { "<c-n>", mc("matchAddCursor", "match", 1), mode = { "n", "x" }, desc = "Add next match cursor" },
-        { "<c-p>", mc("matchAddCursor", "match", -1), mode = { "n", "x" }, desc = "Add previous match cursor" },
+        { "gl", mc("matchAddCursor", "match", 1), mode = { "n", "x" }, desc = "Add next match cursor" },
+        { "gh", mc("matchAddCursor", "match", -1), mode = { "n", "x" }, desc = "Add previous match cursor" },
         { "M", mc("matchCursors", "match"), mode = "x", desc = "Cursor on matches in selection" },
         { "<down>", mc("lineAddCursor", "line", 1), mode = { "n", "x" }, desc = "Add line below cursor" },
         { "<up>", mc("lineAddCursor", "line", -1), mode = { "n", "x" }, desc = "Add line above cursor" },
-        { "gl", mc("addCursorOperator", "line"), mode = { "n", "x" }, desc = "Add cursor for each line in range" },
+        { "gL", mc("addCursorOperator", "line"), mode = { "n", "x" }, desc = "Add cursor for each line in range" },
         { "<leader>dm", mc("diagnosticMatchCursors", "diag"), mode = { "n", "x" }, desc = "Match error diagnostics" },
         { "]D", mc("diagnosticAddCursor", "diag", 1), mode = { "n", "x" }, desc = "Add next diagnostic cursor" },
         { "[D", mc("diagnosticAddCursor", "diag", -1), mode = { "n", "x" }, desc = "Add previous diagnostic cursor" },
