@@ -25,11 +25,11 @@ return {
         { "]D", mc("diagnosticAddCursor", "diag", 1), mode = { "n", "x" }, desc = "Add next diagnostic cursor" },
         { "[D", mc("diagnosticAddCursor", "diag", -1), mode = { "n", "x" }, desc = "Add previous diagnostic cursor" },
         { "<leader>cs", mc("splitCursors", "match"), mode = "x", desc = "Split visual selections by regex" },
-        { "gm", mc("operator", "match"), mode = { "n", "x" }, desc = "Cursor on all matches inside operator range" },
-        { "<c-;>", mc("toggleCursor"), mode = { "n", "x" }, desc = "Toggle cursor" },
+        { "<leader>k", mc("toggleCursor"), mode = { "n", "x" }, desc = "Toggle cursor" },
+        { "gM", mc("operator", "match"), mode = { "n", "x" }, desc = "Cursor on all matches inside operator range" },
         { "<leader>ca", mc("alignCursors"), mode = "n", desc = "Align cursor columns" },
         { "<leader>cr", mc("restoreCursors"), mode = "n", desc = "Restore deleted cursors" },
-        { "<leader><c-;>", mc("duplicateCursors"), mode = { "n", "x" }, desc = "Duplicate cursors" },
+        { "<leader>cd", mc("duplicateCursors"), mode = { "n", "x" }, desc = "Duplicate cursors" },
         { "I", mc("insertVisual"), mode = "x", desc = "Insert at start" },
         { "A", mc("appendVisual"), mode = "x", desc = "Append at end" },
     },
@@ -83,7 +83,7 @@ return {
                 end
             end)
 
-            layerSet({ "n", "x" }, "<c-c>", cursors.deleteCursor)
+            layerSet({ "n", "x" }, "<leader>cx", cursors.deleteCursor)
 
             layerSet("n", "<esc>", function()
                 if not cursors.cursorsEnabled() then

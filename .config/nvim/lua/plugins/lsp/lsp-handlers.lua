@@ -81,6 +81,7 @@ M.keys = {
     { lhs = "grr", rhs = function() Snacks.picker.lsp_references() end, desc = "References", has = "references" },
     { lhs = "gri", rhs = function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation", has = "implementation" },
     { lhs = "grt", rhs = function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition", has = "typeDefinition" },
+    { lhs = "gD", rhs = function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
     { lhs = "gO", rhs = function() Snacks.picker.lsp_symbols() end, desc = "Lsp Symbols", has = "documentSymbol" },
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
     { lhs = "<a-n>", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },

@@ -29,3 +29,5 @@ if not vim.g.vscode then
 
     require("vim._extui").enable({})
 end
+
+require("custom.toggler").setup()

@@ -50,6 +50,7 @@ if vim.g.vscode then
         "blink.indent",
         "multicursor.nvim",
         "nvim-spider",
+        "mini.operators",
     }
 
     cond = function(plugin)

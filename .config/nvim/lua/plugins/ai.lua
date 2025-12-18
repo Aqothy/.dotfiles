@@ -39,6 +39,9 @@ return {
                 diff = {
                     inline = "chars",
                 },
+                clear = {
+                    esc = false,
+                },
             },
             cli = {
                 win = {
@@ -60,6 +63,14 @@ return {
                 end,
                 expr = true,
                 desc = "Goto/Apply Next Edit Suggestion",
+            },
+            {
+                "<c-c>",
+                function()
+                    require("sidekick.nes").clear()
+                end,
+                mode = { "n", "x" },
+                desc = "Clear NES Suggestions",
             },
             {
                 "<c-.>",

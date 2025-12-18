@@ -245,7 +245,7 @@ return {
                             "^[%l%d]+%f[^%l%d]",
                         },
                         "^().*()$",
-                    },
+                    }, -- camelCase words
                     d = { "%f[%d]%d+" }, -- digits
                     t = "",
                 },
@@ -284,6 +284,36 @@ return {
                     hex_color = hi.gen_highlighter.hex_color(),
                 },
             }
+        end,
+    },
+    {
+        "nvim-mini/mini.operators",
+        keys = {
+            { "g=", mode = { "n", "x" }, desc = "Evaluate operator" },
+            { "cx", desc = "Exchange operator" },
+            { "X", mode = "x", desc = "Exchange operator visual" },
+            { "gS", mode = { "n", "x" }, desc = "Sort operator" },
+            { "r", mode = { "n", "x" }, desc = "Replace operator" },
+            { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
+        },
+        opts = {
+            exchange = {
+                prefix = "",
+            },
+            multiply = {
+                prefix = "gm",
+            },
+            replace = {
+                prefix = "r",
+            },
+            sort = {
+                prefix = "gS",
+            },
+        },
+        config = function(_, opts)
+            local mo = require("mini.operators")
+            mo.setup(opts)
+            mo.make_mappings("exchange", { textobject = "cx", line = "cxx", selection = "X" })
         end,
     },
 }

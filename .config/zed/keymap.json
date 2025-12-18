@@ -34,6 +34,21 @@
     }
   },
   {
+    "context": "VimControl && !menu && vim_mode != operator",
+    "bindings": {
+      "w": "vim::NextSubwordStart",
+      "b": "vim::PreviousSubwordStart",
+      "e": "vim::NextSubwordEnd",
+      "g e": "vim::PreviousSubwordEnd"
+    }
+  },
+  {
+    "context": "VimControl && !menu && vim_mode == operator",
+    "bindings": {
+      "e": "vim::NextSubwordEnd"
+    }
+  },
+  {
     "context": "Dock && !Terminal",
     "bindings": {
       "ctrl-h": "workspace::ActivatePaneLeft",

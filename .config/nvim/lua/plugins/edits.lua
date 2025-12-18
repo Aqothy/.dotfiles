@@ -7,6 +7,8 @@ return {
             extensions = {
                 suround = false,
                 utf8 = false,
+                filetype = { nft = { "snacks_picker_input" } },
+                alpha = { after = true },
             },
         },
     },
@@ -24,7 +26,7 @@ return {
     {
         "Wansmer/treesj",
         keys = {
-            { "<leader>j", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
+            { "<leader>J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
         },
         opts = { use_default_keymaps = false, max_join_length = 150 },
     },
@@ -35,6 +37,8 @@ return {
             { "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
             { "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
         },
-        opts = {},
+        opts = {
+            skipInsignificantPunctuation = false,
+        },
     },
 }

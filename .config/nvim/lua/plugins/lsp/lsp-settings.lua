@@ -132,17 +132,8 @@ M["gopls"] = {
     end,
 }
 
--- uv tool install basedpyright
-M["basedpyright"] = {
-    settings = {
-        basedpyright = {
-            disableOrganizeImports = true,
-            analysis = {
-                typeCheckingMode = "standard",
-            },
-        },
-    },
-}
+-- uv tool install ty@latest
+M["ty"] = {}
 
 -- comes with macos
 M["sourcekit"] = {

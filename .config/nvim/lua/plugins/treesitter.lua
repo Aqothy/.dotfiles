@@ -2,7 +2,6 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "main",
         build = ":TSUpdate",
         event = { "LazyFile", "VeryLazy" },
         dependencies = {
@@ -83,26 +82,28 @@ return {
                     local move = require("nvim-treesitter-textobjects.move")
                     local swap = require("nvim-treesitter-textobjects.swap")
 
-                    map("n", "<leader>an", function()
-                        swap.swap_next("@parameter.inner", "textobjects")
-                    end, "Treesitter swap next parameter")
-                    map("n", "<leader>ap", function()
-                        swap.swap_previous("@parameter.inner", "textobjects")
-                    end, "Treesitter swap prev parameter")
+                    local function ts_bind(func, query)
+                        return function()
+                            func(query, "textobjects")
+                        end
+                    end
 
-                    map({ "n", "x", "o" }, "]m", function()
-                        move.goto_next_start({ "@function.outer", "@class.outer" }, "textobjects")
-                    end, "Treesitter next function or class start")
-                    map({ "n", "x", "o" }, "[m", function()
-                        move.goto_previous_start({ "@function.outer", "@class.outer" }, "textobjects")
-                    end, "Treesitter prev function or class start")
+                    map("n", "<leader>an", ts_bind(swap.swap_next, "@parameter.inner"), "TS swap next parameter")
+                    map("n", "<leader>ap", ts_bind(swap.swap_previous, "@parameter.inner"), "TS swap prev parameter")
 
-                    map({ "n", "x", "o" }, "]a", function()
-                        move.goto_next_start("@parameter.inner", "textobjects")
-                    end, "Treesitter next parameter start")
-                    map({ "n", "x", "o" }, "[a", function()
-                        move.goto_previous_start("@parameter.inner", "textobjects")
-                    end, "Treesitter prev parameter start")
+                    local nxo = { "n", "x", "o" }
+                    local func_class = { "@function.outer", "@class.outer" }
+                    local cond_loop = { "@conditional.outer", "@loop.outer" }
+                    local param_attr = { "@parameter.inner", "@attribute.outer" }
+
+                    map(nxo, "]m", ts_bind(move.goto_next_start, func_class), "TS next function start")
+                    map(nxo, "[m", ts_bind(move.goto_previous_start, func_class), "TS prev function start")
+
+                    map(nxo, "]]", ts_bind(move.goto_next_end, cond_loop), "TS next loop end")
+                    map(nxo, "[[", ts_bind(move.goto_previous_start, cond_loop), "TS prev loop start")
+
+                    map(nxo, "]a", ts_bind(move.goto_next_start, param_attr), "TS next attribute")
+                    map(nxo, "[a", ts_bind(move.goto_previous_start, param_attr), "TS prev attribute")
                 end,
             })
         end,

@@ -27,6 +27,7 @@ map("c", "<c-j>", [[\(.*\)]], { desc = "Fighting Kirby!" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
+map({ "n", "x", "o" }, "mm", "%", { remap = true, desc = "Matchit" })
 
 if vim.g.vscode then
     return
@@ -50,6 +51,12 @@ map("n", "<M-s-,>", "<c-w>3<", { desc = "Resize window left" })
 map("n", "<M-s-.>", "<c-w>3>", { desc = "Resize window right" })
 map("n", "<M-s-->", "3<C-W>+", { desc = "Resize window up" })
 map("n", "<M-s-=>", "3<C-W>-", { desc = "Resize window down" })
+map("n", "<A-down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+map("n", "<A-up>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+map("i", "<A-down>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+map("i", "<A-up>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("x", "<A-down>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+map("x", "<A-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- Tabs
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
@@ -107,7 +114,7 @@ end, { expr = true, desc = "Yank last killed text" })
 
 -- utils
 map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
-map("n", "<c-q>", function()
+map("n", "<M-q>", function()
     local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
     if not success and err then
         vim.notify(err, vim.log.levels.ERROR)
