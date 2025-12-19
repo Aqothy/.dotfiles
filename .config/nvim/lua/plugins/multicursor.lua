@@ -17,7 +17,7 @@ return {
     keys = {
         { "gl", mc("matchAddCursor", "match", 1), mode = { "n", "x" }, desc = "Add next match cursor" },
         { "gh", mc("matchAddCursor", "match", -1), mode = { "n", "x" }, desc = "Add previous match cursor" },
-        { "M", mc("matchCursors", "match"), mode = "x", desc = "Cursor on matches in selection" },
+        { "m", mc("matchCursors", "match"), mode = "x", desc = "Cursor on matches in selection" },
         { "<down>", mc("lineAddCursor", "line", 1), mode = { "n", "x" }, desc = "Add line below cursor" },
         { "<up>", mc("lineAddCursor", "line", -1), mode = { "n", "x" }, desc = "Add line above cursor" },
         { "gL", mc("addCursorOperator", "line"), mode = { "n", "x" }, desc = "Add cursor for each line in range" },

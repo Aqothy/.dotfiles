@@ -34,18 +34,10 @@
     }
   },
   {
-    "context": "VimControl && !menu && vim_mode != operator",
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
     "bindings": {
-      "w": "vim::NextSubwordStart",
-      "b": "vim::PreviousSubwordStart",
-      "e": "vim::NextSubwordEnd",
-      "g e": "vim::PreviousSubwordEnd"
-    }
-  },
-  {
-    "context": "VimControl && !menu && vim_mode == operator",
-    "bindings": {
-      "e": "vim::NextSubwordEnd"
+      "q": "vim::AnyQuotes",
+      "b": "vim::AnyBrackets"
     }
   },
   {

@@ -30,15 +30,4 @@ return {
         },
         opts = { use_default_keymaps = false, max_join_length = 150 },
     },
-    {
-        "chrisgrieser/nvim-spider",
-        keys = {
-            { "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
-            { "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
-            { "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
-        },
-        opts = {
-            skipInsignificantPunctuation = false,
-        },
-    },
 }

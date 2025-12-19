@@ -88,22 +88,22 @@ return {
                         end
                     end
 
-                    map("n", "<leader>an", ts_bind(swap.swap_next, "@parameter.inner"), "TS swap next parameter")
-                    map("n", "<leader>ap", ts_bind(swap.swap_previous, "@parameter.inner"), "TS swap prev parameter")
+                    local args_attr = { "@parameter.inner", "@attribute.inner" }
+                    map("n", "<leader>an", ts_bind(swap.swap_next, args_attr), "Swap Next Arg")
+                    map("n", "<leader>ap", ts_bind(swap.swap_previous, args_attr), "Swap Prev Arg")
 
                     local nxo = { "n", "x", "o" }
-                    local func_class = { "@function.outer", "@class.outer" }
-                    local cond_loop = { "@conditional.outer", "@loop.outer" }
-                    local param_attr = { "@parameter.inner", "@attribute.outer" }
+                    local methods = { "@function.outer" }
+                    local sections = { "@class.outer" }
 
-                    map(nxo, "]m", ts_bind(move.goto_next_start, func_class), "TS next function start")
-                    map(nxo, "[m", ts_bind(move.goto_previous_start, func_class), "TS prev function start")
+                    map(nxo, "]m", ts_bind(move.goto_next_start, methods), "Next Method")
+                    map(nxo, "[m", ts_bind(move.goto_previous_start, methods), "Prev Method")
 
-                    map(nxo, "]]", ts_bind(move.goto_next_end, cond_loop), "TS next loop end")
-                    map(nxo, "[[", ts_bind(move.goto_previous_start, cond_loop), "TS prev loop start")
+                    map(nxo, "]]", ts_bind(move.goto_next_start, sections), "Next Class")
+                    map(nxo, "[[", ts_bind(move.goto_previous_start, sections), "Prev Class")
 
-                    map(nxo, "]a", ts_bind(move.goto_next_start, param_attr), "TS next attribute")
-                    map(nxo, "[a", ts_bind(move.goto_previous_start, param_attr), "TS prev attribute")
+                    map(nxo, "]a", ts_bind(move.goto_next_start, args_attr), "Next Arg")
+                    map(nxo, "[a", ts_bind(move.goto_previous_start, args_attr), "Prev Arg")
                 end,
             })
         end,

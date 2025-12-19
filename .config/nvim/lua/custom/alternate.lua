@@ -83,21 +83,13 @@ end
 
 function M.setup(opts)
     M.options = vim.tbl_deep_extend("force", default, opts or {})
+    vim.keymap.set("n", "<leader>A", M.jump, { desc = "Alternate" })
 
-    local map = vim.keymap.set
-    map("n", "<leader>A", function()
-        M.jump()
-    end, { desc = "Alternate" })
-
-    vim.api.nvim_create_user_command("As", function()
-        M.jump("split")
-    end, { desc = "Split Alternate" })
-    vim.api.nvim_create_user_command("Av", function()
-        M.jump("vsplit")
-    end, { desc = "Vsplit Alternate" })
-    vim.api.nvim_create_user_command("At", function()
-        M.jump("tabedit")
-    end, { desc = "Tab Alternate" })
+    for suffix, cmd in pairs({ s = "split", v = "vsplit", t = "tabedit" }) do
+        vim.api.nvim_create_user_command("A" .. suffix, function()
+            M.jump(cmd)
+        end, { desc = cmd .. " Alternate" })
+    end
 end
 
 return M

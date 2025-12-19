@@ -26,25 +26,23 @@ end
 function M.setup(opts)
     M.options = vim.tbl_deep_extend("force", M.options, opts or {})
 
-    if vim.fn.isdirectory(M.options.dir) == 0 then
-        vim.fn.mkdir(M.options.dir, "p")
-    end
+    vim.fn.mkdir(M.options.dir, "p")
 
-    local arg = vim.fn.argv(0)
-    ---@cast arg string
     local argc = vim.fn.argc()
-    local should_start = false
-
-    if argc == 0 then
-        if is_allowed() then
-            should_start = true
-        end
-    elseif argc == 1 and vim.fn.isdirectory(arg) == 1 then
-        M.root_dir = vim.fn.fnamemodify(arg, ":p:h")
-        should_start = true
+    if argc > 1 then
+        return
     end
 
-    if should_start then
+    if argc == 1 then
+        local arg = vim.fn.argv(0)
+        ---@cast arg string
+        if vim.fn.isdirectory(arg) == 0 then
+            return
+        end
+        M.root_dir = vim.fn.fnamemodify(arg, ":p:h")
+    end
+
+    if is_allowed() then
         M.start()
     end
 end

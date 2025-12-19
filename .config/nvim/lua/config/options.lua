@@ -71,7 +71,6 @@ opt.listchars = {
     trail = "·",
 }
 opt.formatoptions = "jcroqlnt"
-opt.wrap = false
 
 opt.fileencoding = "utf-8"
 

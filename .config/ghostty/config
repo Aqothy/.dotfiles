@@ -1,0 +1,21 @@
+auto-update-channel = tip
+
+font-family = "Hack Nerd Font Mono"
+font-size = 15
+
+adjust-cell-height = 8%
+adjust-cursor-height = 8%
+mouse-hide-while-typing = true
+window-padding-color = extend
+
+theme = "Gruvbox Material Dark"
+
+macos-option-as-alt = true
+
+keybind = super+ctrl+k=goto_split:top
+keybind = super+ctrl+j=goto_split:bottom
+keybind = super+ctrl+h=goto_split:left
+keybind = super+ctrl+l=goto_split:right
+keybind = super+shift+i=inspector:toggle
+keybind = super+\=new_split:right
+keybind = super+enter=new_split:down

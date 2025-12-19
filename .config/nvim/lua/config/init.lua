@@ -49,7 +49,6 @@ if vim.g.vscode then
         "mini.ai",
         "blink.indent",
         "multicursor.nvim",
-        "nvim-spider",
         "mini.operators",
     }
 

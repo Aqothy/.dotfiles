@@ -27,7 +27,7 @@ map("c", "<c-j>", [[\(.*\)]], { desc = "Fighting Kirby!" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
-map({ "n", "x", "o" }, "mm", "%", { remap = true, desc = "Matchit" })
+map({ "n", "x", "o" }, "M", "%", { remap = true, desc = "Matchit" })
 
 if vim.g.vscode then
     return
