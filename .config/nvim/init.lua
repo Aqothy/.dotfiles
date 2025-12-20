@@ -1,5 +1,3 @@
-vim.loader.enable()
-
 require("config.options")
 vim.filetype.add({
     filename = {

@@ -17,7 +17,7 @@ M["delve"] = {
                 port = "${port}",
                 executable = {
                     command = "dlv",
-                    args = { "dap", "-l", "127.0.0.1:${port}", "--log", "--log-output=dap" },
+                    args = { "dap", "-l", "127.0.0.1:${port}" },
                     detached = vim.fn.has("win32") == 0,
                 },
             })
@@ -48,7 +48,7 @@ M["delve"] = {
 }
 
 M["pwa-node"] = {
-    filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
+    filetypes = { "typescript", "javascript" },
     adapter = {
         type = "server",
         host = "localhost",
@@ -56,7 +56,7 @@ M["pwa-node"] = {
         executable = {
             command = "node",
             args = {
-                vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+                vim.fn.expand("~/.local/bin/dapDebugServer.js"),
                 "${port}",
             },
         },
@@ -68,6 +68,9 @@ M["pwa-node"] = {
             name = "Launch file",
             program = "${file}",
             cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+            resolveSourceMapLocations = { "${workspaceFolder}/**", "!**/node_modules/**" },
         },
         {
             type = "pwa-node",
@@ -75,20 +78,20 @@ M["pwa-node"] = {
             name = "Attach",
             processId = dap_utils.pick_process,
             cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+            resolveSourceMapLocations = { "${workspaceFolder}/**", "!**/node_modules/**" },
         },
         {
-            name = "tsx",
+            name = "Debug via tsx",
             type = "pwa-node",
             request = "launch",
             program = "${file}",
             runtimeExecutable = "tsx",
             cwd = "${workspaceFolder}",
-            console = "integratedTerminal",
-            internalConsoleOptions = "neverOpen",
-            skipFiles = {
-                "<node_internals>/**",
-                "${workspaceFolder}/node_modules/**",
-            },
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+            resolveSourceMapLocations = { "${workspaceFolder}/**", "!**/node_modules/**" },
         },
     },
 }
@@ -98,43 +101,13 @@ M["node"] = {
         if config.type == "node" then
             config.type = "pwa-node"
         end
-        callback(M["pwa-node"].adapter)
+        local nativeAdapter = M["pwa-node"].adapter
+        if type(nativeAdapter) == "function" then
+            nativeAdapter(callback, config)
+        else
+            callback(nativeAdapter)
+        end
     end,
-}
-
-M["codelldb"] = {
-    filetypes = { "c", "cpp", "swift" },
-    adapter = {
-        type = "server",
-        host = "127.0.0.1",
-        port = "${port}",
-        executable = {
-            command = "codelldb",
-            args = {
-                "--port",
-                "${port}",
-            },
-        },
-    },
-    configurations = {
-        {
-            type = "codelldb",
-            request = "launch",
-            name = "Launch executable",
-            program = function()
-                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-            end,
-            cwd = "${workspaceFolder}",
-            stopOnEntry = false,
-        },
-        {
-            type = "codelldb",
-            request = "attach",
-            name = "Attach to process",
-            pid = dap_utils.pick_process,
-            cwd = "${workspaceFolder}",
-        },
-    },
 }
 
 return M

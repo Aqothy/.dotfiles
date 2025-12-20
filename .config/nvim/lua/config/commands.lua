@@ -33,12 +33,6 @@ command("Make", function(opts)
     utils.run_async(cmd, efm, cmd, { no_qf = no_qf })
 end, { nargs = "*", complete = "file", desc = "Async Make" })
 
-command("R", function(opts)
-    local cmd = vim.fn.expandcmd(opts.args)
-
-    utils.run_async(cmd, nil, cmd, { no_qf = true })
-end, { nargs = "+", complete = "shellcmdline", desc = "Run commands" })
-
 command("Grep", function(opts)
     local grepprg = get_option("grepprg", { scope = "global" })
 

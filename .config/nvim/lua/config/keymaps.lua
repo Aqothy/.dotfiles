@@ -28,6 +28,8 @@ map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
 map({ "n", "x", "o" }, "M", "%", { remap = true, desc = "Matchit" })
+map("n", "<leader>w", "<esc><cmd>update<cr>", { desc = "Save File" })
+map("n", "<leader><c-l>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
 
 if vim.g.vscode then
     return
@@ -73,7 +75,7 @@ map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
-map("n", "<M-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
+map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })
@@ -114,27 +116,10 @@ end, { expr = true, desc = "Yank last killed text" })
 
 -- utils
 map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
-map("n", "<M-q>", function()
-    local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
-    if not success and err then
-        vim.notify(err, vim.log.levels.ERROR)
-    end
-end, { desc = "Toggle qf" })
-map("n", "<localleader>q", function()
-    local success, err = pcall(vim.fn.getloclist(0, { all = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
-    if not success and err then
-        vim.notify(err, vim.log.levels.ERROR)
-    end
-end, { desc = "Toggle loclist" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
-map("n", "<M-r>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
-map("n", "<M-z>", function()
-    vim.wo.wrap = not vim.wo.wrap
-end, { desc = "Toggle word wrap" })
 
-map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
@@ -156,7 +141,7 @@ map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-map("n", "<M-d>", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
+map("n", "gh", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
 map("n", "yd", function()
     local diags = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
     local n_diags = #diags

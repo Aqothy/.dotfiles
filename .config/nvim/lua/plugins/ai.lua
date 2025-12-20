@@ -12,12 +12,6 @@ return {
                 replace_keycodes = false,
                 desc = "Accept Copilot Suggestion",
             })
-            vim.keymap.set({ "i", "s" }, "<c-c>", function()
-                vim.fn["copilot#Dismiss"]()
-                require("sidekick.nes").clear()
-            end, {
-                desc = "Dismiss Copilot Suggestion",
-            })
             vim.keymap.set("n", "<leader>tc", function()
                 if vim.fn["copilot#Enabled"]() == 1 then
                     vim.cmd("Copilot disable")
@@ -38,9 +32,6 @@ return {
             nes = {
                 diff = {
                     inline = "chars",
-                },
-                clear = {
-                    esc = false,
                 },
             },
             cli = {
@@ -63,14 +54,6 @@ return {
                 end,
                 expr = true,
                 desc = "Goto/Apply Next Edit Suggestion",
-            },
-            {
-                "<c-c>",
-                function()
-                    require("sidekick.nes").clear()
-                end,
-                mode = { "n", "x" },
-                desc = "Clear NES Suggestions",
             },
             {
                 "<c-.>",

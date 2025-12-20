@@ -71,8 +71,6 @@ automatically-unhide-macos-hidden-apps = false
 
     alt-shift-semicolon = 'mode service'
 
-    alt-shift-f = 'fullscreen'
-
 [workspace-to-monitor-force-assignment]
     1 = 'main'
     2 = 'main'
