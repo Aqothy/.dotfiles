@@ -52,21 +52,19 @@ function M.setup()
 
     vim.diagnostic.config(config)
 
-    local register_capability = vim.lsp.handlers["client/registerCapability"]
-    vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
-        vim.schedule(function()
+    vim.lsp.handlers["client/registerCapability"] = (function(overridden)
+        return function(err, res, ctx)
+            local result = overridden(err, res, ctx)
             local client = vim.lsp.get_client_by_id(ctx.client_id)
             if not client then
                 return
             end
-
             for buffer in pairs(client.attached_buffers) do
                 M.on_attach(client, buffer)
             end
-        end)
-
-        return register_capability(err, res, ctx)
-    end
+            return result
+        end
+    end)(vim.lsp.handlers["client/registerCapability"])
 end
 
 function M.has(method, client, bufnr)
