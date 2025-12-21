@@ -47,20 +47,17 @@ end
 
 function M.toggle()
     local word = get_word_object()
-    if not word then
-        return
+
+    local alternate = word and M.alternates[word] or nil
+
+    if alternate then
+        local result = type(alternate) == "function" and alternate() or alternate
+        vim.cmd('normal! "_ciw' .. result)
+    else
+        vim.cmd("normal! ")
     end
-
-    local alternate = M.alternates[word]
-    if not alternate then
-        return
-    end
-
-    local result = type(alternate) == "function" and alternate() or alternate
-
-    vim.cmd('normal! "_ciw' .. result)
 end
 
-vim.keymap.set("n", "<leader>i", M.toggle, { desc = "Toggle alternate word" })
+vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word" })
 
 return M
