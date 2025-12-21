@@ -331,7 +331,7 @@ return {
         { "<leader>gs", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         { "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
-        { "<leader>'",  function() Snacks.scratch({ ft = "markdown" }) end, desc = "Toggle Scratch Notes" },
+        { "<leader>ns",  function() Snacks.scratch({ ft = "markdown" }) end, desc = "Toggle Scratch Notes" },
         {
             "<leader>no",
             function()

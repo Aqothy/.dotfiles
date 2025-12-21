@@ -63,9 +63,6 @@ map("x", "<A-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", 
 -- Tabs
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-for i = 1, 9 do
-    map("n", "<leader>" .. i, "<cmd>tabnext " .. i .. "<cr>", { desc = "Go to Tab " .. i })
-end
 map("t", "<c-[>", "<c-\\><c-n>", { desc = "Esc Terminal" })
 map("t", "<esc>", function()
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
