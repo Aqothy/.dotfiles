@@ -26,6 +26,8 @@ map("n", "<C-h>", vscode_action("workbench.action.navigateLeft"), { desc = "Go t
 map("n", "<C-j>", vscode_action("workbench.action.navigateDown"), { desc = "Go to Lower Window" })
 map("n", "<C-k>", vscode_action("workbench.action.navigateUp"), { desc = "Go to Upper Window" })
 map("n", "<C-l>", vscode_action("workbench.action.navigateRight"), { desc = "Go to Right Window" })
+map("n", "]r", vscode_action("editor.action.wordHighlight.next"), { desc = "Next Word Highlight" })
+map("n", "[r", vscode_action("editor.action.wordHighlight.prev"), { desc = "Previous Word Highlight" })
 
 map({ "i", "n", "s" }, "<esc>", function()
     vim.cmd("noh")
