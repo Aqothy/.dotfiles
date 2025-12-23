@@ -124,8 +124,14 @@ function M.create_autocmds()
     })
 end
 
-vim.keymap.set("n", "<leader>rl", M.load, { desc = "Restore Session" })
-vim.keymap.set("n", "<leader>ds", M.stop, { desc = "Stop Session" })
-vim.keymap.set("n", "<leader>S", M.start, { desc = "Start Session" })
+vim.keymap.set("n", "<leader>Sl", M.load, { desc = "Restore Session" })
+vim.keymap.set("n", "<leader>Sd", function()
+    M.stop()
+    vim.notify("Session stopped", vim.log.levels.INFO)
+end, { desc = "Stop Session" })
+vim.keymap.set("n", "<leader>Ss", function()
+    M.start()
+    vim.notify("Session started", vim.log.levels.INFO)
+end, { desc = "Start Session" })
 
 return M

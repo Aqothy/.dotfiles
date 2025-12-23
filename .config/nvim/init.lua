@@ -16,8 +16,10 @@ require("config.commands")
 require("config.autocmds")
 
 if not vim.g.vscode then
-    require("custom.statusline")
-    require("custom.tabline")
+    vim.schedule(function()
+        require("custom.statusline")
+        require("custom.tabline")
+    end)
     require("custom.session").setup({
         allowed_dirs = {
             "~/Code/Personal",
