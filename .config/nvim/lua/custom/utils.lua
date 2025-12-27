@@ -12,18 +12,6 @@ function M.action(action)
     })
 end
 
-function M.bufname_valid(bufname)
-    if
-        bufname:match("^/")
-        or bufname:match("^[a-zA-Z]:")
-        or bufname:match("^zipfile://")
-        or bufname:match("^tarfile:")
-    then
-        return true
-    end
-    return false
-end
-
 -- treesitter
 
 M.ensure_installed = {

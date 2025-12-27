@@ -60,13 +60,18 @@ map("i", "<A-up>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("x", "<A-down>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("x", "<A-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
--- Tabs
+-- Terminal
+map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
+map("t", "<C-h>", "<c-\\><c-n><c-w>h", { desc = "Go to Left Window" })
+map("t", "<C-j>", "<c-\\><c-n><c-w>j", { desc = "Go to Lower Window" })
+map("t", "<C-k>", "<c-\\><c-n><c-w>k", { desc = "Go to Upper Window" })
+map("t", "<C-l>", "<c-\\><c-n><c-w>l", { desc = "Go to Right Window" })
+map("t", "<C-x><C-l>", "<C-l>", { desc = "Send Original Ctrl-l (Clear)" })
+map("t", "<C-x><C-k>", "<C-k>", { desc = "Send Original Ctrl-k (Kill Line)" })
+
+-- Tabs and windows
 map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map("t", "<c-[>", "<c-\\><c-n>", { desc = "Esc Terminal" })
-map("t", "<esc>", function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
-end, { desc = "Feed esc" })
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
@@ -80,6 +85,10 @@ map("n", "cdu", "<cmd>lcd .. | pwd<cr>", { desc = "Change directory to parent di
 map("n", "cd-", "<cmd>lcd - | pwd<cr>", { desc = "Change directory to previous directory" })
 
 -- Editing
+map("i", "<C-b>", "<Left>", { desc = "Backward char" })
+map("c", "<C-b>", "<Left>", { desc = "Backward char" })
+map("i", "<C-f>", "<Right>", { desc = "Forward char" })
+map("c", "<C-f>", "<Right>", { desc = "Forward char" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
 map("i", "<C-A>", "<C-O>^", { desc = "Beginning of line" })
 map("c", "<C-A>", "<Home>", { desc = "Beginning of line" })

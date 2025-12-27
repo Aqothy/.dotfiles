@@ -301,7 +301,7 @@ return {
                 height = 0.99,
                 keys = {
                     hide = {
-                        "<c-[>",
+                        "<c-q>",
                         "hide",
                         mode = "t",
                         expr = true,

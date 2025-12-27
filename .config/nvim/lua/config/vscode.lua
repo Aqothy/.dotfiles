@@ -53,6 +53,7 @@ return {
         opts = {
             highlight = { enabled = false },
             indent = { enabled = false },
+            folds = { enabled = false },
         },
     },
     {

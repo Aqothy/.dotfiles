@@ -15,9 +15,9 @@ opt.relativenumber = true
 
 -- indentation
 opt.expandtab = true
-opt.shiftwidth = 0
 opt.tabstop = 4
-opt.softtabstop = 4
+opt.shiftwidth = 0
+opt.softtabstop = -1
 opt.shiftround = true
 opt.smartindent = true
 opt.breakindent = true
@@ -64,6 +64,7 @@ opt.virtualedit = "block" -- Allow cursor to move where there is no text in visu
 opt.background = "dark"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+opt.foldtext = ""
 opt.cursorline = true
 opt.list = true
 opt.listchars = {

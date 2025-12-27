@@ -14,6 +14,7 @@ return {
             highlight = {
                 disable = {},
             },
+            folds = {},
         },
         config = function(_, opts)
             local TS = require("nvim-treesitter")
@@ -68,6 +69,14 @@ return {
                     if not is_disabled(lang, "indent", buf) then
                         if ts_utils.have(ft, "indents") then
                             vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                        end
+                    end
+
+                    if not is_disabled(lang, "folds", buf) then
+                        if ts_utils.have(ft, "folds") then
+                            local win = vim.api.nvim_get_current_win()
+                            vim.wo[win][0].foldmethod = "expr"
+                            vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
                         end
                     end
 
