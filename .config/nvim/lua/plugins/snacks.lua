@@ -368,5 +368,6 @@ return {
         { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
         { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
         { "gO", function() Snacks.picker.treesitter() end, desc = "Treesitter symbols" },
+        { "<c-;>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
     },
 }

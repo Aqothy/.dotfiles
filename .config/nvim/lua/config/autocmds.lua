@@ -18,8 +18,8 @@ end
 -- Check file changes after using term
 autocmd({ "TermClose", "TermLeave" }, {
     group = augroup("checktime"),
-    callback = function(ev)
-        if vim.bo[ev.buf].buftype ~= "nofile" then
+    callback = function()
+        if vim.o.buftype ~= "nofile" then
             vim.cmd("checktime")
         end
     end,

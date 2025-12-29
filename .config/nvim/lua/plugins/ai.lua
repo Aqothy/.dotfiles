@@ -1,12 +1,21 @@
 return {
     {
         "github/copilot.vim",
+        event = "LazyFile",
         init = function()
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_filetypes = {
                 ["*"] = true,
                 dotenv = false,
             }
+            vim.g.copilot_lsp_settings = {
+                telemetry = {
+                    telemetryLevel = "off",
+                },
+            }
+            vim.g.copilot_version = false
+        end,
+        config = function()
             vim.keymap.set("i", "<s-tab>", 'copilot#Accept("\\<s-tab>")', {
                 expr = true,
                 replace_keycodes = false,

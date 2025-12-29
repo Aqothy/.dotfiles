@@ -62,10 +62,10 @@ map("x", "<A-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", 
 
 -- Terminal
 map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
-map("t", "<C-h>", "<c-\\><c-n><c-w>h", { desc = "Go to Left Window" })
-map("t", "<C-j>", "<c-\\><c-n><c-w>j", { desc = "Go to Lower Window" })
-map("t", "<C-k>", "<c-\\><c-n><c-w>k", { desc = "Go to Upper Window" })
-map("t", "<C-l>", "<c-\\><c-n><c-w>l", { desc = "Go to Right Window" })
+map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to Left Window" })
+map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to Lower Window" })
+map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to Upper Window" })
+map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to Right Window" })
 map("t", "<C-x><C-l>", "<C-l>", { desc = "Send Original Ctrl-l (Clear)" })
 map("t", "<C-x><C-k>", "<C-k>", { desc = "Send Original Ctrl-k (Kill Line)" })
 
