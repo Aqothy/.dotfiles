@@ -194,7 +194,10 @@ return {
     },
     {
         "nvim-mini/mini.ai",
-        event = "VeryLazy",
+        keys = {
+            { "a", mode = { "x", "o" } },
+            { "i", mode = { "x", "o" } },
+        },
         opts = function()
             local ai = require("mini.ai")
             local gen_spec = ai.gen_spec

@@ -172,7 +172,7 @@ M.file_cache = {}
 M.file_info_cache = {}
 M.file_size_cache = {}
 
-autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
+autocmd({ "BufFilePost", "BufWritePost", "FileChangedShellPost" }, {
     group = stl_group,
     callback = function(ev)
         local buf = ev.buf
@@ -183,6 +183,17 @@ autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
     desc = "Invalidate file cache",
 })
 
+autocmd("OptionSet", {
+    group = stl_group,
+    pattern = { "filetype" },
+    callback = function()
+        local buf = api.nvim_get_current_buf()
+        M.file_cache[buf] = nil
+        M.file_info_cache[buf] = nil
+    end,
+    desc = "Invalidate file cache on filetype change",
+})
+
 autocmd("BufDelete", {
     group = stl_group,
     callback = function(ev)
@@ -190,7 +201,6 @@ autocmd("BufDelete", {
         M.file_cache[buf] = nil
         M.file_info_cache[buf] = nil
         M.file_size_cache[buf] = nil
-        M.diagnostic_counts[buf] = nil
         M.diagnostic_str_cache[buf] = nil
     end,
     desc = "Cleanup buffer caches",
@@ -233,16 +243,18 @@ function M.filetype_component()
     end
 
     local relative_path = fn.expand("%:.")
+    local ft = bo[buf].filetype
 
     local icon_part = "%0*󰈔 "
     if has_mini_icons then
-        local icon, icon_hl = mini_icons.get("file", relative_path)
+        local icon, icon_hl = mini_icons.get("filetype", ft)
         icon_part = "%#" .. icon_hl .. "#" .. icon .. " "
     end
 
     -- Only truncate if not empty and not a terminal buffer
+    local buftype = bo[buf].buftype
     local display_path
-    if relative_path ~= "" and bo.buftype ~= "terminal" then
+    if relative_path ~= "" and buftype ~= "terminal" then
         display_path = M.truncate_path(relative_path, 40)
     else
         display_path = "%t" -- Use only the filename
@@ -250,7 +262,7 @@ function M.filetype_component()
 
     local result = icon_part .. "%0*" .. display_path .. " %m%r"
 
-    if bo.buftype == "" then
+    if buftype == "" then
         M.file_cache[buf] = result
     end
 
@@ -264,18 +276,12 @@ M.diagnostic_levels = {
     { name = "INFO", sign = diag_signs.Info, hl = "DiagnosticInfo" },
     { name = "HINT", sign = diag_signs.Hint, hl = "DiagnosticHint" },
 }
-M.diagnostic_counts = {}
 M.diagnostic_str_cache = {}
 
 autocmd("DiagnosticChanged", {
     group = stl_group,
     callback = function(ev)
         local buf = ev.buf
-        if api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "" then
-            M.diagnostic_counts[buf] = vim.diagnostic.count(buf)
-        else
-            M.diagnostic_counts[buf] = nil
-        end
         M.diagnostic_str_cache[buf] = nil
         vim.schedule(function()
             vim.cmd("redrawstatus")
@@ -291,9 +297,12 @@ function M.diagnostics_component()
         return M.diagnostic_str_cache[buf]
     end
 
-    local count = M.diagnostic_counts[buf]
-    if not count then
-        if bo.buftype == "" then
+    local count = vim.diagnostic.count(buf)
+
+    local buftype = bo[buf].buftype
+
+    if not next(count) then
+        if buftype == "" then
             M.diagnostic_str_cache[buf] = ""
         end
         return ""
@@ -312,7 +321,7 @@ function M.diagnostics_component()
 
     local result = (#parts > 0) and table.concat(parts, " ") or ""
 
-    if bo.buftype == "" then
+    if buftype == "" then
         M.diagnostic_str_cache[buf] = result
     end
 
@@ -426,7 +435,7 @@ M.filesize_component = function()
 
     local result = "%0*" .. format_filesize(size)
 
-    if bo.buftype == "" then
+    if bo[buf].buftype == "" then
         M.file_size_cache[buf] = result
     end
 
@@ -449,9 +458,10 @@ function M.file_info_component()
         return M.file_info_cache[buf]
     end
 
-    local result = "%#AqlineFileInfo#" .. bo.fileencoding .. (bo.expandtab and " Spaces:" or " Tab:") .. bo.tabstop
+    local buf_opts = bo[buf]
+    local result = "%#AqlineFileInfo#" .. buf_opts.fileencoding .. (buf_opts.expandtab and " Spaces:" or " Tab:") .. buf_opts.tabstop
 
-    if bo.buftype == "" then
+    if buf_opts.buftype == "" then
         M.file_info_cache[buf] = result
     end
 

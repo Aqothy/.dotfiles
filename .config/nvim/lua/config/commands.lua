@@ -13,12 +13,10 @@ command("Make", function(opts)
     local cmd = ""
     local global_makeprg = get_option("makeprg", { scope = "global" })
     local efm = get_option("errorformat", { buf = bufnr })
-    local no_qf = false
 
     if opts.args and opts.args ~= "" then
         local args = vim.fn.expandcmd(opts.args)
         cmd = global_makeprg .. " " .. args
-        no_qf = true
     else
         local local_makeprg = get_option("makeprg", { buf = bufnr })
 
@@ -26,12 +24,11 @@ command("Make", function(opts)
             cmd = vim.fn.expandcmd(local_makeprg)
         else
             cmd = vim.fn.expandcmd(global_makeprg)
-            no_qf = true
         end
     end
 
-    utils.run_async(cmd, efm, cmd, { no_qf = no_qf })
-end, { nargs = "*", complete = "file", desc = "Async Make" })
+    utils.run_async(cmd, efm, cmd, { bang = opts.bang })
+end, { nargs = "*", bang = true, complete = "file", desc = "Async Make" })
 
 command("Grep", function(opts)
     local grepprg = get_option("grepprg", { scope = "global" })
@@ -48,19 +45,19 @@ command("Grep", function(opts)
     local cmd = grepprg .. " " .. args
     local efm = get_option("grepformat", { scope = "global" })
 
-    utils.run_async(cmd, efm, "Grep")
-end, { nargs = "+", complete = "file", desc = "Async Grep" })
+    utils.run_async(cmd, efm, "Grep", { bang = opts.bang })
+end, { nargs = "+", bang = true, complete = "file", desc = "Async Grep" })
 
-command("Tsc", function()
+command("Tsc", function(opts)
     local cmd = "npx tsgo --noEmit"
     local efm = "%f %#(%l\\,%c): %trror TS%n: %m,%trror TS%n: %m,%-G%.%#"
 
-    utils.run_async(cmd, efm, "Tsc")
-end, { nargs = 0, desc = "Run TSC" })
+    utils.run_async(cmd, efm, "Tsc", { bang = opts.bang })
+end, { nargs = 0, bang = true, desc = "Run TSC" })
 
-command("GoLint", function()
+command("GoLint", function(opts)
     local cmd = "golangci-lint run"
     local efm = "%A%f:%l:%c: %m,%-G%.%#"
 
-    utils.run_async(cmd, efm, "GolangCI-Lint")
-end, { nargs = 0, desc = "Run GolangCI-Lint" })
+    utils.run_async(cmd, efm, "GolangCI-Lint", { bang = opts.bang })
+end, { nargs = 0, bang = true, desc = "Run GolangCI-Lint" })

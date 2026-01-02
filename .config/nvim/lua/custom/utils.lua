@@ -82,19 +82,13 @@ end
 
 function M.run_async(cmd, efm, title, opts)
     if not cmd or cmd == "" then
-        vim.notify("No command provided to run_async", vim.log.levels.ERROR)
-        return
+        return vim.notify("No command provided", vim.log.levels.ERROR)
     end
 
     opts = opts or {}
     local lines = {}
 
-    if not opts.silent then
-        vim.notify("Started: " .. title, vim.log.levels.INFO)
-    end
-
     local function on_event(_, data)
-        -- sometimes data can have emtpy lines, so dont use vim.list_extend
         if data then
             for _, line in ipairs(data) do
                 if line ~= "" then
@@ -110,25 +104,7 @@ function M.run_async(cmd, efm, title, opts)
         on_stdout = on_event,
         on_stderr = on_event,
         on_exit = function(_, exit_code)
-            if opts.silent then
-                return
-            end
-            if opts.no_qf then
-                local output = table.concat(lines, "\n")
-
-                if output == "" then
-                    output = title .. " finished"
-                end
-
-                if exit_code == 0 then
-                    vim.notify(output, vim.log.levels.INFO)
-                else
-                    vim.notify(output, vim.log.levels.ERROR)
-                end
-                return
-            end
-
-            if #lines > 0 then
+            vim.schedule(function()
                 if not efm or efm == "" then
                     efm = vim.api.nvim_get_option_value("errorformat", { scope = "global" })
                 end
@@ -139,12 +115,14 @@ function M.run_async(cmd, efm, title, opts)
                     efm = efm,
                 })
 
-                vim.cmd("copen")
+                if not opts.bang then
+                    vim.cmd("copen")
+                end
 
-                vim.notify(title .. " finished", vim.log.levels.INFO)
-            else
-                vim.notify(title .. " finished (no output)", vim.log.levels.INFO)
-            end
+                local msg = title .. (exit_code == 0 and ": Success" or ": Failed")
+                local level = exit_code == 0 and vim.log.levels.INFO or vim.log.levels.ERROR
+                vim.notify(msg, level)
+            end)
         end,
     })
 end
