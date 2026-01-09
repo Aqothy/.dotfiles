@@ -15,6 +15,13 @@ local has_sidekick, sidekick = pcall(require, "sidekick.status")
 
 local groups = {}
 
+local function stl_escape(str)
+    if not str or str == "" then
+        return str
+    end
+    return str:gsub("%%", "%%%%")
+end
+
 local mode_colors = {
     Normal = "Cursor",
     Pending = "PMenuSel",
@@ -148,7 +155,8 @@ function M.git_components()
         return "", ""
     end
 
-    local branch = (git_info.head and git_info.head ~= "") and ("%0* " .. git_info.head) or ""
+    local branch_name = git_info.head and git_info.head ~= "" and stl_escape(git_info.head) or ""
+    local branch = branch_name ~= "" and ("%0* " .. branch_name) or ""
 
     local status_parts = {}
     local git_icons = has_icons and icons.git or { added = "+", modified = "~", removed = "-" }
@@ -255,7 +263,7 @@ function M.filetype_component()
     local buftype = bo[buf].buftype
     local display_path
     if relative_path ~= "" and buftype ~= "terminal" then
-        display_path = M.truncate_path(relative_path, 40)
+        display_path = stl_escape(M.truncate_path(relative_path, 40))
     else
         display_path = "%t" -- Use only the filename
     end
@@ -341,7 +349,7 @@ local function update_lsp_progress_str()
         local state = M.lsp_progress_state[k]
         local icon = state.is_done and "" or "󱥸"
         local hl = state.is_done and "%#AqlineLspDone#" or "%#AqlineLspLoading#"
-        parts[#parts + 1] = hl .. state.name .. " " .. icon .. "%0*"
+        parts[#parts + 1] = hl .. stl_escape(state.name) .. " " .. icon .. "%0*"
     end
     M.lsp_progress_cached_str = table.concat(parts, " ")
 end
@@ -459,7 +467,10 @@ function M.file_info_component()
     end
 
     local buf_opts = bo[buf]
-    local result = "%#AqlineFileInfo#" .. buf_opts.fileencoding .. (buf_opts.expandtab and " Spaces:" or " Tab:") .. buf_opts.tabstop
+    local result = "%#AqlineFileInfo#"
+        .. buf_opts.fileencoding
+        .. (buf_opts.expandtab and " Spaces:" or " Tab:")
+        .. buf_opts.tabstop
 
     if buf_opts.buftype == "" then
         M.file_info_cache[buf] = result

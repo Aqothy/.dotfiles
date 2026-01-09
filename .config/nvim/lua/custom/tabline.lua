@@ -11,6 +11,15 @@ local group = api.nvim_create_augroup("AqTabline", { clear = true })
 
 local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
 
+local function stl_escape(str)
+    if not str or str == "" then
+        return str
+    end
+    return str:gsub("%%", "%%%%")
+end
+
+local path_sep = package.config:sub(1, 1)
+
 local diag_severity_map = {
     [vim.diagnostic.severity.ERROR] = { sign = diag_signs.Error, hl = "DiagnosticError" },
     [vim.diagnostic.severity.WARN] = { sign = diag_signs.Warn, hl = "DiagnosticWarn" },
@@ -111,11 +120,11 @@ local function get_tab_data()
 
     for i, item in ipairs(data) do
         if item.path ~= "" and name_counts[item.name] > 1 then
-            local parts = vim.split(item.path, "/")
+            local parts = vim.split(item.path, path_sep, { plain = true })
             local res = item.name
 
             for k = #parts - 1, 1, -1 do
-                res = parts[k] .. "/" .. res
+                res = parts[k] .. path_sep .. res
                 local collision = false
 
                 for j, other in ipairs(data) do
@@ -143,7 +152,7 @@ local function build_tab(item, index, is_current)
     local buf = item.buf
 
     local icon = get_icon(buf, hl)
-    local label = item.name
+    local label = stl_escape(item.name)
     local diag = get_diagnostic_indicator(buf)
 
     local is_modified = api.nvim_get_option_value("modified", { buf = buf })
