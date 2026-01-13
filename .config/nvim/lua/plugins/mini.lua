@@ -260,12 +260,12 @@ return {
         event = "LazyFile",
         keys = {
             {
-                "<leader>th",
+                "<leader>uh",
                 function()
                     ---@diagnostic disable-next-line
                     MiniHipatterns.toggle()
                 end,
-                desc = "Toggle MiniHipatterns",
+                desc = "Toggle Hipatterns",
             },
         },
         opts = function()

@@ -98,8 +98,8 @@ return {
                     end
 
                     local args_attr = { "@parameter.inner", "@attribute.inner" }
-                    map("n", "<leader>an", ts_bind(swap.swap_next, args_attr), "Swap Next Arg")
-                    map("n", "<leader>ap", ts_bind(swap.swap_previous, args_attr), "Swap Prev Arg")
+                    map("n", "<localleader>a", ts_bind(swap.swap_next, args_attr), "Swap Next Arg")
+                    map("n", "<localleader>A", ts_bind(swap.swap_previous, args_attr), "Swap Prev Arg")
 
                     local nxo = { "n", "x", "o" }
                     local methods = { "@function.outer" }

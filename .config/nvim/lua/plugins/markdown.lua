@@ -1,8 +1,9 @@
 return {
     {
         "brianhuster/live-preview.nvim",
+        cmd = "LivePreview",
         keys = {
-            { "<leader>mp", "<cmd>LivePreview start<cr>", desc = "Live Preview" },
+            { "<localleader>mp", ft = "markdown", "<cmd>LivePreview start<cr>", desc = "Live Preview" },
         },
     },
 }

@@ -19,7 +19,7 @@ return {
         },
         { "<leader>gh", "<cmd>DiffviewFileHistory<cr>", desc = "Diff File History" },
         { "<leader>gm", "<cmd>DiffviewOpen origin/main<cr>", desc = "Diff Main" },
-        { "<leader>pr", "<cmd>DiffviewOpen origin/main...HEAD<cr>", desc = "Diff Merge Base Main" },
+        { "<leader>gR", "<cmd>DiffviewOpen origin/main...HEAD<cr>", desc = "Git Review (vs main)" },
     },
     opts = {
         view = {

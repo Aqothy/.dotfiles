@@ -46,7 +46,7 @@ return {
         },
         keys = {
             {
-                "<leader>dp",
+                "<leader>dm",
                 function()
                     require("debugmaster").mode.toggle()
                 end,

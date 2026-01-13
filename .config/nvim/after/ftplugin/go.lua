@@ -42,10 +42,10 @@ local function goModTag(operation)
     end)
 end
 
-vim.keymap.set("n", "<leader>aj", function()
+vim.keymap.set("n", "<localleader>ta", function()
     goModTag("add")
-end, { desc = "Add json tags to struct", buffer = true })
+end, { desc = "Tag Add (json)", buffer = true })
 
-vim.keymap.set("n", "<leader>rj", function()
+vim.keymap.set("n", "<localleader>tr", function()
     goModTag("remove")
-end, { desc = "Remove json tags from struct", buffer = true })
+end, { desc = "Tag Remove (json)", buffer = true })

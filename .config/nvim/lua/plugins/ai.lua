@@ -21,15 +21,17 @@ return {
                 replace_keycodes = false,
                 desc = "Accept Copilot Suggestion",
             })
-            vim.keymap.set("n", "<leader>tc", function()
-                if vim.fn["copilot#Enabled"]() == 1 then
-                    vim.cmd("Copilot disable")
-                else
-                    vim.cmd("Copilot enable")
-                end
-                vim.cmd("Copilot status")
-                vim.cmd("Sidekick nes toggle")
-            end, { desc = "Toggle Copilot" })
+            -- for some reason copilot lsp sometimes doesn't stop on exit
+            vim.api.nvim_create_autocmd("VimLeavePre", {
+                desc = "Stop Copilot LSP client on exit",
+                group = vim.api.nvim_create_augroup("CopilotCleanup", { clear = true }),
+                callback = function()
+                    local clients = vim.lsp.get_clients({ name = "GitHub Copilot" })
+                    for _, client in ipairs(clients) do
+                        client:stop()
+                    end
+                end,
+            })
         end,
     },
     {

@@ -1,7 +1,16 @@
 return {
     "stevearc/conform.nvim",
     cmd = "ConformInfo",
-    event = "BufWritePre",
+    keys = {
+        {
+            "<leader>=",
+            function()
+                require("conform").format({ async = true })
+            end,
+            mode = { "n", "x" },
+            desc = "Format",
+        },
+    },
     opts = {
         log_level = vim.log.levels.OFF,
         notify_on_error = false,
@@ -32,6 +41,5 @@ return {
             lsp_format = "fallback",
             timeout_ms = 500,
         },
-        format_on_save = {},
     },
 }

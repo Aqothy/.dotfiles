@@ -37,16 +37,16 @@ M["vtsls"] = {
         javascript = jsts_config,
     },
     on_attach = function(_, bufnr)
-        map("n", "<leader>oi", function()
+        map("n", "<localleader>ri", function()
             utils.action("source.addMissingImports.ts")
             vim.defer_fn(function()
                 utils.action("source.organizeImports")
             end, 100)
-        end, { buffer = bufnr, desc = "Organize Imports", silent = true })
+        end, { buffer = bufnr, desc = "Refactor imports", silent = true })
 
-        map("n", "<leader>rm", function()
+        map("n", "<localleader>ru", function()
             utils.action("source.removeUnused.ts")
-        end, { buffer = bufnr, desc = "Remove Unused", silent = true })
+        end, { buffer = bufnr, desc = "Refractor unused", silent = true })
     end,
 }
 
@@ -126,9 +126,9 @@ M["gopls"] = {
         },
     },
     on_attach = function(_, bufnr)
-        map("n", "<leader>rr", function()
+        map("n", "<localleader>rf", function()
             utils.action("refactor.rewrite.fillStruct")
-        end, { buffer = bufnr, desc = "Fill Struct", silent = true })
+        end, { buffer = bufnr, desc = "Refactor Fill struct", silent = true })
     end,
 }
 

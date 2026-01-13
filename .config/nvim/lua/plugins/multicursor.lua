@@ -28,7 +28,7 @@ return {
         { "<up>", mc("lineAddCursor", "line", -1), mode = { "n", "x" }, desc = "Add line above cursor" },
         { "<leader>cl", mc("addCursorOperator", "line"), mode = { "n", "x" }, desc = "Add cursor for each line in range" },
         { "<leader>cs", mc("splitCursors", "match"), mode = "x", desc = "Split visual selections by regex" },
-        { "<leader>k", mc("toggleCursor"), mode = { "n", "x" }, desc = "Toggle cursor" },
+        { "<leader>ct", mc("toggleCursor"), mode = { "n", "x" }, desc = "Toggle cursor" },
         { "gM", mc("operator", "match"), mode = { "n", "x" }, desc = "Cursor on all matches inside operator range" },
         { "<leader>ca", mc("alignCursors"), mode = "n", desc = "Align cursor columns" },
         { "<leader>cr", mc("restoreCursors"), mode = "n", desc = "Restore deleted cursors" },

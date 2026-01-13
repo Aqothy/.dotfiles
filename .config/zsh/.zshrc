@@ -68,7 +68,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 autoload -Uz vcs_info
 
-typeset -g __git_async_fd
+typeset -g __git_async_fd=""
 typeset -g _git_status_prompt=""
 
 # VCS styling
@@ -89,19 +89,27 @@ __async_git_info() {
 
 # Called when new data is ready to be read from the pipe
 __async_git_done() {
+  local fd=$1
+  local new_prompt
+
   # Read everything from the fd
-  _git_status_prompt="$(<&$1)"
+  new_prompt="$(<&$fd)"
+  if [[ "$_git_status_prompt" != "$new_prompt" ]]; then
+    _git_status_prompt="$new_prompt"
+    zle reset-prompt
+  fi
   # remove the handler and close the file descriptor
-  zle -F "$1"
-  exec {1}<&-
-  zle && zle reset-prompt
+  zle -F "$fd"
+  exec {fd}<&-
+  __git_async_fd=""
 }
 
 __async_git_start() {
   # remove any existing handler and close the previous fd
   if [[ -n "$__git_async_fd" ]] && { true <&$__git_async_fd } 2>/dev/null; then
-    zle -F $__git_async_fd
+    zle -F "$__git_async_fd"
     exec {__git_async_fd}<&-
+    __git_async_fd=""
   fi
   # fork a process to fetch the vcs status and open a pipe to read from it
   exec {__git_async_fd}< <(__async_git_info "$PWD")

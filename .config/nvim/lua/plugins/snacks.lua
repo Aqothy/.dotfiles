@@ -123,6 +123,7 @@ return {
             sections = {
                 { text = string.format("NVIM %s", vim.version()), align = "center", padding = 2 },
                 { section = "keys", padding = 1 },
+                { section = "startup", padding = 1 },
             },
         },
         bigfile = { enabled = true },
@@ -326,14 +327,14 @@ return {
         { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
         { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
-        { "<leader>hd", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
+        { "<leader>gD", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
         { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
         { "<leader>gs", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
         { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         { "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete Other Buffers" },
         { "<leader>ns",  function() Snacks.scratch({ ft = "markdown" }) end, desc = "Toggle Scratch Notes" },
         {
-            "<leader>no",
+            "<leader>nt",
             function()
                 ---@diagnostic disable-next-line: missing-fields
                 Snacks.scratch({
@@ -352,10 +353,10 @@ return {
         { "<leader>F", function() Snacks.picker.pick("aqfiles", { cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Smart cwd" },
         { "<leader>ss", function() Snacks.picker.grep() end, desc = "Search String" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>u", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "undo tree" },
+        { "<leader>su", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "Undo Tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-        { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profiler Picker" },
-        { "<leader>zz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
+        { "<leader>sp", function() Snacks.toggle.profiler():toggle() end, desc = "Search profile" },
+        { "<leader>uz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>ld", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
         { "<leader>lD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
