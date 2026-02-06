@@ -70,9 +70,12 @@ local function get_icon(buf, hl)
 
     local ft = vim.bo[buf].filetype
     local icon, icon_hl
-
     if has_mini_icons then
-        icon, icon_hl = mini_icons.get("filetype", ft)
+        local is_default
+        icon, icon_hl, is_default = mini_icons.get("filetype", ft)
+        if is_default then
+            icon, icon_hl = mini_icons.get("file", api.nvim_buf_get_name(buf))
+        end
     end
 
     icon = icon or "󰈔"
@@ -192,7 +195,7 @@ function M.render()
     return table.concat(chunks)
 end
 
-autocmd({ "BufFilePost", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
+autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
     group = group,
     callback = function(ev)
         clear_buffer_cache(ev.buf)

@@ -37,14 +37,21 @@ function M.setup()
                 return (icons.diagnostics[sev_list[s[diagnostic.severity]]] or "●") .. " "
             end,
         },
-        update_in_insert = false,
         underline = { severity = { min = vim.diagnostic.severity.WARN } },
         severity_sort = true,
         float = {
-            style = "minimal",
             source = "if_many",
             header = "",
             prefix = "",
+        },
+        jump = {
+            on_jump = function(diagnostic, bufnr)
+                if not diagnostic then
+                    return
+                end
+
+                vim.diagnostic.open_float({ bufnr = bufnr, focus = false })
+            end,
         },
     }
 

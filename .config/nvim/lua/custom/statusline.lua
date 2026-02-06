@@ -180,7 +180,7 @@ M.file_cache = {}
 M.file_info_cache = {}
 M.file_size_cache = {}
 
-autocmd({ "BufFilePost", "BufWritePost", "FileChangedShellPost" }, {
+autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
     group = stl_group,
     callback = function(ev)
         local buf = ev.buf
@@ -253,11 +253,17 @@ function M.filetype_component()
     local relative_path = fn.expand("%:.")
     local ft = bo[buf].filetype
 
-    local icon_part = "%0*󰈔 "
+    local icon, icon_hl
     if has_mini_icons then
-        local icon, icon_hl = mini_icons.get("filetype", ft)
-        icon_part = "%#" .. icon_hl .. "#" .. icon .. " "
+        local is_default
+        icon, icon_hl, is_default = mini_icons.get("filetype", ft)
+        if is_default then
+            icon, icon_hl = mini_icons.get("file", relative_path)
+        end
     end
+
+    icon = icon or "󰈔"
+    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%0*"
 
     -- Only truncate if not empty and not a terminal buffer
     local buftype = bo[buf].buftype
@@ -268,7 +274,7 @@ function M.filetype_component()
         display_path = "%t" -- Use only the filename
     end
 
-    local result = icon_part .. "%0*" .. display_path .. " %m%r"
+    local result = icon_hl .. icon .. "%0* " .. display_path .. " %m%r"
 
     if buftype == "" then
         M.file_cache[buf] = result
@@ -487,13 +493,6 @@ function M.render_inactive()
         parts[#parts + 1] = file_comp
     end
 
-    parts[#parts + 1] = "%#StatusLineNC#%="
-
-    local diag = M.diagnostics_component()
-    if diag ~= "" then
-        parts[#parts + 1] = diag
-    end
-
     return " " .. table.concat(parts, "  ") .. " "
 end
 
@@ -515,7 +514,7 @@ function M.render()
         parts[#parts + 1] = file_comp
     end
 
-    if width > 100 and git_changes ~= "" then
+    if git_changes ~= "" then
         parts[#parts + 1] = git_changes
     end
 
@@ -531,12 +530,12 @@ function M.render()
         parts[#parts + 1] = diag
     end
 
-    local copilot_status = M.copilot_component()
-    if copilot_status ~= "" then
-        parts[#parts + 1] = copilot_status
-    end
-
     if width > 120 then
+        local copilot_status = M.copilot_component()
+        if copilot_status ~= "" then
+            parts[#parts + 1] = copilot_status
+        end
+
         local os_comp = M.os_component()
         if os_comp ~= "" then
             parts[#parts + 1] = os_comp

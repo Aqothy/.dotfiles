@@ -27,12 +27,10 @@ opt.swapfile = false
 opt.writebackup = false
 opt.undofile = true
 opt.updatetime = 200
-opt.history = 100
 opt.lazyredraw = true
 
 opt.splitright = true
 opt.splitbelow = true
-opt.splitkeep = "screen"
 
 opt.ignorecase = true
 opt.smartcase = true

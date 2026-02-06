@@ -5,17 +5,20 @@
 bindkey -e
 
 # Zsh Options
+HISTSIZE=10000
+SAVEHIST=10000
 setopt AUTO_CD
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
+setopt EXTENDED_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
 setopt SHARE_HISTORY
 setopt PROMPT_SUBST
-setopt GLOB_DOTS
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
 setopt CORRECT
 setopt GLOB_COMPLETE
+setopt HIST_VERIFY
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -31,6 +34,7 @@ alias gd="git difftool --dir-diff"
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
 alias ld='lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias ls='ls -G -l'
 
 d() {
    git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
@@ -142,7 +146,7 @@ autoload -Uz compinit && compinit
 compdef _git sb=git-switch
 compdef _git co=git-checkout
 
-eval "$(fnm env --use-on-cd --shell zsh)"
+eval "$(mise activate zsh)"
 eval "$(uv generate-shell-completion zsh)"
 
 source <(fzf --zsh)

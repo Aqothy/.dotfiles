@@ -41,8 +41,18 @@ return {
 
             vim.cmd("colorscheme gruvbox")
 
+            local base_bg = is_dark and colors.dark0_soft or colors.light0_soft
+            local blend = require("custom.utils").blend
+
             local custom_hls = {
                 DiffviewChangeDelete = { bg = "#5a332f" },
+                DiagnosticVirtualTextError = { bg = blend(colors.bright_red, 0.12, base_bg), fg = colors.bright_red },
+                DiagnosticVirtualTextWarn = {
+                    bg = blend(colors.bright_yellow, 0.12, base_bg),
+                    fg = colors.bright_yellow,
+                },
+                DiagnosticVirtualTextInfo = { bg = blend(colors.bright_blue, 0.12, base_bg), fg = colors.bright_blue },
+                DiagnosticVirtualTextHint = { bg = blend(colors.bright_aqua, 0.12, base_bg), fg = colors.bright_aqua },
             }
 
             for name, opts in pairs(custom_hls) do

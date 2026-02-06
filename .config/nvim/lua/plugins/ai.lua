@@ -1,38 +1,23 @@
 return {
     {
-        "github/copilot.vim",
+        "zbirenbaum/copilot.lua",
         event = "LazyFile",
-        init = function()
-            vim.g.copilot_no_tab_map = true
-            vim.g.copilot_filetypes = {
-                ["*"] = true,
-                dotenv = false,
-            }
-            vim.g.copilot_lsp_settings = {
-                telemetry = {
-                    telemetryLevel = "off",
+        cmd = "Copilot",
+        opts = {
+            panel = {
+                enabled = false,
+            },
+            suggestion = {
+                auto_trigger = true,
+                keymap = {
+                    accept = "<c-l>",
                 },
-            }
-            vim.g.copilot_version = false
-        end,
-        config = function()
-            vim.keymap.set("i", "<s-tab>", 'copilot#Accept("\\<s-tab>")', {
-                expr = true,
-                replace_keycodes = false,
-                desc = "Accept Copilot Suggestion",
-            })
-            -- for some reason copilot lsp sometimes doesn't stop on exit
-            vim.api.nvim_create_autocmd("VimLeavePre", {
-                desc = "Stop Copilot LSP client on exit",
-                group = vim.api.nvim_create_augroup("CopilotCleanup", { clear = true }),
-                callback = function()
-                    local clients = vim.lsp.get_clients({ name = "GitHub Copilot" })
-                    for _, client in ipairs(clients) do
-                        client:stop()
-                    end
-                end,
-            })
-        end,
+            },
+            filetypes = {
+                markdown = true,
+                dotenv = false,
+            },
+        },
     },
     {
         "folke/sidekick.nvim",
@@ -48,7 +33,7 @@ return {
             cli = {
                 win = {
                     split = {
-                        width = 0.4,
+                        width = 0.35,
                     },
                 },
             },
@@ -92,6 +77,12 @@ return {
                 function() require("sidekick.cli").send({ msg = "{this}" }) end,
                 mode = { "x", "n" },
                 desc = "Send This",
+            },
+            {
+                "<leader>ap",
+                function() require("sidekick.cli").prompt() end,
+                mode = { "n", "x" },
+                desc = "Sidekick Select Prompt",
             },
         },
     },

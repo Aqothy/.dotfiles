@@ -1,8 +1,9 @@
 local M = {}
 
 M.options = {
+    auto_start = true,
     allowed_dirs = {},
-    need = 1, -- Minimum number of normal buffers required to save a session
+    need_tabs = 2,
     dir = vim.fn.stdpath("state") .. "/sessions/",
 }
 
@@ -52,6 +53,11 @@ function M.save()
     vim.cmd("mks! " .. vim.fn.fnameescape(file))
 end
 
+function M.exists()
+    local file = get_session_path()
+    return vim.fn.filereadable(file) == 1
+end
+
 function M.load()
     local file = get_session_path()
     if vim.fn.filereadable(file) == 1 then
@@ -70,16 +76,27 @@ end
 function M.create_autocmds()
     local group = vim.api.nvim_create_augroup("aqothy/session", { clear = true })
 
-    vim.api.nvim_create_autocmd("VimEnter", {
-        group = group,
-        nested = true,
-        callback = function()
-            local lazy_view = require("lazy.view")
-            if not vim.g.using_stdin and not lazy_view.visible() then
-                M.load()
-            end
-        end,
-    })
+    if M.options.auto_start then
+        vim.api.nvim_create_autocmd("VimEnter", {
+            group = group,
+            once = true,
+            nested = true,
+            callback = function()
+                local lazy_view = require("lazy.view")
+                if not vim.g.using_stdin and not lazy_view.visible() then
+                    M.load()
+                end
+            end,
+        })
+
+        vim.api.nvim_create_autocmd("StdinReadPre", {
+            group = group,
+            once = true,
+            callback = function()
+                vim.g.using_stdin = true
+            end,
+        })
+    end
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         group = group,
@@ -89,18 +106,9 @@ function M.create_autocmds()
                 return
             end
 
-            local bufs = vim.tbl_filter(function(b)
-                local name = vim.api.nvim_buf_get_name(b)
+            local tabs = vim.api.nvim_list_tabpages()
 
-                return vim.bo[b].buftype == ""
-                    and vim.fn.buflisted(b) == 1
-                    and name ~= ""
-                    -- When opening `nvim .`, buffer 1 is named the CWD path.
-                    -- exclude this to prevent saving empty sessions.
-                    and vim.fn.isdirectory(name) == 0
-            end, vim.api.nvim_list_bufs())
-
-            if #bufs < M.options.need then
+            if #tabs < M.options.need_tabs then
                 return
             end
 
@@ -112,14 +120,6 @@ function M.create_autocmds()
             end
 
             M.save()
-        end,
-    })
-
-    vim.api.nvim_create_autocmd("StdinReadPre", {
-        group = group,
-        once = true,
-        callback = function()
-            vim.g.using_stdin = true
         end,
     })
 end

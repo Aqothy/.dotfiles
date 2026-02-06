@@ -45,15 +45,3 @@
     renames = true
     algorithm = histogram
     indentHeuristic = true
-
-[merge]
-    tool = nvimdiff
-
-[mergetool]
-    prompt = true
-    keepBackup = false
-    trustExitCode = true
-    hideResolved = true
-
-[mergetool "nvimdiff"]
-    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c 'windo set foldcolumn=0 signcolumn=no wrap' -c 'wincmd J'

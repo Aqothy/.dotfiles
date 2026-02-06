@@ -107,6 +107,15 @@ return {
                     { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
                     { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
                     {
+                        icon = " ",
+                        key = "l",
+                        desc = "Load Session",
+                        action = ":lua require('custom.session').load()",
+                        enabled = function()
+                            return require("custom.session").exists()
+                        end,
+                    },
+                    {
                         icon = " ",
                         key = "g",
                         desc = "Git",
@@ -115,7 +124,6 @@ return {
                             return Snacks.git.get_root() ~= nil
                         end,
                     },
-                    { icon = " ", key = "t", desc = "New Tab", action = ":tabnew" },
                     { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },

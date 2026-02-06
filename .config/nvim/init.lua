@@ -19,13 +19,14 @@ if not vim.g.vscode then
     vim.schedule(function()
         require("custom.statusline")
         require("custom.tabline")
+        require("custom.alternate").setup()
     end)
     require("custom.session").setup({
         allowed_dirs = {
             "~/Code/Personal",
         },
+        auto_start = false,
     })
-    require("custom.alternate").setup()
 
     require("vim._extui").enable({})
 end

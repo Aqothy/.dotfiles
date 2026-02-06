@@ -32,5 +32,6 @@
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
-  "workbench.colorTheme": "Gruvbox Dark Medium"
+  "workbench.colorTheme": "Gruvbox Dark Medium",
+  "chat.tools.terminal.outputLocation": "chat"
 }
