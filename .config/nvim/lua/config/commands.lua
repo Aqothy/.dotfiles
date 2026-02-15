@@ -30,24 +30,6 @@ command("Make", function(opts)
     utils.run_async(cmd, efm, cmd, { bang = opts.bang })
 end, { nargs = "*", bang = true, complete = "file", desc = "Async Make" })
 
-command("Grep", function(opts)
-    local grepprg = get_option("grepprg", { scope = "global" })
-
-    local args = vim.fn.expandcmd(opts.args)
-    local split_args = vim.split(args, " ", { trimempty = true })
-    local last_arg = split_args[#split_args]
-
-    -- if you dont pass in a file or directory, rg won't search anything
-    if vim.fn.isdirectory(last_arg) == 0 and vim.fn.filereadable(last_arg) == 0 then
-        args = args .. " ."
-    end
-
-    local cmd = grepprg .. " " .. args
-    local efm = get_option("grepformat", { scope = "global" })
-
-    utils.run_async(cmd, efm, "Grep", { bang = opts.bang })
-end, { nargs = "+", bang = true, complete = "file", desc = "Async Grep" })
-
 command("Tsc", function(opts)
     local cmd = "npx tsgo --noEmit"
     local efm = "%f %#(%l\\,%c): %trror TS%n: %m,%trror TS%n: %m,%-G%.%#"

@@ -1,84 +1,16 @@
 local M = {}
 
--- lsp
-
-function M.action(action)
-    return vim.lsp.buf.code_action({
-        apply = true,
-        context = {
-            only = { action },
-            diagnostics = {},
-        },
-    })
-end
-
--- treesitter
-
-M.ensure_installed = {
-    "c",
-    "lua",
-    "vim",
-    "vimdoc",
-    "query",
-    "markdown",
-    "markdown_inline",
-
-    -- extras
-    "javascript",
-    "typescript",
-    "cpp",
-    "go",
-    "bash",
-    "tsx",
-    "json",
-    "swift",
-    "python",
-    "regex",
-}
-M._installed = nil
-M._queries = {}
-
-function M.get_installed_parsers(update)
-    if update then
-        M._installed, M._queries = {}, {}
-        for _, lang in ipairs(require("nvim-treesitter").get_installed("parsers")) do
-            M._installed[lang] = true
-        end
+function M.bufname_valid(bufname)
+    if
+        bufname:match("^/")
+        or bufname:match("^[a-zA-Z]:")
+        or bufname:match("^zipfile://")
+        or bufname:match("^tarfile:")
+    then
+        return true
     end
-    return M._installed or {}
+    return false
 end
-
-function M.have_query(lang, query)
-    local key = lang .. ":" .. query
-    if M._queries[key] == nil then
-        local ok, res = pcall(vim.treesitter.query.get, lang, query)
-        M._queries[key] = ok and res ~= nil
-    end
-    return M._queries[key]
-end
-
-function M.have(ft, query)
-    local lang = vim.treesitter.language.get_lang(ft)
-    if not lang or not M.get_installed_parsers()[lang] then
-        return false
-    end
-    if query and not M.have_query(lang, query) then
-        return false
-    end
-    return true
-end
-
-function M.get_ensured_parsers_fts()
-    local ft_set = {}
-    for _, lang in ipairs(M.ensure_installed) do
-        for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang) or {}) do
-            ft_set[ft] = true
-        end
-    end
-    return vim.tbl_keys(ft_set)
-end
-
--- async
 
 function M.run_async(cmd, efm, title, opts)
     if not cmd or cmd == "" then
@@ -98,6 +30,17 @@ function M.run_async(cmd, efm, title, opts)
         end
     end
 
+    local function run_callback(cb, ...)
+        if type(cb) ~= "function" then
+            return
+        end
+
+        local ok, err = pcall(cb, ...)
+        if not ok then
+            vim.notify(title .. ": callback failed: " .. err, vim.log.levels.ERROR)
+        end
+    end
+
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
@@ -105,47 +48,37 @@ function M.run_async(cmd, efm, title, opts)
         on_stderr = on_event,
         on_exit = function(_, exit_code)
             vim.schedule(function()
-                if not efm or efm == "" then
-                    efm = vim.api.nvim_get_option_value("errorformat", { scope = "global" })
-                end
-
-                vim.fn.setqflist({}, "r", {
-                    title = title,
-                    lines = lines,
-                    efm = efm,
-                })
-
                 if not opts.bang then
+                    if not efm or efm == "" then
+                        efm = vim.api.nvim_get_option_value("errorformat", { scope = "global" })
+                    end
+
+                    vim.fn.setqflist({}, "r", {
+                        title = title,
+                        lines = lines,
+                        efm = efm,
+                    })
+
                     vim.cmd("copen")
                 end
 
-                local msg = title .. (exit_code == 0 and ": Success" or ": Failed")
-                local level = exit_code == 0 and vim.log.levels.INFO or vim.log.levels.ERROR
-                vim.notify(msg, level)
+                local is_success = exit_code == 0
+                if not opts.bang or not is_success then
+                    local msg = title .. (is_success and ": Success" or ": Failed")
+                    local level = is_success and vim.log.levels.INFO or vim.log.levels.ERROR
+                    vim.notify(msg, level)
+                end
+
+                if is_success then
+                    run_callback(opts.on_success, lines)
+                else
+                    run_callback(opts.on_failure, lines)
+                end
+
+                run_callback(opts.on_exit, exit_code, lines)
             end)
         end,
     })
-end
-
--- colors
-
-local function rgb(c)
-    c = string.lower(c)
-    return { tonumber(c:sub(2, 3), 16), tonumber(c:sub(4, 5), 16), tonumber(c:sub(6, 7), 16) }
-end
-
-function M.blend(fg, alpha, bg)
-    alpha = type(alpha) == "string" and (tonumber(alpha, 16) / 0xff) or alpha
-
-    fg = rgb(fg)
-    bg = rgb(bg)
-
-    local blendChannel = function(i)
-        local ret = (alpha * fg[i] + ((1 - alpha) * bg[i]))
-        return math.floor(math.min(math.max(0, ret), 255) + 0.5)
-    end
-
-    return string.format("#%02x%02x%02x", blendChannel(1), blendChannel(2), blendChannel(3))
 end
 
 return M

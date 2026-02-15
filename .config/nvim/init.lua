@@ -17,8 +17,8 @@ require("config.autocmds")
 
 if not vim.g.vscode then
     vim.schedule(function()
-        require("custom.statusline")
-        require("custom.tabline")
+        require("custom.statusline").setup()
+        require("custom.tabline").setup()
         require("custom.alternate").setup()
     end)
     require("custom.session").setup({

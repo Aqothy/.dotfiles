@@ -17,14 +17,15 @@ return {
             end,
             desc = "Toggle Diffview",
         },
-        { "<leader>gh", "<cmd>DiffviewFileHistory<cr>", desc = "Diff File History" },
+        { "<leader>gh", ":DiffviewFileHistory<cr>", mode = { "n", "x" }, desc = "Diff File History" },
         { "<leader>gm", "<cmd>DiffviewOpen origin/main<cr>", desc = "Diff Main" },
         { "<leader>gR", "<cmd>DiffviewOpen origin/main...HEAD<cr>", desc = "Git Review (vs main)" },
     },
     opts = {
+        show_help_hints = false,
         view = {
             merge_tool = {
-                layout = "diff4_mixed",
+                layout = "diff3_mixed",
             },
         },
         file_panel = {

@@ -1,9 +1,13 @@
 local fn = vim.fn
+local utils = require("custom.utils")
 
 -- go install github.com/fatih/gomodifytags@latest
-local function goModTag(operation)
+local function goModTag(operation, opts)
+    opts = opts or {}
+
     if fn.executable("gomodifytags") == 0 then
         vim.notify("gomodifytags not found", vim.log.levels.ERROR)
+        return
     end
 
     if vim.bo.modified then
@@ -31,21 +35,19 @@ local function goModTag(operation)
 
         cmd = cmd .. " -" .. operation .. "-tags json -transform camelcase -w --quiet"
 
-        local output = fn.system(cmd)
-
-        if vim.v.shell_error ~= 0 then
-            vim.notify("Failed to add JSON tags: " .. output, vim.log.levels.ERROR)
-            return
-        end
-
-        vim.cmd("checktime")
+        utils.run_async(cmd, "%m", "GoTag " .. operation, {
+            bang = opts.bang,
+            on_success = function()
+                vim.cmd("checktime")
+            end,
+        })
     end)
 end
 
 vim.keymap.set("n", "<localleader>ta", function()
-    goModTag("add")
+    goModTag("add", { bang = true })
 end, { desc = "Tag Add (json)", buffer = true })
 
 vim.keymap.set("n", "<localleader>tr", function()
-    goModTag("remove")
+    goModTag("remove", { bang = true })
 end, { desc = "Tag Remove (json)", buffer = true })

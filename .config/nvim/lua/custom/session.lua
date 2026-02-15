@@ -27,20 +27,21 @@ end
 function M.setup(opts)
     M.options = vim.tbl_deep_extend("force", M.options, opts or {})
 
+    vim.keymap.set("n", "<leader>Sl", M.load, { desc = "Restore Session" })
+    vim.keymap.set("n", "<leader>Sd", function()
+        M.stop()
+        vim.notify("Session stopped", vim.log.levels.INFO)
+    end, { desc = "Stop Session" })
+    vim.keymap.set("n", "<leader>Ss", function()
+        M.start()
+        vim.notify("Session started", vim.log.levels.INFO)
+    end, { desc = "Start Session" })
+
     vim.fn.mkdir(M.options.dir, "p")
 
     local argc = vim.fn.argc()
     if argc > 1 then
         return
-    end
-
-    if argc == 1 then
-        local arg = vim.fn.argv(0)
-        ---@cast arg string
-        if vim.fn.isdirectory(arg) == 0 then
-            return
-        end
-        M.root_dir = vim.fn.fnamemodify(arg, ":p:h")
     end
 
     if is_allowed() then
@@ -106,12 +107,6 @@ function M.create_autocmds()
                 return
             end
 
-            local tabs = vim.api.nvim_list_tabpages()
-
-            if #tabs < M.options.need_tabs then
-                return
-            end
-
             local ok, dv_lib = pcall(require, "diffview.lib")
             if ok and dv_lib and dv_lib.views then
                 for _, view in pairs(dv_lib.views) do
@@ -119,19 +114,15 @@ function M.create_autocmds()
                 end
             end
 
+            local tabs = vim.api.nvim_list_tabpages()
+
+            if #tabs < M.options.need_tabs then
+                return
+            end
+
             M.save()
         end,
     })
 end
-
-vim.keymap.set("n", "<leader>Sl", M.load, { desc = "Restore Session" })
-vim.keymap.set("n", "<leader>Sd", function()
-    M.stop()
-    vim.notify("Session stopped", vim.log.levels.INFO)
-end, { desc = "Stop Session" })
-vim.keymap.set("n", "<leader>Ss", function()
-    M.start()
-    vim.notify("Session started", vim.log.levels.INFO)
-end, { desc = "Start Session" })
 
 return M

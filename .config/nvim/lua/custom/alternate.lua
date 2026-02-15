@@ -62,7 +62,7 @@ function M.jump(cmd)
     local choices = is_creation_mode and candidates or existing
 
     local function open(path)
-        vim.cmd((cmd or M.options.open_cmd) .. " " .. path)
+        vim.cmd((cmd or M.options.open_cmd) .. " " .. vim.fn.fnameescape(path))
     end
 
     if not is_creation_mode and #choices == 1 then

@@ -196,6 +196,9 @@ return {
             { "a", mode = { "x", "o" } },
             { "i", mode = { "x", "o" } },
         },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         opts = function()
             local ai = require("mini.ai")
             local gen_spec = ai.gen_spec

@@ -1,13 +1,25 @@
 local M = {}
 
 local api = vim.api
-local has_mini_icons, mini_icons = pcall(require, "mini.icons")
 local has_icons, icons = pcall(require, "config.icons")
+local mini_icons_mod = nil
+local group = "AqTabline"
+local autocmd = api.nvim_create_autocmd
+
+local function get_mini_icons()
+    if mini_icons_mod == false then
+        return nil
+    end
+    if mini_icons_mod then
+        return mini_icons_mod
+    end
+
+    local ok, mod = pcall(require, "mini.icons")
+    mini_icons_mod = ok and mod or false
+    return ok and mod or nil
+end
 
 M.file_cache = {}
-
-local autocmd = api.nvim_create_autocmd
-local group = api.nvim_create_augroup("AqTabline", { clear = true })
 
 local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
 
@@ -26,15 +38,6 @@ local diag_severity_map = {
     [vim.diagnostic.severity.INFO] = { sign = diag_signs.Info, hl = "DiagnosticInfo" },
     [vim.diagnostic.severity.HINT] = { sign = diag_signs.Hint, hl = "DiagnosticHint" },
 }
-
-autocmd("DiagnosticChanged", {
-    group = group,
-    callback = function()
-        vim.schedule(function()
-            vim.cmd("redrawtabline")
-        end)
-    end,
-})
 
 local function clear_buffer_cache(buf)
     M.file_cache[buf] = nil
@@ -70,7 +73,8 @@ local function get_icon(buf, hl)
 
     local ft = vim.bo[buf].filetype
     local icon, icon_hl
-    if has_mini_icons then
+    local mini_icons = get_mini_icons()
+    if mini_icons then
         local is_default
         icon, icon_hl, is_default = mini_icons.get("filetype", ft)
         if is_default then
@@ -81,7 +85,7 @@ local function get_icon(buf, hl)
     icon = icon or "󰈔"
     icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%0*"
 
-    if vim.bo[buf].buftype == "" then
+    if vim.bo[buf].buftype == "" and mini_icons ~= nil then
         M.file_cache[buf] = M.file_cache[buf] or {}
         M.file_cache[buf].icon = { icon = icon, hl = icon_hl }
     end
@@ -195,22 +199,36 @@ function M.render()
     return table.concat(chunks)
 end
 
-autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
-    group = group,
-    callback = function(ev)
-        clear_buffer_cache(ev.buf)
-    end,
-})
+local function create_autocmds()
+    autocmd("DiagnosticChanged", {
+        group = group,
+        callback = vim.schedule_wrap(function()
+            vim.cmd("redrawtabline")
+        end),
+    })
 
-autocmd("OptionSet", {
-    group = group,
-    pattern = { "filetype" },
-    callback = function()
-        local buf = api.nvim_get_current_buf()
-        clear_buffer_cache(buf)
-    end,
-})
+    autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
+        group = group,
+        callback = function(ev)
+            clear_buffer_cache(ev.buf)
+        end,
+    })
 
-vim.opt.tabline = "%!v:lua.require('custom.tabline').render()"
+    autocmd("OptionSet", {
+        group = group,
+        pattern = { "filetype" },
+        callback = function()
+            local buf = api.nvim_get_current_buf()
+            clear_buffer_cache(buf)
+        end,
+    })
+end
+
+function M.setup()
+    api.nvim_create_augroup(group, { clear = true })
+    create_autocmds()
+
+    vim.opt.tabline = "%!v:lua.require('custom.tabline').render()"
+end
 
 return M

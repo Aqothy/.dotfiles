@@ -8,6 +8,7 @@ return {
     },
     config = vim.schedule_wrap(function()
         local handlers = require("plugins.lsp.lsp-handlers")
+        local utils = require("custom.utils")
 
         handlers.setup()
 
@@ -25,6 +26,25 @@ return {
                 handlers.on_attach(client, ev.buf)
             end,
         })
+
+        ---@diagnostic disable-next-line: duplicate-set-field
+        vim.lsp.start = (function(overridden)
+            return function(config, opts)
+                if opts and opts.bufnr then
+                    local bufnr = opts.bufnr
+                    if not vim.api.nvim_buf_is_valid(bufnr) then
+                        return
+                    end
+
+                    local bufname = vim.api.nvim_buf_get_name(bufnr)
+                    -- prevent lsp from attaching to artificial buffers, ref: https://github.com/neovim/neovim/issues/32074
+                    if not utils.bufname_valid(bufname) then
+                        return
+                    end
+                end
+                return overridden(config, opts)
+            end
+        end)(vim.lsp.start)
 
         local params = {
             capabilities = handlers.capabilities,

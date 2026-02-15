@@ -33,5 +33,8 @@
     "asvetliakov.vscode-neovim": 1
   },
   "workbench.colorTheme": "Gruvbox Dark Medium",
-  "chat.tools.terminal.outputLocation": "chat"
+  "workbench.startupEditor": "none",
+  "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
+  "github.copilot.chat.responsesApiReasoningEffort": "high",
+  "chat.checkpoints.showFileChanges": true,
 }

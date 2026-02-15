@@ -70,8 +70,8 @@ map("t", "<C-x><C-l>", "<C-l>", { desc = "Send Original Ctrl-l (Clear)" })
 map("t", "<C-x><C-k>", "<C-k>", { desc = "Send Original Ctrl-k (Kill Line)" })
 
 -- Tabs and windows
-map("n", "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<c-n>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<c-p>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
@@ -123,12 +123,13 @@ map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File
 
 -- utils
 map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
-map("n", "y<c-g>", function()
-    vim.fn.setreg("+", vim.fn.expand("%:."))
-end, { desc = "Yank relative file path to clipboard" })
 
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+
+map("n", "<M-z>", function()
+    vim.wo.wrap = not vim.wo.wrap
+end, { desc = "Toggle line wrap" })
 
 map({ "i", "n", "s" }, "<esc>", function()
     vim.cmd("noh")

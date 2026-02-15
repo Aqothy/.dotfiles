@@ -1,9 +1,17 @@
 local M = {}
 
-local utils = require("custom.utils")
 local lsp_util = require("lspconfig.util")
 
 local map = vim.keymap.set
+local function action(action_name)
+    return vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+            only = { action_name },
+            diagnostics = {},
+        },
+    })
+end
 
 -- use enabled field to disable or enable a lsp
 -- make sure to initialize the lsp even if you don't want custom config
@@ -38,14 +46,14 @@ M["vtsls"] = {
     },
     on_attach = function(_, bufnr)
         map("n", "<localleader>ri", function()
-            utils.action("source.addMissingImports.ts")
+            action("source.addMissingImports.ts")
             vim.defer_fn(function()
-                utils.action("source.organizeImports")
+                action("source.organizeImports")
             end, 100)
         end, { buffer = bufnr, desc = "Refactor imports", silent = true })
 
         map("n", "<localleader>ru", function()
-            utils.action("source.removeUnused.ts")
+            action("source.removeUnused.ts")
         end, { buffer = bufnr, desc = "Refractor unused", silent = true })
     end,
 }
@@ -76,7 +84,6 @@ M["lua_ls"] = {
             },
         })
     end,
-
     settings = {
         Lua = {
             workspace = {
@@ -127,7 +134,7 @@ M["gopls"] = {
     },
     on_attach = function(_, bufnr)
         map("n", "<localleader>rf", function()
-            utils.action("refactor.rewrite.fillStruct")
+            action("refactor.rewrite.fillStruct")
         end, { buffer = bufnr, desc = "Refactor Fill struct", silent = true })
     end,
 }

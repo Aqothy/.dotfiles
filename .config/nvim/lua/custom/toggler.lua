@@ -28,6 +28,8 @@ function M.setup(opts)
     if opts and opts.alternates then
         M.alternates = vim.tbl_extend("force", M.alternates, opts.alternates)
     end
+
+    vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word" })
 end
 
 local function get_word_object()
@@ -57,7 +59,5 @@ function M.toggle()
         vim.cmd("normal! ")
     end
 end
-
-vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word" })
 
 return M

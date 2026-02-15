@@ -6,12 +6,28 @@ local fn = vim.fn
 local cmd = vim.cmd
 local uv = vim.uv or vim.loop
 
-local stl_group = api.nvim_create_augroup("aqline", { clear = true })
+local stl_group = "aqline"
 local autocmd = api.nvim_create_autocmd
 
 local has_icons, icons = pcall(require, "config.icons")
-local has_mini_icons, mini_icons = pcall(require, "mini.icons")
-local has_sidekick, sidekick = pcall(require, "sidekick.status")
+local mini_icons_mod = nil
+
+local function get_mini_icons()
+    if mini_icons_mod == false then
+        return nil
+    end
+    if mini_icons_mod then
+        return mini_icons_mod
+    end
+
+    local ok, mod = pcall(require, "mini.icons")
+    mini_icons_mod = ok and mod or false
+    return ok and mod or nil
+end
+
+local function get_sidekick_status()
+    return package.loaded["sidekick.status"]
+end
 
 local groups = {}
 
@@ -40,9 +56,11 @@ groups["AqlineFileInfo"] = { link = "QuickFixLine" }
 groups["AqlineLspLoading"] = { link = "DiagnosticInfo" }
 groups["AqlineLspDone"] = { link = "DiagnosticOk" }
 
-for group, opts in pairs(groups) do
-    opts.default = true
-    vim.api.nvim_set_hl(0, group, opts)
+local function setup_highlights()
+    for group, opts in pairs(groups) do
+        opts.default = true
+        vim.api.nvim_set_hl(0, group, opts)
+    end
 end
 
 local os_uname = uv.os_uname()
@@ -53,11 +71,12 @@ M.os_cache = nil
 
 function M.os_component()
     if not M.os_cache then
-        if has_mini_icons then
+        local mini_icons = get_mini_icons()
+        if mini_icons then
             local icon, icon_hl = mini_icons.get("os", M.sysname)
             M.os_cache = "%#" .. icon_hl .. "#" .. icon
         else
-            M.os_cache = ""
+            return ""
         end
     end
     return M.os_cache
@@ -129,15 +148,6 @@ for _, data in pairs(M.MODE_MAP) do
         or ("%#AqlineMode" .. hl .. "# " .. data.short .. " %0*")
 end
 
--- For op-pending mode
-autocmd("ModeChanged", {
-    group = stl_group,
-    desc = "Update statusline on mode change",
-    callback = vim.schedule_wrap(function()
-        cmd("redrawstatus")
-    end),
-})
-
 function M.mode_component()
     local mode = api.nvim_get_mode().mode
     local mode_data = M.MODE_MAP[mode] or { long = "UNKNOWN", short = "U" }
@@ -180,48 +190,6 @@ M.file_cache = {}
 M.file_info_cache = {}
 M.file_size_cache = {}
 
-autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
-    group = stl_group,
-    callback = function(ev)
-        local buf = ev.buf
-        M.file_cache[buf] = nil
-        M.file_info_cache[buf] = nil
-        M.file_size_cache[buf] = nil
-    end,
-    desc = "Invalidate file cache",
-})
-
-autocmd("OptionSet", {
-    group = stl_group,
-    pattern = { "filetype" },
-    callback = function()
-        local buf = api.nvim_get_current_buf()
-        M.file_cache[buf] = nil
-        M.file_info_cache[buf] = nil
-    end,
-    desc = "Invalidate file cache on filetype change",
-})
-
-autocmd("BufDelete", {
-    group = stl_group,
-    callback = function(ev)
-        local buf = ev.buf
-        M.file_cache[buf] = nil
-        M.file_info_cache[buf] = nil
-        M.file_size_cache[buf] = nil
-        M.diagnostic_str_cache[buf] = nil
-    end,
-    desc = "Cleanup buffer caches",
-})
-
-autocmd("DirChanged", {
-    group = stl_group,
-    callback = function(ev)
-        M.file_cache[ev.buf] = nil
-    end,
-    desc = "Invalidate file cache on directory change",
-})
-
 local path_sep = M.sysname == "windows" and "\\" or "/"
 
 function M.truncate_path(path, max_len)
@@ -254,7 +222,8 @@ function M.filetype_component()
     local ft = bo[buf].filetype
 
     local icon, icon_hl
-    if has_mini_icons then
+    local mini_icons = get_mini_icons()
+    if mini_icons then
         local is_default
         icon, icon_hl, is_default = mini_icons.get("filetype", ft)
         if is_default then
@@ -276,7 +245,7 @@ function M.filetype_component()
 
     local result = icon_hl .. icon .. "%0* " .. display_path .. " %m%r"
 
-    if buftype == "" then
+    if buftype == "" and mini_icons ~= nil then
         M.file_cache[buf] = result
     end
 
@@ -291,18 +260,6 @@ M.diagnostic_levels = {
     { name = "HINT", sign = diag_signs.Hint, hl = "DiagnosticHint" },
 }
 M.diagnostic_str_cache = {}
-
-autocmd("DiagnosticChanged", {
-    group = stl_group,
-    callback = function(ev)
-        local buf = ev.buf
-        M.diagnostic_str_cache[buf] = nil
-        vim.schedule(function()
-            vim.cmd("redrawstatus")
-        end)
-    end,
-    desc = "Track diagnostics",
-})
 
 function M.diagnostics_component()
     local buf = api.nvim_get_current_buf()
@@ -360,43 +317,6 @@ local function update_lsp_progress_str()
     M.lsp_progress_cached_str = table.concat(parts, " ")
 end
 
-autocmd("LspProgress", {
-    group = stl_group,
-    pattern = { "begin", "end" },
-    callback = function(ev)
-        local client_id = ev.data.client_id
-        local client = vim.lsp.get_client_by_id(client_id)
-        if not client then
-            return
-        end
-
-        local value = ev.data.params.value
-        local is_end = value.kind == "end"
-
-        -- cancel existing cleanup timers
-        if M.lsp_progress_state[client_id] and M.lsp_progress_state[client_id].timer then
-            M.lsp_progress_state[client_id].timer:close()
-        end
-
-        M.lsp_progress_state[client_id] = {
-            name = client.name,
-            is_done = is_end,
-            timer = nil,
-        }
-
-        if is_end then
-            M.lsp_progress_state[client_id].timer = vim.defer_fn(function()
-                M.lsp_progress_state[client_id] = nil
-                update_lsp_progress_str()
-                vim.cmd("redrawstatus")
-            end, 3000)
-        end
-
-        update_lsp_progress_str()
-        vim.cmd("redrawstatus")
-    end,
-})
-
 function M.lsp_progress_component()
     return M.lsp_progress_cached_str
 end
@@ -409,7 +329,8 @@ M.copilot_icons = {
 }
 
 function M.copilot_component()
-    if not has_sidekick then
+    local sidekick = get_sidekick_status()
+    if not sidekick then
         return ""
     end
 
@@ -455,16 +376,6 @@ M.filesize_component = function()
 
     return result
 end
-
-autocmd("OptionSet", {
-    group = stl_group,
-    pattern = { "fileencoding", "expandtab", "tabstop" },
-    callback = function()
-        local buf = api.nvim_get_current_buf()
-        M.file_info_cache[buf] = nil
-    end,
-    desc = "Invalidate file info cache on option change",
-})
 
 function M.file_info_component()
     local buf = api.nvim_get_current_buf()
@@ -557,19 +468,137 @@ end
 
 M.win_width = nil
 
-autocmd({ "VimResized", "WinResized", "WinEnter" }, {
-    group = stl_group,
-    callback = function()
-        M.win_width = nil
-    end,
-    desc = "Invalidate window width cache",
-})
+local function create_autocmds()
+    -- For op-pending mode
+    autocmd("ModeChanged", {
+        group = stl_group,
+        desc = "Update statusline on mode change",
+        callback = vim.schedule_wrap(function()
+            cmd("redrawstatus")
+        end),
+    })
 
--- vim.opt.laststatus = 3
--- vim.g.qf_disable_statusline = 1
-vim.opt.showmode = false
-vim.opt.ruler = false
-vim.opt.statusline =
-    "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'custom.statusline'.render() : v:lua.require'custom.statusline'.render_inactive()%}"
+    autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
+        group = stl_group,
+        callback = function(ev)
+            local buf = ev.buf
+            M.file_cache[buf] = nil
+            M.file_info_cache[buf] = nil
+            M.file_size_cache[buf] = nil
+        end,
+        desc = "Invalidate file cache",
+    })
+
+    autocmd("OptionSet", {
+        group = stl_group,
+        pattern = { "filetype" },
+        callback = function()
+            local buf = api.nvim_get_current_buf()
+            M.file_cache[buf] = nil
+            M.file_info_cache[buf] = nil
+        end,
+        desc = "Invalidate file cache on filetype change",
+    })
+
+    autocmd("BufDelete", {
+        group = stl_group,
+        callback = function(ev)
+            local buf = ev.buf
+            M.file_cache[buf] = nil
+            M.file_info_cache[buf] = nil
+            M.file_size_cache[buf] = nil
+            M.diagnostic_str_cache[buf] = nil
+        end,
+        desc = "Cleanup buffer caches",
+    })
+
+    autocmd("DirChanged", {
+        group = stl_group,
+        callback = function(ev)
+            M.file_cache[ev.buf] = nil
+        end,
+        desc = "Invalidate file cache on directory change",
+    })
+
+    autocmd("DiagnosticChanged", {
+        group = stl_group,
+        callback = function(ev)
+            local buf = ev.buf
+            M.diagnostic_str_cache[buf] = nil
+            vim.schedule(function()
+                vim.cmd("redrawstatus")
+            end)
+        end,
+        desc = "Track diagnostics",
+    })
+
+    autocmd("LspProgress", {
+        group = stl_group,
+        pattern = { "begin", "end" },
+        callback = function(ev)
+            local client_id = ev.data.client_id
+            local client = vim.lsp.get_client_by_id(client_id)
+            if not client then
+                return
+            end
+
+            local value = ev.data.params.value
+            local is_end = value.kind == "end"
+
+            -- cancel existing cleanup timers
+            if M.lsp_progress_state[client_id] and M.lsp_progress_state[client_id].timer then
+                M.lsp_progress_state[client_id].timer:close()
+            end
+
+            M.lsp_progress_state[client_id] = {
+                name = client.name,
+                is_done = is_end,
+                timer = nil,
+            }
+
+            if is_end then
+                M.lsp_progress_state[client_id].timer = vim.defer_fn(function()
+                    M.lsp_progress_state[client_id] = nil
+                    update_lsp_progress_str()
+                    vim.cmd("redrawstatus")
+                end, 3000)
+            end
+
+            update_lsp_progress_str()
+            vim.cmd("redrawstatus")
+        end,
+    })
+
+    autocmd("OptionSet", {
+        group = stl_group,
+        pattern = { "fileencoding", "expandtab", "tabstop" },
+        callback = function()
+            local buf = api.nvim_get_current_buf()
+            M.file_info_cache[buf] = nil
+        end,
+        desc = "Invalidate file info cache on option change",
+    })
+
+    autocmd({ "VimResized", "WinResized", "WinEnter" }, {
+        group = stl_group,
+        callback = function()
+            M.win_width = nil
+        end,
+        desc = "Invalidate window width cache",
+    })
+end
+
+function M.setup()
+    api.nvim_create_augroup(stl_group, { clear = true })
+    setup_highlights()
+    create_autocmds()
+
+    -- vim.opt.laststatus = 3
+    -- vim.g.qf_disable_statusline = 1
+    vim.opt.showmode = false
+    vim.opt.ruler = false
+    vim.opt.statusline =
+        "%{%(nvim_get_current_win()==#g:actual_curwin || &laststatus==3) ? v:lua.require'custom.statusline'.render() : v:lua.require'custom.statusline'.render_inactive()%}"
+end
 
 return M

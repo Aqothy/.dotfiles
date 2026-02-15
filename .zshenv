@@ -7,7 +7,6 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 export PATH="$HOME/.local/bin:$PATH" # Local scripts
 export PATH="$HOME/.nvim/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 
 [[ -f "$HOME/.zshenv.local" ]] && source "$HOME/.zshenv.local"

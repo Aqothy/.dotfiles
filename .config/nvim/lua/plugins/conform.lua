@@ -28,18 +28,18 @@ return {
             markdown = { "prettier" },
             -- brew install stylua
             lua = { "stylua" },
-            -- go install mvdan.cc/gofumpt@latest
             -- go install golang.org/x/tools/cmd/goimports@latest
-            go = { "goimports", "gofumpt" },
+            go = { "goimports", "gofmt" },
             -- comes with mac
             swift = { "swift" },
-            python = { name = "ruff", lsp_format = "prefer" },
-            -- For filetypes without a formatter, use trim and lsp:
+            python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
+            -- For filetypes without explicit formatter config:
+            -- run trims, then run LSP formatter.
             ["_"] = { "trim_whitespace", "trim_newlines", lsp_format = "last" },
         },
         default_format_opts = {
             lsp_format = "fallback",
-            timeout_ms = 500,
+            timeout_ms = 1200,
         },
     },
 }

@@ -1,7 +1,6 @@
 return {
     {
         "zbirenbaum/copilot.lua",
-        event = "LazyFile",
         cmd = "Copilot",
         opts = {
             panel = {
@@ -21,11 +20,19 @@ return {
     },
     {
         "folke/sidekick.nvim",
+        event = "LazyFile",
+        dependencies = {
+            "zbirenbaum/copilot.lua",
+        },
         opts = {
             signs = {
                 enabled = false,
             },
             nes = {
+                debounce = 15,
+                trigger = {
+                    events = { "ModeChanged i:n", "TextChanged", "User SidekickNesDone", "LspAttach" },
+                },
                 diff = {
                     inline = "chars",
                 },
@@ -38,7 +45,6 @@ return {
                 },
             },
         },
-        event = "VeryLazy",
         -- stylua: ignore
         keys = {
             {
@@ -74,9 +80,9 @@ return {
             },
             {
                 "<leader>av",
-                function() require("sidekick.cli").send({ msg = "{this}" }) end,
-                mode = { "x", "n" },
-                desc = "Send This",
+                function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+                mode = { "x" },
+                desc = "Send Visual Selection",
             },
             {
                 "<leader>ap",

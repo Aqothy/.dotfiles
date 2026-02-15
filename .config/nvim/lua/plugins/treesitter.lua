@@ -4,21 +4,35 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         event = { "LazyFile", "VeryLazy" },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
         opts = {
-            indent = {
-                disable = { "swift", "python" },
-            },
-            highlight = {
-                disable = {},
-            },
+            indent = { disable = { "swift" } },
+            highlight = { disable = {} },
             folds = {},
+            ensure_installed = {
+                "c",
+                "lua",
+                "vim",
+                "vimdoc",
+                "query",
+                "markdown",
+                "markdown_inline",
+
+                -- extras
+                "javascript",
+                "typescript",
+                "cpp",
+                "go",
+                "bash",
+                "tsx",
+                "json",
+                "swift",
+                "python",
+                "regex",
+            },
         },
         config = function(_, opts)
             local TS = require("nvim-treesitter")
-            local ts_utils = require("custom.utils")
+            local ts_group = vim.api.nvim_create_augroup("aqothy/treesitter", { clear = true })
 
             local function is_disabled(lang, feat, buf)
                 local f = opts[feat] or {}
@@ -32,103 +46,137 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
-            TS.setup(opts)
+            local function apply_features(buf, ft)
+                local lang = vim.treesitter.language.get_lang(ft)
 
-            ts_utils.get_installed_parsers(true)
+                if not is_disabled(lang, "highlight", buf) then
+                    pcall(vim.treesitter.start, buf, lang)
+                end
 
-            local missing_parsers = vim.tbl_filter(function(lang)
-                return not ts_utils.have(lang)
-            end, ts_utils.ensure_installed)
+                if not is_disabled(lang, "indent", buf) then
+                    vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end
 
-            if #missing_parsers > 0 then
-                TS.install(missing_parsers, { summary = true }):wait()
-                vim.cmd("restart")
+                if not is_disabled(lang, "folds", buf) then
+                    local win = vim.fn.bufwinid(buf)
+                    if win ~= -1 then
+                        vim.wo[win][0].foldmethod = "expr"
+                        vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                    end
+                end
             end
 
-            local filetypes = ts_utils.get_ensured_parsers_fts()
+            TS.setup(opts)
+
+            local ft_set = {}
+            for _, lang in ipairs(opts.ensure_installed) do
+                for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang) or {}) do
+                    ft_set[ft] = true
+                end
+            end
+            local fts = vim.tbl_keys(ft_set)
+            vim.list_extend(fts, { "http" })
 
             vim.api.nvim_create_autocmd("FileType", {
-                group = vim.api.nvim_create_augroup("aqothy/treesitter", { clear = true }),
-                pattern = filetypes,
+                group = ts_group,
+                pattern = fts,
                 callback = function(ev)
-                    local ft = ev.match
-                    local buf = ev.buf
-
-                    if not ts_utils.have(ft) then
-                        return
-                    end
-
-                    local lang = vim.treesitter.language.get_lang(ft)
-
-                    if not is_disabled(lang, "highlight", buf) then
-                        if ts_utils.have(ft, "highlights") then
-                            pcall(vim.treesitter.start, buf, lang)
-                        end
-                    end
-
-                    if not is_disabled(lang, "indent", buf) then
-                        if ts_utils.have(ft, "indents") then
-                            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                        end
-                    end
-
-                    if not is_disabled(lang, "folds", buf) then
-                        if ts_utils.have(ft, "folds") then
-                            local win = vim.api.nvim_get_current_win()
-                            vim.wo[win][0].foldmethod = "expr"
-                            vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                        end
-                    end
-
-                    if not ts_utils.have(ft, "textobjects") then
-                        return
-                    end
-
-                    local function map(modes, lhs, rhs, desc)
-                        vim.keymap.set(modes, lhs, rhs, { buffer = buf, silent = true, desc = desc })
-                    end
-
-                    local move = require("nvim-treesitter-textobjects.move")
-                    local swap = require("nvim-treesitter-textobjects.swap")
-
-                    local function ts_bind(func, query)
-                        return function()
-                            func(query, "textobjects")
-                        end
-                    end
-
-                    local args_attr = { "@parameter.inner", "@attribute.inner" }
-                    map("n", "<localleader>a", ts_bind(swap.swap_next, args_attr), "Swap Next Arg")
-                    map("n", "<localleader>A", ts_bind(swap.swap_previous, args_attr), "Swap Prev Arg")
-
-                    local nxo = { "n", "x", "o" }
-                    local methods = { "@function.outer" }
-                    local sections = { "@class.outer" }
-
-                    map(nxo, "]m", ts_bind(move.goto_next_start, methods), "Next Method")
-                    map(nxo, "[m", ts_bind(move.goto_previous_start, methods), "Prev Method")
-
-                    map(nxo, "]]", ts_bind(move.goto_next_start, sections), "Next Class")
-                    map(nxo, "[[", ts_bind(move.goto_previous_start, sections), "Prev Class")
-
-                    map(nxo, "]a", ts_bind(move.goto_next_start, args_attr), "Next Arg")
-                    map(nxo, "[a", ts_bind(move.goto_previous_start, args_attr), "Prev Arg")
+                    apply_features(ev.buf, ev.match)
                 end,
             })
+
+            local parsers = {}
+            for _, lang in ipairs(require("nvim-treesitter").get_installed("parsers")) do
+                parsers[lang] = true
+            end
+            local missing_parsers = vim.tbl_filter(function(lang)
+                return not parsers[lang]
+            end, opts.ensure_installed)
+
+            if #missing_parsers > 0 then
+                TS.install(missing_parsers, { summary = true }):await(function(err)
+                    vim.schedule(function()
+                        if err then
+                            vim.notify("Treesitter install failed: " .. err, vim.log.levels.ERROR)
+                            return
+                        end
+                        -- Re-apply features to all buffers after new parsers are installed
+                        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                            local ft = vim.bo[buf].filetype
+                            if ft ~= "" and ft_set[ft] then
+                                apply_features(buf, ft)
+                            end
+                        end
+                    end)
+                end)
+            end
         end,
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
-        lazy = true,
         opts = {
-            move = {
-                set_jumps = true,
-            },
-            select = {
-                lookahead = true,
-            },
+            move = { set_jumps = true },
+            select = { lookahead = true },
         },
+        keys = function()
+            local function ts_bind(module, method, query)
+                return function()
+                    require(module)[method](query, "textobjects")
+                end
+            end
+
+            local args_attr = { "@parameter.inner", "@attribute.inner" }
+
+            return {
+                {
+                    "<localleader>a",
+                    ts_bind("nvim-treesitter-textobjects.swap", "swap_next", args_attr),
+                    desc = "Swap Next Arg",
+                },
+                {
+                    "<localleader>A",
+                    ts_bind("nvim-treesitter-textobjects.swap", "swap_previous", args_attr),
+                    desc = "Swap Prev Arg",
+                },
+                {
+                    "]m",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@function.outer" }),
+                    mode = { "n", "x", "o" },
+                    desc = "Next Method",
+                },
+                {
+                    "[m",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@function.outer" }),
+                    mode = { "n", "x", "o" },
+                    desc = "Prev Method",
+                },
+                {
+                    "]]",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@class.outer" }),
+                    mode = { "n", "x", "o" },
+                    desc = "Next Class",
+                },
+                {
+                    "[[",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@class.outer" }),
+                    mode = { "n", "x", "o" },
+                    desc = "Prev Class",
+                },
+                {
+                    "]a",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", args_attr),
+                    mode = { "n", "x", "o" },
+                    desc = "Next Arg",
+                },
+                {
+                    "[a",
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", args_attr),
+                    mode = { "n", "x", "o" },
+                    desc = "Prev Arg",
+                },
+            }
+        end,
     },
     {
         "nvim-treesitter/nvim-treesitter-context",

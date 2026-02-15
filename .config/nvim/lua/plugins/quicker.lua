@@ -24,7 +24,7 @@ return {
     },
     keys = {
         {
-            "<c-q>",
+            "cq",
             function()
                 require("quicker").toggle()
             end,
