@@ -89,11 +89,11 @@ M.keys = {
     { lhs = "gD", rhs = function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
     { lhs = "gO", rhs = function() Snacks.picker.lsp_symbols() end, desc = "Lsp Symbols", has = "documentSymbol" },
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
-    { lhs = "<a-n>", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
-    { lhs = "<a-p>", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
+    { lhs = "]r", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
+    { lhs = "[r", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
     { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls", has = "callHierarchy/incomingCalls" },
     { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls", has = "callHierarchy/outgoingCalls" },
-    { lhs = "<M-;>", rhs = function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Inlay Hints", has = "inlayHint" },
+    { lhs = "<a-;>", rhs = function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Inlay Hints", has = "inlayHint" },
 }
 
 function M.on_attach(client, bufnr)
@@ -101,9 +101,11 @@ function M.on_attach(client, bufnr)
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
 
     if M.has("foldingRange", client, bufnr) then
-        local win = vim.api.nvim_get_current_win()
-        vim.wo[win][0].foldmethod = "expr"
-        vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+        local win = vim.fn.bufwinid(bufnr)
+        if win ~= -1 then
+            vim.wo[win][0].foldmethod = "expr"
+            vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+        end
     end
 
     for _, key in ipairs(M.keys) do

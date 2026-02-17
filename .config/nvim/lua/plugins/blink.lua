@@ -56,7 +56,10 @@ return {
         event = "LazyFile",
         opts = {
             static = {
-                enabled = false,
+                char = "▏",
+            },
+            scope = {
+                char = "▏",
             },
         },
     },

@@ -142,10 +142,10 @@ for _, data in pairs(M.MODE_MAP) do
     local hl = M.MODE_TO_HIGHLIGHT[mode_str] or "Other"
 
     M.mode_hl_cache.long[mode_str] = M.mode_hl_cache.long[mode_str]
-        or ("%#AqlineMode" .. hl .. "# " .. mode_str .. " %0*")
+        or ("%#AqlineMode" .. hl .. "# " .. mode_str .. " %*")
 
     M.mode_hl_cache.short[mode_str] = M.mode_hl_cache.short[mode_str]
-        or ("%#AqlineMode" .. hl .. "# " .. data.short .. " %0*")
+        or ("%#AqlineMode" .. hl .. "# " .. data.short .. " %*")
 end
 
 function M.mode_component()
@@ -156,7 +156,7 @@ function M.mode_component()
     local use_short = M.win_width and M.win_width < 120
     local cache = use_short and M.mode_hl_cache.short[mode_str] or M.mode_hl_cache.long[mode_str]
 
-    return cache or ("%#AqlineModeOther# " .. (use_short and mode_data.short or mode_str) .. " %0*")
+    return cache or ("%#AqlineModeOther# " .. (use_short and mode_data.short or mode_str) .. " %*")
 end
 
 function M.git_components()
@@ -166,7 +166,7 @@ function M.git_components()
     end
 
     local branch_name = git_info.head and git_info.head ~= "" and stl_escape(git_info.head) or ""
-    local branch = branch_name ~= "" and ("%0* " .. branch_name) or ""
+    local branch = branch_name ~= "" and ("%* " .. branch_name) or ""
 
     local status_parts = {}
     local git_icons = has_icons and icons.git or { added = "+", modified = "~", removed = "-" }
@@ -232,7 +232,7 @@ function M.filetype_component()
     end
 
     icon = icon or "󰈔"
-    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%0*"
+    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%*"
 
     -- Only truncate if not empty and not a terminal buffer
     local buftype = bo[buf].buftype
@@ -243,7 +243,7 @@ function M.filetype_component()
         display_path = "%t" -- Use only the filename
     end
 
-    local result = icon_hl .. icon .. "%0* " .. display_path .. " %m%r"
+    local result = icon_hl .. icon .. "%* " .. display_path .. " %m%r"
 
     if buftype == "" and mini_icons ~= nil then
         M.file_cache[buf] = result
@@ -312,7 +312,7 @@ local function update_lsp_progress_str()
         local state = M.lsp_progress_state[k]
         local icon = state.is_done and "" or "󱥸"
         local hl = state.is_done and "%#AqlineLspDone#" or "%#AqlineLspLoading#"
-        parts[#parts + 1] = hl .. stl_escape(state.name) .. " " .. icon .. "%0*"
+        parts[#parts + 1] = hl .. stl_escape(state.name) .. " " .. icon .. "%*"
     end
     M.lsp_progress_cached_str = table.concat(parts, " ")
 end
@@ -343,7 +343,7 @@ function M.copilot_component()
 
     local hl = status.busy and "DiagnosticWarn" or config.hl
 
-    return "%#" .. hl .. "#" .. config.text .. "%0*"
+    return "%#" .. hl .. "#" .. config.text .. "%*"
 end
 
 local function format_filesize(size)
@@ -368,7 +368,7 @@ M.filesize_component = function()
         size = 0
     end
 
-    local result = "%0*" .. format_filesize(size)
+    local result = "%*" .. format_filesize(size)
 
     if bo[buf].buftype == "" then
         M.file_size_cache[buf] = result
@@ -429,7 +429,7 @@ function M.render()
         parts[#parts + 1] = git_changes
     end
 
-    parts[#parts + 1] = "%0*%="
+    parts[#parts + 1] = "%*%="
 
     local lsp_progress = M.lsp_progress_component()
     if lsp_progress ~= "" then

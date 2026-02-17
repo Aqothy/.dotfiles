@@ -46,18 +46,31 @@ return {
                 return vim.tbl_contains(disable or {}, lang)
             end
 
+            local function has_query(lang, query)
+                local ok, res = pcall(vim.treesitter.query.get, lang, query)
+                return ok and res ~= nil
+            end
+
             local function apply_features(buf, ft)
+                if vim.bo[buf].buftype ~= "" then
+                    return
+                end
+
                 local lang = vim.treesitter.language.get_lang(ft)
 
-                if not is_disabled(lang, "highlight", buf) then
+                if not lang or not vim.treesitter.language.add(lang) then
+                    return
+                end
+
+                if not is_disabled(lang, "highlight", buf) and has_query(lang, "highlights") then
                     pcall(vim.treesitter.start, buf, lang)
                 end
 
-                if not is_disabled(lang, "indent", buf) then
+                if not is_disabled(lang, "indent", buf) and has_query(lang, "indents") then
                     vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                 end
 
-                if not is_disabled(lang, "folds", buf) then
+                if not is_disabled(lang, "folds", buf) and has_query(lang, "folds") then
                     local win = vim.fn.bufwinid(buf)
                     if win ~= -1 then
                         vim.wo[win][0].foldmethod = "expr"
@@ -68,18 +81,8 @@ return {
 
             TS.setup(opts)
 
-            local ft_set = {}
-            for _, lang in ipairs(opts.ensure_installed) do
-                for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang) or {}) do
-                    ft_set[ft] = true
-                end
-            end
-            local fts = vim.tbl_keys(ft_set)
-            vim.list_extend(fts, { "http" })
-
             vim.api.nvim_create_autocmd("FileType", {
                 group = ts_group,
-                pattern = fts,
                 callback = function(ev)
                     apply_features(ev.buf, ev.match)
                 end,
@@ -103,7 +106,7 @@ return {
                         -- Re-apply features to all buffers after new parsers are installed
                         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
                             local ft = vim.bo[buf].filetype
-                            if ft ~= "" and ft_set[ft] then
+                            if ft ~= "" then
                                 apply_features(buf, ft)
                             end
                         end

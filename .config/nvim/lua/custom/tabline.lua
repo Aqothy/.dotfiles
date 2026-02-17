@@ -83,7 +83,7 @@ local function get_icon(buf, hl)
     end
 
     icon = icon or "󰈔"
-    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%0*"
+    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%*"
 
     if vim.bo[buf].buftype == "" and mini_icons ~= nil then
         M.file_cache[buf] = M.file_cache[buf] or {}

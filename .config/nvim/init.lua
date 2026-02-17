@@ -19,6 +19,7 @@ if not vim.g.vscode then
     vim.schedule(function()
         require("custom.statusline").setup()
         require("custom.tabline").setup()
+        require("custom.statuscolumn").setup()
         require("custom.alternate").setup()
     end)
     require("custom.session").setup({
