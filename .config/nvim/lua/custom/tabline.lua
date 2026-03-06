@@ -20,6 +20,7 @@ local function get_mini_icons()
 end
 
 M.file_cache = {}
+M.diagnostic_cache = {}
 
 local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
 
@@ -41,33 +42,36 @@ local diag_severity_map = {
 
 local function clear_buffer_cache(buf)
     M.file_cache[buf] = nil
+    M.diagnostic_cache[buf] = nil
 end
 
-local function get_title(buf)
-    local cached = M.file_cache[buf] and M.file_cache[buf].title
-    if cached then
+local function get_buf_info(buf)
+    local cached = M.file_cache[buf]
+    if cached and cached.title and cached.path then
         return cached
     end
 
     local bt = vim.bo[buf].buftype
-    local name = api.nvim_buf_get_name(buf)
-    local val
-    if name == "" then
-        val = bt ~= "" and bt or "[No Name]"
+    local path = api.nvim_buf_get_name(buf)
+    local title
+    if path == "" then
+        title = bt ~= "" and bt or "[No Name]"
     else
-        val = vim.fs.basename(name)
+        title = vim.fs.basename(path)
     end
 
     if bt == "" then
         M.file_cache[buf] = M.file_cache[buf] or {}
-        M.file_cache[buf].title = val
+        M.file_cache[buf].title = title
+        M.file_cache[buf].path = path
     end
-    return val
+
+    return M.file_cache[buf] or { title = title, path = path }
 end
 
 local function get_icon(buf, hl)
     local cached = M.file_cache[buf] and M.file_cache[buf].icon
-    if cached then
+    if cached ~= nil then
         return cached.hl .. cached.icon .. hl .. " "
     end
 
@@ -78,14 +82,15 @@ local function get_icon(buf, hl)
         local is_default
         icon, icon_hl, is_default = mini_icons.get("filetype", ft)
         if is_default then
-            icon, icon_hl = mini_icons.get("file", api.nvim_buf_get_name(buf))
+            local info = get_buf_info(buf)
+            icon, icon_hl = mini_icons.get("file", info.path)
         end
     end
 
     icon = icon or "󰈔"
     icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%*"
 
-    if vim.bo[buf].buftype == "" and mini_icons ~= nil then
+    if vim.bo[buf].buftype == "" then
         M.file_cache[buf] = M.file_cache[buf] or {}
         M.file_cache[buf].icon = { icon = icon, hl = icon_hl }
     end
@@ -94,8 +99,17 @@ local function get_icon(buf, hl)
 end
 
 local function get_diagnostic_indicator(buf)
+    if M.diagnostic_cache[buf] ~= nil then
+        return M.diagnostic_cache[buf]
+    end
+
+    if vim.bo[buf].buftype ~= "" then
+        return ""
+    end
+
     local counts = vim.diagnostic.count(buf)
     if next(counts) == nil then
+        M.diagnostic_cache[buf] = ""
         return ""
     end
 
@@ -103,9 +117,13 @@ local function get_diagnostic_indicator(buf)
         local count = counts[severity]
         if count and count > 0 then
             local info = diag_severity_map[severity]
-            return "%#" .. info.hl .. "# " .. info.sign
+            local res = "%#" .. info.hl .. "# " .. info.sign
+            M.diagnostic_cache[buf] = res
+            return res
         end
     end
+
+    M.diagnostic_cache[buf] = ""
     return ""
 end
 
@@ -117,12 +135,11 @@ local function get_tab_data()
     for i, tab in ipairs(tabs) do
         local win = api.nvim_tabpage_get_win(tab)
         local buf = api.nvim_win_get_buf(win)
-        local path = api.nvim_buf_get_name(buf)
-        local name = get_title(buf)
+        local info = get_buf_info(buf)
 
-        data[i] = { tab = tab, buf = buf, path = path, name = name }
+        data[i] = { tab = tab, buf = buf, path = info.path, name = info.title }
 
-        name_counts[name] = (name_counts[name] or 0) + 1
+        name_counts[info.title] = (name_counts[info.title] or 0) + 1
     end
 
     for i, item in ipairs(data) do
@@ -135,7 +152,7 @@ local function get_tab_data()
                 local collision = false
 
                 for j, other in ipairs(data) do
-                    if i ~= j and other.path ~= "" then
+                    if i ~= j and other.path ~= "" and item.buf ~= other.buf then
                         if string.sub(other.path, -#res) == res then
                             collision = true
                             break
@@ -163,7 +180,7 @@ local function build_tab(item, index, is_current)
     local diag = get_diagnostic_indicator(buf)
 
     local is_modified = api.nvim_get_option_value("modified", { buf = buf })
-    local modified = is_modified and " [+]" or ""
+    local modified = is_modified and " ●" or ""
 
     return table.concat({
         hl,
@@ -202,12 +219,15 @@ end
 local function create_autocmds()
     autocmd("DiagnosticChanged", {
         group = group,
-        callback = vim.schedule_wrap(function()
-            vim.cmd("redrawtabline")
-        end),
+        callback = function(ev)
+            M.diagnostic_cache[ev.buf] = nil
+            vim.schedule(function()
+                vim.cmd("redrawtabline")
+            end)
+        end,
     })
 
-    autocmd({ "BufEnter", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
+    autocmd({ "BufFilePost", "BufWritePost", "BufDelete", "FileChangedShellPost" }, {
         group = group,
         callback = function(ev)
             clear_buffer_cache(ev.buf)

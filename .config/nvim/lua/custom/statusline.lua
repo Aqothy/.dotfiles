@@ -53,8 +53,7 @@ for mode, color in pairs(mode_colors) do
 end
 
 groups["AqlineFileInfo"] = { link = "QuickFixLine" }
-groups["AqlineLspLoading"] = { link = "DiagnosticInfo" }
-groups["AqlineLspDone"] = { link = "DiagnosticOk" }
+groups["AqlineLspClients"] = { link = "DiagnosticInfo" }
 
 local function setup_highlights()
     for group, opts in pairs(groups) do
@@ -76,7 +75,7 @@ function M.os_component()
             local icon, icon_hl = mini_icons.get("os", M.sysname)
             M.os_cache = "%#" .. icon_hl .. "#" .. icon
         else
-            return ""
+            M.os_cache = ""
         end
     end
     return M.os_cache
@@ -190,7 +189,7 @@ M.file_cache = {}
 M.file_info_cache = {}
 M.file_size_cache = {}
 
-local path_sep = M.sysname == "windows" and "\\" or "/"
+local path_sep = package.config:sub(1, 1)
 
 function M.truncate_path(path, max_len)
     if #path <= max_len or path == "" then
@@ -214,8 +213,13 @@ end
 
 function M.filetype_component()
     local buf = api.nvim_get_current_buf()
-    if M.file_cache[buf] then
-        return M.file_cache[buf]
+    local use_short = M.win_width and M.win_width < 120
+
+    if type(M.file_cache[buf]) == "table" then
+        local cache = use_short and M.file_cache[buf].short or M.file_cache[buf].long
+        if cache then
+            return cache
+        end
     end
 
     local relative_path = fn.expand("%:.")
@@ -236,20 +240,27 @@ function M.filetype_component()
 
     -- Only truncate if not empty and not a terminal buffer
     local buftype = bo[buf].buftype
-    local display_path
-    if relative_path ~= "" and buftype ~= "terminal" then
-        display_path = stl_escape(M.truncate_path(relative_path, 40))
-    else
-        display_path = "%t" -- Use only the filename
+    local short_path = "%t"
+    local long_path = (relative_path ~= "" and buftype ~= "terminal") and stl_escape(M.truncate_path(relative_path, 40))
+        or "%t"
+
+    local modified_icon = "%{&modified?' ●':''}"
+    local readonly_icon = "%{&readonly?' 󰌾':''}"
+
+    local prefix = icon_hl .. icon .. "%* "
+    local suffix = modified_icon .. readonly_icon
+
+    local short_result = prefix .. short_path .. suffix
+    local long_result = prefix .. long_path .. suffix
+
+    if buftype == "" then
+        M.file_cache[buf] = {
+            short = short_result,
+            long = long_result,
+        }
     end
 
-    local result = icon_hl .. icon .. "%* " .. display_path .. " %m%r"
-
-    if buftype == "" and mini_icons ~= nil then
-        M.file_cache[buf] = result
-    end
-
-    return result
+    return use_short and short_result or long_result
 end
 
 local diag_signs = has_icons and icons.diagnostics or { Error = "●", Warn = "●", Info = "●", Hint = "●" }
@@ -264,18 +275,18 @@ M.diagnostic_str_cache = {}
 function M.diagnostics_component()
     local buf = api.nvim_get_current_buf()
 
-    if M.diagnostic_str_cache[buf] then
+    if M.diagnostic_str_cache[buf] ~= nil then
         return M.diagnostic_str_cache[buf]
+    end
+
+    if bo[buf].buftype ~= "" then
+        return ""
     end
 
     local count = vim.diagnostic.count(buf)
 
-    local buftype = bo[buf].buftype
-
     if not next(count) then
-        if buftype == "" then
-            M.diagnostic_str_cache[buf] = ""
-        end
+        M.diagnostic_str_cache[buf] = ""
         return ""
     end
 
@@ -291,34 +302,44 @@ function M.diagnostics_component()
     end
 
     local result = (#parts > 0) and table.concat(parts, " ") or ""
-
-    if buftype == "" then
-        M.diagnostic_str_cache[buf] = result
-    end
+    M.diagnostic_str_cache[buf] = result
 
     return result
 end
 
-M.lsp_progress_state = {}
-M.lsp_progress_cached_str = ""
+M.lsp_clients_cache = {}
 
-local function update_lsp_progress_str()
-    local parts = {}
-    -- sort so that the order is consistent
-    local keys = vim.tbl_keys(M.lsp_progress_state)
-    table.sort(keys)
-
-    for _, k in ipairs(keys) do
-        local state = M.lsp_progress_state[k]
-        local icon = state.is_done and "" or "󱥸"
-        local hl = state.is_done and "%#AqlineLspDone#" or "%#AqlineLspLoading#"
-        parts[#parts + 1] = hl .. stl_escape(state.name) .. " " .. icon .. "%*"
+function M.update_lsp_clients(buf)
+    local clients = vim.lsp.get_clients({ bufnr = buf })
+    if #clients == 0 then
+        M.lsp_clients_cache[buf] = nil
+        return
     end
-    M.lsp_progress_cached_str = table.concat(parts, " ")
+
+    local names = {}
+    for _, client in ipairs(clients) do
+        if client.name ~= "copilot" then
+            table.insert(names, client.name)
+        end
+    end
+
+    -- only client is copilot
+    if #names == 0 then
+        M.lsp_clients_cache[buf] = nil
+        return
+    end
+
+    M.lsp_clients_cache[buf] = "%#AqlineLspClients# " .. table.concat(names, " ") .. "%*"
 end
 
-function M.lsp_progress_component()
-    return M.lsp_progress_cached_str
+function M.lsp_clients_component()
+    local buf = api.nvim_get_current_buf()
+
+    if M.lsp_clients_cache[buf] ~= nil then
+        return M.lsp_clients_cache[buf]
+    end
+
+    return ""
 end
 
 M.copilot_icons = {
@@ -356,10 +377,14 @@ local function format_filesize(size)
     end
 end
 
-M.filesize_component = function()
+function M.filesize_component()
     local buf = api.nvim_get_current_buf()
-    if M.file_size_cache[buf] then
+    if M.file_size_cache[buf] ~= nil then
         return M.file_size_cache[buf]
+    end
+
+    if bo[buf].buftype ~= "" then
+        return ""
     end
 
     local size = fn.getfsize(fn.expand("%:p"))
@@ -369,29 +394,28 @@ M.filesize_component = function()
     end
 
     local result = "%*" .. format_filesize(size)
-
-    if bo[buf].buftype == "" then
-        M.file_size_cache[buf] = result
-    end
+    M.file_size_cache[buf] = result
 
     return result
 end
 
 function M.file_info_component()
     local buf = api.nvim_get_current_buf()
-    if M.file_info_cache[buf] then
+    if M.file_info_cache[buf] ~= nil then
         return M.file_info_cache[buf]
     end
 
     local buf_opts = bo[buf]
+    if buf_opts.buftype ~= "" then
+        return ""
+    end
+
     local result = "%#AqlineFileInfo#"
         .. buf_opts.fileencoding
         .. (buf_opts.expandtab and " Spaces:" or " Tab:")
         .. buf_opts.tabstop
 
-    if buf_opts.buftype == "" then
-        M.file_info_cache[buf] = result
-    end
+    M.file_info_cache[buf] = result
 
     return result
 end
@@ -431,25 +455,20 @@ function M.render()
 
     parts[#parts + 1] = "%*%="
 
-    local lsp_progress = M.lsp_progress_component()
-    if lsp_progress ~= "" then
-        parts[#parts + 1] = lsp_progress
-    end
-
     local diag = M.diagnostics_component()
     if diag ~= "" then
         parts[#parts + 1] = diag
     end
 
     if width > 120 then
+        local lsp_clients = M.lsp_clients_component()
+        if lsp_clients ~= "" then
+            parts[#parts + 1] = lsp_clients
+        end
+
         local copilot_status = M.copilot_component()
         if copilot_status ~= "" then
             parts[#parts + 1] = copilot_status
-        end
-
-        local os_comp = M.os_component()
-        if os_comp ~= "" then
-            parts[#parts + 1] = os_comp
         end
 
         local filesize = M.filesize_component()
@@ -478,7 +497,7 @@ local function create_autocmds()
         end),
     })
 
-    autocmd({ "BufEnter", "BufWritePost", "FileChangedShellPost" }, {
+    autocmd({ "BufFilePost", "BufWritePost", "FileChangedShellPost" }, {
         group = stl_group,
         callback = function(ev)
             local buf = ev.buf
@@ -512,10 +531,21 @@ local function create_autocmds()
         desc = "Cleanup buffer caches",
     })
 
-    autocmd("DirChanged", {
+    autocmd({ "LspAttach", "LspDetach" }, {
         group = stl_group,
         callback = function(ev)
-            M.file_cache[ev.buf] = nil
+            vim.schedule(function()
+                M.update_lsp_clients(ev.buf)
+                vim.cmd("redrawstatus")
+            end)
+        end,
+        desc = "Update LSP clients cache",
+    })
+
+    autocmd("DirChanged", {
+        group = stl_group,
+        callback = function()
+            M.file_cache = {}
         end,
         desc = "Invalidate file cache on directory change",
     })
@@ -530,43 +560,6 @@ local function create_autocmds()
             end)
         end,
         desc = "Track diagnostics",
-    })
-
-    autocmd("LspProgress", {
-        group = stl_group,
-        pattern = { "begin", "end" },
-        callback = function(ev)
-            local client_id = ev.data.client_id
-            local client = vim.lsp.get_client_by_id(client_id)
-            if not client then
-                return
-            end
-
-            local value = ev.data.params.value
-            local is_end = value.kind == "end"
-
-            -- cancel existing cleanup timers
-            if M.lsp_progress_state[client_id] and M.lsp_progress_state[client_id].timer then
-                M.lsp_progress_state[client_id].timer:close()
-            end
-
-            M.lsp_progress_state[client_id] = {
-                name = client.name,
-                is_done = is_end,
-                timer = nil,
-            }
-
-            if is_end then
-                M.lsp_progress_state[client_id].timer = vim.defer_fn(function()
-                    M.lsp_progress_state[client_id] = nil
-                    update_lsp_progress_str()
-                    vim.cmd("redrawstatus")
-                end, 3000)
-            end
-
-            update_lsp_progress_str()
-            vim.cmd("redrawstatus")
-        end,
     })
 
     autocmd("OptionSet", {
@@ -593,8 +586,8 @@ function M.setup()
     setup_highlights()
     create_autocmds()
 
-    -- vim.opt.laststatus = 3
-    -- vim.g.qf_disable_statusline = 1
+    vim.opt.laststatus = 3
+    vim.g.qf_disable_statusline = 1
     vim.opt.showmode = false
     vim.opt.ruler = false
     vim.opt.statusline =
