@@ -4,8 +4,6 @@ return {
     keys = {
         { "'", desc = "Arrow" },
         { "m", desc = "Mark Buffer Loc" },
-        { "<a-n>", function() require("arrow.persist").next() end, desc = "Next Mark" },
-        { "<a-p>", function() require("arrow.persist").previous() end, desc = "Previous Mark" },
     },
     event = "BufReadPost",
     opts = {

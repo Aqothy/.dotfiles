@@ -192,7 +192,7 @@ M.file_size_cache = {}
 local path_sep = package.config:sub(1, 1)
 
 function M.truncate_path(path, max_len)
-    if #path <= max_len or path == "" then
+    if #path <= max_len then
         return path
     end
 

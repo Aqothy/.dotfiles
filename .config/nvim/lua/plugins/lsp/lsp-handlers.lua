@@ -91,22 +91,14 @@ M.keys = {
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
     { lhs = "]r", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
     { lhs = "[r", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
-    { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls", has = "callHierarchy/incomingCalls" },
-    { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls", has = "callHierarchy/outgoingCalls" },
+    { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls" },
+    { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls" },
     { lhs = "<a-;>", rhs = function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Inlay Hints", has = "inlayHint" },
 }
 
 function M.on_attach(client, bufnr)
     vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
-
-    if M.has("foldingRange", client, bufnr) then
-        local win = vim.fn.bufwinid(bufnr)
-        if win ~= -1 then
-            vim.wo[win][0].foldmethod = "expr"
-            vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-        end
-    end
 
     for _, key in ipairs(M.keys) do
         local has = not key.has or M.has(key.has, client, bufnr)

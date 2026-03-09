@@ -4,11 +4,11 @@ return {
         event = "InsertEnter",
         opts = {
             cmap = false,
+            tabout = { enable = true, map = "<tab>", hopout = true },
+            fastwarp = { nocursormove = false },
             extensions = {
                 suround = false,
                 utf8 = false,
-                filetype = { nft = { "snacks_picker_input" } },
-                alpha = { after = true },
             },
         },
     },

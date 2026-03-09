@@ -1,7 +1,61 @@
+local function agent(action)
+    local terms = {}
+    for _, s in ipairs(require("sidekick.cli.state").get({ attached = true })) do
+        if s.terminal then
+            table.insert(terms, s.terminal)
+        end
+    end
+
+    if action == "toggle" then
+        for _, t in ipairs(terms) do
+            if t:is_open() then
+                t:hide()
+                return
+            end
+        end
+
+        require("sidekick.cli").toggle()
+        return
+    end
+
+    if #terms < 2 then
+        return
+    end
+
+    -- Sort for consistent cycling
+    table.sort(terms, function(a, b)
+        return a.tool.name < b.tool.name
+    end)
+
+    local idx
+    for i, t in ipairs(terms) do
+        if t:is_open() then
+            idx = i
+            break
+        end
+    end
+
+    if idx then
+        terms[idx]:hide()
+
+        local step = action == "next" and 1 or -1
+        local target = terms[((idx - 1 + step) % #terms) + 1]
+
+        target:show()
+        target:focus()
+        vim.schedule(function()
+            vim.cmd.startinsert()
+        end)
+    end
+end
+
 return {
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
+        dependencies = {
+            "folke/sidekick.nvim",
+        },
         opts = {
             panel = {
                 enabled = false,
@@ -16,14 +70,11 @@ return {
                 markdown = true,
                 dotenv = false,
             },
+            copilot_node_command = "/Users/aqothy/.local/bin/node",
         },
     },
     {
         "folke/sidekick.nvim",
-        event = "LazyFile",
-        dependencies = {
-            "zbirenbaum/copilot.lua",
-        },
         opts = {
             signs = {
                 enabled = false,
@@ -33,15 +84,42 @@ return {
                 trigger = {
                     events = { "ModeChanged i:n", "TextChanged", "User SidekickNesDone", "LspAttach" },
                 },
-                diff = {
-                    inline = "chars",
-                },
             },
             cli = {
                 win = {
-                    split = {
-                        width = 0.35,
+                    keys = {
+                        cycle_prev = {
+                            "<A-[>",
+                            function()
+                                agent("prev")
+                            end,
+                            mode = { "n", "t" },
+                            desc = "Cycle Prev Agent",
+                        },
+                        cycle_next = {
+                            "<A-]>",
+                            function()
+                                agent("next")
+                            end,
+                            mode = { "n", "t" },
+                            desc = "Cycle Next Agent",
+                        },
+                        select = {
+                            "<A-s-p>",
+                            function(term)
+                                term:hide()
+                                require("sidekick.cli").select()
+                            end,
+                            mode = { "n", "t" },
+                            desc = "Select Agent",
+                        },
                     },
+                    split = {
+                        width = 0.3,
+                    },
+                },
+                tools = {
+                    codex = { cmd = { "codex" } },
                 },
             },
         },
@@ -59,9 +137,9 @@ return {
             },
             {
                 "<c-.>",
-                function() require("sidekick.cli").toggle() end,
+                function() agent("toggle") end,
                 desc = "Sidekick Toggle",
-                mode = { "n", "t", "i" },
+                mode = { "n", "t" },
             },
             {
                 "<leader>as",
@@ -74,21 +152,10 @@ return {
                 desc = "Detach a CLI Session",
             },
             {
-                "<leader>af",
-                function() require("sidekick.cli").send({ msg = "{file}" }) end,
-                desc = "Send File",
-            },
-            {
                 "<leader>av",
                 function() require("sidekick.cli").send({ msg = "{selection}" }) end,
                 mode = { "x" },
                 desc = "Send Visual Selection",
-            },
-            {
-                "<leader>ap",
-                function() require("sidekick.cli").prompt() end,
-                mode = { "n", "x" },
-                desc = "Sidekick Select Prompt",
             },
         },
     },

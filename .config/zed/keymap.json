@@ -15,8 +15,8 @@
   {
     "context": "Editor",
     "bindings": {
-      "alt-n": "editor::GoToNextDocumentHighlight",
-      "alt-p": "editor::GoToPreviousDocumentHighlight"
+      "]r": "editor::GoToNextDocumentHighlight",
+      "[r": "editor::GoToPreviousDocumentHighlight"
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
   },
@@ -53,13 +53,6 @@
     "context": "vim_mode == visual",
     "bindings": {
       "shift-s": "vim::PushAddSurrounds"
-    }
-  },
-  {
-    "context": "(Editor && showing_completions)",
-    "bindings": {
-      "ctrl-y": "editor::ConfirmCompletion",
-      "enter": "editor::Newline"
     }
   }
 ]

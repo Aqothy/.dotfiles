@@ -29,7 +29,6 @@ return {
             },
         },
         file_panel = {
-            listing_style = "list",
             win_config = {
                 width = 25,
             },

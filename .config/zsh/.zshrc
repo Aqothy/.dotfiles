@@ -28,7 +28,7 @@ alias py="python3"
 alias cpp="clang++ -std=c++20"
 alias vi="nvim"
 alias svi="nvim --listen /tmp/nvim"
-alias gs="git status -s"
+alias gs="git status"
 alias gaa="git add -A"
 alias sc="git switch -c"
 alias ds='DELTA_FEATURES=+side-by-side git diff'
@@ -36,16 +36,16 @@ alias lg="lazygit"
 alias ld='lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
-alias ls='ls -G -l'
+alias ls='ls -la --color=auto'
 
 d() {
-   git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+  git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
 }
 
 sb() {
   if [[ -n "$1" ]]; then
-      git switch $1
-      return
+    git switch $1
+    return
   fi
   local branches branch
   branches=$(git --no-pager branch -vv) &&
@@ -55,8 +55,8 @@ sb() {
 
 co() {
   if [[ -n "$1" ]]; then
-      git checkout $1
-      return
+    git checkout $1
+    return
   fi
   local commits commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
@@ -73,12 +73,14 @@ export FZF_DEFAULT_COMMAND='rg --files --no-messages --color=never -g "!.git" -g
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 _git_status_prompt() {
-  local b
+  local b dirty
 
   b=$(git symbolic-ref --quiet --short HEAD 2>/dev/null \
-     || git rev-parse --short HEAD 2>/dev/null) || return
+    || git rev-parse --short HEAD 2>/dev/null) || return
 
-  echo " %F{yellow}%f %F{blue}${b}%f"
+  git diff-index --quiet HEAD 2>/dev/null || dirty=' %F{red}✘%f'
+
+  echo " %F{yellow}%f %F{blue}${b}%f${dirty}"
 }
 
 PROMPT='%B%(?:%F{green}➜%f:%F{red}!%f) %F{cyan}%~%f$(_git_status_prompt)%b '

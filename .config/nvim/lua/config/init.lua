@@ -77,7 +77,6 @@ require("lazy").setup({
         rtp = {
             -- disable some rtp plugins
             disabled_plugins = disabled_plugins,
-            paths = { "/opt/homebrew/opt/fzf" },
         },
     },
 })

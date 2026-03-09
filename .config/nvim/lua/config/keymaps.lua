@@ -10,8 +10,8 @@ map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map({ "n", "x", "o" }, "<bs>", [["_d]], { desc = "Delete without yanking" })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
-map("x", "iL", "^og_", { desc = "Select line without whitespace" })
-map("o", "iL", "<cmd>normal viL<cr>", { desc = "Operate line" })
+map("x", "il", "^og_", { desc = "Select line without whitespace" })
+map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
 map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
 map("n", "g/", ":%s/\\<<c-r><c-w>\\>/<c-r><c-w>/gIc<left><left><left><left>", { desc = "Replace word in buffer" })
 map("x", "g/", '"sy:%s/\\V<C-r>s/<C-r>s/gIc<left><left><left><left>', { desc = "Replace visual word" })
@@ -30,6 +30,7 @@ end, { desc = "Yank relative file path to clipboard" })
 map({ "n", "x", "o" }, "M", "%", { remap = true, desc = "Matchit" })
 map("n", "<leader>w", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader><c-l>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
+map("n", "<leader><c-o>", "<cmd>pop<cr>", { desc = "Pop off tag stack" })
 
 if vim.g.vscode then
     return
@@ -48,7 +49,7 @@ map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
-map("n", "<leader><tab>", "<c-^>", { desc = "Alternate buffer" })
+map("n", "<a-b>", "<c-^>", { desc = "Alternate buffer" })
 map("n", "<a-s-,>", "<c-w>3<", { desc = "Resize window left" })
 map("n", "<a-s-.>", "<c-w>3>", { desc = "Resize window right" })
 map("n", "<a-s-up>", "3<C-W>+", { desc = "Resize window up" })
@@ -62,22 +63,17 @@ map("x", "<a-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", 
 
 -- Terminal
 map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
-map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to Left Window" })
-map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to Lower Window" })
-map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to Upper Window" })
-map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to Right Window" })
-map("t", "<C-x><C-l>", "<C-l>", { desc = "Send Original Ctrl-l (Clear)" })
-map("t", "<C-x><C-k>", "<C-k>", { desc = "Send Original Ctrl-k (Kill Line)" })
 
 -- Tabs and windows
-map("n", "<c-n>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<c-p>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map({ "n", "t" }, "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map({ "n", "t" }, "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("t", "<esc>", "<esc>", { desc = "Feed Escape" })
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
-map("n", "<leader><c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
+map("n", "<c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })
@@ -120,10 +116,9 @@ map("c", "<C-Y>", function()
     return vim.fn.pumvisible() == 1 and "<C-Y>" or "<C-R>-"
 end, { expr = true, desc = "Yank last killed text" })
 map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
+map("i", "<C-CR>", "<C-o>o", { desc = "Insert line below" })
 
 -- utils
-map("n", "<localleader>x", "<cmd>source %<cr>", { desc = "Source file" })
-
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 

@@ -3,11 +3,11 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        event = { "LazyFile", "VeryLazy" },
+        event = "LazyFile",
+        cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
         opts = {
             indent = { disable = { "swift" } },
             highlight = { disable = {} },
-            folds = {},
             ensure_installed = {
                 "c",
                 "lua",
@@ -52,10 +52,6 @@ return {
             end
 
             local function apply_features(buf, ft)
-                if vim.bo[buf].buftype ~= "" then
-                    return
-                end
-
                 local lang = vim.treesitter.language.get_lang(ft)
 
                 if not lang or not vim.treesitter.language.add(lang) then
@@ -68,14 +64,6 @@ return {
 
                 if not is_disabled(lang, "indent", buf) and has_query(lang, "indents") then
                     vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                end
-
-                if not is_disabled(lang, "folds", buf) and has_query(lang, "folds") then
-                    local win = vim.fn.bufwinid(buf)
-                    if win ~= -1 then
-                        vim.wo[win][0].foldmethod = "expr"
-                        vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                    end
                 end
             end
 

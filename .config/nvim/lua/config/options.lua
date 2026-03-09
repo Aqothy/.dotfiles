@@ -27,7 +27,6 @@ opt.swapfile = false
 opt.writebackup = false
 opt.undofile = true
 opt.updatetime = 200
-opt.lazyredraw = true
 
 opt.splitright = true
 opt.splitbelow = true
@@ -63,6 +62,8 @@ opt.background = "dark"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldtext = ""
+opt.foldmethod = "marker"
+opt.foldmarker = "#region,#endregion"
 opt.cursorline = true
 opt.list = true
 opt.listchars = {

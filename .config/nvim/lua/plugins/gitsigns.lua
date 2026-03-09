@@ -18,6 +18,7 @@ return {
             changedelete = { text = "┃" },
         },
         attach_to_untracked = true,
+        gh = true,
         on_attach = function(bufnr)
             local gs = package.loaded.gitsigns
             local line = vim.fn.line

@@ -19,8 +19,8 @@ if not vim.g.vscode then
     vim.schedule(function()
         require("custom.statusline").setup()
         require("custom.tabline").setup()
-        require("custom.statuscolumn").setup()
         require("custom.alternate").setup()
+        require("vim._core.ui2").enable({ msg = { target = "msg", timeout = 3000 } })
     end)
     require("custom.session").setup({
         allowed_dirs = {
@@ -28,8 +28,6 @@ if not vim.g.vscode then
         },
         auto_start = false,
     })
-
-    require("vim._extui").enable({})
 end
 
 require("custom.toggler").setup()

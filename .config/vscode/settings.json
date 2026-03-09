@@ -37,4 +37,5 @@
   "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
   "github.copilot.chat.responsesApiReasoningEffort": "high",
   "chat.checkpoints.showFileChanges": true,
+  "chat.viewSessions.orientation": "stacked",
 }

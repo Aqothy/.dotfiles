@@ -2,9 +2,9 @@ return {
     {
         "saghen/blink.cmp",
         event = { "InsertEnter", "CmdLineEnter" },
-        version = "*",
         opts = {
             keymap = {
+                preset = "enter",
                 ["<Up>"] = false,
                 ["<Down>"] = false,
             },

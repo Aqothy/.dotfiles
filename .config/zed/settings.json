@@ -1,4 +1,12 @@
 {
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    },
+    "gemini": {
+      "type": "registry"
+    }
+  },
   "tabs": {
     "show_diagnostics": "all",
     "file_icons": true

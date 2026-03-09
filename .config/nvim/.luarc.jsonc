@@ -8,7 +8,6 @@
     ]
   },
   "workspace": {
-    "checkThirdParty": false,
     "library": [
       // Runtime and builtin libraries.
       "$VIMRUNTIME/lua",

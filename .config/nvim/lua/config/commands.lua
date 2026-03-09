@@ -43,3 +43,13 @@ command("GoLint", function(opts)
 
     utils.run_async(cmd, efm, "GolangCI-Lint", { bang = opts.bang })
 end, { nargs = 0, bang = true, desc = "Run GolangCI-Lint" })
+
+command("LspLog", function()
+    vim.cmd("tabnew " .. vim.lsp.log.get_filename())
+end, {
+    desc = "Open lsp log",
+})
+
+command("LspDebug", function()
+    vim.lsp.log.set_level(vim.log.levels.WARN)
+end, { desc = "enable lsp log" })

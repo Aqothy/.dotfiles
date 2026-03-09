@@ -1,9 +1,9 @@
 local M = {}
 
 M.options = {
-    auto_start = true,
+    auto_start = false,
     allowed_dirs = {},
-    need_tabs = 2,
+    need_tabs = 1,
     dir = vim.fn.stdpath("state") .. "/sessions/",
 }
 

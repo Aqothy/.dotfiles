@@ -1,12 +1,11 @@
 return {
     "neovim/nvim-lspconfig",
-    event = "LazyFile",
-    cmd = "LspInfo",
+    event = { "BufReadPre", "BufNewFile" },
     -- stylua: ignore
     keys = {
         { "<leader>lc", function() Snacks.picker.lsp_config() end, desc = "Lsp config" },
     },
-    config = vim.schedule_wrap(function()
+    config = function()
         local handlers = require("plugins.lsp.lsp-handlers")
         local utils = require("custom.utils")
 
@@ -24,6 +23,27 @@ return {
                 end
 
                 handlers.on_attach(client, ev.buf)
+            end,
+        })
+
+        vim.api.nvim_create_autocmd("LspProgress", {
+            group = lsp_group,
+            callback = function(ev)
+                local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+                if not client then
+                    return
+                end
+
+                local params = ev.data.params
+                local value = params.value
+                vim.api.nvim_echo({ { value.message or "done" } }, false, {
+                    id = client.id .. "-" .. params.token,
+                    kind = "progress",
+                    title = value.title,
+                    status = value.kind ~= "end" and "running" or "success",
+                    percent = value.percentage,
+                })
             end,
         })
 
@@ -75,5 +95,5 @@ return {
                 vim.lsp.enable(lsp)
             end
         end
-    end),
+    end,
 }

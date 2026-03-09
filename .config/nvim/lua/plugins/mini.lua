@@ -296,7 +296,7 @@ return {
             { "g=", mode = { "n", "x" }, desc = "Evaluate operator" },
             { "cx", desc = "Exchange operator" },
             { "X", mode = "x", desc = "Exchange operator visual" },
-            { "gS", mode = { "n", "x" }, desc = "Sort operator" },
+            { "_s", mode = { "n", "x" }, desc = "Sort operator" },
             { "r", mode = { "n", "x" }, desc = "Replace operator" },
             { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
         },
@@ -311,7 +311,7 @@ return {
                 prefix = "r",
             },
             sort = {
-                prefix = "gS",
+                prefix = "_s",
             },
         },
         config = function(_, opts)

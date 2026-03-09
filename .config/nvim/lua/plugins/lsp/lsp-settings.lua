@@ -104,9 +104,17 @@ M["clangd"] = {
         "--clang-tidy",
         "--header-insertion=iwyu",
         "--completion-style=detailed",
-        "--function-arg-placeholders=0",
+        "--function-arg-placeholders=false",
         "--fallback-style=WebKit",
     },
+    on_attach = function(_, bufnr)
+        map(
+            "n",
+            "<localleader>s",
+            "<cmd>LspClangdSwitchSourceHeader<cr>",
+            { buffer = bufnr, desc = "Switch between source/header", silent = true }
+        )
+    end,
 }
 
 -- go install golang.org/x/tools/gopls@latest

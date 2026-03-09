@@ -102,3 +102,12 @@ autocmd("DirChanged", {
 })
 
 setup_git_env()
+
+autocmd("FileType", {
+    group = augroup("ui_opts"),
+    pattern = { "msg" },
+    callback = function(ev)
+        local win = vim.fn.bufwinid(ev.buf)
+        pcall(vim.api.nvim_win_set_config, win, { border = "none" })
+    end,
+})
