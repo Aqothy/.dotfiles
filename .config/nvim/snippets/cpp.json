@@ -1,7 +1,7 @@
 {
   "cp": {
     "prefix": "cp",
-    "body": "#include \"~/.config/bits/stdc++.h\"\nusing namespace std;\n",
+    "body": "#include \"/Users/aqothy/.config/bits/stdc++.h\"\nusing namespace std;\n",
     "description": "Competitive programming headers"
   }
 }

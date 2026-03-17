@@ -14,13 +14,19 @@ M.capabilities = {
 M.capabilities = vim.tbl_deep_extend(
     "force",
     vim.lsp.protocol.make_client_capabilities(),
-    has_blink and blink.get_lsp_capabilities() or {},
+    has_blink and blink.get_lsp_capabilities({}, false) or {},
     M.capabilities
 )
 
 local icons = require("config.icons")
+local rep = require("custom.repeat")
 
 local s = vim.diagnostic.severity
+local next_reference, prev_reference = rep.pair(function()
+    Snacks.words.jump(vim.v.count1, true)
+end, function()
+    Snacks.words.jump(-vim.v.count1, true)
+end)
 
 local sev_list = {
     ["ERROR"] = "Error",
@@ -89,8 +95,8 @@ M.keys = {
     { lhs = "gD", rhs = function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
     { lhs = "gO", rhs = function() Snacks.picker.lsp_symbols() end, desc = "Lsp Symbols", has = "documentSymbol" },
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
-    { lhs = "]r", rhs = function() Snacks.words.jump(vim.v.count1, true) end, desc = "Next Word", has = "documentHighlight" },
-    { lhs = "[r", rhs = function() Snacks.words.jump(-vim.v.count1, true) end, desc = "Prev Word", has = "documentHighlight" },
+    { lhs = "]r", rhs = next_reference, desc = "Next Word", has = "documentHighlight" },
+    { lhs = "[r", rhs = prev_reference, desc = "Prev Word", has = "documentHighlight" },
     { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls" },
     { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls" },
     { lhs = "<a-;>", rhs = function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Inlay Hints", has = "inlayHint" },

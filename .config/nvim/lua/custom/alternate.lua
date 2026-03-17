@@ -83,7 +83,7 @@ end
 
 function M.setup(opts)
     M.options = vim.tbl_deep_extend("force", default, opts or {})
-    vim.keymap.set("n", "<leader>A", M.jump, { desc = "Alternate" })
+    vim.keymap.set("n", "<a-a>", M.jump, { desc = "Alternate" })
 
     for suffix, cmd in pairs({ s = "split", v = "vsplit", t = "tabedit" }) do
         vim.api.nvim_create_user_command("A" .. suffix, function()

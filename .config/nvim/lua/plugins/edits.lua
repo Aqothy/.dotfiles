@@ -4,7 +4,6 @@ return {
         event = "InsertEnter",
         opts = {
             cmap = false,
-            tabout = { enable = true, map = "<tab>", hopout = true },
             fastwarp = { nocursormove = false },
             extensions = {
                 suround = false,
@@ -29,5 +28,11 @@ return {
             { "<leader>J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
         },
         opts = { use_default_keymaps = false, max_join_length = 150 },
+    },
+    {
+        "nmac427/guess-indent.nvim",
+        cmd = "GuessIndent",
+        event = "LazyFile",
+        opts = {},
     },
 }

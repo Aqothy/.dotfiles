@@ -29,6 +29,8 @@ automatically-unhide-macos-hidden-apps = false
     outer.right =      10
 
 [mode.main.binding]
+    alt-f = 'exec-and-forget open -a Finder'
+
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 

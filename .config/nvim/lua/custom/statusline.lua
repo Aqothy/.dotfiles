@@ -318,7 +318,7 @@ function M.update_lsp_clients(buf)
 
     local names = {}
     for _, client in ipairs(clients) do
-        if client.name ~= "copilot" then
+        if not client.name:lower():find("copilot") then
             table.insert(names, client.name)
         end
     end

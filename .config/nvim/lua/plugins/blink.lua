@@ -2,9 +2,13 @@ return {
     {
         "saghen/blink.cmp",
         event = { "InsertEnter", "CmdLineEnter" },
+        version = "*",
         opts = {
             keymap = {
                 preset = "enter",
+                ["<C-y>"] = { "select_and_accept" },
+                ["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
+                ["<C-k>"] = false,
                 ["<Up>"] = false,
                 ["<Down>"] = false,
             },
@@ -25,6 +29,10 @@ return {
                     max_items = 30,
                     selection = { auto_insert = false },
                 },
+                documentation = {
+                    auto_show = true,
+                    auto_show_delay_ms = 200,
+                },
             },
             sources = {
                 providers = {
@@ -36,18 +44,43 @@ return {
                             show_hidden_files_by_default = true,
                         },
                     },
+                    snippets = {
+                        should_show_items = function(ctx)
+                            return ctx.trigger.initial_kind ~= "trigger_character"
+                        end,
+                    },
                 },
             },
             fuzzy = {
                 implementation = "lua",
-                sorts = {
-                    "exact",
-                    "score",
-                    "sort_text",
-                },
+                sorts = function()
+                    if vim.api.nvim_get_mode().mode == "c" then
+                        return { "score", "sort_text" }
+                    end
+
+                    return {
+                        function(a, b)
+                            if math.abs(a.score - b.score) > 4 then
+                                return
+                            end
+
+                            return require("blink.cmp.fuzzy.sort").sort_text(a, b)
+                        end,
+                        "score",
+                        "exact",
+                        "label",
+                        "kind",
+                    }
+                end,
             },
             appearance = {
                 kind_icons = require("config.icons").kinds,
+            },
+            signature = {
+                enabled = true,
+                trigger = {
+                    enabled = false,
+                },
             },
         },
     },

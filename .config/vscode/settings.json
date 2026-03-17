@@ -38,4 +38,6 @@
   "github.copilot.chat.responsesApiReasoningEffort": "high",
   "chat.checkpoints.showFileChanges": true,
   "chat.viewSessions.orientation": "stacked",
+  "terminal.integrated.macOptionIsMeta": true,
+  "git.blame.editorDecoration.enabled": true,
 }

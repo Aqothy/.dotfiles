@@ -18,8 +18,10 @@
   "agent": {
     "default_profile": "write",
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-5.2-codex",
+      "effort": "high",
+      "enable_thinking": true,
+      "provider": "zed.dev",
+      "model": "gpt-5.4",
     },
   },
   "base_keymap": "VSCode",

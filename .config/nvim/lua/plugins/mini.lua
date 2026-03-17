@@ -13,7 +13,7 @@ return {
                 ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
             },
             filetype = {
-                dotenv = { glyph = "", hl = "MiniIconsYellow" },
+                env = { glyph = "", hl = "MiniIconsYellow" },
                 go = { glyph = "", hl = "MiniIconsAzure" },
             },
         },
@@ -120,13 +120,21 @@ return {
                 vim.notify("Yanked path: " .. path)
             end
 
+            local function entry_dir(entry)
+                if not entry or not entry.path then
+                    return nil
+                end
+
+                return entry.fs_type == "directory" and entry.path or vim.fs.dirname(entry.path)
+            end
+
             local files_set_cwd = function()
-                local path = (mf.get_fs_entry() or {}).path
-                if path == nil then
+                local dir = entry_dir(mf.get_fs_entry())
+                if dir == nil then
                     return vim.notify("Cursor is not on valid entry")
                 end
-                local dir = vim.fs.dirname(path)
-                vim.fn.chdir(dir)
+
+                vim.fn.chdir(dir, "tabpage")
                 vim.notify("Set CWD to: " .. dir)
             end
 
@@ -144,8 +152,8 @@ return {
             autocmd("User", {
                 group = group,
                 pattern = "MiniFilesBufferCreate",
-                callback = function(event)
-                    local buf = event.data.buf_id
+                callback = function(ev)
+                    local buf = ev.data.buf_id
 
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")
@@ -162,15 +170,19 @@ return {
                 group = group,
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
+                    local current_dir = entry_dir(mf.get_fs_entry())
                     mf.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
+                    if current_dir then
+                        mf.set_bookmark("c", current_dir, { desc = "Current file directory" })
+                    end
                 end,
             })
 
             autocmd("User", {
                 group = group,
                 pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
-                callback = function(event)
-                    Snacks.rename.on_rename_file(event.data.from, event.data.to)
+                callback = function(ev)
+                    Snacks.rename.on_rename_file(ev.data.from, ev.data.to)
                     vim.schedule(function()
                         mf.close()
                     end)
@@ -180,80 +192,14 @@ return {
             autocmd("User", {
                 group = group,
                 pattern = "MiniFilesActionDelete",
-                callback = function(event)
-                    local from = event.data.to
+                callback = function(ev)
+                    local from = ev.data.to
                     local ok, ret = pcall(vim.fn.system, { "trash", from })
                     if not ok or vim.v.shell_error ~= 0 then
                         vim.notify("Failed to trash file: " .. from .. "\n" .. ret, vim.log.levels.ERROR)
                     end
                 end,
             })
-        end,
-    },
-    {
-        "nvim-mini/mini.ai",
-        keys = {
-            { "a", mode = { "x", "o" } },
-            { "i", mode = { "x", "o" } },
-        },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
-        opts = function()
-            local ai = require("mini.ai")
-            local gen_spec = ai.gen_spec
-            local ts_arg = gen_spec.treesitter({
-                a = { "@parameter.outer", "@attribute.outer" },
-                i = { "@parameter.inner", "@attribute.inner" },
-            })
-            local ts_call = gen_spec.treesitter({ a = "@call.outer", i = "@call.inner" })
-            local fb_call = gen_spec.function_call()
-            local fb_arg = gen_spec.argument()
-            return {
-                n_lines = 500,
-                silent = true,
-                mappings = {
-                    around_next = "a;",
-                    inside_next = "i;",
-                    around_last = "a,",
-                    inside_last = "i,",
-                },
-                custom_textobjects = {
-                    o = gen_spec.treesitter({
-                        a = { "@block.outer", "@conditional.outer", "@loop.outer" },
-                        i = { "@block.inner", "@conditional.inner", "@loop.inner" },
-                    }),
-                    f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-                    c = gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
-                    a = function(...)
-                        local ok, res = pcall(ts_arg, ...)
-                        if not ok or vim.tbl_isempty(res) then
-                            return fb_arg
-                        end
-                        return res
-                    end,
-                    u = function(...)
-                        local ok, res = pcall(ts_call, ...)
-                        if not ok or vim.tbl_isempty(res) then
-                            return fb_call
-                        end
-                        return res
-                    end,
-                    U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
-                    ["/"] = gen_spec.treesitter({ a = "@comment.outer", i = "@comment.inner" }),
-                    e = {
-                        {
-                            "%u[%l%d]+%f[^%l%d]",
-                            "%f[%S][%l%d]+%f[^%l%d]",
-                            "%f[%P][%l%d]+%f[^%l%d]",
-                            "^[%l%d]+%f[^%l%d]",
-                        },
-                        "^().*()$",
-                    }, -- camelCase words
-                    d = { "%f[%d]%d+" }, -- digits
-                    t = "",
-                },
-            }
         end,
     },
     {
@@ -288,36 +234,6 @@ return {
                     hex_color = hi.gen_highlighter.hex_color(),
                 },
             }
-        end,
-    },
-    {
-        "nvim-mini/mini.operators",
-        keys = {
-            { "g=", mode = { "n", "x" }, desc = "Evaluate operator" },
-            { "cx", desc = "Exchange operator" },
-            { "X", mode = "x", desc = "Exchange operator visual" },
-            { "_s", mode = { "n", "x" }, desc = "Sort operator" },
-            { "r", mode = { "n", "x" }, desc = "Replace operator" },
-            { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
-        },
-        opts = {
-            exchange = {
-                prefix = "",
-            },
-            multiply = {
-                prefix = "gm",
-            },
-            replace = {
-                prefix = "r",
-            },
-            sort = {
-                prefix = "_s",
-            },
-        },
-        config = function(_, opts)
-            local mo = require("mini.operators")
-            mo.setup(opts)
-            mo.make_mappings("exchange", { textobject = "cx", line = "cxx", selection = "X" })
         end,
     },
 }

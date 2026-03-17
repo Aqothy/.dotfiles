@@ -1,3 +1,7 @@
+---@class UserLspConfig: vim.lsp.Config
+---@field enabled? boolean
+
+---@type table<string, UserLspConfig>
 local M = {}
 
 local lsp_util = require("lspconfig.util")
@@ -18,7 +22,13 @@ end
 -- since were not using mason-lspconfig it will not be initialized by default
 
 -- npm install -g @typescript/native-preview
-M["tsgo"] = {}
+M["tsgo"] = {
+    on_attach = function(_, bufnr)
+        map("n", "<localleader>ri", function()
+            action("source.organizeImports")
+        end, { buffer = bufnr, desc = "Refactor imports", silent = true })
+    end,
+}
 
 local jsts_config = {
     updateImportsOnFileMove = { enabled = "always" },
@@ -152,7 +162,7 @@ M["ty"] = {}
 
 -- comes with macos
 M["sourcekit"] = {
-    filetypes = { "swift", "objc", "objcpp" },
+    filetypes = { "swift" },
 }
 
 -- uv tool install ruff@latest

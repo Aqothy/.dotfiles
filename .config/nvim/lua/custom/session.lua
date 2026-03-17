@@ -2,12 +2,17 @@ local M = {}
 
 M.options = {
     auto_start = false,
+    autosave = false,
     allowed_dirs = {},
     need_tabs = 1,
     dir = vim.fn.stdpath("state") .. "/sessions/",
+    hooks = {
+        before_save = function() end,
+    },
 }
 
 M.root_dir = vim.fn.getcwd()
+M.attached = false
 
 local function is_allowed()
     for _, dir in ipairs(M.options.allowed_dirs) do
@@ -30,23 +35,15 @@ function M.setup(opts)
     vim.keymap.set("n", "<leader>Sl", M.load, { desc = "Restore Session" })
     vim.keymap.set("n", "<leader>Sd", function()
         M.stop()
-        vim.notify("Session stopped", vim.log.levels.INFO)
-    end, { desc = "Stop Session" })
+        vim.notify("Session detached", vim.log.levels.INFO)
+    end, { desc = "Detach Session" })
     vim.keymap.set("n", "<leader>Ss", function()
         M.start()
-        vim.notify("Session started", vim.log.levels.INFO)
-    end, { desc = "Start Session" })
+        vim.notify("Session attached", vim.log.levels.INFO)
+    end, { desc = "Attach Session" })
 
     vim.fn.mkdir(M.options.dir, "p")
-
-    local argc = vim.fn.argc()
-    if argc > 1 then
-        return
-    end
-
-    if is_allowed() then
-        M.start()
-    end
+    M.create_autocmds()
 end
 
 function M.save()
@@ -63,15 +60,16 @@ function M.load()
     local file = get_session_path()
     if vim.fn.filereadable(file) == 1 then
         vim.cmd("source " .. vim.fn.fnameescape(file))
+        M.start()
     end
 end
 
 function M.start()
-    M.create_autocmds()
+    M.attached = true
 end
 
 function M.stop()
-    pcall(vim.api.nvim_clear_autocmds, { group = "aqothy/session" })
+    M.attached = false
 end
 
 function M.create_autocmds()
@@ -84,7 +82,7 @@ function M.create_autocmds()
             nested = true,
             callback = function()
                 local lazy_view = require("lazy.view")
-                if not vim.g.using_stdin and not lazy_view.visible() then
+                if vim.fn.argc() == 0 and is_allowed() and not vim.g.using_stdin and not lazy_view.visible() then
                     M.load()
                 end
             end,
@@ -102,17 +100,16 @@ function M.create_autocmds()
     vim.api.nvim_create_autocmd("VimLeavePre", {
         group = group,
         callback = function(ev)
+            if not M.attached and not (M.options.autosave and is_allowed()) then
+                return
+            end
+
             local ft = vim.bo[ev.buf].filetype
             if ft == "gitcommit" or ft == "gitrebase" then
                 return
             end
 
-            local ok, dv_lib = pcall(require, "diffview.lib")
-            if ok and dv_lib and dv_lib.views then
-                for _, view in pairs(dv_lib.views) do
-                    view:close()
-                end
-            end
+            M.options.hooks.before_save()
 
             local tabs = vim.api.nvim_list_tabpages()
 

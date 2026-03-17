@@ -26,60 +26,6 @@ local git_ref_opts = {
     },
 }
 
-local git_diff_opts = {
-    layout = {
-        preset = "diff",
-    },
-    formatters = {
-        file = {
-            filename_first = true,
-        },
-    },
-    win = {
-        input = {
-            keys = {
-                ["<c-i>"] = { "toggle_staged", mode = { "n", "i" } },
-                ["<c-g>"] = { "toggle_group", mode = { "n", "i" } },
-                ["<c-x>"] = { "git_restore", mode = { "n", "i" } },
-                ["<c-r>"] = false,
-            },
-        },
-        list = {
-            keys = {
-                ["<c-i>"] = { "toggle_staged" },
-                ["<c-g>"] = { "toggle_group" },
-                ["<c-x>"] = { "git_restore" },
-            },
-        },
-        preview = {
-            keys = {
-                ["<tab>"] = { "list_down" },
-                ["<s-tab>"] = { "list_up" },
-            },
-        },
-    },
-    actions = {
-        toggle_staged = function(p)
-            local opts = p.opts
-            if opts.staged == nil then
-                opts.staged = false
-            else
-                opts.staged = nil
-            end
-            p:find()
-        end,
-        toggle_group = function(p)
-            local opts = p.opts
-            if opts.group == nil then
-                opts.group = true
-            else
-                opts.group = not opts.group
-            end
-            p:find()
-        end,
-    },
-}
-
 local symbol_filter = {
     filter = {
         default = {
@@ -191,8 +137,6 @@ return {
                     keys = {
                         ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
                         ["<a-h>"] = false,
-                        ["<Down>"] = { "history_forward", mode = { "i", "n" } },
-                        ["<Up>"] = { "history_back", mode = { "i", "n" } },
                     },
                 },
                 list = {
@@ -222,58 +166,6 @@ return {
                         { win = "preview", title = "{preview}", border = "rounded" },
                     },
                 },
-                default = {
-                    fullscreen = true,
-                    layout = {
-                        backdrop = false,
-                        box = "horizontal",
-                        {
-                            box = "vertical",
-                            {
-                                win = "input",
-                                height = 1,
-                                border = "rounded",
-                                title = "{title} {live} {flags}",
-                                title_pos = "center",
-                            },
-                            { win = "list", border = "none" },
-                        },
-                        { win = "preview", title = "{preview}", border = true, width = 0.6 },
-                    },
-                },
-                diff = {
-                    fullscreen = true,
-                    layout = {
-                        backdrop = false,
-                        box = "horizontal",
-                        {
-                            box = "vertical",
-                            width = 0.25,
-                            min_width = 20,
-                            {
-                                win = "input",
-                                height = 1,
-                                border = "rounded",
-                                title = "{title} {live} {flags}",
-                                title_pos = "center",
-                            },
-                            { win = "list", border = "none" },
-                        },
-                        { win = "preview", title = "{preview}", border = true },
-                    },
-                },
-                vertical = {
-                    fullscreen = true,
-                    layout = {
-                        border = true,
-                        title = "{title} {live} {flags}",
-                        title_pos = "center",
-                        box = "vertical",
-                        { win = "input", height = 1, border = "bottom" },
-                        { win = "list", border = "none" },
-                        { win = "preview", title = "{preview}", height = 0.6, border = "top" },
-                    },
-                },
             },
             sources = {
                 aqfiles = {
@@ -283,11 +175,9 @@ return {
                     multi = { "recent", "files" },
                     format = "file",
                     filter = { cwd = true },
-                    hidden = true,
                     transform = "unique_file",
                     sort = { fields = { "score:desc", "idx" } },
                 },
-                git_diff = git_diff_opts,
                 files = {
                     show_empty = false,
                     exclude = { ".DS_Store" },
@@ -310,7 +200,6 @@ return {
                 git_log = git_ref_opts,
                 git_log_file = git_ref_opts,
                 git_branches = git_ref_opts,
-                gh_diff = git_diff_opts,
                 gh_pr = { live = false },
                 gh_issue = { live = false },
                 lsp_symbols = symbol_filter,
@@ -388,7 +277,7 @@ return {
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
         { "<leader>F", function() Snacks.picker.pick("aqfiles", { cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Smart cwd" },
-        { "<leader>ss", function() Snacks.picker.grep() end, desc = "Search String" },
+        { "g/", function() Snacks.picker.grep() end, desc = "Search String" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>su", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "Undo Tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
@@ -408,7 +297,6 @@ return {
         { "gO", function() Snacks.picker.treesitter() end, desc = "Treesitter symbols" },
         { "<c-;>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
         { "<leader>sf", function() Snacks.picker.git_files({ layout = { preset = "vscode" } }) end, desc = "Search Files (git-files)" },
-        { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
         { "<leader>sh", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
         { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },

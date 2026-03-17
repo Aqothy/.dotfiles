@@ -1,13 +1,5 @@
 require("config.options")
-vim.filetype.add({
-    filename = {
-        [".env"] = "dotenv",
-    },
-    pattern = {
-        ["%.env%.[%w_.-]+"] = "dotenv",
-    },
-})
-vim.treesitter.language.register("bash", { "kitty", "dotenv", "zsh" })
+vim.treesitter.language.register("bash", { "kitty", "zsh" })
 
 require("config")
 
@@ -27,6 +19,16 @@ if not vim.g.vscode then
             "~/Code/Personal",
         },
         auto_start = false,
+        hooks = {
+            before_save = function()
+                local ok, dv_lib = pcall(require, "diffview.lib")
+                if ok and dv_lib and dv_lib.views then
+                    for _, view in pairs(dv_lib.views) do
+                        view:close()
+                    end
+                end
+            end,
+        },
     })
 end
 

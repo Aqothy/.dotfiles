@@ -46,10 +46,8 @@ if vim.g.vscode then
         "nvim-treesitter-textobjects",
         "flash.nvim",
         "treesj",
-        "mini.ai",
         "blink.indent",
         "multicursor.nvim",
-        "mini.operators",
     }
 
     cond = function(plugin)

@@ -51,27 +51,19 @@ end
 
 return {
     {
-        "zbirenbaum/copilot.lua",
+        "github/copilot.vim",
         cmd = "Copilot",
         dependencies = {
             "folke/sidekick.nvim",
         },
-        opts = {
-            panel = {
-                enabled = false,
-            },
-            suggestion = {
-                auto_trigger = true,
-                keymap = {
-                    accept = "<c-l>",
-                },
-            },
-            filetypes = {
-                markdown = true,
-                dotenv = false,
-            },
-            copilot_node_command = "/Users/aqothy/.local/bin/node",
-        },
+        init = function()
+            vim.g.copilot_filetypes = {
+                ["*"] = true,
+                env = false,
+            }
+            vim.g.copilot_version = false
+            vim.g.copilot_node_command = "/Users/aqothy/.local/bin/node"
+        end,
     },
     {
         "folke/sidekick.nvim",
@@ -80,7 +72,6 @@ return {
                 enabled = false,
             },
             nes = {
-                debounce = 15,
                 trigger = {
                     events = { "ModeChanged i:n", "TextChanged", "User SidekickNesDone", "LspAttach" },
                 },
@@ -117,9 +108,6 @@ return {
                     split = {
                         width = 0.3,
                     },
-                },
-                tools = {
-                    codex = { cmd = { "codex" } },
                 },
             },
         },

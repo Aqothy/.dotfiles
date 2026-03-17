@@ -36,14 +36,14 @@ autocmd("FileType", {
         "vim",
         "query",
     },
-    callback = function(event)
-        vim.bo[event.buf].buflisted = false
+    callback = function(ev)
+        vim.bo[ev.buf].buflisted = false
         vim.schedule(function()
             vim.keymap.set("n", "q", function()
                 vim.cmd("close")
-                pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+                pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
             end, {
-                buffer = event.buf,
+                buffer = ev.buf,
                 silent = true,
                 desc = "Quit buffer",
             })
@@ -54,9 +54,9 @@ autocmd("FileType", {
 -- go to last loc when opening a buffer
 autocmd("BufReadPost", {
     group = augroup("last_loc"),
-    callback = function(event)
+    callback = function(ev)
         local exclude = { "gitcommit" }
-        local buf = event.buf
+        local buf = ev.buf
         if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].aqothy_last_loc then
             return
         end

@@ -105,29 +105,122 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        branch = "main",
         opts = {
             move = { set_jumps = true },
             select = { lookahead = true },
         },
         keys = function()
+            local function repeatable(method)
+                return function(...)
+                    return require("nvim-treesitter-textobjects.repeatable_move")[method](...)
+                end
+            end
+
+            local function ts_select(query)
+                return function()
+                    return require("nvim-treesitter-textobjects.select").select_textobject(query, "textobjects")
+                end
+            end
+
             local function ts_bind(module, method, query)
                 return function()
                     require(module)[method](query, "textobjects")
                 end
             end
 
-            local args_attr = { "@parameter.inner", "@attribute.inner" }
-
             return {
                 {
+                    "af",
+                    ts_select("@function.outer"),
+                    mode = { "x", "o" },
+                    desc = "Around function",
+                },
+                {
+                    "if",
+                    ts_select("@function.inner"),
+                    mode = { "x", "o" },
+                    desc = "Inside function",
+                },
+                {
+                    "ac",
+                    ts_select("@class.outer"),
+                    mode = { "x", "o" },
+                    desc = "Around class",
+                },
+                {
+                    "ic",
+                    ts_select("@class.inner"),
+                    mode = { "x", "o" },
+                    desc = "Inside class",
+                },
+                {
+                    "aa",
+                    ts_select("@parameter.outer"),
+                    mode = { "x", "o" },
+                    desc = "Around argument",
+                },
+                {
+                    "ia",
+                    ts_select("@parameter.inner"),
+                    mode = { "x", "o" },
+                    desc = "Inside argument",
+                },
+                {
+                    "au",
+                    ts_select("@call.outer"),
+                    mode = { "x", "o" },
+                    desc = "Around call",
+                },
+                {
+                    "iu",
+                    ts_select("@call.inner"),
+                    mode = { "x", "o" },
+                    desc = "Inside call",
+                },
+                {
+                    "f",
+                    repeatable("builtin_f_expr"),
+                    mode = { "n", "x", "o" },
+                    expr = true,
+                },
+                {
+                    "F",
+                    repeatable("builtin_F_expr"),
+                    mode = { "n", "x", "o" },
+                    expr = true,
+                },
+                {
+                    "t",
+                    repeatable("builtin_t_expr"),
+                    mode = { "n", "x", "o" },
+                    expr = true,
+                },
+                {
+                    "T",
+                    repeatable("builtin_T_expr"),
+                    mode = { "n", "x", "o" },
+                    expr = true,
+                },
+                {
+                    ";",
+                    repeatable("repeat_last_move"),
+                    mode = { "n", "x", "o" },
+                    desc = "Repeat next move",
+                },
+                {
+                    ",",
+                    repeatable("repeat_last_move_opposite"),
+                    mode = { "n", "x", "o" },
+                    desc = "Repeat previous move",
+                },
+                {
                     "<localleader>a",
-                    ts_bind("nvim-treesitter-textobjects.swap", "swap_next", args_attr),
+                    ts_bind("nvim-treesitter-textobjects.swap", "swap_next", { "@parameter.inner" }),
                     desc = "Swap Next Arg",
                 },
                 {
                     "<localleader>A",
-                    ts_bind("nvim-treesitter-textobjects.swap", "swap_previous", args_attr),
+                    ts_bind("nvim-treesitter-textobjects.swap", "swap_previous", { "@parameter.inner" }),
                     desc = "Swap Prev Arg",
                 },
                 {
@@ -156,13 +249,13 @@ return {
                 },
                 {
                     "]a",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", args_attr),
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@parameter.inner" }),
                     mode = { "n", "x", "o" },
                     desc = "Next Arg",
                 },
                 {
                     "[a",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", args_attr),
+                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@parameter.inner" }),
                     mode = { "n", "x", "o" },
                     desc = "Prev Arg",
                 },

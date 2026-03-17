@@ -1,5 +1,7 @@
 local map = vim.keymap.set
 
+local rep = require("custom.repeat")
+
 -- "Whole Buffer" text-object:
 map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
 map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
@@ -7,23 +9,13 @@ map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
-map({ "n", "x", "o" }, "<bs>", [["_d]], { desc = "Delete without yanking" })
+map({ "n", "x", "o" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
 map("x", "il", "^og_", { desc = "Select line without whitespace" })
 map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
 map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
-map("n", "g/", ":%s/\\<<c-r><c-w>\\>/<c-r><c-w>/gIc<left><left><left><left>", { desc = "Replace word in buffer" })
-map("x", "g/", '"sy:%s/\\V<C-r>s/<C-r>s/gIc<left><left><left><left>', { desc = "Replace visual word" })
-map("n", "g.", "*``cgn", { desc = "Search and replace word under cursor" })
-map(
-    "x",
-    "g.",
-    [["sy:let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')<CR>:set hls<CR>cgn]],
-    { desc = "Search & Replace selection" }
-)
 map("x", "Q", "<cmd>norm @q<CR>", { desc = "Run macro 'q' on selection" })
-map("c", "<c-j>", [[\(.*\)]], { desc = "Fighting Kirby!" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
@@ -35,6 +27,9 @@ map("n", "<leader><c-o>", "<cmd>pop<cr>", { desc = "Pop off tag stack" })
 if vim.g.vscode then
     return
 end
+
+local next_buffer, prev_buffer = rep.command_pair("bnext", "bprevious")
+local next_qf, prev_qf = rep.command_pair("cnext", "cprevious")
 
 -- Navigation and movement
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -50,16 +45,20 @@ map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
 map("n", "<a-b>", "<c-^>", { desc = "Alternate buffer" })
+map("n", "]b", next_buffer, { desc = "Next Buffer" })
+map("n", "[b", prev_buffer, { desc = "Prev Buffer" })
+map("n", "]q", next_qf, { desc = "Next Quickfix Item" })
+map("n", "[q", prev_qf, { desc = "Prev Quickfix Item" })
 map("n", "<a-s-,>", "<c-w>3<", { desc = "Resize window left" })
 map("n", "<a-s-.>", "<c-w>3>", { desc = "Resize window right" })
 map("n", "<a-s-up>", "3<C-W>+", { desc = "Resize window up" })
 map("n", "<a-s-down>", "3<C-W>-", { desc = "Resize window down" })
-map("n", "<a-down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
-map("n", "<a-up>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-map("i", "<a-down>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-map("i", "<a-up>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
-map("x", "<a-down>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
-map("x", "<a-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+map("n", "<a-down>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down", silent = true })
+map("n", "<a-up>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up", silent = true })
+map("i", "<a-down>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down", silent = true })
+map("i", "<a-up>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up", silent = true })
+map("x", "<a-down>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down", silent = true })
+map("x", "<a-up>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up", silent = true })
 
 -- Terminal
 map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
@@ -67,6 +66,9 @@ map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
 -- Tabs and windows
 map({ "n", "t" }, "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map({ "n", "t" }, "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+for i = 1, 5 do
+    map("n", "<leader>" .. i, "<cmd>tabnext " .. i .. "<cr>", { desc = "Go to Tab " .. i })
+end
 map("t", "<esc>", "<esc>", { desc = "Feed Escape" })
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
@@ -74,11 +76,8 @@ map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
 map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
 map("n", "<c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
-map("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close tab" })
+map("n", "<c-s-w>", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
-map("n", "cdl", "<cmd>lcd %:h | pwd<cr>", { desc = "Change directory to current file's directory" })
-map("n", "cdu", "<cmd>lcd .. | pwd<cr>", { desc = "Change directory to parent directory" })
-map("n", "cd-", "<cmd>lcd - | pwd<cr>", { desc = "Change directory to previous directory" })
 
 -- Editing
 map("i", "<C-b>", "<Left>", { desc = "Backward char" })
@@ -132,16 +131,21 @@ map({ "i", "n", "s" }, "<esc>", function()
     return "<esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
 
-local diagnostic_goto = function(next, severity)
-    severity = severity and vim.diagnostic.severity[severity] or nil
+local next_diag, prev_diag = rep.pair(function()
+    vim.diagnostic.jump({ count = vim.v.count1 })
+end, function()
+    vim.diagnostic.jump({ count = -vim.v.count1 })
+end)
+local next_error, prev_error = rep.pair(function()
+    vim.diagnostic.jump({ count = vim.v.count1, severity = vim.diagnostic.severity.ERROR })
+end, function()
+    vim.diagnostic.jump({ count = -vim.v.count1, severity = vim.diagnostic.severity.ERROR })
+end)
 
-    return function()
-        vim.diagnostic.jump({ count = (next and 1 or -1) * vim.v.count1, severity = severity })
-    end
-end
-
-map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
+map("n", "]d", next_diag, { desc = "Next Diagnostic" })
+map("n", "[d", prev_diag, { desc = "Prev Diagnostic" })
+map("n", "]e", next_error, { desc = "Next Error" })
+map("n", "[e", prev_error, { desc = "Prev Error" })
 map("n", "gh", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
 map("n", "yd", function()
     local diags = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })

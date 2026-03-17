@@ -19,15 +19,20 @@ return {
         },
         attach_to_untracked = true,
         gh = true,
+        current_line_blame = true,
+        current_line_blame_opts = {
+            delay = 200,
+        },
         on_attach = function(bufnr)
             local gs = package.loaded.gitsigns
             local line = vim.fn.line
+            local next_hunk, prev_hunk = require("custom.repeat").pair(gs.next_hunk, gs.prev_hunk)
 
             local function map(mode, l, r, desc)
                 vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc, silent = true })
             end
-            map("n", "[h", gs.prev_hunk, "Previous hunk")
-            map("n", "]h", gs.next_hunk, "Next hunk")
+            map("n", "[h", prev_hunk, "Previous hunk")
+            map("n", "]h", next_hunk, "Next hunk")
             map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
             map("n", "<leader>hs", gs.stage_hunk, "Stage hunk")
             map("n", "<leader>hr", gs.reset_hunk, "Reset hunk")

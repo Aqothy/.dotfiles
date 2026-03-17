@@ -78,7 +78,7 @@ _git_status_prompt() {
   b=$(git symbolic-ref --quiet --short HEAD 2>/dev/null \
     || git rev-parse --short HEAD 2>/dev/null) || return
 
-  git diff-index --quiet HEAD 2>/dev/null || dirty=' %F{red}✘%f'
+  git diff-index --quiet --ignore-submodules HEAD 2>/dev/null || dirty=' %F{red}✘%f'
 
   echo " %F{yellow}%f %F{blue}${b}%f${dirty}"
 }

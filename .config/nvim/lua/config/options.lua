@@ -71,6 +71,7 @@ opt.listchars = {
     trail = "·",
 }
 opt.formatoptions = "jcroqlnt"
+opt.mousescroll = "ver:1,hor:1"
 
 opt.fileencoding = "utf-8"
 
