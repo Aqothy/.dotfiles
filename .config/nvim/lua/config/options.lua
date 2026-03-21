@@ -72,6 +72,7 @@ opt.listchars = {
 }
 opt.formatoptions = "jcroqlnt"
 opt.mousescroll = "ver:1,hor:1"
+opt.guifont = "Hack Nerd Font Mono:h15"
 
 opt.fileencoding = "utf-8"
 
@@ -82,4 +83,8 @@ end
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-opt.sessionoptions = { "curdir", "tabpages", "winsize", "terminal", "skiprtp" }
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "terminal" }
+
+if g.neovide then
+    g.neovide_input_macos_option_key_is_meta = "both"
+end

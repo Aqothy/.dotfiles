@@ -236,4 +236,103 @@ return {
             }
         end,
     },
+    {
+        "nvim-mini/mini.ai",
+        keys = {
+            { "a", mode = { "x", "o" } },
+            { "i", mode = { "x", "o" } },
+        },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
+        opts = function()
+            local ai = require("mini.ai")
+            local gen_spec = ai.gen_spec
+            local ts_arg = gen_spec.treesitter({
+                a = { "@parameter.outer", "@attribute.outer" },
+                i = { "@parameter.inner", "@attribute.inner" },
+            })
+            local fb_arg = gen_spec.argument()
+            local ts_call = gen_spec.treesitter({ a = "@call.outer", i = "@call.inner" })
+            local fb_call = gen_spec.function_call()
+            return {
+                n_lines = 500,
+                silent = true,
+                mappings = {
+                    around_next = "",
+                    inside_next = "",
+                    around_last = "",
+                    inside_last = "",
+                    goto_left = "",
+                    goto_right = "",
+                },
+                custom_textobjects = {
+                    o = gen_spec.treesitter({
+                        a = { "@conditional.outer", "@loop.outer" },
+                        i = { "@conditional.inner", "@loop.inner" },
+                    }),
+                    f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+                    c = gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+                    a = function(...)
+                        local ok, res = pcall(ts_arg, ...)
+                        if not ok or vim.tbl_isempty(res) then
+                            return fb_arg
+                        end
+                        return res
+                    end,
+                    u = function(...)
+                        local ok, res = pcall(ts_call, ...)
+                        if not ok or vim.tbl_isempty(res) then
+                            return fb_call
+                        end
+                        return res
+                    end,
+                    U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+                    S = {
+                        {
+                            "%u[%l%d]+%f[^%l%d]",
+                            "%f[%S][%l%d]+%f[^%l%d]",
+                            "%f[%P][%l%d]+%f[^%l%d]",
+                            "^[%l%d]+%f[^%l%d]",
+                        },
+                        "^().*()$",
+                    }, -- camelCase words
+                    t = "",
+                },
+            }
+        end,
+    },
+    {
+        "nvim-mini/mini.operators",
+        keys = {
+            { "=q", mode = { "n", "x" }, desc = "Evaluate operator" },
+            { "cx", desc = "Exchange operator" },
+            { "X", mode = "x", desc = "Exchange operator visual" },
+            { "gS", mode = { "n", "x" }, desc = "Sort operator" },
+            { "r", mode = { "n", "x" }, desc = "Replace operator" },
+            { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
+        },
+        opts = {
+            evaluate = {
+                prefix = "=q",
+            },
+            exchange = {
+                prefix = "",
+            },
+            multiply = {
+                prefix = "gm",
+            },
+            replace = {
+                prefix = "r",
+            },
+            sort = {
+                prefix = "gS",
+            },
+        },
+        config = function(_, opts)
+            local mo = require("mini.operators")
+            mo.setup(opts)
+            mo.make_mappings("exchange", { textobject = "cx", line = "cxx", selection = "X" })
+        end,
+    },
 }

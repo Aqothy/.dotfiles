@@ -1,3 +1,5 @@
+vim.g.snacks_animate = false
+
 local git_ref_opts = {
     actions = {
         ["diff_commit"] = function(picker)
@@ -102,9 +104,34 @@ return {
                 },
             },
             sections = {
-                { section = "header", align = "center" },
-                { section = "keys", padding = 1 },
-                { section = "startup", padding = 1 },
+                { section = "header" },
+                { header = "Show me your dreams." },
+                { pane = 2, text = "", padding = { 0, 3 } },
+                { pane = 2, icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+                {
+                    pane = 2,
+                    icon = "󰈔 ",
+                    title = "Recent Files",
+                    section = "recent_files",
+                    indent = 2,
+                    padding = 1,
+                    cwd = true,
+                },
+                {
+                    pane = 2,
+                    icon = " ",
+                    title = "Git Status",
+                    section = "terminal",
+                    enabled = function()
+                        return Snacks.git.get_root() ~= nil
+                    end,
+                    cmd = "git status --short --branch --renames",
+                    padding = 3,
+                    height = 5,
+                    ttl = 0,
+                    indent = 3,
+                },
+                { pane = 2, section = "startup" },
             },
         },
 
@@ -120,6 +147,8 @@ return {
             enabled = true,
             modes = { "n" },
         },
+
+        explorer = { enabled = true },
 
         picker = {
             enabled = true,
@@ -175,6 +204,7 @@ return {
                     multi = { "recent", "files" },
                     format = "file",
                     filter = { cwd = true },
+                    hidden = true,
                     transform = "unique_file",
                     sort = { fields = { "score:desc", "idx" } },
                 },
@@ -279,10 +309,13 @@ return {
         { "<leader>F", function() Snacks.picker.pick("aqfiles", { cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Smart cwd" },
         { "g/", function() Snacks.picker.grep() end, desc = "Search String" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
-        { "<leader>su", function() Snacks.picker.undo({ layout = { preset = "diff" } }) end, desc = "Undo Tree" },
+        { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo Tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-        { "<leader>sp", function() Snacks.toggle.profiler():toggle() end, desc = "Search profile" },
+        { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profile Picker" },
+        { "<leader>se", function() Snacks.explorer() end, desc = "Search Explorer" },
         { "<leader>uz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
+        { "<leader>us", function() Snacks.toggle.option("spell", { name = "Spelling" }):toggle() end, desc = "Toggle Spelling" },
+        { "<leader>ud", function() Snacks.toggle.dim():toggle() end, desc = "Toggle Dim" },
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>ld", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
         { "<leader>lD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },

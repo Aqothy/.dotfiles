@@ -5,6 +5,7 @@ return {
         opts = {
             cmap = false,
             fastwarp = { nocursormove = false },
+            bs = { delete_from_end = false },
             extensions = {
                 suround = false,
                 utf8 = false,
@@ -34,5 +35,22 @@ return {
         cmd = "GuessIndent",
         event = "LazyFile",
         opts = {},
+    },
+    {
+        "chrisgrieser/nvim-spider",
+        keys = {
+            {
+                "e",
+                "<cmd>lua require('spider').motion('e')<CR>",
+                mode = { "n", "x", "o" },
+                desc = "End of subword",
+            },
+            {
+                "b",
+                "<cmd>lua require('spider').motion('b')<CR>",
+                mode = { "n", "x", "o" },
+                desc = "Beginning of subword",
+            },
+        },
     },
 }

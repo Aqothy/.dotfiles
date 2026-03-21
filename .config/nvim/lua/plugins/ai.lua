@@ -68,13 +68,14 @@ return {
     {
         "folke/sidekick.nvim",
         opts = {
-            signs = {
-                enabled = false,
-            },
             nes = {
                 trigger = {
                     events = { "ModeChanged i:n", "TextChanged", "User SidekickNesDone", "LspAttach" },
                 },
+                diff = {
+                    inline = "chars",
+                },
+                signs = false,
             },
             cli = {
                 win = {
@@ -135,13 +136,13 @@ return {
                 desc = "Select CLI",
             },
             {
-                "<leader>ad",
+                "<leader>ac",
                 function() require("sidekick.cli").close() end,
                 desc = "Detach a CLI Session",
             },
             {
                 "<leader>av",
-                function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+                function() require("sidekick.cli").send({ msg = "{this}\n{selection}" }) end,
                 mode = { "x" },
                 desc = "Send Visual Selection",
             },

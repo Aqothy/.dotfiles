@@ -21,7 +21,7 @@ end
 -- make sure to initialize the lsp even if you don't want custom config
 -- since were not using mason-lspconfig it will not be initialized by default
 
--- npm install -g @typescript/native-preview
+-- pnpm add -g @typescript/native-preview
 M["tsgo"] = {
     on_attach = function(_, bufnr)
         map("n", "<localleader>ri", function()
@@ -37,7 +37,7 @@ local jsts_config = {
     },
 }
 
--- npm install -g @vtsls/language-server
+-- pnpm add -g @vtsls/language-server
 M["vtsls"] = {
     enabled = false,
     settings = {
@@ -168,7 +168,7 @@ M["sourcekit"] = {
 -- uv tool install ruff@latest
 M["ruff"] = {}
 
--- npm i -g @tailwindcss/language-server
+-- pnpm add -g @tailwindcss/language-server
 M["tailwindcss"] = {
     root_dir = function(bufnr, on_dir)
         local root_files = {
@@ -187,7 +187,7 @@ M["tailwindcss"] = {
     end,
 }
 
--- npm i -g vscode-langservers-extracted
+-- pnpm add -g vscode-langservers-extracted
 M["eslint"] = {}
 
 M["jsonls"] = {
@@ -209,5 +209,7 @@ M["jsonls"] = {
 }
 
 M["cssls"] = {}
+
+M["oxlint"] = {}
 
 return M

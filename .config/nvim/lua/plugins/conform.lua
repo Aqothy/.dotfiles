@@ -3,7 +3,7 @@ return {
     cmd = "ConformInfo",
     keys = {
         {
-            "<leader>gq",
+            "<leader>i",
             function()
                 require("conform").format({ async = true })
             end,
@@ -16,16 +16,16 @@ return {
         notify_on_error = false,
         quiet = true,
         formatters_by_ft = {
-            -- npm install -g prettier
-            javascript = { "prettier" },
-            typescript = { "prettier" },
-            javascriptreact = { "prettier" },
-            typescriptreact = { "prettier" },
-            css = { "prettier" },
-            html = { "prettier" },
-            json = { "prettier" },
-            yaml = { "prettier" },
-            markdown = { "prettier" },
+            -- pnpm add -g oxfmt
+            javascript = { "oxfmt" },
+            typescript = { "oxfmt" },
+            javascriptreact = { "oxfmt" },
+            typescriptreact = { "oxfmt" },
+            css = { "oxfmt" },
+            html = { "oxfmt" },
+            json = { "oxfmt" },
+            yaml = { "oxfmt" },
+            markdown = { "oxfmt" },
             -- brew install stylua
             lua = { "stylua" },
             -- go install golang.org/x/tools/cmd/goimports@latest
@@ -39,7 +39,6 @@ return {
         },
         default_format_opts = {
             lsp_format = "fallback",
-            timeout_ms = 1200,
         },
     },
 }

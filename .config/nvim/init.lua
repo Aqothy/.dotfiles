@@ -18,7 +18,6 @@ if not vim.g.vscode then
         allowed_dirs = {
             "~/Code/Personal",
         },
-        auto_start = false,
         hooks = {
             before_save = function()
                 local ok, dv_lib = pcall(require, "diffview.lib")

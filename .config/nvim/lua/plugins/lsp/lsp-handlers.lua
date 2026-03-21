@@ -97,8 +97,8 @@ M.keys = {
     { lhs = "<leader>ls", rhs = function() Snacks.picker.lsp_workspace_symbols() end, desc = "Workspace Symbols", has = "documentSymbol" },
     { lhs = "]r", rhs = next_reference, desc = "Next Word", has = "documentHighlight" },
     { lhs = "[r", rhs = prev_reference, desc = "Prev Word", has = "documentHighlight" },
-    { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls" },
-    { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls" },
+    { lhs = "<leader>li", rhs = function() Snacks.picker.lsp_incoming_calls() end, desc = "Incoming Calls", has = "callHierarchy/incomingCalls" },
+    { lhs = "<leader>lo", rhs = function() Snacks.picker.lsp_outgoing_calls() end, desc = "Outgoing Calls", has = "callHierarchy/outgoingCalls" },
     { lhs = "<a-;>", rhs = function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, desc = "Inlay Hints", has = "inlayHint" },
 }
 
