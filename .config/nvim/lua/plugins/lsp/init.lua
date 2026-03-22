@@ -8,6 +8,7 @@ return {
     config = function()
         local handlers = require("plugins.lsp.lsp-handlers")
         local utils = require("custom.utils")
+        local progress_message_max_width = 40
 
         handlers.setup()
 
@@ -38,7 +39,13 @@ return {
                 local params = ev.data.params
                 local value = params.value
                 local not_end = value.kind ~= "end"
-                vim.api.nvim_echo({ { value.message or "done" } }, false, {
+                local message = value.message
+
+                if message and vim.fn.strchars(message) > progress_message_max_width then
+                    message = vim.fn.strcharpart(message, 0, progress_message_max_width - 1) .. "…"
+                end
+
+                vim.api.nvim_echo({ { message or "done" } }, false, {
                     id = client.id .. "-" .. params.token,
                     kind = "progress",
                     title = (not_end and "󱥸" or "") .. (" [%s] %s"):format(client.name, value.title),

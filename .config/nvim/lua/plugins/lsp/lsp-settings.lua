@@ -212,4 +212,6 @@ M["cssls"] = {}
 
 M["oxlint"] = {}
 
+M["rust_analyzer"] = {}
+
 return M

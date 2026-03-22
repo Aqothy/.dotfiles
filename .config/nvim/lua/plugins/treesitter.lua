@@ -29,6 +29,7 @@ return {
                 "python",
                 "regex",
                 "html",
+                "rust",
             },
         },
         config = function(_, opts)

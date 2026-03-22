@@ -30,6 +30,7 @@ return {
             lua = { "stylua" },
             -- go install golang.org/x/tools/cmd/goimports@latest
             go = { "goimports", "gofmt" },
+            rust = { name = "rust_analyzer", lsp_format = "prefer" },
             -- comes with mac
             swift = { "swift" },
             python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
