@@ -305,7 +305,7 @@ return {
     {
         "nvim-mini/mini.operators",
         keys = {
-            { "=q", mode = { "n", "x" }, desc = "Evaluate operator" },
+            { "g?", mode = { "n", "x" }, desc = "Evaluate operator" },
             { "cx", desc = "Exchange operator" },
             { "X", mode = "x", desc = "Exchange operator visual" },
             { "gS", mode = { "n", "x" }, desc = "Sort operator" },
@@ -314,7 +314,7 @@ return {
         },
         opts = {
             evaluate = {
-                prefix = "=q",
+                prefix = "g?",
             },
             exchange = {
                 prefix = "",
