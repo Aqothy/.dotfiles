@@ -61,11 +61,10 @@ return {
                 -- just like oil
                 "-",
                 function()
-                    local bufname = vim.api.nvim_buf_get_name(0)
-                    local path = vim.fn.fnamemodify(bufname, ":p")
+                    local path = vim.api.nvim_buf_get_name(0)
 
-                    if path and vim.uv.fs_stat(path) then
-                        MiniFiles.open(bufname, false)
+                    if path ~= "" and vim.uv.fs_stat(path) then
+                        MiniFiles.open(path, false)
                         MiniFiles.reveal_cwd()
                     else
                         vim.notify("No valid path found", vim.log.levels.WARN)
@@ -120,26 +119,21 @@ return {
                 vim.notify("Yanked path: " .. path)
             end
 
-            local function entry_dir(entry)
-                if not entry or not entry.path then
-                    return nil
-                end
-
-                return entry.fs_type == "directory" and entry.path or vim.fs.dirname(entry.path)
-            end
-
-            local files_set_cwd = function()
-                local dir = entry_dir(mf.get_fs_entry())
-                if dir == nil then
+            local set_cwd = function()
+                local path = (mf.get_fs_entry() or {}).path
+                if path == nil then
                     return vim.notify("Cursor is not on valid entry")
                 end
-
+                local dir = vim.fs.dirname(path)
                 vim.fn.chdir(dir, "tabpage")
                 vim.notify("Set CWD to: " .. dir)
             end
 
             local ui_open = function()
-                vim.ui.open(mf.get_fs_entry().path)
+                local path = (mf.get_fs_entry() or {}).path
+                if path then
+                    vim.ui.open(path)
+                end
             end
 
             local nmap = function(buf_id, lhs, rhs, desc)
@@ -158,7 +152,7 @@ return {
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")
                     nmap(buf, "gy", yank_path, "Yank path")
-                    nmap(buf, "cg", files_set_cwd, "Set CWD")
+                    nmap(buf, "cg", set_cwd, "Set CWD")
 
                     map_split(buf, "<C-w>s", "horizontal")
                     map_split(buf, "<C-w>v", "vertical")
@@ -170,10 +164,10 @@ return {
                 group = group,
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
-                    local current_dir = entry_dir(mf.get_fs_entry())
+                    local current_dir = (mf.get_fs_entry() or {}).path
                     mf.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
                     if current_dir then
-                        mf.set_bookmark("c", current_dir, { desc = "Current file directory" })
+                        mf.set_bookmark("c", vim.fs.dirname(current_dir), { desc = "Current file directory" })
                     end
                 end,
             })
@@ -288,15 +282,16 @@ return {
                         return res
                     end,
                     U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
-                    S = {
+                    e = {
                         {
                             "%u[%l%d]+%f[^%l%d]",
-                            "%f[%S][%l%d]+%f[^%l%d]",
-                            "%f[%P][%l%d]+%f[^%l%d]",
+                            "%f[^%s%p][%l%d]+%f[^%l%d]",
                             "^[%l%d]+%f[^%l%d]",
+                            "%f[^%s%p][%w]+%f[^%w]",
+                            "^[%w]+%f[^%w]",
                         },
                         "^().*()$",
-                    }, -- camelCase words
+                    }, -- subwords
                     t = "",
                 },
             }

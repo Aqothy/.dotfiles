@@ -3,8 +3,8 @@ local map = vim.keymap.set
 local rep = require("custom.repeat")
 
 -- "Whole Buffer" text-object:
-map("x", "ie", "gg^oG$", { desc = "Select whole buffer" })
-map("o", "ie", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
+map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
+map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
 
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })

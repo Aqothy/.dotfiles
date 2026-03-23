@@ -33,6 +33,9 @@ return {
                     auto_show = true,
                     auto_show_delay_ms = 200,
                 },
+                trigger = {
+                    show_on_insert_on_trigger_character = false,
+                },
             },
             sources = {
                 providers = {

@@ -106,7 +106,7 @@ return {
             sections = {
                 { section = "header" },
                 { header = "Show me your dreams." },
-                { pane = 2, text = "", padding = { 0, 3 } },
+                { pane = 2, text = "", padding = { 0, 4 } },
                 { pane = 2, icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
                 {
                     pane = 2,
@@ -328,7 +328,7 @@ return {
         { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
         { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
         { "gO", function() Snacks.picker.treesitter() end, desc = "Treesitter symbols" },
-        { "<c-;>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
+        { "<c-\\>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
         { "<leader>sf", function() Snacks.picker.git_files({ layout = { preset = "vscode" } }) end, desc = "Search Files (git-files)" },
         { "<leader>sh", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },

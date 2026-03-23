@@ -15,5 +15,18 @@
       "}"
     ],
     "description": "SwiftUI view declaration"
+  },
+  "header": {
+    "prefix": "head",
+    "body": [
+      "//",
+      "//  ${TM_FILENAME}",
+      "//  ${WORKSPACE_NAME}",
+      "//",
+      "//  Created by Anthony Qiu on ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}.",
+      "//",
+      ""
+    ],
+    "description": "header"
   }
 }

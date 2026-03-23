@@ -58,11 +58,11 @@ function M.run_async(cmd, efm, title, opts)
             end
 
             if is_success then
-                run_callback(opts.on_success, lines)
+                run_callback(opts.on_success, obj)
             else
-                run_callback(opts.on_failure, lines)
+                run_callback(opts.on_failure, obj)
             end
-            run_callback(opts.on_exit, obj.code, lines)
+            run_callback(opts.on_exit, obj)
         end)
     end)
 end

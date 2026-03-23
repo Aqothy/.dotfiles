@@ -1,3 +1,7 @@
+-- pnpm add -g oxfmt
+-- prefer project-configured JS formatters, otherwise fall back to oxfmt
+local js_fmt = { "biome", "prettier", "oxfmt", stop_after_first = true }
+
 return {
     "stevearc/conform.nvim",
     cmd = "ConformInfo",
@@ -15,17 +19,20 @@ return {
         log_level = vim.log.levels.OFF,
         notify_on_error = false,
         quiet = true,
+        formatters = {
+            biome = { require_cwd = true },
+            prettier = { require_cwd = true },
+        },
         formatters_by_ft = {
-            -- pnpm add -g oxfmt
-            javascript = { "oxfmt" },
-            typescript = { "oxfmt" },
-            javascriptreact = { "oxfmt" },
-            typescriptreact = { "oxfmt" },
-            css = { "oxfmt" },
-            html = { "oxfmt" },
-            json = { "oxfmt" },
-            yaml = { "oxfmt" },
-            markdown = { "oxfmt" },
+            javascript = js_fmt,
+            typescript = js_fmt,
+            javascriptreact = js_fmt,
+            typescriptreact = js_fmt,
+            css = js_fmt,
+            html = js_fmt,
+            json = js_fmt,
+            yaml = js_fmt,
+            markdown = js_fmt,
             -- brew install stylua
             lua = { "stylua" },
             -- go install golang.org/x/tools/cmd/goimports@latest
