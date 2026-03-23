@@ -1,4 +1,9 @@
 {
+  "diagnostics": {
+    "inline": {
+      "enabled": true
+    }
+  },
   "agent_servers": {
     "codex-acp": {
       "type": "registry"

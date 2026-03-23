@@ -67,7 +67,7 @@ return {
                         MiniFiles.open(path, false)
                         MiniFiles.reveal_cwd()
                     else
-                        vim.notify("No valid path found", vim.log.levels.WARN)
+                        MiniFiles.open(vim.uv.cwd(), false)
                     end
                 end,
                 desc = "Open MiniFiles (Directory of Current File)",
@@ -107,7 +107,7 @@ return {
                 end
 
                 local desc = "Split " .. direction
-                vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+                vim.keymap.set("n", lhs, rhs, { buf = buf_id, desc = desc })
             end
 
             local yank_path = function()
@@ -137,7 +137,7 @@ return {
             end
 
             local nmap = function(buf_id, lhs, rhs, desc)
-                vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+                vim.keymap.set("n", lhs, rhs, { buf = buf_id, desc = desc })
             end
 
             local autocmd = vim.api.nvim_create_autocmd
@@ -152,7 +152,7 @@ return {
                     nmap(buf, "g.", toggle_dotfiles, "Toggle hidden files")
                     nmap(buf, "gx", ui_open, "OS open")
                     nmap(buf, "gy", yank_path, "Yank path")
-                    nmap(buf, "cg", set_cwd, "Set CWD")
+                    nmap(buf, "cd", set_cwd, "Set CWD")
 
                     map_split(buf, "<C-w>s", "horizontal")
                     map_split(buf, "<C-w>v", "vertical")
@@ -165,7 +165,7 @@ return {
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
                     local current_dir = (mf.get_fs_entry() or {}).path
-                    mf.set_bookmark("w", vim.fn.getcwd(), { desc = "Working directory" })
+                    mf.set_bookmark("w", vim.uv.cwd(), { desc = "Working directory" })
                     if current_dir then
                         mf.set_bookmark("c", vim.fs.dirname(current_dir), { desc = "Current file directory" })
                     end
@@ -188,9 +188,12 @@ return {
                 pattern = "MiniFilesActionDelete",
                 callback = function(ev)
                     local from = ev.data.to
-                    local ok, ret = pcall(vim.fn.system, { "trash", from })
-                    if not ok or vim.v.shell_error ~= 0 then
-                        vim.notify("Failed to trash file: " .. from .. "\n" .. ret, vim.log.levels.ERROR)
+                    local result = vim.system({ "trash", from }, { text = true }):wait()
+                    if result.code ~= 0 then
+                        vim.notify(
+                            "Failed to trash file: " .. from .. "\n" .. (result.stderr or ""),
+                            vim.log.levels.ERROR
+                        )
                     end
                 end,
             })

@@ -25,6 +25,9 @@ autocmd({ "TermClose", "TermLeave" }, {
     end,
 })
 
+-- Remove "[Process exited]" message
+pcall(vim.api.nvim_clear_autocmds, { group = "nvim.terminal", event = "TermClose" })
+
 -- close some filetypes with <q>
 autocmd("FileType", {
     group = augroup("close_with_q"),
@@ -43,7 +46,7 @@ autocmd("FileType", {
                 vim.cmd("close")
                 pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
             end, {
-                buffer = ev.buf,
+                buf = ev.buf,
                 silent = true,
                 desc = "Quit buffer",
             })
@@ -70,24 +73,21 @@ autocmd("BufReadPost", {
     end,
 })
 
-local home = vim.fn.expand("~")
+local home = vim.env.HOME
 local git_dir = home .. "/.dotfiles"
 
 local function setup_git_env()
-    local cwd = vim.fn.getcwd()
-
-    local result = vim.fn.system({
+    local result = vim.system({
         "git",
         "--git-dir=" .. git_dir,
         "--work-tree=" .. home,
-        "-C",
-        cwd,
         "ls-files",
         "--",
         ".",
-    })
+    }, { text = true }):wait()
+    local stdout = result.stdout or ""
 
-    if vim.v.shell_error == 0 and #result > 0 then
+    if result.code == 0 and #stdout > 0 then
         vim.env.GIT_DIR = git_dir
         vim.env.GIT_WORK_TREE = home
     else

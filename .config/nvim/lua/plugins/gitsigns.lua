@@ -29,7 +29,7 @@ return {
             local next_hunk, prev_hunk = require("custom.repeat").pair(gs.next_hunk, gs.prev_hunk)
 
             local function map(mode, l, r, desc)
-                vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc, silent = true })
+                vim.keymap.set(mode, l, r, { buf = bufnr, desc = desc, silent = true })
             end
             map("n", "[h", prev_hunk, "Previous hunk")
             map("n", "]h", next_hunk, "Next hunk")

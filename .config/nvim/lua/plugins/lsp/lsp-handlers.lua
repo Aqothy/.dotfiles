@@ -104,13 +104,13 @@ M.keys = {
 
 function M.on_attach(client, bufnr)
     vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
-    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
+    vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "virtual" })
 
     for _, key in ipairs(M.keys) do
         local has = not key.has or M.has(key.has, client, bufnr)
         if has then
             vim.keymap.set(key.mode or "n", key.lhs, key.rhs, {
-                buffer = bufnr,
+                buf = bufnr,
                 silent = key.silent ~= false,
                 desc = key.desc,
             })

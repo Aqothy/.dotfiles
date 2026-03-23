@@ -1,12 +1,17 @@
 return {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
-        code = {
-            sign = false,
-        },
+        code = { border = "thin" },
         heading = {
-            sign = false,
             icons = {},
+        },
+        sign = { enabled = false },
+        overrides = { -- LSP hovers: hide code block lines
+            buftype = {
+                nofile = {
+                    code = { border = "hide", style = "normal" },
+                },
+            },
         },
     },
     ft = "markdown",

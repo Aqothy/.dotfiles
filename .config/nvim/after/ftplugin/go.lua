@@ -46,8 +46,8 @@ end
 
 vim.keymap.set("n", "<localleader>ta", function()
     goModTag("add", { bang = true })
-end, { desc = "Tag Add (json)", buffer = true })
+end, { desc = "Tag Add (json)", buf = 0 })
 
 vim.keymap.set("n", "<localleader>tr", function()
     goModTag("remove", { bang = true })
-end, { desc = "Tag Remove (json)", buffer = true })
+end, { desc = "Tag Remove (json)", buf = 0 })

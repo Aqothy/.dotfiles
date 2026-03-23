@@ -47,6 +47,7 @@ opt.pumheight = 10
 opt.completeopt = { "menuone", "noinsert", "fuzzy", "popup" }
 opt.wildignore:append({ ".DS_Store" })
 opt.wildoptions:append({ "fuzzy" })
+opt.wildmode = "longest:full,full"
 
 opt.signcolumn = "yes"
 opt.winborder = "rounded"
@@ -74,6 +75,7 @@ opt.formatoptions = "jcroqlnt"
 opt.mousescroll = "ver:1,hor:1"
 opt.guifont = "Hack Nerd Font Mono:h15"
 opt.wrap = false
+opt.smoothscroll = true
 
 opt.fileencoding = "utf-8"
 

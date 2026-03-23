@@ -11,7 +11,7 @@ M.options = {
     },
 }
 
-M.root_dir = vim.fn.getcwd()
+M.root_dir = vim.uv.cwd()
 M.recording = false
 
 local function is_allowed()

@@ -26,7 +26,7 @@ M["tsgo"] = {
     on_attach = function(_, bufnr)
         map("n", "<localleader>ri", function()
             action("source.organizeImports")
-        end, { buffer = bufnr, desc = "Refactor imports", silent = true })
+        end, { buf = bufnr, desc = "Refactor imports", silent = true })
     end,
 }
 
@@ -60,11 +60,11 @@ M["vtsls"] = {
             vim.defer_fn(function()
                 action("source.organizeImports")
             end, 100)
-        end, { buffer = bufnr, desc = "Refactor imports", silent = true })
+        end, { buf = bufnr, desc = "Refactor imports", silent = true })
 
         map("n", "<localleader>ru", function()
             action("source.removeUnused.ts")
-        end, { buffer = bufnr, desc = "Refractor unused", silent = true })
+        end, { buf = bufnr, desc = "Refractor unused", silent = true })
     end,
 }
 
@@ -122,7 +122,7 @@ M["clangd"] = {
             "n",
             "<localleader>s",
             "<cmd>LspClangdSwitchSourceHeader<cr>",
-            { buffer = bufnr, desc = "Switch between source/header", silent = true }
+            { buf = bufnr, desc = "Switch between source/header", silent = true }
         )
     end,
 }
@@ -153,7 +153,7 @@ M["gopls"] = {
     on_attach = function(_, bufnr)
         map("n", "<localleader>rf", function()
             action("refactor.rewrite.fillStruct")
-        end, { buffer = bufnr, desc = "Refactor Fill struct", silent = true })
+        end, { buf = bufnr, desc = "Refactor Fill struct", silent = true })
     end,
 }
 

@@ -4,7 +4,7 @@ local api = vim.api
 local bo = vim.bo
 local fn = vim.fn
 local cmd = vim.cmd
-local uv = vim.uv or vim.loop
+local uv = vim.uv
 
 local stl_group = "aqline"
 local autocmd = api.nvim_create_autocmd

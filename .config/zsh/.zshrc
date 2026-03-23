@@ -37,7 +37,7 @@ alias ld='lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
 alias ls='ls -la --color=auto'
-alias nv='/Applications/Neovide.app/Contents/MacOS/neovide'
+alias nv='neovide'
 
 d() {
   git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
@@ -74,12 +74,13 @@ export FZF_DEFAULT_COMMAND='rg --files --no-messages --color=never -g "!.git" -g
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 _git_status_prompt() {
-  local b dirty
+  local b dirty git_status
 
   b=$(git symbolic-ref --quiet --short HEAD 2>/dev/null \
     || git rev-parse --short HEAD 2>/dev/null) || return
 
-  git diff-index --quiet --ignore-submodules HEAD 2>/dev/null || dirty=' %F{red}✘%f'
+  git_status=$(git status --porcelain --ignore-submodules --untracked-files=no 2>/dev/null) || return
+  [[ -n "$git_status" ]] && dirty=' %F{red}✘%f'
 
   echo " %F{yellow}%f %F{blue}${b}%f${dirty}"
 }
