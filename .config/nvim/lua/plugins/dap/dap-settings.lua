@@ -1,6 +1,7 @@
 local M = {}
 
 local dap_utils = require("dap.utils")
+local share = vim.fs.dirname(vim.fn.stdpath("data"))
 
 M["delve"] = {
     filetypes = { "go" },
@@ -26,7 +27,7 @@ M["delve"] = {
     configurations = {
         {
             type = "delve",
-            name = "Debug",
+            name = "Launch",
             request = "launch",
             program = "${file}",
         },
@@ -37,12 +38,96 @@ M["delve"] = {
             request = "attach",
             processId = dap_utils.pick_process,
         },
+    },
+}
+
+M["pwa-node"] = {
+    filetypes = { "typescript", "javascript" },
+    adapter = {
+        type = "server",
+        host = "localhost",
+        port = "${port}",
+        executable = {
+            command = "node",
+            args = {
+                share .. "/js-debug/src/dapDebugServer.js",
+                "${port}",
+            },
+        },
+    },
+    configurations = {
         {
-            type = "delve",
-            name = "Debug test",
+            type = "pwa-node",
             request = "launch",
-            mode = "test",
+            name = "Launch",
             program = "${file}",
+            runtimeExecutable = function()
+                local ft = vim.bo.filetype
+                if ft == "typescript" then
+                    return "tsx"
+                end
+            end,
+            cwd = "${workspaceFolder}",
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+            console = "integratedTerminal",
+        },
+        {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = dap_utils.pick_process,
+            cwd = "${workspaceFolder}",
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+        },
+    },
+}
+
+-- vscode dap config uses node, convert to pwa-node
+M["node"] = {
+    adapter = function(callback, config)
+        if config.type == "node" then
+            config.type = "pwa-node"
+        end
+        local nativeAdapter = M["pwa-node"].adapter
+        if type(nativeAdapter) == "function" then
+            nativeAdapter(callback, config)
+        else
+            callback(nativeAdapter)
+        end
+    end,
+}
+
+M["codelldb"] = {
+    filetypes = { "c", "cpp", "rust" },
+    adapter = {
+        type = "server",
+        host = "localhost",
+        port = "${port}",
+        executable = {
+            command = share .. "/codelldb/adapter/codelldb",
+            args = {
+                "--port",
+                "${port}",
+            },
+        },
+    },
+    configurations = {
+        {
+            type = "codelldb",
+            request = "launch",
+            name = "Launch",
+            program = function()
+                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+            console = "integratedTerminal",
+        },
+        {
+            type = "codelldb",
+            request = "attach",
+            name = "Attach",
+            pid = dap_utils.pick_process,
+            cwd = "${workspaceFolder}",
         },
     },
 }
