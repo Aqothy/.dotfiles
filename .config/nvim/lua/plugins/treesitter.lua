@@ -8,6 +8,7 @@ return {
         opts = {
             indent = { disable = { "swift" } },
             highlight = { disable = {} },
+            folds = { disable = {} },
             ensure_installed = {
                 "c",
                 "lua",
@@ -30,6 +31,8 @@ return {
                 "regex",
                 "html",
                 "rust",
+                "yaml",
+                "diff",
             },
         },
         config = function(_, opts)
@@ -55,17 +58,25 @@ return {
 
             local function apply_features(buf, ft)
                 local lang = vim.treesitter.language.get_lang(ft)
+                local has_parser = lang and vim.treesitter.language.add(lang)
 
-                if not lang or not vim.treesitter.language.add(lang) then
-                    return
-                end
-
-                if not is_disabled(lang, "highlight", buf) and has_query(lang, "highlights") then
+                if has_parser and not is_disabled(lang, "highlight", buf) and has_query(lang, "highlights") then
                     pcall(vim.treesitter.start, buf, lang)
                 end
 
-                if not is_disabled(lang, "indent", buf) and has_query(lang, "indents") then
+                if has_parser and not is_disabled(lang, "indent", buf) and has_query(lang, "indents") then
                     vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end
+
+                local win = vim.fn.bufwinid(buf)
+                if win ~= -1 then
+                    if has_parser and not is_disabled(lang, "folds", buf) and has_query(lang, "folds") then
+                        vim.wo[win][0].foldmethod = "expr"
+                        vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                    else
+                        vim.wo[win][0].foldmethod = "manual"
+                        vim.wo[win][0].foldexpr = ""
+                    end
                 end
             end
 

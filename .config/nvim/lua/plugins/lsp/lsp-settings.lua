@@ -216,4 +216,6 @@ M["biome"] = {}
 
 M["rust_analyzer"] = {}
 
+M["yamlls"] = {}
+
 return M

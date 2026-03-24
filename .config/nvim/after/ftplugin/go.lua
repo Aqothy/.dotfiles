@@ -35,7 +35,7 @@ local function goModTag(operation, opts)
 
         cmd = cmd .. " -" .. operation .. "-tags json -transform camelcase -w --quiet"
 
-        utils.run_async(cmd, "%m", "GoTag " .. operation, {
+        utils.run_async(cmd, nil, "GoTag " .. operation, {
             bang = opts.bang,
             on_success = function()
                 vim.cmd("checktime")
@@ -44,10 +44,10 @@ local function goModTag(operation, opts)
     end)
 end
 
-vim.keymap.set("n", "<localleader>ta", function()
+vim.keymap.set("n", "<localleader>ja", function()
     goModTag("add", { bang = true })
 end, { desc = "Tag Add (json)", buf = 0 })
 
-vim.keymap.set("n", "<localleader>tr", function()
+vim.keymap.set("n", "<localleader>jr", function()
     goModTag("remove", { bang = true })
 end, { desc = "Tag Remove (json)", buf = 0 })

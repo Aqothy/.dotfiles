@@ -43,19 +43,19 @@ function M.run_async(cmd, efm, title, opts)
                 table.insert(lines, line)
             end
 
+            if not efm or efm == "" then
+                efm = vim.api.nvim_get_option_value("errorformat", { scope = "global" })
+            end
+
+            vim.fn.setqflist({}, "r", { title = title, lines = lines, efm = efm })
+
             if not opts.bang then
-                if not efm or efm == "" then
-                    efm = vim.api.nvim_get_option_value("errorformat", { scope = "global" })
-                end
-                vim.fn.setqflist({}, "r", { title = title, lines = lines, efm = efm })
-                vim.cmd("copen")
+                vim.cmd("cwindow")
             end
 
             local is_success = obj.code == 0
-            if not opts.bang or not is_success then
-                local msg = title .. (is_success and ": Success" or ": Failed")
-                vim.notify(msg, is_success and vim.log.levels.INFO or vim.log.levels.ERROR)
-            end
+            local msg = title .. (is_success and ": Success" or ": Failed")
+            vim.notify(msg, is_success and vim.log.levels.INFO or vim.log.levels.ERROR)
 
             if is_success then
                 run_callback(opts.on_success, obj)

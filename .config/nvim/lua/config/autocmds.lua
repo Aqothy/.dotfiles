@@ -111,3 +111,13 @@ autocmd("FileType", {
         pcall(vim.api.nvim_win_set_config, win, { border = "none" })
     end,
 })
+
+autocmd("FileType", {
+    group = augroup("text_opts"),
+    pattern = { "text", "tex", "gitcommit", "markdown" },
+    callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.spell = true
+        vim.opt_local.conceallevel = 2
+    end,
+})

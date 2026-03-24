@@ -9,26 +9,29 @@ if vim.g.vscode then
 end
 
 command("Make", function(opts)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local cmd = ""
-    local global_makeprg = get_option("makeprg", { scope = "global" })
-    local efm = get_option("errorformat", { buf = bufnr })
+    local buf = vim.api.nvim_get_current_buf()
+    local efm = get_option("errorformat", { buf = buf })
+    local cmd = get_option("makeprg", { buf = buf })
 
-    if opts.args and opts.args ~= "" then
-        local args = vim.fn.expandcmd(opts.args)
-        cmd = global_makeprg .. " " .. args
-    else
-        local local_makeprg = get_option("makeprg", { buf = bufnr })
+    if cmd == "" then
+        cmd = get_option("makeprg", { scope = "global" })
+    end
 
-        if local_makeprg ~= "" then
-            cmd = vim.fn.expandcmd(local_makeprg)
-        else
-            cmd = vim.fn.expandcmd(global_makeprg)
-        end
+    cmd = vim.fn.expandcmd(cmd)
+    local args = opts.args ~= "" and vim.fn.expandcmd(opts.args) or ""
+
+    if args ~= "" then
+        cmd = cmd .. " " .. args
     end
 
     utils.run_async(cmd, efm, cmd, { bang = opts.bang })
 end, { nargs = "*", bang = true, complete = "file", desc = "Async Make" })
+
+command("Run", function(opts)
+    local cmd = vim.fn.expandcmd(opts.args)
+
+    utils.run_async(cmd, nil, cmd, { bang = opts.bang })
+end, { nargs = "+", bang = true, complete = "shellcmdline", desc = "Run async shell command" })
 
 command("Tsc", function(opts)
     local cmd = "npx tsgo --noEmit"

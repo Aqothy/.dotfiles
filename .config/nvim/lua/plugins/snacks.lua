@@ -1,5 +1,3 @@
-vim.g.snacks_animate = false
-
 local git_ref_opts = {
     actions = {
         ["diff_commit"] = function(picker)
@@ -47,6 +45,9 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
+    init = function()
+        vim.g.snacks_animate = false
+    end,
     opts = {
         dashboard = {
             preset = {

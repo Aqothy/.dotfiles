@@ -107,7 +107,7 @@ return {
                         },
                     },
                     split = {
-                        width = 0.3,
+                        width = 0.4,
                     },
                 },
             },

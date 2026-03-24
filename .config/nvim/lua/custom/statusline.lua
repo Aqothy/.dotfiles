@@ -587,7 +587,7 @@ function M.setup()
     create_autocmds()
 
     vim.opt.laststatus = 3
-    vim.g.qf_disable_statusline = 1
+    -- vim.g.qf_disable_statusline = 1
     vim.opt.showmode = false
     vim.opt.ruler = false
     vim.opt.statusline =

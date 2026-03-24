@@ -106,6 +106,14 @@ function M.on_attach(client, bufnr)
     vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
     vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "virtual" })
 
+    if M.has("foldingRange", client, bufnr) then
+        local win = vim.fn.bufwinid(bufnr)
+        if win ~= -1 then
+            vim.wo[win][0].foldmethod = "expr"
+            vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+        end
+    end
+
     for _, key in ipairs(M.keys) do
         local has = not key.has or M.has(key.has, client, bufnr)
         if has then
