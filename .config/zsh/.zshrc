@@ -37,7 +37,6 @@ alias ld='lazygit --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias so="source $ZDOTDIR/.zshrc"
 alias md='mkdir -p'
 alias ls='ls -la --color=auto'
-alias nv='neovide'
 
 d() {
   git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@

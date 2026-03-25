@@ -34,9 +34,10 @@ local symbol_filter = {
             "Enum",
             "Function",
             "Interface",
-            "Module",
             "Method",
             "Struct",
+            "Variable",
+            "Constant",
         },
     },
 }

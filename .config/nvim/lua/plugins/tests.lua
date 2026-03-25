@@ -2,8 +2,8 @@ return {
     "vim-test/vim-test",
     init = function()
         _G.AqTestStrat = function(cmd)
-            local utils = require("custom.utils")
-            utils.run_async(cmd, nil, cmd, {})
+            local utils = require("custom.tasks")
+            utils.spawn(cmd, { title = cmd })
         end
 
         vim.cmd([[

@@ -1,4 +1,4 @@
-local utils = require("custom.utils")
+local utils = require("custom.tasks")
 
 local command = vim.api.nvim_create_user_command
 
@@ -24,27 +24,27 @@ command("Make", function(opts)
         cmd = cmd .. " " .. args
     end
 
-    utils.run_async(cmd, efm, cmd, { bang = opts.bang })
+    utils.spawn(cmd, { title = cmd, efm = efm, bang = opts.bang })
 end, { nargs = "*", bang = true, complete = "file", desc = "Async Make" })
 
 command("Run", function(opts)
     local cmd = vim.fn.expandcmd(opts.args)
 
-    utils.run_async(cmd, nil, cmd, { bang = opts.bang })
+    utils.spawn(cmd, { title = cmd, bang = opts.bang })
 end, { nargs = "+", bang = true, complete = "shellcmdline", desc = "Run async shell command" })
 
 command("Tsc", function(opts)
     local cmd = "npx tsgo --noEmit"
     local efm = "%f %#(%l\\,%c): %trror TS%n: %m,%trror TS%n: %m,%-G%.%#"
 
-    utils.run_async(cmd, efm, "Tsc", { bang = opts.bang })
+    utils.spawn(cmd, { title = "Tsc", efm = efm, bang = opts.bang })
 end, { nargs = 0, bang = true, desc = "Run TSC" })
 
 command("GoLint", function(opts)
     local cmd = "golangci-lint run"
     local efm = "%A%f:%l:%c: %m,%-G%.%#"
 
-    utils.run_async(cmd, efm, "GolangCI-Lint", { bang = opts.bang })
+    utils.spawn(cmd, { title = "GoLint", efm = efm, bang = opts.bang })
 end, { nargs = 0, bang = true, desc = "Run GolangCI-Lint" })
 
 command("LspLog", function()

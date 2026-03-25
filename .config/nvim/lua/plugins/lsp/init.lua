@@ -7,7 +7,6 @@ return {
     },
     config = function()
         local handlers = require("plugins.lsp.lsp-handlers")
-        local utils = require("custom.utils")
         local progress_message_max_width = 40
 
         handlers.setup()
@@ -66,7 +65,14 @@ return {
 
                     local bufname = vim.api.nvim_buf_get_name(bufnr)
                     -- prevent lsp from attaching to artificial buffers, ref: https://github.com/neovim/neovim/issues/32074
-                    if not utils.bufname_valid(bufname) then
+                    if
+                        not (
+                            bufname:match("^/")
+                            or bufname:match("^[a-zA-Z]:")
+                            or bufname:match("^zipfile://")
+                            or bufname:match("^tarfile:")
+                        )
+                    then
                         return
                     end
                 end

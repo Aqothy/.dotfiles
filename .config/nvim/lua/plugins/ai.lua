@@ -97,7 +97,7 @@ return {
                             desc = "Cycle Next Agent",
                         },
                         select = {
-                            "<A-s-p>",
+                            "<a-.>",
                             function(term)
                                 term:hide()
                                 require("sidekick.cli").select()

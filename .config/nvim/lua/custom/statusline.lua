@@ -11,6 +11,7 @@ local autocmd = api.nvim_create_autocmd
 
 local has_icons, icons = pcall(require, "config.icons")
 local mini_icons_mod = nil
+local has_term_util, term_util = pcall(require, "vim._core.util")
 
 local function get_mini_icons()
     if mini_icons_mod == false then
@@ -158,6 +159,15 @@ function M.mode_component()
     return cache or ("%#AqlineModeOther# " .. (use_short and mode_data.short or mode_str) .. " %*")
 end
 
+function M.session_component()
+    local session = package.loaded["custom.session"]
+    local is_recording = session and session.recording
+    if is_recording then
+        return "󱂬"
+    end
+    return ""
+end
+
 function M.git_components()
     local git_info = vim.b.gitsigns_status_dict
     if not git_info then
@@ -247,8 +257,16 @@ function M.filetype_component()
     local modified_icon = "%{&modified?' ●':''}"
     local readonly_icon = "%{&readonly?' 󰌾':''}"
 
+    local extra = ""
+    if buftype == "terminal" and has_term_util then
+        local exit_code = term_util.term_exitcode()
+        if exit_code then
+            extra = " " .. exit_code
+        end
+    end
+
     local prefix = icon_hl .. icon .. "%* "
-    local suffix = modified_icon .. readonly_icon
+    local suffix = modified_icon .. readonly_icon .. extra
 
     local short_result = prefix .. short_path .. suffix
     local long_result = prefix .. long_path .. suffix
@@ -410,10 +428,17 @@ function M.file_info_component()
         return ""
     end
 
-    local result = "%#AqlineFileInfo#"
-        .. buf_opts.fileencoding
-        .. (buf_opts.expandtab and " Spaces:" or " Tab:")
-        .. buf_opts.tabstop
+    local t = {}
+
+    table.insert(t, (buf_opts.expandtab and "S:" or "T:") .. buf_opts.tabstop)
+
+    local fenc = buf_opts.fileencoding ~= "" and buf_opts.fileencoding:upper() or "UTF-8"
+    table.insert(t, fenc)
+
+    local ff_map = { unix = "LF", dos = "CRLF" }
+    table.insert(t, ff_map[buf_opts.fileformat] or buf_opts.fileformat:upper())
+
+    local result = "%#AqlineFileInfo#" .. table.concat(t, " ")
 
     M.file_info_cache[buf] = result
 
@@ -469,6 +494,11 @@ function M.render()
         local copilot_status = M.copilot_component()
         if copilot_status ~= "" then
             parts[#parts + 1] = copilot_status
+        end
+
+        local session = M.session_component()
+        if session ~= "" then
+            parts[#parts + 1] = session
         end
 
         local filesize = M.filesize_component()
@@ -564,7 +594,7 @@ local function create_autocmds()
 
     autocmd("OptionSet", {
         group = stl_group,
-        pattern = { "fileencoding", "expandtab", "tabstop" },
+        pattern = { "fileencoding", "fileformat", "expandtab", "tabstop" },
         callback = function()
             local buf = api.nvim_get_current_buf()
             M.file_info_cache[buf] = nil

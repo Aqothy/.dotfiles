@@ -86,7 +86,3 @@ opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "terminal" }
-
-if g.neovide then
-    g.neovide_input_macos_option_key_is_meta = "both"
-end

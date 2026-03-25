@@ -54,6 +54,25 @@ autocmd("FileType", {
     end,
 })
 
+autocmd("FileType", {
+    group = augroup("ui_opts"),
+    pattern = { "msg" },
+    callback = function(ev)
+        local win = vim.fn.bufwinid(ev.buf)
+        pcall(vim.api.nvim_win_set_config, win, { border = "none" })
+    end,
+})
+
+autocmd("FileType", {
+    group = augroup("text_opts"),
+    pattern = { "text", "tex", "gitcommit", "markdown" },
+    callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.spell = true
+        vim.opt_local.conceallevel = 2
+    end,
+})
+
 -- go to last loc when opening a buffer
 autocmd("BufReadPost", {
     group = augroup("last_loc"),
@@ -102,22 +121,3 @@ autocmd("DirChanged", {
 })
 
 setup_git_env()
-
-autocmd("FileType", {
-    group = augroup("ui_opts"),
-    pattern = { "msg" },
-    callback = function(ev)
-        local win = vim.fn.bufwinid(ev.buf)
-        pcall(vim.api.nvim_win_set_config, win, { border = "none" })
-    end,
-})
-
-autocmd("FileType", {
-    group = augroup("text_opts"),
-    pattern = { "text", "tex", "gitcommit", "markdown" },
-    callback = function()
-        vim.opt_local.wrap = true
-        vim.opt_local.spell = true
-        vim.opt_local.conceallevel = 2
-    end,
-})

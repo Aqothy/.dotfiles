@@ -1,6 +1,6 @@
 return {
     "stevearc/quicker.nvim",
-    event = "FileType qf",
+    ft = "qf",
     opts = {
         highlight = {
             lsp = false,
