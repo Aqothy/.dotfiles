@@ -23,6 +23,7 @@ end
 
 -- pnpm add -g @typescript/native-preview
 M["tsgo"] = {
+    enabled = false,
     on_attach = function(_, bufnr)
         map("n", "<localleader>ri", function()
             action("source.organizeImports")
@@ -35,16 +36,27 @@ local jsts_config = {
     preferences = {
         useAliasesForRenames = false,
     },
+    inlayHints = {
+        enumMemberValues = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        parameterNames = { enabled = "literals" },
+        parameterTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        variableTypes = { enabled = false },
+    },
+    tsserver = {
+        nodePath = "/Users/aqothy/.local/bin/node",
+    },
 }
 
 -- pnpm add -g @vtsls/language-server
 M["vtsls"] = {
-    enabled = false,
+    enabled = true,
     settings = {
         vtsls = {
-            enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
             experimental = {
+                maxInlayHintLength = 30,
                 completion = {
                     enableServerSideFuzzyMatch = true,
                     entriesLimit = 30,

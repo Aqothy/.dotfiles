@@ -21,7 +21,6 @@
   "editor.fontSize": 15,
   "workbench.activityBar.location": "top",
   "zenMode.restore": false,
-  "editor.hover.sticky": false,
   "terminal.integrated.fontSize": 15,
   "editor.stickyScroll.maxLineCount": 3,
   "editor.cursorSurroundingLines": 8,

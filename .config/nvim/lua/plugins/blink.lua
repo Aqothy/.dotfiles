@@ -62,6 +62,7 @@ return {
                     end
 
                     return {
+                        "exact",
                         function(a, b)
                             if math.abs(a.score - b.score) > 4 then
                                 return
@@ -70,7 +71,6 @@ return {
                             return require("blink.cmp.fuzzy.sort").sort_text(a, b)
                         end,
                         "score",
-                        "exact",
                         "label",
                         "kind",
                     }
