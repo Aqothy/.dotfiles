@@ -26,7 +26,34 @@ local git_ref_opts = {
     },
 }
 
-local symbol_filter = {
+local symbol_opts = {
+    keep_parents = true,
+    layout = {
+        preset = "dropdown",
+        preview = "main",
+        layout = {
+            max_width = 60,
+        },
+    },
+    -- open at symbol containing cursor: https://github.com/folke/snacks.nvim/issues/1057
+    on_show = function(picker)
+        local row = vim.api.nvim_win_get_cursor(picker.main)[1] - 1
+
+        picker.matcher.task:on(
+            "done",
+            vim.schedule_wrap(function()
+                local items = picker:items()
+
+                for i = #items, 1, -1 do
+                    local range = items[i].range
+                    if range and row >= range.start.line and row <= range["end"].line then
+                        picker.list:move(i, true)
+                        return
+                    end
+                end
+            end)
+        )
+    end,
     filter = {
         default = {
             "Class",
@@ -34,10 +61,14 @@ local symbol_filter = {
             "Enum",
             "Function",
             "Interface",
+            "Module",
             "Method",
             "Struct",
             "Variable",
+            "Property",
             "Constant",
+            "Field",
+            "Namespace",
         },
     },
 }
@@ -234,8 +265,7 @@ return {
                 git_branches = git_ref_opts,
                 gh_pr = { live = false },
                 gh_issue = { live = false },
-                lsp_symbols = symbol_filter,
-                treesitter = symbol_filter,
+                lsp_symbols = symbol_opts,
             },
         },
 
@@ -329,7 +359,6 @@ return {
         { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
         { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
         { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
-        { "gO", function() Snacks.picker.treesitter() end, desc = "Treesitter symbols" },
         { "<c-\\>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
         { "<leader>sf", function() Snacks.picker.git_files({ layout = { preset = "vscode" } }) end, desc = "Search Files (git-files)" },
         { "<leader>sh", function() Snacks.picker.highlights() end, desc = "Highlights" },
