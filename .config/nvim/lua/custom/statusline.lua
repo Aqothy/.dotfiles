@@ -288,7 +288,23 @@ M.diagnostic_levels = {
     { name = "INFO", sign = diag_signs.Info, hl = "DiagnosticInfo" },
     { name = "HINT", sign = diag_signs.Hint, hl = "DiagnosticHint" },
 }
+local diagnostic_severity = vim.diagnostic.severity
 M.diagnostic_str_cache = {}
+M.workspace_diagnostic_cache = nil
+
+local function format_diagnostics(count)
+    local parts = {}
+
+    for i = 1, #M.diagnostic_levels do
+        local level = M.diagnostic_levels[i]
+        local n = count[diagnostic_severity[level.name]]
+        if n and n > 0 then
+            parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n
+        end
+    end
+
+    return (#parts > 0) and table.concat(parts, " ") or ""
+end
 
 function M.diagnostics_component()
     local buf = api.nvim_get_current_buf()
@@ -308,20 +324,43 @@ function M.diagnostics_component()
         return ""
     end
 
-    local severity = vim.diagnostic.severity
-    local parts = {}
+    local result = format_diagnostics(count)
+    M.diagnostic_str_cache[buf] = result
 
-    for i = 1, #M.diagnostic_levels do
-        local level = M.diagnostic_levels[i]
-        local n = count[severity[level.name]]
-        if n and n > 0 then
-            parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n
+    return result
+end
+
+function M.workspace_diagnostics_component()
+    if M.workspace_diagnostic_cache ~= nil then
+        return M.workspace_diagnostic_cache
+    end
+
+    local total = {
+        [diagnostic_severity.ERROR] = 0,
+        [diagnostic_severity.WARN] = 0,
+        [diagnostic_severity.INFO] = 0,
+        [diagnostic_severity.HINT] = 0,
+    }
+
+    for _, buf in ipairs(api.nvim_list_bufs()) do
+        if bo[buf].buftype == "" then
+            local count = vim.diagnostic.count(buf)
+            if next(count) then
+                for j = 1, #M.diagnostic_levels do
+                    local level = M.diagnostic_levels[j]
+                    local sev = diagnostic_severity[level.name]
+                    local n = count[sev]
+                    if n and n > 0 then
+                        total[sev] = total[sev] + n
+                    end
+                end
+            end
         end
     end
 
-    local result = (#parts > 0) and table.concat(parts, " ") or ""
-    M.diagnostic_str_cache[buf] = result
+    local result = format_diagnostics(total)
 
+    M.workspace_diagnostic_cache = result
     return result
 end
 
@@ -480,9 +519,9 @@ function M.render()
 
     parts[#parts + 1] = "%*%="
 
-    local diag = M.diagnostics_component()
-    if diag ~= "" then
-        parts[#parts + 1] = diag
+    local workspace_diag = M.workspace_diagnostics_component()
+    if workspace_diag ~= "" then
+        parts[#parts + 1] = workspace_diag
     end
 
     if width > 120 then
@@ -585,6 +624,7 @@ local function create_autocmds()
         callback = function(ev)
             local buf = ev.buf
             M.diagnostic_str_cache[buf] = nil
+            M.workspace_diagnostic_cache = nil
             vim.schedule(function()
                 vim.cmd("redrawstatus")
             end)
