@@ -16,7 +16,11 @@
     "show_diagnostics": "all",
     "file_icons": true
   },
-  "icon_theme": "Material Icon Theme",
+  "icon_theme": {
+    "mode": "system",
+    "light": "Material Icon Theme",
+    "dark": "Material Icon Theme"
+  },
   "edit_predictions": {
     "provider": "zed"
   },

@@ -47,6 +47,7 @@ return {
                 vim.api.nvim_echo({ { message or "done" } }, false, {
                     id = client.id .. "-" .. params.token,
                     kind = "progress",
+                    source = "vim.lsp",
                     title = (not_end and "󱥸" or "") .. (" [%s] %s"):format(client.name, value.title),
                     status = not_end and "running" or "success",
                     percent = value.percentage,

@@ -111,6 +111,7 @@ function M.on_attach(client, bufnr)
         if win ~= -1 then
             vim.wo[win][0].foldmethod = "expr"
             vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+            vim.b[bufnr].folding_provider = "lsp"
         end
     end
 
