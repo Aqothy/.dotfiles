@@ -2,10 +2,10 @@ notARepository: quit
 os:
   editPreset: nvim-remote
 gui:
-  nerdFontsVersion: 3
+  nerdFontsVersion: "3"
   filterMode: fuzzy
   mouseEvents: true
   sidePanelWidth: 0.2
 git:
   pagers:
-    - pager: delta --dark --paging=never
+    - pager: delta --paging=never

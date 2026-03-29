@@ -59,7 +59,6 @@ opt.whichwrap:append("h,l")
 opt.showcmd = false
 opt.fillchars = { eob = " ", diff = "╱", foldopen = "", foldclose = "", fold = " ", foldsep = " " }
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-opt.background = "dark"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldtext = ""

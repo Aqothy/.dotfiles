@@ -12,25 +12,21 @@ return {
 
             if is_dark then
                 overrides = {
-                    NormalFloat = { bg = colors.dark0_soft },
                     SignColumn = { bg = colors.dark0_soft },
                     Pmenu = { bg = colors.dark0_soft },
                     LspReferenceText = { link = "Visual" },
                     LspReferenceRead = { link = "Visual" },
                     LspReferenceWrite = { link = "Visual" },
                     DiffText = { link = "DiffAdd" },
-                    TreesitterContext = { bg = colors.dark1 },
                 }
             else
                 overrides = {
-                    NormalFloat = { bg = colors.light0_soft },
                     SignColumn = { bg = colors.light0_soft },
                     Pmenu = { bg = colors.light0_soft },
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
                     DiffText = { link = "DiffAdd" },
-                    TreesitterContext = { bg = colors.light1 },
                 }
             end
 

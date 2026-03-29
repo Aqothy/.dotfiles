@@ -39,4 +39,7 @@
   "chat.viewSessions.orientation": "stacked",
   "terminal.integrated.macOptionIsMeta": true,
   "git.blame.editorDecoration.enabled": true,
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Gruvbox Dark Soft",
+  "workbench.preferredLightColorTheme": "Gruvbox Light Soft",
 }
