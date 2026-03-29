@@ -43,7 +43,6 @@ return {
         },
         hooks = {
             diff_buf_win_enter = function(_, winid, ctx)
-                vim.wo[winid].signcolumn = "no"
                 vim.wo[winid].foldcolumn = "0"
                 vim.wo[winid].cursorline = false
                 -- vscode like diff highlight

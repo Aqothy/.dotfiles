@@ -1,6 +1,8 @@
 local M = {}
 local api = vim.api
 local fn = vim.fn
+local bo = vim.bo
+local wo = vim.wo
 
 local foldclose_char = ""
 local foldopen_char = ""
@@ -9,12 +11,12 @@ local foldexprs = {
     ["v:lua.vim.treesitter.foldexpr()"] = vim.treesitter.foldexpr,
 }
 
-local function is_current_line(lnum)
-    if vim.wo.relativenumber then
+local function is_current_line(winid, lnum)
+    if wo[winid].relativenumber then
         return vim.v.relnum == 0
     end
 
-    return lnum == api.nvim_win_get_cursor(0)[1]
+    return lnum == api.nvim_win_get_cursor(winid)[1]
 end
 
 local function is_fold_start(lnum)
@@ -23,8 +25,8 @@ local function is_fold_start(lnum)
         return false
     end
 
-    if vim.wo.foldmethod == "expr" then
-        local foldexpr = foldexprs[vim.wo.foldexpr]
+    if wo.foldmethod == "expr" then
+        local foldexpr = foldexprs[wo.foldexpr]
         if foldexpr then
             local value = foldexpr(lnum)
             if type(value) == "string" then
@@ -49,9 +51,9 @@ local function format_sign(sign)
     return text
 end
 
-local function get_line_signs(lnum)
+local function get_line_signs(buf, lnum)
     local extmarks = api.nvim_buf_get_extmarks(
-        0,
+        buf,
         -1,
         { lnum - 1, 0 },
         { lnum - 1, -1 },
@@ -88,22 +90,30 @@ local function get_line_signs(lnum)
     return git, other
 end
 
-local function render_fold(lnum)
-    if fn.foldclosed(lnum) ~= -1 then
-        return foldclose_char
-    end
+local function render_fold(winid, lnum)
+    return api.nvim_win_call(winid, function()
+        if fn.foldclosed(lnum) ~= -1 then
+            return foldclose_char
+        end
 
-    if is_current_line(lnum) and is_fold_start(lnum) then
-        return foldopen_char
-    end
+        if is_current_line(winid, lnum) and is_fold_start(lnum) then
+            return foldopen_char
+        end
 
-    return " "
+        return " "
+    end)
 end
 
 function M.render()
+    local winid = vim.g.statusline_winid
+    local buf = api.nvim_win_get_buf(winid)
+    if bo[buf].buftype ~= "" then
+        return ""
+    end
+
     local lnum = vim.v.lnum
-    local git, other = get_line_signs(lnum)
-    return format_sign(git) .. format_sign(other) .. " %l " .. render_fold(lnum) .. " "
+    local git, other = get_line_signs(buf, lnum)
+    return format_sign(git) .. format_sign(other) .. " %l " .. render_fold(winid, lnum) .. " "
 end
 
 function M.setup()
