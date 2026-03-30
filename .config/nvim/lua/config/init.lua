@@ -26,7 +26,6 @@ local disabled_plugins = {
     "tohtml",
     "tutor",
     "zipPlugin",
-    "netrwPlugin",
 }
 
 local lazy_spec = {

@@ -31,6 +31,9 @@ return {
         file_panel = {
             win_config = {
                 width = 25,
+                win_opts = {
+                    signcolumn = "no",
+                },
             },
         },
         file_history_panel = {
@@ -42,9 +45,7 @@ return {
             DiffviewOpen = { "--imply-local" },
         },
         hooks = {
-            diff_buf_win_enter = function(_, winid, ctx)
-                vim.wo[winid].foldcolumn = "0"
-                vim.wo[winid].cursorline = false
+            diff_buf_win_enter = function(_, _, ctx)
                 -- vscode like diff highlight
                 if ctx.layout_name:match("^diff2") then
                     if ctx.symbol == "a" then

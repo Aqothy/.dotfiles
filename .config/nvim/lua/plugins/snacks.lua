@@ -276,6 +276,9 @@ return {
         },
 
         styles = {
+            dashboard = {
+                wo = { foldcolumn = "0" },
+            },
             notification = {
                 wo = { wrap = true },
             },

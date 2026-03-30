@@ -1,15 +1,18 @@
 local M = {}
 local api = vim.api
 local fn = vim.fn
-local bo = vim.bo
 local wo = vim.wo
 
 local foldclose_char = ""
 local foldopen_char = ""
+local foldsep_char = " "
 local foldexprs = {
     ["v:lua.vim.lsp.foldexpr()"] = vim.lsp.foldexpr,
     ["v:lua.vim.treesitter.foldexpr()"] = vim.treesitter.foldexpr,
 }
+local statuscolumn_expr = '%!v:lua.require("custom.statuscolumn").render()'
+
+local redraw_group = api.nvim_create_augroup("aqothy_statuscolumn", { clear = true })
 
 local function is_current_line(winid, lnum)
     if wo[winid].relativenumber then
@@ -49,6 +52,14 @@ local function format_sign(sign)
     end
 
     return text
+end
+
+local function has_signcolumn(win)
+    return win.signcolumn ~= "no" and win.signcolumn ~= "number"
+end
+
+local function has_foldcolumn(win)
+    return win.foldcolumn ~= "0"
 end
 
 local function get_line_signs(buf, lnum)
@@ -100,29 +111,67 @@ local function render_fold(winid, lnum)
             return foldopen_char
         end
 
-        return " "
+        return foldsep_char
     end)
 end
 
 function M.render()
-    local winid = vim.g.statusline_winid
-    local buf = api.nvim_win_get_buf(winid)
-    if bo[buf].buftype ~= "" then
+    if vim.v.virtnum ~= 0 then
         return ""
     end
-
+    local winid = vim.g.statusline_winid
+    local win = wo[winid]
     local lnum = vim.v.lnum
-    local git, other = get_line_signs(buf, lnum)
-    return format_sign(git) .. format_sign(other) .. " %l " .. render_fold(winid, lnum) .. " "
+
+    local signs = ""
+    if has_signcolumn(win) then
+        local buf = api.nvim_win_get_buf(winid)
+        local git, other = get_line_signs(buf, lnum)
+        signs = format_sign(git) .. format_sign(other) .. " "
+    end
+
+    local nums = ""
+    if win.number or win.relativenumber then
+        local number = lnum
+        if win.relativenumber then
+            number = vim.v.relnum
+            if number == 0 and win.number then
+                number = lnum
+            end
+        end
+
+        local width = math.max(1, win.numberwidth - 1)
+        nums = string.format("%" .. width .. "d ", number)
+    end
+
+    local fold = ""
+    if has_foldcolumn(win) then
+        local foldwidth = tonumber(win.foldcolumn) or 1
+        fold = render_fold(winid, lnum) .. string.rep(" ", foldwidth - 1)
+    end
+
+    return signs .. nums .. fold
 end
 
 function M.setup()
     local fillchars = vim.opt.fillchars:get()
     foldclose_char = fillchars.foldclose or foldclose_char
     foldopen_char = fillchars.foldopen or foldopen_char
+    foldsep_char = fillchars.foldsep or foldsep_char
 
-    vim.opt.numberwidth = 7
-    vim.opt.statuscolumn = "%!v:lua.require('custom.statuscolumn').render()"
+    vim.opt.signcolumn = "yes"
+    vim.opt.foldcolumn = "2"
+    vim.opt.statuscolumn = statuscolumn_expr
+
+    api.nvim_create_autocmd("OptionSet", {
+        group = redraw_group,
+        pattern = { "foldcolumn", "number", "numberwidth", "relativenumber", "signcolumn" },
+        callback = function()
+            vim.schedule(function()
+                vim.cmd.redrawstatus()
+            end)
+        end,
+    })
 end
 
 return M

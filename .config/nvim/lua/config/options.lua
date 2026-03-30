@@ -49,7 +49,6 @@ opt.wildignore:append({ ".DS_Store" })
 opt.wildoptions:append({ "fuzzy" })
 opt.wildmode = "longest:full,full"
 
-opt.signcolumn = "yes"
 opt.winborder = "rounded"
 opt.diffopt =
     { "internal", "filler", "closeoff", "inline:char", "algorithm:histogram", "indent-heuristic", "linematch:60" }
