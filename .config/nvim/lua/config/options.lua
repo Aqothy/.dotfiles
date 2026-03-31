@@ -74,6 +74,7 @@ opt.mousescroll = "ver:1,hor:1"
 opt.guifont = "Hack Nerd Font Mono:h15"
 opt.wrap = false
 opt.smoothscroll = true
+opt.textwidth = 80
 
 opt.fileencoding = "utf-8"
 

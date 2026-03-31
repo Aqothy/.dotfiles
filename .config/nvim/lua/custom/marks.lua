@@ -8,6 +8,7 @@ local ns = api.nvim_create_namespace(namespace)
 local pending_m = false
 
 M.namespace = namespace
+M.ns = ns
 
 local function is_letter_mark(mark)
     return type(mark.mark) == "string" and mark.mark:match("^'[A-Za-z]$") ~= nil
@@ -15,14 +16,20 @@ end
 
 local function decor_mark(bufnr, mark)
     pcall(api.nvim_buf_set_extmark, bufnr, ns, mark.pos[2] - 1, 0, {
+        priority = 30,
         sign_text = mark.mark:sub(2),
         sign_hl_group = "DiagnosticHint",
     })
 end
 
-local function decor_marks(bufnr, marks)
+local function decor_marks(bufnr, marks, top_row, bot_row)
     for _, mark in ipairs(marks) do
-        if is_letter_mark(mark) and mark.pos[1] == bufnr then
+        if
+            is_letter_mark(mark)
+            and mark.pos[1] == bufnr
+            and mark.pos[2] - 1 >= top_row
+            and mark.pos[2] - 1 < bot_row
+        then
             decor_mark(bufnr, mark)
         end
     end
@@ -32,9 +39,8 @@ function M.setup()
     api.nvim_set_decoration_provider(ns, {
         on_win = function(_, _, bufnr, top_row, bot_row)
             api.nvim_buf_clear_namespace(bufnr, ns, top_row, bot_row)
-
-            decor_marks(bufnr, fn.getmarklist(bufnr))
-            decor_marks(bufnr, fn.getmarklist())
+            decor_marks(bufnr, fn.getmarklist(bufnr), top_row, bot_row)
+            decor_marks(bufnr, fn.getmarklist(), top_row, bot_row)
         end,
     })
 

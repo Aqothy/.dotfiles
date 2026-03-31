@@ -3,7 +3,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        event = { "LazyFile", "VeryLazy" },
+        event = "LazyFile",
         cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
         opts = {
             indent = { disable = { "swift" } },
