@@ -2,6 +2,7 @@ local M = {}
 local api = vim.api
 local fn = vim.fn
 local wo = vim.wo
+-- local marks_namespace = require("custom.marks").namespace
 
 local foldclose_char = ""
 local foldopen_char = ""
@@ -12,7 +13,7 @@ local foldexprs = {
 }
 local statuscolumn_expr = '%!v:lua.require("custom.statuscolumn").render()'
 
-local redraw_group = api.nvim_create_augroup("aqothy_statuscolumn", { clear = true })
+-- local redraw_group = api.nvim_create_augroup("aqothy_statuscolumn", { clear = true })
 
 local function is_current_line(winid, lnum)
     if wo[winid].relativenumber then
@@ -41,65 +42,103 @@ local function is_fold_start(lnum)
     return level > fn.foldlevel(lnum - 1)
 end
 
-local function format_sign(sign)
-    if not sign or not sign.text then
-        return " "
-    end
-
-    local text = fn.strcharpart(sign.text, 0, 1)
-    if sign.texthl then
-        return "%#" .. sign.texthl .. "#" .. text .. "%*"
-    end
-
-    return text
-end
-
-local function has_signcolumn(win)
-    return win.signcolumn ~= "no" and win.signcolumn ~= "number"
-end
+-- local function format_sign(sign)
+--     if not sign or not sign.text then
+--         return " "
+--     end
+--
+--     local text = fn.strcharpart(sign.text, 0, 1)
+--     if sign.texthl then
+--         return "%#" .. sign.texthl .. "#" .. text .. "%*"
+--     end
+--
+--     return text
+-- end
+--
+-- local function has_signcolumn(win)
+--     return win.signcolumn ~= "no" and win.signcolumn ~= "number"
+-- end
 
 local function has_foldcolumn(win)
     return win.foldcolumn ~= "0"
 end
 
-local function get_line_signs(buf, lnum)
-    local extmarks = api.nvim_buf_get_extmarks(
-        buf,
-        -1,
-        { lnum - 1, 0 },
-        { lnum - 1, -1 },
-        { details = true, type = "sign" }
-    )
-    local git_text, git_texthl
-    local other_text, other_texthl
-    local git_priority, other_priority
-
-    for _, mark in ipairs(extmarks) do
-        local details = mark[4]
-
-        if details then
-            local hl = details.sign_hl_group or ""
-            local priority = details.priority or 0
-
-            if hl:find("GitSigns", 1, true) then
-                if not git_text or priority > git_priority then
-                    git_text = details.sign_text
-                    git_texthl = details.sign_hl_group
-                    git_priority = priority
-                end
-            elseif not other_text or priority > other_priority then
-                other_text = details.sign_text
-                other_texthl = details.sign_hl_group
-                other_priority = priority
-            end
-        end
-    end
-
-    local git = git_text and { text = git_text, texthl = git_texthl } or nil
-    local other = other_text and { text = other_text, texthl = other_texthl } or nil
-
-    return git, other
-end
+-- local namespace_names = {}
+--
+-- local function get_namespace_name(ns_id)
+--     local name = namespace_names[ns_id]
+--     if name ~= nil then
+--         return name
+--     end
+--
+--     for ns_name, id in pairs(api.nvim_get_namespaces()) do
+--         namespace_names[id] = ns_name
+--     end
+--
+--     return namespace_names[ns_id]
+-- end
+--
+-- local function get_sign_kind(details)
+--     local ns_name = details.ns_id and get_namespace_name(details.ns_id)
+--     if not ns_name then
+--         return "other"
+--     end
+--
+--     if vim.startswith(ns_name, "gitsigns") then
+--         return "git"
+--     end
+--
+--     if ns_name == marks_namespace then
+--         return "mark"
+--     end
+--
+--     return "other"
+-- end
+--
+-- local function get_line_signs(buf, lnum)
+--     local extmarks = api.nvim_buf_get_extmarks(
+--         buf,
+--         -1,
+--         { lnum - 1, 0 },
+--         { lnum - 1, -1 },
+--         { details = true, type = "sign" }
+--     )
+--     local git_text, git_texthl
+--     local mark_text, mark_texthl
+--     local other_text, other_texthl
+--     local other_priority
+--
+--     for _, mark in ipairs(extmarks) do
+--         local details = mark[4]
+--
+--         if details then
+--             local priority = details.priority or 0
+--             local kind = get_sign_kind(details)
+--
+--             if kind == "git" then
+--                 if not git_text then
+--                     git_text = details.sign_text
+--                     git_texthl = details.sign_hl_group
+--                 end
+--             elseif kind == "mark" then
+--                 if not mark_text then
+--                     mark_text = details.sign_text
+--                     mark_texthl = details.sign_hl_group
+--                 end
+--             elseif not other_text or priority > other_priority then
+--                 other_text = details.sign_text
+--                 other_texthl = details.sign_hl_group
+--                 other_priority = priority
+--             end
+--         end
+--     end
+--
+--     local git = git_text and { text = git_text, texthl = git_texthl } or nil
+--     local mark = mark_text and { text = mark_text, texthl = mark_texthl } or nil
+--     local other = other_text and { text = other_text, texthl = other_texthl } or nil
+--
+--     return git, mark, other
+-- end
 
 local function render_fold(winid, lnum)
     return api.nvim_win_call(winid, function()
