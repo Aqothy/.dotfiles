@@ -123,32 +123,33 @@ function M.render()
     local win = wo[winid]
     local lnum = vim.v.lnum
 
-    local signs = ""
-    if has_signcolumn(win) then
-        local buf = api.nvim_win_get_buf(winid)
-        local git, other = get_line_signs(buf, lnum)
-        signs = format_sign(git) .. format_sign(other) .. " "
-    end
+    local signs = "%s"
+    -- if has_signcolumn(win) then
+    --     local buf = api.nvim_win_get_buf(winid)
+    --     local git, other = get_line_signs(buf, lnum)
+    --     signs = format_sign(git) .. format_sign(other) .. " "
+    -- end
 
-    local nums = ""
-    if win.number or win.relativenumber then
-        local number = lnum
-        if win.relativenumber then
-            number = vim.v.relnum
-            if number == 0 and win.number then
-                number = lnum
-            end
-        end
+    local nums = (win.number or win.relativenumber) and "%l " or ""
+    -- if win.number or win.relativenumber then
+    --     local number = lnum
+    --     if win.relativenumber then
+    --         number = vim.v.relnum
+    --         if number == 0 and win.number then
+    --             number = lnum
+    --         end
+    --     end
+    --
+    --     local width = math.max(1, win.numberwidth - 1)
+    --     nums = string.format("%" .. width .. "d ", number)
+    -- end
 
-        local width = math.max(1, win.numberwidth - 1)
-        nums = string.format("%" .. width .. "d ", number)
-    end
-
-    local fold = ""
-    if has_foldcolumn(win) then
-        local foldwidth = tonumber(win.foldcolumn) or 1
-        fold = render_fold(winid, lnum) .. string.rep(" ", foldwidth - 1)
-    end
+    -- local fold = ""
+    -- if has_foldcolumn(win) then
+    --     local foldwidth = tonumber(win.foldcolumn) or 1
+    --     fold = render_fold(winid, lnum) .. string.rep(" ", foldwidth - 1)
+    -- end
+    local fold = has_foldcolumn(win) and render_fold(winid, lnum) .. " " or ""
 
     return signs .. nums .. fold
 end
@@ -160,18 +161,18 @@ function M.setup()
     foldsep_char = fillchars.foldsep or foldsep_char
 
     vim.opt.signcolumn = "yes"
+    -- 2 to count for extra space
     vim.opt.foldcolumn = "2"
     vim.opt.statuscolumn = statuscolumn_expr
 
-    api.nvim_create_autocmd("OptionSet", {
-        group = redraw_group,
-        pattern = { "foldcolumn", "number", "numberwidth", "relativenumber", "signcolumn" },
-        callback = function()
-            vim.schedule(function()
-                vim.cmd.redrawstatus()
-            end)
-        end,
-    })
+    -- api.nvim_create_autocmd("OptionSet", {
+    --     group = redraw_group,
+    --     pattern = { "foldcolumn", "number", "numberwidth", "relativenumber", "signcolumn" },
+    --     callback = function()
+    --         vim.opt_local.statuscolumn = ""
+    --         vim.opt_local.statuscolumn = statuscolumn_expr
+    --     end,
+    -- })
 end
 
 return M

@@ -15,6 +15,7 @@
 
 [delta]
     navigate = true
+    syntax-theme = gruvbox-dark
 
 [column]
     ui = auto

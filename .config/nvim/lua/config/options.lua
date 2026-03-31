@@ -56,7 +56,8 @@ opt.termguicolors = true
 opt.scrolloff = 8
 opt.whichwrap:append("h,l")
 opt.showcmd = false
-opt.fillchars = { eob = " ", diff = "╱", foldopen = "", foldclose = "", fold = " ", foldsep = " " }
+opt.fillchars =
+    { eob = " ", diff = "╱", foldopen = "", foldclose = "", fold = " ", foldsep = " ", foldinner = " " }
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.foldlevel = 99
 opt.foldlevelstart = 99
