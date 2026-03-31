@@ -11,7 +11,7 @@ if not vim.g.vscode then
     vim.schedule(function()
         require("custom.tabline").setup()
         require("custom.alternate").setup()
-        require("vim._core.ui2").enable({ msg = { target = "msg", timeout = 3000 } })
+        require("custom.marks").setup()
         require("vim._core.ui2").enable({})
     end)
     require("custom.statusline").setup()
