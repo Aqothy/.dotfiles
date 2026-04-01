@@ -3,12 +3,8 @@ local M = {}
 local api = vim.api
 local fn = vim.fn
 
-local namespace = "marksigns"
-local ns = api.nvim_create_namespace(namespace)
+local ns = api.nvim_create_namespace("marksigns")
 local pending_m = false
-
-M.namespace = namespace
-M.ns = ns
 
 local function is_letter_mark(mark)
     return type(mark.mark) == "string" and mark.mark:match("^'[A-Za-z]$") ~= nil
@@ -16,7 +12,7 @@ end
 
 local function decor_mark(bufnr, mark)
     pcall(api.nvim_buf_set_extmark, bufnr, ns, mark.pos[2] - 1, 0, {
-        priority = 30,
+        priority = 15,
         sign_text = mark.mark:sub(2),
         sign_hl_group = "DiagnosticHint",
     })
@@ -53,13 +49,8 @@ function M.setup()
                 return
             end
 
-            local is_upper = ch:match("^[A-Z]$") ~= nil
             vim.schedule(function()
-                if is_upper then
-                    vim.cmd.redrawstatus({ bang = true })
-                else
-                    vim.cmd.redrawstatus()
-                end
+                vim.cmd.redrawstatus()
             end)
             return
         end

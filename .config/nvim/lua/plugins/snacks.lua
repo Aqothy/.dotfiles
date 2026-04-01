@@ -139,7 +139,7 @@ return {
             sections = {
                 { section = "header" },
                 { header = "Show me your dreams." },
-                { pane = 2, text = "", padding = { 0, 4 } },
+                { pane = 2, text = "", padding = { 0, 3 } },
                 { pane = 2, icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
                 {
                     pane = 2,

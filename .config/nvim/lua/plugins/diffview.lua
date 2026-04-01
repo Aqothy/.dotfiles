@@ -29,8 +29,8 @@ return {
             },
         },
         file_panel = {
+            listing_style = "list",
             win_config = {
-                width = 25,
                 win_opts = {
                     signcolumn = "no",
                 },

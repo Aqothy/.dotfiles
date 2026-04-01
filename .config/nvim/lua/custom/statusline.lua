@@ -74,7 +74,7 @@ function M.os_component()
         local mini_icons = get_mini_icons()
         if mini_icons then
             local icon, icon_hl = mini_icons.get("os", M.sysname)
-            M.os_cache = "%#" .. icon_hl .. "#" .. icon
+            M.os_cache = "%$" .. icon_hl .. "$" .. icon
         else
             M.os_cache = ""
         end
@@ -246,7 +246,7 @@ function M.filetype_component()
     end
 
     icon = icon or "󰈔"
-    icon_hl = icon_hl and ("%#" .. icon_hl .. "#") or "%*"
+    icon_hl = icon_hl and ("%$" .. icon_hl .. "$") or "%*"
 
     -- Only truncate if not empty and not a terminal buffer
     local buftype = bo[buf].buftype

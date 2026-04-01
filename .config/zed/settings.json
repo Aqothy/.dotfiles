@@ -13,10 +13,6 @@
       "type": "registry"
     }
   },
-  "tabs": {
-    "show_diagnostics": "all",
-    "file_icons": true
-  },
   "icon_theme": {
     "mode": "system",
     "light": "Material Icon Theme",

@@ -2,7 +2,6 @@ local M = {}
 local api = vim.api
 local fn = vim.fn
 local wo = vim.wo
-local marks_ns = require("custom.marks").ns
 
 local foldclose_char = ""
 local foldopen_char = ""
@@ -12,8 +11,6 @@ local foldexprs = {
     ["v:lua.vim.treesitter.foldexpr()"] = vim.treesitter.foldexpr,
 }
 local statuscolumn_expr = '%!v:lua.require("custom.statuscolumn").render()'
-
-local redraw_group = api.nvim_create_augroup("aqothy_statuscolumn", { clear = true })
 
 local function is_current_line(winid, lnum)
     if wo[winid].relativenumber then
@@ -68,14 +65,6 @@ local function get_sign_kind(details)
         return "git"
     end
 
-    if details.sign_name and vim.startswith(details.sign_name, "Dap") then
-        return "dap"
-    end
-
-    if details.ns_id == marks_ns then
-        return "mark"
-    end
-
     return "other"
 end
 
@@ -88,8 +77,6 @@ local function get_line_signs(buf, lnum)
         { details = true, type = "sign" }
     )
     local git_text, git_texthl
-    local dap_text, dap_texthl
-    local mark_text, mark_texthl
     local other_text, other_texthl
     local other_priority
 
@@ -105,16 +92,6 @@ local function get_line_signs(buf, lnum)
                     git_text = details.sign_text
                     git_texthl = details.sign_hl_group
                 end
-            elseif kind == "dap" then
-                if not dap_text then
-                    dap_text = details.sign_text
-                    dap_texthl = details.sign_hl_group
-                end
-            elseif kind == "mark" then
-                if not mark_text then
-                    mark_text = details.sign_text
-                    mark_texthl = details.sign_hl_group
-                end
             elseif not other_text or priority > other_priority then
                 other_text = details.sign_text
                 other_texthl = details.sign_hl_group
@@ -124,11 +101,9 @@ local function get_line_signs(buf, lnum)
     end
 
     local git = git_text and { text = git_text, texthl = git_texthl } or nil
-    local dap = dap_text and { text = dap_text, texthl = dap_texthl } or nil
-    local mark = mark_text and { text = mark_text, texthl = mark_texthl } or nil
     local other = other_text and { text = other_text, texthl = other_texthl } or nil
 
-    return git, dap, mark, other
+    return git, other
 end
 
 local function render_fold(winid, lnum)
@@ -156,8 +131,8 @@ function M.render()
     local signs = ""
     if has_signcolumn(win) then
         local buf = api.nvim_win_get_buf(winid)
-        local git, dap, mark, other = get_line_signs(buf, lnum)
-        signs = format_sign(git) .. format_sign(dap or mark or other)
+        local git, other = get_line_signs(buf, lnum)
+        signs = format_sign(git) .. format_sign(other) .. " "
     end
 
     local nums = ""
@@ -188,17 +163,8 @@ function M.setup()
 
     vim.opt.signcolumn = "yes"
     vim.opt.foldcolumn = "1"
+    vim.opt.numberwidth = 3
     vim.opt.statuscolumn = statuscolumn_expr
-
-    -- reset and recalc width
-    api.nvim_create_autocmd("OptionSet", {
-        group = redraw_group,
-        pattern = { "foldcolumn", "number", "numberwidth", "relativenumber", "signcolumn" },
-        callback = function()
-            vim.opt_local.statuscolumn = ""
-            vim.opt_local.statuscolumn = statuscolumn_expr
-        end,
-    })
 end
 
 return M
