@@ -1,6 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     -- stylua: ignore
     keys = {
         { "<leader>lc", function() Snacks.picker.lsp_config() end, desc = "Lsp config" },
@@ -8,12 +8,13 @@ return {
     config = function()
         local handlers = require("plugins.lsp.lsp-handlers")
         local progress_message_max_width = 40
+        local autocmd = vim.api.nvim_create_autocmd
 
         handlers.setup()
 
         local lsp_group = vim.api.nvim_create_augroup("aqothy/lspconfig", { clear = true })
 
-        vim.api.nvim_create_autocmd("LspAttach", {
+        autocmd("LspAttach", {
             group = lsp_group,
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -26,7 +27,7 @@ return {
             end,
         })
 
-        vim.api.nvim_create_autocmd("LspProgress", {
+        autocmd("LspProgress", {
             group = lsp_group,
             callback = function(ev)
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -89,6 +90,7 @@ return {
         vim.lsp.config("*", params)
 
         local settings = require("plugins.lsp.lsp-settings")
+        local to_enable = {}
         for lsp, user_opts in pairs(settings) do
             if user_opts.enabled ~= false then
                 local opts = vim.deepcopy(user_opts)
@@ -107,8 +109,12 @@ return {
                 end
 
                 vim.lsp.config(lsp, opts)
-                vim.lsp.enable(lsp)
+                table.insert(to_enable, lsp)
             end
         end
+
+        vim.schedule(function()
+            vim.lsp.enable(to_enable)
+        end)
     end,
 }
