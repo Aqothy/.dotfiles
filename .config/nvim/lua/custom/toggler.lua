@@ -5,17 +5,13 @@ M.alternates = {
     ["false"] = "true",
     ["True"] = "False",
     ["False"] = "True",
-    ["TRUE"] = "FALSE",
-    ["FALSE"] = "TRUE",
     ["Yes"] = "No",
     ["No"] = "Yes",
-    ["YES"] = "NO",
-    ["NO"] = "YES",
     ["||"] = "&&",
     ["&&"] = "||",
     ["or"] = "and",
     ["and"] = "or",
-    ["=="] = function()
+    ["=="] = function(_)
         return vim.bo.filetype == "lua" and "~=" or "!="
     end,
     ["!="] = "==",
@@ -24,39 +20,69 @@ M.alternates = {
     ["~="] = "==",
 }
 
+M.alternate_rules = {
+    -- snake_case to camelCase
+    function(word)
+        if word:find("_") then
+            return (word:gsub("_(%l)", string.upper))
+        end
+    end,
+    -- camelCase to snake_case
+    function(word)
+        if word:find("%u") then
+            return (word:gsub("(%l)(%u)", "%1_%2"):lower())
+        end
+    end,
+}
+
+local function resolve_alternate(word)
+    local alternate = M.alternates[word]
+
+    if alternate ~= nil then
+        if type(alternate) == "function" then
+            return alternate(word)
+        end
+        return alternate
+    end
+
+    for _, rule in ipairs(M.alternate_rules) do
+        local result = rule(word)
+        if result then
+            return result
+        end
+    end
+end
+
 function M.setup(opts)
-    if opts and opts.alternates then
+    opts = opts or {}
+
+    if opts.alternates then
         M.alternates = vim.tbl_extend("force", M.alternates, opts.alternates)
     end
 
-    vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word" })
-end
-
-local function get_word_object()
-    local save_cursor = vim.api.nvim_win_get_cursor(0)
-    vim.cmd("keepjumps normal! viw")
-    local s = vim.api.nvim_buf_get_mark(0, "<")
-    local e = vim.api.nvim_buf_get_mark(0, ">")
-    vim.api.nvim_win_set_cursor(0, save_cursor)
-
-    if s[1] == 0 or e[1] == 0 then
-        return nil
+    if opts.alternate_rules then
+        vim.list_extend(M.alternate_rules, opts.alternate_rules)
     end
 
-    local lines = vim.api.nvim_buf_get_text(0, s[1] - 1, s[2], e[1] - 1, e[2] + 1, {})
-    return lines[1]
+    vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word", silent = true })
+end
+
+local function get_word_under_cursor()
+    vim.cmd("keepjumps normal! viw" .. vim.keycode("<Esc>"))
+    local text = vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"), { type = "v" })
+    return text[1]
 end
 
 function M.toggle()
-    local word = get_word_object()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local word = get_word_under_cursor()
+    local result = resolve_alternate(word)
 
-    local alternate = word and M.alternates[word] or nil
-
-    if alternate then
-        local result = type(alternate) == "function" and alternate() or alternate
+    if result then
         vim.cmd('normal! "_ciw' .. result)
+        vim.api.nvim_win_set_cursor(0, cursor)
     else
-        vim.cmd("normal! ")
+        vim.cmd("normal! " .. vim.keycode("<C-a>"))
     end
 end
 

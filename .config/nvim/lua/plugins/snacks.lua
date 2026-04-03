@@ -113,23 +113,14 @@ return {
                 -- stylua: ignore
                 keys = {
                     { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
-                    { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
                     {
                         icon = " ",
-                        key = "l",
+                        key = "s",
                         desc = "Load Session",
                         action = ":lua require('custom.session').load()",
                         enabled = function()
                             return require("custom.session").exists()
-                        end,
-                    },
-                    {
-                        icon = " ",
-                        key = "g",
-                        desc = "Git",
-                        action = ":lua Snacks.lazygit()",
-                        enabled = function()
-                            return Snacks.git.get_root() ~= nil
                         end,
                     },
                     { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
@@ -139,32 +130,8 @@ return {
             sections = {
                 { section = "header" },
                 { header = "Show me your dreams." },
-                { pane = 2, text = "", padding = { 0, 3 } },
-                { pane = 2, icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-                {
-                    pane = 2,
-                    icon = "󰈔 ",
-                    title = "Recent Files",
-                    section = "recent_files",
-                    indent = 2,
-                    padding = 1,
-                    cwd = true,
-                },
-                {
-                    pane = 2,
-                    icon = " ",
-                    title = "Git Status",
-                    section = "terminal",
-                    enabled = function()
-                        return Snacks.git.get_root() ~= nil
-                    end,
-                    cmd = "git status --short --branch --renames",
-                    padding = 3,
-                    height = 5,
-                    ttl = 0,
-                    indent = 3,
-                },
-                { pane = 2, section = "startup" },
+                { section = "keys", padding = 1 },
+                { section = "startup" },
             },
         },
 

@@ -25,6 +25,8 @@ map("n", "<leader><c-l>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc
 map("n", "<leader><c-o>", "<cmd>pop<cr>", { desc = "Pop off tag stack" })
 map("x", "J", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down", silent = true })
 map("x", "K", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up", silent = true })
+map("n", "C", '"_C', { desc = "Change into void" })
+map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
 
 if vim.g.vscode then
     return
