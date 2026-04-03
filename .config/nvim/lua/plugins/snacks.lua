@@ -221,18 +221,15 @@ return {
                         preset = "vscode",
                     },
                 },
-                grep = {
-                    hidden = true,
-                },
-                grep_word = {
-                    hidden = true,
-                },
+                grep = { hidden = true },
+                grep_word = { hidden = true },
                 git_log = git_ref_opts,
                 git_log_file = git_ref_opts,
                 git_branches = git_ref_opts,
                 gh_pr = { live = false },
                 gh_issue = { live = false },
                 lsp_symbols = symbol_opts,
+                explorer = { hidden = true },
             },
         },
 

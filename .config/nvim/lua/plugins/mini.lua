@@ -1,7 +1,7 @@
 return {
     {
         "echasnovski/mini.icons",
-        lazy = true,
+        event = "VeryLazy",
         opts = {
             file = {
                 ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
@@ -28,7 +28,6 @@ return {
         "nvim-mini/mini.files",
         opts = {
             options = {
-                use_as_default_explorer = true,
                 permanent_delete = false,
             },
             mappings = {
@@ -43,17 +42,17 @@ return {
                 end,
             },
             windows = {
-                width_nofocus = 25,
+                width_nofocus = 30,
+                width_focus = 30,
+                width_preview = 30,
                 preview = true,
             },
         },
-        ---@diagnostic disable-next-line
-        lazy = vim.fn.isdirectory(vim.fn.argv(0)) ~= 1,
         keys = {
             {
                 "<leader>ee",
                 function()
-                    MiniFiles.open(vim.uv.cwd(), true)
+                    MiniFiles.open(vim.uv.cwd())
                 end,
                 desc = "Open mini.files (cwd)",
             },

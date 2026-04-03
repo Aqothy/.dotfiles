@@ -82,6 +82,8 @@ map("c", "<a-b>", "<S-Left>", { desc = "Backward a word" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
 map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("i", "<C-CR>", "<C-o>o", { desc = "Insert line below" })
+map("n", "<C-CR>", "]<space>", { remap = true, desc = "New line below" })
+map("i", "<C-;>", "<C-o>$;", { desc = "Append semicolon at EOL" })
 
 -- utils
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })

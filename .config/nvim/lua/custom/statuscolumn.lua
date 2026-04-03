@@ -3,14 +3,14 @@ local api = vim.api
 local fn = vim.fn
 local wo = vim.wo
 
-local foldclose_char = ""
-local foldopen_char = ""
-local foldsep_char = " "
+local fillchars = vim.opt.fillchars:get()
+local foldclose_char = fillchars.foldclose or ""
+local foldopen_char = fillchars.foldopen or ""
+local foldsep_char = fillchars.foldsep or " "
 local foldexprs = {
     ["v:lua.vim.lsp.foldexpr()"] = vim.lsp.foldexpr,
     ["v:lua.vim.treesitter.foldexpr()"] = vim.treesitter.foldexpr,
 }
-local statuscolumn_expr = '%!v:lua.require("custom.statuscolumn").render()'
 
 local function is_current_line(winid, lnum)
     if wo[winid].relativenumber then
@@ -153,18 +153,6 @@ function M.render()
     local fold = has_foldcolumn(win) and render_fold(winid, lnum) .. " " or ""
 
     return signs .. nums .. fold
-end
-
-function M.setup()
-    local fillchars = vim.opt.fillchars:get()
-    foldclose_char = fillchars.foldclose or foldclose_char
-    foldopen_char = fillchars.foldopen or foldopen_char
-    foldsep_char = fillchars.foldsep or foldsep_char
-
-    vim.opt.signcolumn = "yes"
-    vim.opt.foldcolumn = "1"
-    vim.opt.numberwidth = 3
-    vim.opt.statuscolumn = statuscolumn_expr
 end
 
 return M

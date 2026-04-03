@@ -15,7 +15,6 @@ if not vim.g.vscode then
         require("vim._core.ui2").enable({})
     end)
     require("custom.statusline").setup()
-    require("custom.statuscolumn").setup()
     require("custom.session").setup({
         allowed_dirs = {
             "~/Code/Personal",

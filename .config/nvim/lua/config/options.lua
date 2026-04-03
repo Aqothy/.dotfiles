@@ -86,3 +86,8 @@ opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "terminal" }
+
+opt.signcolumn = "yes"
+opt.foldcolumn = "1"
+opt.numberwidth = 3
+opt.statuscolumn = '%!v:lua.require("custom.statuscolumn").render()'

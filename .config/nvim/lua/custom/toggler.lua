@@ -2,23 +2,33 @@ local M = {}
 
 M.alternates = {
     ["true"] = "false",
-    ["false"] = "true",
     ["True"] = "False",
-    ["False"] = "True",
     ["Yes"] = "No",
-    ["No"] = "Yes",
     ["||"] = "&&",
-    ["&&"] = "||",
     ["or"] = "and",
-    ["and"] = "or",
     ["=="] = function(_)
         return vim.bo.filetype == "lua" and "~=" or "!="
     end,
     ["!="] = "==",
     ["==="] = "!==",
-    ["!=="] = "===",
     ["~="] = "==",
 }
+
+local function build_lookup(alternates, auto_inverse)
+    local lookup = vim.tbl_extend("force", {}, alternates)
+
+    if auto_inverse then
+        for word, alternate in pairs(alternates) do
+            if type(alternate) == "string" and lookup[alternate] == nil then
+                lookup[alternate] = word
+            end
+        end
+    end
+
+    return lookup
+end
+
+M.lookup = build_lookup(M.alternates, true)
 
 M.alternate_rules = {
     -- snake_case to camelCase
@@ -36,7 +46,7 @@ M.alternate_rules = {
 }
 
 local function resolve_alternate(word)
-    local alternate = M.alternates[word]
+    local alternate = M.lookup[word]
 
     if alternate ~= nil then
         if type(alternate) == "function" then
@@ -55,10 +65,14 @@ end
 
 function M.setup(opts)
     opts = opts or {}
+    local auto_inverse = opts.auto_inverse ~= false
+    local alternates = M.alternates
 
     if opts.alternates then
-        M.alternates = vim.tbl_extend("force", M.alternates, opts.alternates)
+        alternates = vim.tbl_extend("force", {}, M.alternates, opts.alternates)
     end
+
+    M.lookup = build_lookup(alternates, auto_inverse)
 
     if opts.alternate_rules then
         vim.list_extend(M.alternate_rules, opts.alternate_rules)
@@ -68,12 +82,15 @@ function M.setup(opts)
 end
 
 local function get_word_under_cursor()
+    local cursor = vim.api.nvim_win_get_cursor(0)
     vim.cmd("keepjumps normal! viw" .. vim.keycode("<Esc>"))
-    local text = vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"), { type = "v" })
+    local text = vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"))
+    vim.api.nvim_win_set_cursor(0, cursor)
     return text[1]
 end
 
 function M.toggle()
+    local count = vim.v.count
     local cursor = vim.api.nvim_win_get_cursor(0)
     local word = get_word_under_cursor()
     local result = resolve_alternate(word)
@@ -82,7 +99,8 @@ function M.toggle()
         vim.cmd('normal! "_ciw' .. result)
         vim.api.nvim_win_set_cursor(0, cursor)
     else
-        vim.cmd("normal! " .. vim.keycode("<C-a>"))
+        local prefix = count > 0 and tostring(count) or ""
+        vim.cmd("normal! " .. prefix .. vim.keycode("<C-a>"))
     end
 end
 
