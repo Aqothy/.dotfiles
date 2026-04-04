@@ -34,6 +34,7 @@ return {
                 "rust",
                 "yaml",
                 "diff",
+                "http",
             },
         },
         config = function(_, opts)
