@@ -27,6 +27,7 @@
 
 [fetch]
     all = true
+    prune = true
 
 [push]
     autoSetupRemote = true
@@ -45,3 +46,16 @@
     renames = true
     algorithm = histogram
     indentHeuristic = true
+    colorMoved = plain
+    mnemonicPrefix = true
+
+[rebase]
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
+
+[tag]
+    sort = version:refname
+
+[rerere]
+    enabled = true

@@ -54,6 +54,7 @@ opt.diffopt =
     { "internal", "filler", "closeoff", "inline:char", "algorithm:histogram", "indent-heuristic", "linematch:60" }
 opt.termguicolors = true
 opt.scrolloff = 8
+opt.sidescrolloff = 8
 opt.whichwrap:append("h,l")
 opt.showcmd = false
 opt.fillchars =

@@ -153,6 +153,11 @@ return {
         picker = {
             enabled = true,
             ui_select = true,
+            formatters = {
+                file = {
+                    filename_first = true,
+                },
+            },
             icons = {
                 kinds = require("config.icons").kinds,
             },
@@ -179,20 +184,21 @@ return {
                 vscode = {
                     layout = {
                         backdrop = false,
-                        width = 0.5,
-                        min_width = 60,
+                        row = 1,
+                        width = 0.4,
+                        min_width = 80,
                         height = 0.95,
                         border = "none",
                         box = "vertical",
                         {
                             win = "input",
                             height = 1,
-                            border = "rounded",
+                            border = true,
                             title = "{title} {live} {flags}",
                             title_pos = "center",
                         },
-                        { win = "list", height = 0.4, border = "none" },
-                        { win = "preview", title = "{preview}", border = "rounded" },
+                        { win = "list", height = 0.4, border = "hpad" },
+                        { win = "preview", title = "{preview}", border = true },
                     },
                 },
             },
@@ -314,7 +320,7 @@ return {
         { "<leader>se", function() Snacks.explorer() end, desc = "Search Explorer" },
         { "<leader>uz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
         { "<leader>us", function() Snacks.toggle.option("spell", { name = "Spelling" }):toggle() end, desc = "Toggle Spelling" },
-        { "<leader>ud", function() Snacks.toggle.dim():toggle() end, desc = "Toggle Dim" },
+        { "<leader>uD", function() Snacks.toggle.dim():toggle() end, desc = "Toggle Dim" },
         { "<leader>/", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>sd", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
         { "<leader>sD", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },

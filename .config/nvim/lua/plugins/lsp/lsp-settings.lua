@@ -210,7 +210,7 @@ M["jsonls"] = {
                     url = "https://json.schemastore.org/package.json",
                 },
                 {
-                    fileMatch = { "tsconfig.json" },
+                    fileMatch = { "tsconfig*.json" },
                     url = "https://json.schemastore.org/tsconfig.json",
                 },
             },

@@ -26,6 +26,7 @@ return {
                 "bash",
                 "tsx",
                 "json",
+                "json5",
                 "swift",
                 "python",
                 "regex",

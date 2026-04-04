@@ -3,8 +3,8 @@ local map = vim.keymap.set
 local rep = require("custom.repeat")
 
 -- "Whole Buffer" text-object:
-map("x", "ig", "gg^oG$", { desc = "Select whole buffer" })
-map("o", "ig", "<cmd>normal vig<cr>", { desc = "Operate whole buffer" })
+map("x", "ie", "gg^oG$", { desc = "Select whole buffer" })
+map("o", "ie", "<cmd>normal vie<cr>", { desc = "Operate whole buffer" })
 
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
@@ -20,13 +20,15 @@ map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
 end, { desc = "Yank relative file path to clipboard" })
 map({ "n", "x", "o" }, "M", "%", { remap = true, desc = "Matchit" })
-map("n", "<leader>w", "<esc><cmd>update<cr>", { desc = "Save File" })
+map("n", "<leader>w", "<cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader><c-l>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
 map("n", "<leader><c-o>", "<cmd>pop<cr>", { desc = "Pop off tag stack" })
 map("x", "J", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down", silent = true })
 map("x", "K", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up", silent = true })
 map("n", "C", '"_C', { desc = "Change into void" })
 map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
+map("n", "*", "*N", { desc = "Same pos search" })
+map("n", "#", "#N", { desc = "Same pos search" })
 
 if vim.g.vscode then
     return
@@ -48,7 +50,7 @@ map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
-map("n", "<a-b>", "<c-^>", { desc = "Alternate buffer" })
+map("n", "<leader><tab>", "<c-^>", { desc = "Alternate buffer" })
 map("n", "]b", next_buffer, { desc = "Next Buffer" })
 map("n", "[b", prev_buffer, { desc = "Prev Buffer" })
 map("n", "]q", next_qf, { desc = "Next Quickfix Item" })
@@ -72,11 +74,28 @@ map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
 map("n", "<c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<c-s-w>", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
+map("n", "<a-s-,>", "<c-w>3<", { desc = "Resize window left" })
+map("n", "<a-s-.>", "<c-w>3>", { desc = "Resize window right" })
+map("n", "+", "3<C-W>+", { desc = "Resize window up" })
+map("n", "_", "3<C-W>-", { desc = "Resize window down" })
 
 -- Editing
 map("i", "<C-a>", "<C-o>^", { desc = "Beginning of Line" })
 map("i", "<C-e>", "<C-o>$", { desc = "End of Line" })
 map("c", "<C-a>", "<Home>", { desc = "Beginning of line" })
+map(
+    "x",
+    "<C-h>",
+    [[<esc>:%s/\V<C-R>=escape(getregion(getpos("'<"), getpos("'>"))[0], '/\')<CR>//gI<Left><Left><Left>]],
+    { desc = "Search and replace selection" }
+)
+map("c", "<C-h>", function()
+    if vim.fn.getcmdtype() ~= "/" then
+        return "<C-h>"
+    end
+    local word = vim.fn.expand("<cword>")
+    return "<C-c>:%s/\\<" .. word .. "\\>//gI" .. ("<Left>"):rep(3)
+end, { expr = true, desc = "Search and replace word" })
 map("c", "<a-f>", "<S-Right>", { desc = "Forward a word" })
 map("c", "<a-b>", "<S-Left>", { desc = "Backward a word" })
 map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })

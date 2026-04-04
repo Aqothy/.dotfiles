@@ -284,7 +284,7 @@ return {
                         return res
                     end,
                     U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
-                    e = {
+                    S = {
                         {
                             "%u[%l%d]+%f[^%l%d]",
                             "%f[^%s%p][%l%d]+%f[^%l%d]",
@@ -302,16 +302,14 @@ return {
     {
         "nvim-mini/mini.operators",
         keys = {
-            { "g?", mode = { "n", "x" }, desc = "Evaluate operator" },
             { "cx", desc = "Exchange operator" },
             { "X", mode = "x", desc = "Exchange operator visual" },
-            { "gS", mode = { "n", "x" }, desc = "Sort operator" },
-            { "r", mode = { "n", "x" }, desc = "Replace operator" },
+            { "gR", mode = { "n", "x" }, desc = "Replace operator" },
             { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
         },
         opts = {
             evaluate = {
-                prefix = "g?",
+                prefix = "",
             },
             exchange = {
                 prefix = "",
@@ -320,10 +318,10 @@ return {
                 prefix = "gm",
             },
             replace = {
-                prefix = "r",
+                prefix = "gR",
             },
             sort = {
-                prefix = "gS",
+                prefix = "",
             },
         },
         config = function(_, opts)

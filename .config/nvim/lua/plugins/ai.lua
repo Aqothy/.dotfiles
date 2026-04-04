@@ -41,7 +41,6 @@ local function agent(action)
         local step = action == "next" and 1 or -1
         local target = terms[((idx - 1 + step) % #terms) + 1]
 
-        target:show()
         target:focus()
         vim.schedule(function()
             vim.cmd.startinsert()

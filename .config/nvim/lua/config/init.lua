@@ -51,6 +51,7 @@ if vim.g.vscode then
         "multicursor.nvim",
         "mini.operators",
         "nvim-spider",
+        "vim-test",
     }
 
     cond = function(plugin)

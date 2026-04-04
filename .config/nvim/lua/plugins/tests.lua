@@ -1,21 +1,17 @@
 return {
     "vim-test/vim-test",
     init = function()
-        _G.AqTestStrat = function(cmd)
-            local utils = require("custom.tasks")
-            utils.spawn(cmd, { title = cmd })
+        if vim.g.vscode then
+            vim.g["test#strategy"] = "neovim_vscode"
+            return
         end
 
-        vim.cmd([[
-                function! AqTest(cmd)
-                    call v:lua.AqTestStrat(a:cmd)
-                endfunction
-
-                let g:test#custom_strategies = {
-                    \ 'aq_test': function('AqTest'),
-                    \ }
-                let g:test#strategy = 'aq_test'
-            ]])
+        vim.g["test#custom_strategies"] = {
+            aq_test = function(cmd)
+                require("custom.tasks").spawn(cmd, { title = cmd })
+            end,
+        }
+        vim.g["test#strategy"] = "aq_test"
     end,
     keys = {
         { "<localleader>tf", "<cmd>TestFile<cr>", desc = "Run all tests in current file" },

@@ -38,6 +38,7 @@ autocmd("FileType", {
         "qf",
         "vim",
         "query",
+        "gitsigns-blame",
     },
     callback = function(ev)
         vim.bo[ev.buf].buflisted = false
@@ -93,7 +94,7 @@ local function setup_git_env()
         "--work-tree=" .. home,
         "ls-files",
         "--",
-        ".",
+        vim.fn.getcwd(),
     }, { text = true }):wait()
     local stdout = result.stdout or ""
 
