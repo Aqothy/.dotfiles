@@ -56,6 +56,15 @@ autocmd("FileType", {
 })
 
 autocmd("FileType", {
+    group = augroup("ui_opts"),
+    pattern = { "msg" },
+    callback = function(ev)
+        local win = vim.fn.bufwinid(ev.buf)
+        pcall(vim.api.nvim_win_set_config, win, { border = "none" })
+    end,
+})
+
+autocmd("FileType", {
     group = augroup("text_opts"),
     pattern = { "text", "tex", "gitcommit", "markdown" },
     callback = function()
