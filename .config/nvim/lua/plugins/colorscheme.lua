@@ -14,6 +14,7 @@ return {
                 if vim.o.background == "dark" then
                     return {
                         SignColumn = { bg = colors.dark0_soft },
+                        FoldColumn = { bg = colors.dark0_soft },
                         Pmenu = { bg = colors.dark0_soft },
                         LspReferenceText = { link = "Visual" },
                         LspReferenceRead = { link = "Visual" },
@@ -24,6 +25,7 @@ return {
 
                 return {
                     SignColumn = { bg = colors.light0_soft },
+                    FoldColumn = { bg = colors.light0_soft },
                     Pmenu = { bg = colors.light0_soft },
                     LspReferenceText = { bg = "#CAC2A6" },
                     LspReferenceRead = { bg = "#CAC2A6" },

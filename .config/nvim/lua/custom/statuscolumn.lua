@@ -12,14 +12,6 @@ local foldexprs = {
     ["v:lua.vim.treesitter.foldexpr()"] = vim.treesitter.foldexpr,
 }
 
-local function is_current_line(winid, lnum)
-    if wo[winid].relativenumber then
-        return vim.v.relnum == 0
-    end
-
-    return lnum == api.nvim_win_get_cursor(winid)[1]
-end
-
 local function is_fold_start(lnum)
     local level = fn.foldlevel(lnum)
     if level == 0 then
@@ -46,7 +38,7 @@ local function format_sign(sign)
 
     local text = fn.strcharpart(sign.text, 0, 1)
     if sign.texthl then
-        return "%#" .. sign.texthl .. "#" .. text .. "%*"
+        return "%$" .. sign.texthl .. "$" .. text .. "%*"
     end
 
     return text
@@ -76,8 +68,7 @@ local function get_line_signs(buf, lnum)
         { lnum - 1, -1 },
         { details = true, type = "sign" }
     )
-    local git_text, git_texthl
-    local other_text, other_texthl
+    local git, other
     local other_priority
 
     for _, mark in ipairs(extmarks) do
@@ -88,20 +79,21 @@ local function get_line_signs(buf, lnum)
             local kind = get_sign_kind(details)
 
             if kind == "git" then
-                if not git_text then
-                    git_text = details.sign_text
-                    git_texthl = details.sign_hl_group
+                if not git then
+                    git = {
+                        text = details.sign_text,
+                        texthl = details.sign_hl_group,
+                    }
                 end
-            elseif not other_text or priority > other_priority then
-                other_text = details.sign_text
-                other_texthl = details.sign_hl_group
+            elseif not other or priority > other_priority then
+                other = {
+                    text = details.sign_text,
+                    texthl = details.sign_hl_group,
+                }
                 other_priority = priority
             end
         end
     end
-
-    local git = git_text and { text = git_text, texthl = git_texthl } or nil
-    local other = other_text and { text = other_text, texthl = other_texthl } or nil
 
     return git, other
 end
@@ -112,7 +104,7 @@ local function render_fold(winid, lnum)
             return foldclose_char
         end
 
-        if is_current_line(winid, lnum) and is_fold_start(lnum) then
+        if vim.v.relnum == 0 and is_fold_start(lnum) then
             return foldopen_char
         end
 
