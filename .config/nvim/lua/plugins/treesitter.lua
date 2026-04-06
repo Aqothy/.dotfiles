@@ -35,6 +35,7 @@ return {
                 "yaml",
                 "diff",
                 "http",
+                "sql",
             },
         },
         config = function(_, opts)

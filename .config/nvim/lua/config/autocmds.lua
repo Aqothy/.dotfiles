@@ -38,6 +38,7 @@ autocmd("FileType", {
         "qf",
         "vim",
         "query",
+        "dbout",
         "gitsigns-blame",
     },
     callback = function(ev)
