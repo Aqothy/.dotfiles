@@ -37,20 +37,7 @@ local sev_list = {
 
 function M.setup()
     local config = {
-        signs = {
-            text = {
-                [vim.diagnostic.severity.ERROR] = "",
-                [vim.diagnostic.severity.WARN] = "",
-                [vim.diagnostic.severity.INFO] = "",
-                [vim.diagnostic.severity.HINT] = "",
-            },
-            numhl = {
-                [vim.diagnostic.severity.ERROR] = "DiagnosticError",
-                [vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-                [vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-                [vim.diagnostic.severity.HINT] = "DiagnosticHint",
-            },
-        },
+        signs = false,
         virtual_text = {
             prefix = function(diagnostic)
                 return (icons.diagnostics[sev_list[s[diagnostic.severity]]] or "●") .. " "
@@ -124,7 +111,6 @@ function M.on_attach(client, bufnr)
         if win ~= -1 then
             vim.wo[win][0].foldmethod = "expr"
             vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-            vim.b[bufnr].folding_provider = "lsp"
         end
     end
 

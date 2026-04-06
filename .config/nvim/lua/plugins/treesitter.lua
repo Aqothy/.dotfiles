@@ -72,7 +72,7 @@ return {
                     vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                 end
 
-                if win == -1 or vim.b[buf].folding_provider == "lsp" then
+                if win == -1 then
                     return
                 end
 
