@@ -1,6 +1,6 @@
 local M = {}
 
-M.alternates = {
+local default_alternates = {
     ["true"] = "false",
     ["True"] = "False",
     ["Yes"] = "No",
@@ -28,9 +28,7 @@ local function build_lookup(alternates, auto_inverse)
     return lookup
 end
 
-M.lookup = build_lookup(M.alternates, true)
-
-M.alternate_rules = {
+local default_alternate_rules = {
     -- snake_case to camelCase
     function(word)
         if word:find("_") then
@@ -45,8 +43,19 @@ M.alternate_rules = {
     end,
 }
 
+local function build_rules(extra_rules)
+    local rules = vim.list_extend({}, default_alternate_rules)
+    if extra_rules then
+        vim.list_extend(rules, extra_rules)
+    end
+    return rules
+end
+
+local lookup = build_lookup(default_alternates, true)
+local alternate_rules = build_rules()
+
 local function resolve_alternate(word)
-    local alternate = M.lookup[word]
+    local alternate = lookup[word]
 
     if alternate ~= nil then
         if type(alternate) == "function" then
@@ -55,7 +64,7 @@ local function resolve_alternate(word)
         return alternate
     end
 
-    for _, rule in ipairs(M.alternate_rules) do
+    for _, rule in ipairs(alternate_rules) do
         local result = rule(word)
         if result then
             return result
@@ -66,17 +75,14 @@ end
 function M.setup(opts)
     opts = opts or {}
     local auto_inverse = opts.auto_inverse ~= false
-    local alternates = M.alternates
+    local alternates = vim.tbl_extend("force", {}, default_alternates)
 
     if opts.alternates then
-        alternates = vim.tbl_extend("force", {}, M.alternates, opts.alternates)
+        alternates = vim.tbl_extend("force", alternates, opts.alternates)
     end
 
-    M.lookup = build_lookup(alternates, auto_inverse)
-
-    if opts.alternate_rules then
-        vim.list_extend(M.alternate_rules, opts.alternate_rules)
-    end
+    lookup = build_lookup(alternates, auto_inverse)
+    alternate_rules = build_rules(opts.alternate_rules)
 
     vim.keymap.set("n", "<c-a>", M.toggle, { desc = "Toggle alternate word", silent = true })
 end
