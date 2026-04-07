@@ -145,6 +145,12 @@ return {
                 mode = { "x" },
                 desc = "Send Visual Selection",
             },
+            {
+                "<leader>ad",
+                function() require("sidekick.cli").send({ msg = "{diagnostics_all}" }) end,
+                mode = { "n", "x" },
+                desc = "Send Diagnostic",
+            },
         },
     },
 }

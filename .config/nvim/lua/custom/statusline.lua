@@ -181,13 +181,13 @@ function M.git_components()
     local git_icons = has_icons and icons.git or { added = "+", modified = "~", removed = "-" }
 
     if git_info.added and git_info.added > 0 then
-        status_parts[#status_parts + 1] = "%#GitSignsAdd#" .. git_icons.added .. " " .. git_info.added
+        status_parts[#status_parts + 1] = "%#GitSignsAdd#" .. git_icons.added .. " " .. git_info.added .. "%*"
     end
     if git_info.changed and git_info.changed > 0 then
-        status_parts[#status_parts + 1] = "%#GitSignsChange#" .. git_icons.modified .. " " .. git_info.changed
+        status_parts[#status_parts + 1] = "%#GitSignsChange#" .. git_icons.modified .. " " .. git_info.changed .. "%*"
     end
     if git_info.removed and git_info.removed > 0 then
-        status_parts[#status_parts + 1] = "%#GitSignsDelete#" .. git_icons.removed .. " " .. git_info.removed
+        status_parts[#status_parts + 1] = "%#GitSignsDelete#" .. git_icons.removed .. " " .. git_info.removed .. "%*"
     end
 
     local changes = (#status_parts > 0) and table.concat(status_parts, " ") or ""
@@ -299,7 +299,7 @@ local function format_diagnostics(count)
         local level = M.diagnostic_levels[i]
         local n = count[diagnostic_severity[level.name]]
         if n and n > 0 then
-            parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n
+            parts[#parts + 1] = "%#" .. level.hl .. "#" .. level.sign .. " " .. n .. "%*"
         end
     end
 
@@ -477,7 +477,7 @@ function M.file_info_component()
     local ff_map = { unix = "LF", dos = "CRLF" }
     table.insert(t, ff_map[buf_opts.fileformat] or buf_opts.fileformat:upper())
 
-    local result = "%#AqlineFileInfo#" .. table.concat(t, " ")
+    local result = "%#AqlineFileInfo#" .. table.concat(t, " ") .. "%*"
 
     M.file_info_cache[buf] = result
 
@@ -525,6 +525,8 @@ function M.render()
     end
 
     if width > 120 then
+        parts[#parts + 1] = "%l:%c"
+
         local lsp_clients = M.lsp_clients_component()
         if lsp_clients ~= "" then
             parts[#parts + 1] = lsp_clients

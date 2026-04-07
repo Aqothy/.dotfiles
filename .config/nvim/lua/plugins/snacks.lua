@@ -257,7 +257,7 @@ return {
                 height = 0.99,
                 keys = {
                     hide = {
-                        "<c-q>",
+                        "<c-g>",
                         "hide",
                         mode = "t",
                         expr = true,
@@ -277,6 +277,9 @@ return {
                 wo = {
                     winbar = "",
                 },
+                keys = {
+                    term_normal = false,
+                },
             },
         },
     },
@@ -285,7 +288,7 @@ return {
         { "<leader>go", function() Snacks.gitbrowse({ notify = false }) end, desc = "Git Browse", mode = { "n", "x" } },
         ---@diagnostic disable-next-line: missing-fields
         { "gy", function() Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, desc = "Git Browse (copy)", mode = { "n", "x" },  },
-        { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+        { "<c-g>", function() Snacks.lazygit() end, desc = "Lazygit" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
         { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
         { "<leader>gD", function() Snacks.picker.git_diff() end, desc = "Git Diff" },
@@ -316,7 +319,7 @@ return {
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo Tree" },
         { "<leader>*", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-        { "<leader>pp", function() Snacks.toggle.profiler():toggle() end, desc = "Profile Picker" },
+        { "<leader>uP", function() Snacks.toggle.profiler():toggle() end, desc = "Profile" },
         { "<leader>se", function() Snacks.explorer() end, desc = "Search Explorer" },
         { "<leader>uz", function() Snacks.toggle.zen():toggle() end, desc = "Zen Mode" },
         { "<leader>us", function() Snacks.toggle.option("spell", { name = "Spelling" }):toggle() end, desc = "Toggle Spelling" },

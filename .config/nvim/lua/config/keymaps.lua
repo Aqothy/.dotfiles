@@ -11,7 +11,7 @@ map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map("x", "<bs>", [["_d]], { desc = "Delete without yanking" })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
-map({ "n", "x", "o" }, "L", "$", { desc = "End of line" })
+map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
 map("x", "il", "^og_", { desc = "Select line without whitespace" })
 map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
 map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
@@ -27,8 +27,7 @@ map("x", "J", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "M
 map("x", "K", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up", silent = true })
 map("n", "C", '"_C', { desc = "Change into void" })
 map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
-map("n", "*", "*N", { desc = "Same pos search" })
-map("n", "#", "#N", { desc = "Same pos search" })
+map("n", "*", "*``", { desc = "Same pos search" })
 
 local next_yank, prev_yank = rep.pair(function()
     require("custom.ying").cycle(1)
@@ -53,6 +52,11 @@ if vim.g.vscode then
 end
 
 local next_buffer, prev_buffer = rep.command_pair("bnext", "bprevious")
+local move_tab_next, move_tab_prev = rep.pair(function()
+    pcall(vim.cmd.tabmove, "+" .. vim.v.count1)
+end, function()
+    pcall(vim.cmd.tabmove, "-" .. vim.v.count1)
+end)
 local next_qf, prev_qf = rep.pair(function()
     pcall(vim.cmd.cnext, { count = vim.v.count1 })
 end, function()
@@ -72,26 +76,25 @@ map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
-map("n", "<leader><tab>", "<c-^>", { desc = "Alternate buffer" })
+map("n", "<bs>", "<c-^>", { desc = "Alternate buffer" })
 map("n", "]b", next_buffer, { desc = "Next Buffer" })
 map("n", "[b", prev_buffer, { desc = "Prev Buffer" })
 map("n", "]q", next_qf, { desc = "Next Quickfix Item" })
 map("n", "[q", prev_qf, { desc = "Prev Quickfix Item" })
 
 -- Terminal
-map("t", "<c-q>", "<c-\\><c-n>", { desc = "Esc Terminal" })
+map("t", "<a-n>", "<c-\\><c-n>", { desc = "Terminal escape" })
 
 -- Tabs and windows
-map({ "n", "t" }, "<c-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map({ "n", "t" }, "<c-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<a-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<a-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "]<tab>", move_tab_next, { desc = "Move Tab Right" })
+map("n", "[<tab>", move_tab_prev, { desc = "Move Tab Left" })
 for i = 1, 5 do
     map("n", "<leader>" .. i, "<cmd>tabnext " .. i .. "<cr>", { desc = "Go to Tab " .. i })
 end
-map("t", "<esc>", "<esc>", { desc = "Feed Escape" })
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
-map("n", "<a-]>", "<Cmd>tabmove +1<CR>", { desc = "Move tab right" })
-map("n", "<a-[>", "<Cmd>tabmove -1<CR>", { desc = "Move tab left" })
 map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
 map("n", "<c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<c-s-w>", "<cmd>tabclose<CR>", { desc = "Close tab" })
@@ -102,8 +105,6 @@ map("n", "+", "3<C-W>+", { desc = "Resize window up" })
 map("n", "_", "3<C-W>-", { desc = "Resize window down" })
 
 -- Editing
-map("i", "<C-a>", "<C-o>^", { desc = "Beginning of Line" })
-map("i", "<C-e>", "<C-o>$", { desc = "End of Line" })
 map("c", "<C-a>", "<Home>", { desc = "Beginning of line" })
 map(
     "x",
@@ -125,6 +126,7 @@ map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File
 map("i", "<C-CR>", "<C-o>o", { desc = "Insert line below" })
 map("n", "<C-CR>", "]<space>", { remap = true, desc = "New line below" })
 map("i", "<C-;>", "<C-o>$;", { desc = "Append semicolon at EOL" })
+map("i", "<a-bs>", "<c-w>", { desc = "Delete word" })
 
 -- utils
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
@@ -182,5 +184,3 @@ map("n", "yd", function()
         yank
     )
 end, { desc = "Yank diagnostic message on current line" })
-
-map("n", "<leader>pm", "<cmd>Lazy<cr>", { desc = "Package Manager" })
