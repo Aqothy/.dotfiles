@@ -30,6 +30,24 @@ map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
 map("n", "*", "*N", { desc = "Same pos search" })
 map("n", "#", "#N", { desc = "Same pos search" })
 
+local next_yank, prev_yank = rep.pair(function()
+    require("custom.ying").cycle(1)
+end, function()
+    require("custom.ying").cycle(-1)
+end)
+
+map({ "n", "x" }, "p", function()
+    require("custom.ying").put("p")
+end, { desc = "Put after" })
+map({ "n", "x" }, "P", function()
+    require("custom.ying").put("P")
+end, { desc = "Put before" })
+map("n", "]y", next_yank, { desc = "Next Yank History" })
+map("n", "[y", prev_yank, { desc = "Prev Yank History" })
+map("n", "<leader>sy", function()
+    require("custom.ying").picker()
+end, { desc = "Yank History Picker" })
+
 if vim.g.vscode then
     return
 end

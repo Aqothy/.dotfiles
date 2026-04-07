@@ -32,4 +32,7 @@ if not vim.g.vscode then
     })
 end
 
-require("custom.toggler").setup()
+vim.schedule(function()
+    require("custom.toggler").setup()
+    require("custom.ying").setup()
+end)
