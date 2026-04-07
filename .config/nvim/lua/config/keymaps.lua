@@ -51,7 +51,11 @@ if vim.g.vscode then
     return
 end
 
-local next_buffer, prev_buffer = rep.command_pair("bnext", "bprevious")
+local next_buffer, prev_buffer = rep.pair(function()
+    pcall(vim.cmd.bnext, { count = vim.v.count1 })
+end, function()
+    pcall(vim.cmd.bprevious, { count = vim.v.count1 })
+end)
 local move_tab_next, move_tab_prev = rep.pair(function()
     pcall(vim.cmd.tabmove, "+" .. vim.v.count1)
 end, function()

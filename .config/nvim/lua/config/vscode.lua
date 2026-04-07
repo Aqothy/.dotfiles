@@ -1,4 +1,5 @@
 local vscode = require("vscode")
+local rep = require("custom.repeat")
 
 local map = vim.keymap.set
 local opt = vim.opt
@@ -16,18 +17,27 @@ local function vscode_action(cmd)
     end
 end
 
-map("n", "]d", vscode_action("editor.action.marker.next"), { desc = "Next diagnostic" })
-map("n", "[d", vscode_action("editor.action.marker.prev"), { desc = "Previous diagnostic" })
-map("n", "[h", vscode_action("workbench.action.editor.previousChange"), { desc = "Previous change" })
-map("n", "]h", vscode_action("workbench.action.editor.nextChange"), { desc = "Next change" })
+local next_diag, prev_diag =
+    rep.pair(vscode_action("editor.action.marker.next"), vscode_action("editor.action.marker.prev"))
+local next_hunk, prev_hunk = rep.pair(
+    vscode_action("workbench.action.editor.nextChange"),
+    vscode_action("workbench.action.editor.previousChange")
+)
+local next_word, prev_word =
+    rep.pair(vscode_action("editor.action.wordHighlight.next"), vscode_action("editor.action.wordHighlight.prev"))
+
+map("n", "]d", next_diag, { desc = "Next diagnostic" })
+map("n", "[d", prev_diag, { desc = "Previous diagnostic" })
+map("n", "]h", next_hunk, { desc = "Next change" })
+map("n", "[h", prev_hunk, { desc = "Previous change" })
 map({ "n", "x" }, "<leader>hs", vscode_action("git.stageSelectedRanges"), { desc = "Stage hunk" })
 map({ "n", "x" }, "<leader>hr", vscode_action("git.revertSelectedRanges"), { desc = "Revert hunk" })
 map("n", "<C-h>", vscode_action("workbench.action.navigateLeft"), { desc = "Go to Left Window" })
 map("n", "<C-j>", vscode_action("workbench.action.navigateDown"), { desc = "Go to Lower Window" })
 map("n", "<C-k>", vscode_action("workbench.action.navigateUp"), { desc = "Go to Upper Window" })
 map("n", "<C-l>", vscode_action("workbench.action.navigateRight"), { desc = "Go to Right Window" })
-map("n", "]r", vscode_action("editor.action.wordHighlight.next"), { desc = "Next Word Highlight" })
-map("n", "[r", vscode_action("editor.action.wordHighlight.prev"), { desc = "Previous Word Highlight" })
+map("n", "]r", next_word, { desc = "Next Word Highlight" })
+map("n", "[r", prev_word, { desc = "Previous Word Highlight" })
 
 map({ "i", "n", "s" }, "<esc>", function()
     vim.cmd("noh")
