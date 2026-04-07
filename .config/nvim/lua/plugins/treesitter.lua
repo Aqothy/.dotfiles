@@ -128,11 +128,7 @@ return {
             select = { lookahead = true },
         },
         keys = function()
-            local function repeatable(method)
-                return function(...)
-                    return require("nvim-treesitter-textobjects.repeatable_move")[method](...)
-                end
-            end
+            local rep = require("custom.repeat")
 
             local function ts_bind(module, method, query)
                 return function()
@@ -141,41 +137,53 @@ return {
             end
 
             local args_attr = { "@parameter.inner", "@attribute.inner" }
+            local next_method, prev_method = rep.pair(
+                ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@function.outer" }),
+                ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@function.outer" })
+            )
+            local next_class, prev_class = rep.pair(
+                ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@class.outer" }),
+                ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@class.outer" })
+            )
+            local next_arg, prev_arg = rep.pair(
+                ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", args_attr),
+                ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", args_attr)
+            )
 
             return {
                 {
                     "f",
-                    repeatable("builtin_f_expr"),
+                    rep.builtin_f_expr,
                     mode = { "n", "x", "o" },
                     expr = true,
                 },
                 {
                     "F",
-                    repeatable("builtin_F_expr"),
+                    rep.builtin_F_expr,
                     mode = { "n", "x", "o" },
                     expr = true,
                 },
                 {
                     "t",
-                    repeatable("builtin_t_expr"),
+                    rep.builtin_t_expr,
                     mode = { "n", "x", "o" },
                     expr = true,
                 },
                 {
                     "T",
-                    repeatable("builtin_T_expr"),
+                    rep.builtin_T_expr,
                     mode = { "n", "x", "o" },
                     expr = true,
                 },
                 {
                     ";",
-                    repeatable("repeat_last_move"),
+                    rep.semicolon,
                     mode = { "n", "x", "o" },
                     desc = "Repeat next move",
                 },
                 {
                     ",",
-                    repeatable("repeat_last_move_opposite"),
+                    rep.comma,
                     mode = { "n", "x", "o" },
                     desc = "Repeat previous move",
                 },
@@ -191,37 +199,37 @@ return {
                 },
                 {
                     "]m",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@function.outer" }),
+                    next_method,
                     mode = { "n", "x", "o" },
                     desc = "Next Method",
                 },
                 {
                     "[m",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@function.outer" }),
+                    prev_method,
                     mode = { "n", "x", "o" },
                     desc = "Prev Method",
                 },
                 {
                     "]]",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@class.outer" }),
+                    next_class,
                     mode = { "n", "x", "o" },
                     desc = "Next Class",
                 },
                 {
                     "[[",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@class.outer" }),
+                    prev_class,
                     mode = { "n", "x", "o" },
                     desc = "Prev Class",
                 },
                 {
                     "]a",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", args_attr),
+                    next_arg,
                     mode = { "n", "x", "o" },
                     desc = "Next Arg",
                 },
                 {
                     "[a",
-                    ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", args_attr),
+                    prev_arg,
                     mode = { "n", "x", "o" },
                     desc = "Prev Arg",
                 },

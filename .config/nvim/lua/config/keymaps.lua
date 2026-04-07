@@ -35,7 +35,11 @@ if vim.g.vscode then
 end
 
 local next_buffer, prev_buffer = rep.command_pair("bnext", "bprevious")
-local next_qf, prev_qf = rep.command_pair("cnext", "cprevious")
+local next_qf, prev_qf = rep.pair(function()
+    pcall(vim.cmd.cnext, { count = vim.v.count1 })
+end, function()
+    pcall(vim.cmd.cprevious, { count = vim.v.count1 })
+end)
 
 -- Navigation and movement
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
