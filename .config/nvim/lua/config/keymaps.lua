@@ -56,11 +56,6 @@ local next_buffer, prev_buffer = rep.pair(function()
 end, function()
     pcall(vim.cmd.bprevious, { count = vim.v.count1 })
 end)
-local move_tab_next, move_tab_prev = rep.pair(function()
-    pcall(vim.cmd.tabmove, "+" .. vim.v.count1)
-end, function()
-    pcall(vim.cmd.tabmove, "-" .. vim.v.count1)
-end)
 local next_qf, prev_qf = rep.pair(function()
     pcall(vim.cmd.cnext, { count = vim.v.count1 })
 end, function()
@@ -92,8 +87,8 @@ map("t", "<a-n>", "<c-\\><c-n>", { desc = "Terminal escape" })
 -- Tabs and windows
 map("n", "<a-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
 map("n", "<a-[>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-map("n", "]<tab>", move_tab_next, { desc = "Move Tab Right" })
-map("n", "[<tab>", move_tab_prev, { desc = "Move Tab Left" })
+map("n", "<a-s-]>", "<cmd>tabmove+<cr>", { desc = "Move Tab Right" })
+map("n", "<a-s-[>", "<cmd>tabmove-<cr>", { desc = "Move Tab Left" })
 for i = 1, 5 do
     map("n", "<leader>" .. i, "<cmd>tabnext " .. i .. "<cr>", { desc = "Go to Tab " .. i })
 end
@@ -130,7 +125,7 @@ map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File
 map("i", "<C-CR>", "<C-o>o", { desc = "Insert line below" })
 map("n", "<C-CR>", "]<space>", { remap = true, desc = "New line below" })
 map("i", "<C-;>", "<C-o>$;", { desc = "Append semicolon at EOL" })
-map("i", "<a-bs>", "<c-w>", { desc = "Delete word" })
+map({ "i", "c" }, "<a-bs>", "<c-w>", { desc = "Delete word" })
 
 -- utils
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })

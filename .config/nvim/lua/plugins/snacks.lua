@@ -77,9 +77,6 @@ return {
     "folke/snacks.nvim",
     lazy = false,
     priority = 1000,
-    init = function()
-        vim.g.snacks_animate = false
-    end,
     opts = {
         dashboard = {
             preset = {
@@ -112,7 +109,7 @@ return {
                 ]],
                 -- stylua: ignore
                 keys = {
-                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('aqfiles')" },
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
                     { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
                     {
                         icon = " ",
@@ -153,11 +150,6 @@ return {
         picker = {
             enabled = true,
             ui_select = true,
-            formatters = {
-                file = {
-                    filename_first = true,
-                },
-            },
             icons = {
                 kinds = require("config.icons").kinds,
             },
@@ -182,45 +174,20 @@ return {
             },
             layouts = {
                 vscode = {
-                    layout = {
-                        backdrop = false,
-                        row = 1,
-                        width = 0.4,
-                        min_width = 80,
-                        height = 0.95,
-                        border = "none",
-                        box = "vertical",
-                        {
-                            win = "input",
-                            height = 1,
-                            border = true,
-                            title = "{title} {live} {flags}",
-                            title_pos = "center",
-                        },
-                        { win = "list", height = 0.4, border = "hpad" },
-                        { win = "preview", title = "{preview}", border = true },
-                    },
+                    preview = "main",
                 },
             },
             sources = {
-                aqfiles = {
+                files = {
+                    finder = { "recent_files", "files" },
                     layout = {
                         preset = "vscode",
                     },
-                    multi = { "recent", "files" },
-                    format = "file",
                     filter = { cwd = true },
+                    exclude = { ".DS_Store" },
                     hidden = true,
                     transform = "unique_file",
                     sort = { fields = { "score:desc", "idx" } },
-                },
-                files = {
-                    show_empty = false,
-                    exclude = { ".DS_Store" },
-                    hidden = true,
-                    layout = {
-                        preset = "vscode",
-                    },
                 },
                 buffers = {
                     layout = {
@@ -245,6 +212,18 @@ return {
             },
         },
 
+        dim = {
+            animate = {
+                enabled = false,
+            },
+        },
+
+        scratch = {
+            filekey = {
+                branch = false,
+            },
+        },
+
         styles = {
             dashboard = {
                 wo = { foldcolumn = "0" },
@@ -254,7 +233,7 @@ return {
             },
             lazygit = {
                 width = 0,
-                height = 0.99,
+                height = 0,
                 keys = {
                     hide = {
                         "<c-g>",
@@ -313,8 +292,8 @@ return {
         { "<leader>.", function() Snacks.picker.resume() end, desc = "Resume Last Picker" },
         { "<leader><leader>", function() Snacks.picker({ layout = { preset = "vscode" } }) end, desc = "Pick" },
         { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-        { "<leader>f", function() Snacks.picker.pick("aqfiles") end, desc = "Find Files Smart" },
-        { "<leader>F", function() Snacks.picker.pick("aqfiles", { cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Smart cwd" },
+        { "<leader>f", function() Snacks.picker.files() end, desc = "Find Files" },
+        { "<leader>F", function() Snacks.picker.files({ cwd = vim.fn.expand("%:h") }) end, desc = "Find Files Cwd" },
         { "g/", function() Snacks.picker.grep() end, desc = "Search String" },
         { "<leader>?", function() Snacks.picker.help() end, desc = "Help Pages" },
         { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo Tree" },

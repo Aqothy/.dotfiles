@@ -8,7 +8,6 @@ return {
         opts = {
             indent = { disable = { "swift" } },
             highlight = { disable = {} },
-            folds = { disable = {} },
             ensure_installed = {
                 "c",
                 "lua",
@@ -36,6 +35,7 @@ return {
                 "diff",
                 "http",
                 "sql",
+                "printf",
             },
         },
         config = function(_, opts)
@@ -74,14 +74,6 @@ return {
 
                 if win == -1 then
                     return
-                end
-
-                if has_parser and not is_disabled(lang, "folds", buf) and has_query(lang, "folds") then
-                    vim.wo[win][0].foldmethod = "expr"
-                    vim.wo[win][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                else
-                    vim.wo[win][0].foldmethod = "manual"
-                    vim.wo[win][0].foldexpr = ""
                 end
             end
 

@@ -31,9 +31,7 @@ return {
                 permanent_delete = false,
             },
             mappings = {
-                go_in = "l",
                 go_in_plus = "<CR>",
-                go_out = "h",
                 go_out_plus = "-",
             },
             content = {
@@ -42,9 +40,9 @@ return {
                 end,
             },
             windows = {
-                width_nofocus = 30,
-                width_focus = 30,
-                width_preview = 30,
+                width_nofocus = 20,
+                width_focus = 20,
+                width_preview = 20,
                 preview = true,
             },
         },
@@ -64,7 +62,6 @@ return {
 
                     if path ~= "" and vim.uv.fs_stat(path) then
                         MiniFiles.open(path, false)
-                        MiniFiles.reveal_cwd()
                     else
                         MiniFiles.open(vim.uv.cwd(), false)
                     end
@@ -163,11 +160,7 @@ return {
                 group = group,
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
-                    local current_dir = (mf.get_fs_entry() or {}).path
                     mf.set_bookmark("w", vim.uv.cwd(), { desc = "Working directory" })
-                    if current_dir then
-                        mf.set_bookmark("c", vim.fs.dirname(current_dir), { desc = "Current file directory" })
-                    end
                 end,
             })
 

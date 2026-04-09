@@ -60,14 +60,17 @@ opt.showcmd = false
 opt.fillchars =
     { eob = " ", diff = "╱", foldopen = "", foldclose = "", fold = " ", foldsep = " ", foldinner = " " }
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.foldenable = true
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldtext = ""
-opt.foldmethod = "manual"
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.cursorline = true
 opt.list = true
 opt.listchars = {
-    tab = "▏ ",
+    tab = " ",
+    nbsp = "␣",
     trail = "·",
 }
 opt.formatoptions = "jcroqlnt"
@@ -76,6 +79,7 @@ opt.guifont = "Hack Nerd Font Mono:h15"
 opt.wrap = false
 opt.smoothscroll = true
 opt.textwidth = 80
+opt.cmdheight = 0
 
 opt.fileencoding = "utf-8"
 
@@ -86,7 +90,7 @@ end
 opt.confirm = true
 opt.shortmess:append({ W = true, I = true, c = true, C = true, a = true })
 opt.jumpoptions = { "stack", "view" }
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "terminal" }
+opt.sessionoptions = { "curdir", "tabpages", "winsize", "terminal" }
 
 opt.signcolumn = "yes"
 opt.foldcolumn = "1"

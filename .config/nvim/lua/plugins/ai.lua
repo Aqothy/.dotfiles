@@ -105,8 +105,10 @@ return {
                             desc = "Select Agent",
                         },
                     },
-                    split = {
-                        width = 0.4,
+                    layout = "float",
+                    float = {
+                        width = 1,
+                        height = 1,
                     },
                 },
             },

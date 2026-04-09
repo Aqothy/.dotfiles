@@ -17,7 +17,8 @@ return {
             end,
             desc = "Toggle Diffview",
         },
-        { "<leader>gh", ":DiffviewFileHistory<cr>", mode = { "n", "x" }, desc = "Diff File History" },
+        { "<leader>gh", ":DiffviewFileHistory %<cr>", mode = { "n", "x" }, desc = "Diff File History File/Selection" },
+        { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", mode = "n", desc = "Diff File History" },
         { "<leader>gm", "<cmd>DiffviewOpen origin/main<cr>", desc = "Diff Main" },
         { "<leader>gR", "<cmd>DiffviewOpen origin/main...HEAD<cr>", desc = "Git Review (vs main)" },
     },
@@ -29,6 +30,7 @@ return {
             },
         },
         file_panel = {
+            listing_style = "list",
             win_config = {
                 win_opts = {
                     signcolumn = "no",
@@ -44,8 +46,8 @@ return {
             DiffviewOpen = { "--imply-local" },
         },
         hooks = {
-            diff_buf_win_enter = function(_, winid, ctx)
-                vim.wo[winid].foldenable = false
+            diff_buf_win_enter = function(_, _, ctx)
+                vim.opt_local.foldenable = false
                 -- vscode like diff highlight
                 if ctx.layout_name:match("^diff2") then
                     if ctx.symbol == "a" then
