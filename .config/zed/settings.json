@@ -1,4 +1,17 @@
 {
+  "git_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "semantic_tokens": "combined",
   "relative_line_numbers": "enabled",
   "diagnostics": {
     "inline": {
@@ -22,6 +35,7 @@
     "provider": "zed"
   },
   "agent": {
+    "dock": "right",
     "default_profile": "write",
     "default_model": {
       "effort": "high",

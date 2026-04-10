@@ -67,11 +67,10 @@ autocmd("FileType", {
 
 autocmd("FileType", {
     group = augroup("text_opts"),
-    pattern = { "text", "tex", "gitcommit", "markdown" },
+    pattern = { "text", "tex", "gitcommit" },
     callback = function()
         vim.opt_local.wrap = true
         vim.opt_local.spell = true
-        vim.opt_local.conceallevel = 2
     end,
 })
 
