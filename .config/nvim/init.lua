@@ -12,6 +12,7 @@ if not vim.g.vscode then
         require("custom.tabline").setup()
         require("custom.alternate").setup()
         require("custom.marks").setup()
+        require("custom.folds").setup()
         require("vim._core.ui2").enable({ msg = { target = "msg", timeout = 3000 } })
     end)
     require("custom.statusline").setup()

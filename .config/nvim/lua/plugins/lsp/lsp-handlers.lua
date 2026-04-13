@@ -105,7 +105,10 @@ M.keys = {
 function M.on_attach(client, bufnr)
     vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
     vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "virtual" })
-    vim.lsp.on_type_formatting.enable(true, { buf = bufnr })
+
+    if M.has("foldingRange", client, bufnr) then
+        require("custom.folds").set_provider(bufnr, "lsp")
+    end
 
     for _, key in ipairs(M.keys) do
         local has = not key.has or M.has(key.has, client, bufnr)

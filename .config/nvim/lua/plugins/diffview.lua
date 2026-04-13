@@ -46,8 +46,9 @@ return {
             DiffviewOpen = { "--imply-local" },
         },
         hooks = {
-            diff_buf_win_enter = function(_, _, ctx)
-                vim.opt_local.foldenable = false
+            diff_buf_win_enter = function(_, win, ctx)
+                vim.wo[win].foldenable = false
+                vim.wo[win].foldexpr = "0"
                 -- vscode like diff highlight
                 if ctx.layout_name:match("^diff2") then
                     if ctx.symbol == "a" then
