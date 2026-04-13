@@ -141,6 +141,10 @@ return {
                 ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", args_attr),
                 ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", args_attr)
             )
+            local next_comment, prev_comment = rep.pair(
+                ts_bind("nvim-treesitter-textobjects.move", "goto_next_start", { "@comment.outer" }),
+                ts_bind("nvim-treesitter-textobjects.move", "goto_previous_start", { "@comment.outer" })
+            )
 
             return {
                 {
@@ -224,6 +228,18 @@ return {
                     prev_arg,
                     mode = { "n", "x", "o" },
                     desc = "Prev Arg",
+                },
+                {
+                    "]/",
+                    next_comment,
+                    mode = { "n", "x", "o" },
+                    desc = "Next Comment",
+                },
+                {
+                    "[/",
+                    prev_comment,
+                    mode = { "n", "x", "o" },
+                    desc = "Prev Comment",
                 },
             }
         end,

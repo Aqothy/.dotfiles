@@ -61,7 +61,9 @@ autocmd("FileType", {
     pattern = { "msg" },
     callback = function(ev)
         local win = vim.fn.bufwinid(ev.buf)
-        pcall(vim.api.nvim_win_set_config, win, { border = "none" })
+        if win ~= -1 then
+            vim.api.nvim_win_set_config(win, { border = "none" })
+        end
     end,
 })
 

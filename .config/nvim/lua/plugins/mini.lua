@@ -36,13 +36,12 @@ return {
             },
             content = {
                 filter = function(entry)
-                    return entry.fs_type ~= "file" or entry.name ~= ".DS_Store"
+                    return not (entry.fs_type == "file" and entry.name == ".DS_Store")
                 end,
             },
             windows = {
-                width_nofocus = 20,
-                width_focus = 20,
-                width_preview = 20,
+                width_focus = 30,
+                width_preview = 30,
                 preview = true,
             },
         },
@@ -74,14 +73,14 @@ return {
             mf.setup(opts)
 
             local show_dotfiles = true
-
+            local filter_show = opts.content.filter
             local filter_hide = function(entry)
-                return mf.config.content.filter(entry) and not vim.startswith(entry.name, ".")
+                return filter_show(entry) and not vim.startswith(entry.name, ".")
             end
 
             local toggle_dotfiles = function()
                 show_dotfiles = not show_dotfiles
-                local new_filter = show_dotfiles and mf.config.content.filter or filter_hide
+                local new_filter = show_dotfiles and filter_show or filter_hide
                 mf.refresh({ content = { filter = new_filter } })
             end
 

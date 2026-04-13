@@ -553,7 +553,7 @@ function M.render()
         end
     end
 
-    return table.concat(parts, "  ") .. " "
+    return table.concat(parts, "  ")
 end
 
 M.win_width = nil
