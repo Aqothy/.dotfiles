@@ -1,7 +1,10 @@
 local M = {}
 
+local ns = vim.api.nvim_create_namespace("aqothy/foldtext")
+
 M.config = {
     fallback = "indent",
+    icon = "󰇘",
 }
 
 local function should_skip(win)
@@ -15,6 +18,29 @@ local priorities = {
 
 local function get_priority(name)
     return priorities[name] or 99
+end
+
+local function render_fold_text(win, buf, foldstart)
+    local foldend = vim.fn.foldclosedend(foldstart)
+    local virt_text = { { " " .. M.config.icon, "Folded" } }
+
+    local line = vim.api.nvim_buf_get_lines(buf, foldstart - 1, foldstart, false)[1]
+    if not line then
+        return foldend
+    end
+
+    local wininfo = vim.fn.getwininfo(win)[1]
+    local leftcol = wininfo and wininfo.leftcol or 0
+    local wincol = math.max(0, vim.fn.virtcol({ foldstart, line:len() }) - leftcol)
+
+    vim.api.nvim_buf_set_extmark(buf, ns, foldstart - 1, 0, {
+        virt_text = virt_text,
+        virt_text_win_col = wincol,
+        hl_mode = "combine",
+        ephemeral = true,
+    })
+
+    return foldend
 end
 
 function M.apply(win, buf)
@@ -54,6 +80,22 @@ end
 
 function M.setup(opts)
     M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+
+    vim.api.nvim_set_decoration_provider(ns, {
+        on_win = function(_, win, buf, topline, botline)
+            if should_skip(win) then
+                return
+            end
+            local line = topline
+            while line <= botline do
+                local foldstart = vim.fn.foldclosed(line)
+                if foldstart > -1 then
+                    line = render_fold_text(win, buf, foldstart)
+                end
+                line = line + 1
+            end
+        end,
+    })
 
     local group = vim.api.nvim_create_augroup("aqothy/folds", { clear = true })
 
