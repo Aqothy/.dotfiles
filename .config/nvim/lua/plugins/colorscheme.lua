@@ -13,6 +13,7 @@ return {
             local function get_overrides()
                 if vim.o.background == "dark" then
                     return {
+                        NormalFloat = { bg = colors.dark0_soft },
                         SignColumn = { bg = colors.dark0_soft },
                         FoldColumn = { bg = colors.dark0_soft },
                         Pmenu = { bg = colors.dark0_soft },
@@ -20,10 +21,12 @@ return {
                         LspReferenceRead = { link = "Visual" },
                         LspReferenceWrite = { link = "Visual" },
                         DiffText = { link = "DiffAdd" },
+                        TreesitterContext = { bg = colors.dark1 },
                     }
                 end
 
                 return {
+                    NormalFloat = { bg = colors.light0_soft },
                     SignColumn = { bg = colors.light0_soft },
                     FoldColumn = { bg = colors.light0_soft },
                     Pmenu = { bg = colors.light0_soft },
@@ -31,6 +34,7 @@ return {
                     LspReferenceRead = { bg = "#CAC2A6" },
                     LspReferenceWrite = { bg = "#CAC2A6" },
                     DiffText = { link = "DiffAdd" },
+                    TreesitterContext = { bg = colors.light1 },
                 }
             end
 

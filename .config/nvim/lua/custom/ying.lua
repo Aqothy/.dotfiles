@@ -180,7 +180,13 @@ function M.setup()
             group = group,
             callback = function()
                 local cb = vim.fn.getreg("+")
-                M.push(cb, vim.fn.getregtype("+"))
+                local regtype = vim.fn.getregtype("+")
+                local text = to_text(cb)
+
+                if text ~= "" and (not M.history[1] or to_text(M.history[1].content) ~= text) then
+                    M.push(cb, regtype)
+                    vim.fn.setreg('"', cb, regtype)
+                end
             end,
         })
     end

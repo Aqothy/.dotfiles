@@ -55,21 +55,7 @@ local symbol_opts = {
         )
     end,
     filter = {
-        default = {
-            "Class",
-            "Constructor",
-            "Enum",
-            "Function",
-            "Interface",
-            "Module",
-            "Method",
-            "Struct",
-            "Variable",
-            "Property",
-            "Constant",
-            "Field",
-            "Namespace",
-        },
+        default = require("config.constants").kind_filter,
     },
 }
 
@@ -202,6 +188,7 @@ return {
                 gh_pr = { live = false },
                 gh_issue = { live = false },
                 lsp_symbols = symbol_opts,
+                treesitter = symbol_opts,
                 explorer = { hidden = true },
             },
         },
@@ -322,5 +309,6 @@ return {
         { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
         { "<leader>sM", function() Snacks.picker.man() end, desc = "Man Pages" },
         { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
+        { "gs", function() Snacks.picker.treesitter() end, desc = "Treesitter Symbols" },
     },
 }

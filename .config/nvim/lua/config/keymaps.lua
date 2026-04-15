@@ -61,6 +61,11 @@ local next_qf, prev_qf = rep.pair(function()
 end, function()
     pcall(vim.cmd.cprevious, { count = vim.v.count1 })
 end)
+local next_ll, prev_ll = rep.pair(function()
+    pcall(vim.cmd.lnext, { count = vim.v.count1 })
+end, function()
+    pcall(vim.cmd.lprevious, { count = vim.v.count1 })
+end)
 
 -- Navigation and movement
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -80,6 +85,8 @@ map("n", "]b", next_buffer, { desc = "Next Buffer" })
 map("n", "[b", prev_buffer, { desc = "Prev Buffer" })
 map("n", "]q", next_qf, { desc = "Next Quickfix Item" })
 map("n", "[q", prev_qf, { desc = "Prev Quickfix Item" })
+map("n", "]l", next_ll, { desc = "Next Location List Item" })
+map("n", "[l", prev_ll, { desc = "Prev Location List Item" })
 
 -- Terminal
 map("t", "<a-n>", "<c-\\><c-n>", { desc = "Terminal escape" })
@@ -183,3 +190,5 @@ map("n", "yd", function()
         yank
     )
 end, { desc = "Yank diagnostic message on current line" })
+
+map("n", "z<space>", "<cmd>%foldclose<CR>", { desc = "Close toplevel folds" })

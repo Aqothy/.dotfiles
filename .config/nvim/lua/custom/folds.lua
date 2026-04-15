@@ -86,14 +86,16 @@ function M.setup(opts)
             if should_skip(win) then
                 return
             end
-            local line = topline
-            while line <= botline do
-                local foldstart = vim.fn.foldclosed(line)
-                if foldstart > -1 then
-                    line = render_fold_text(win, buf, foldstart)
+            vim.api.nvim_win_call(win, function()
+                local line = topline
+                while line <= botline do
+                    local foldstart = vim.fn.foldclosed(line)
+                    if foldstart > -1 then
+                        line = render_fold_text(win, buf, foldstart)
+                    end
+                    line = line + 1
                 end
-                line = line + 1
-            end
+            end)
         end,
     })
 
