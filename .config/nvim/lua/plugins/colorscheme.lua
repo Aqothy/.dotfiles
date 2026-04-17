@@ -2,6 +2,7 @@ return {
     {
         "ellisonleao/gruvbox.nvim",
         priority = 1001,
+        enabled = false,
         config = function()
             local gruvbox = require("gruvbox")
             local colors = gruvbox.palette
@@ -59,6 +60,16 @@ return {
                 pattern = "background",
                 callback = apply_gruvbox,
             })
+        end,
+    },
+    {
+        "folke/tokyonight.nvim",
+        priority = 1001,
+        config = function()
+            require("tokyonight").setup({
+                style = "storm",
+            })
+            vim.cmd("colorscheme tokyonight")
         end,
     },
 }

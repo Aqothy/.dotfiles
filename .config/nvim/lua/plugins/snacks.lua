@@ -27,12 +27,12 @@ local git_ref_opts = {
 }
 
 local symbol_opts = {
-    keep_parents = true,
     layout = {
         preset = "dropdown",
         preview = "main",
         layout = {
-            max_width = 60,
+            max_width = 50,
+            height = 0.9,
         },
     },
     -- open at symbol containing cursor: https://github.com/folke/snacks.nvim/issues/1057
@@ -55,7 +55,7 @@ local symbol_opts = {
         )
     end,
     filter = {
-        default = require("config.constants").kind_filter,
+        default = true,
     },
 }
 
@@ -151,12 +151,6 @@ return {
                         ["<a-h>"] = false,
                     },
                 },
-                list = {
-                    keys = {
-                        ["<a-.>"] = "toggle_hidden",
-                        ["<a-h>"] = false,
-                    },
-                },
             },
             layouts = {
                 vscode = {
@@ -187,9 +181,8 @@ return {
                 git_branches = git_ref_opts,
                 gh_pr = { live = false },
                 gh_issue = { live = false },
-                lsp_symbols = symbol_opts,
-                treesitter = symbol_opts,
                 explorer = { hidden = true },
+                lsp_symbols = symbol_opts,
             },
         },
 
@@ -309,6 +302,5 @@ return {
         { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
         { "<leader>sM", function() Snacks.picker.man() end, desc = "Man Pages" },
         { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
-        { "gs", function() Snacks.picker.treesitter() end, desc = "Treesitter Symbols" },
     },
 }

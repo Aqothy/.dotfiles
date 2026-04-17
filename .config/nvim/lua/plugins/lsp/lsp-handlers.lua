@@ -37,7 +37,14 @@ local sev_list = {
 
 function M.setup()
     local config = {
-        signs = false,
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+                [vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
+                [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+                [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
+            },
+        },
         virtual_text = {
             prefix = function(diagnostic)
                 return (icons.diagnostics[sev_list[s[diagnostic.severity]]] or "●") .. " "

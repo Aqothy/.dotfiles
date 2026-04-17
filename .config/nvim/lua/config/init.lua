@@ -62,7 +62,6 @@ end
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = lazy_spec,
-    install = { colorscheme = { "gruvbox" } },
     defaults = {
         lazy = false,
         version = false, -- always use the latest git commit
