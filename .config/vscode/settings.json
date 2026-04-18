@@ -31,7 +31,6 @@
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
-  "workbench.colorTheme": "Gruvbox Dark Medium",
   "workbench.startupEditor": "none",
   "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
   "github.copilot.chat.responsesApiReasoningEffort": "high",
@@ -40,6 +39,4 @@
   "terminal.integrated.macOptionIsMeta": true,
   "git.blame.editorDecoration.enabled": true,
   "window.autoDetectColorScheme": true,
-  "workbench.preferredDarkColorTheme": "Gruvbox Dark Soft",
-  "workbench.preferredLightColorTheme": "Gruvbox Light Soft",
 }

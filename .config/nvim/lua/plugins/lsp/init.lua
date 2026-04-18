@@ -7,7 +7,7 @@ return {
     },
     config = function()
         local handlers = require("plugins.lsp.lsp-handlers")
-        local progress_message_max_width = 40
+        local progress_message_max_width = 30
         local autocmd = vim.api.nvim_create_autocmd
 
         handlers.setup()

@@ -185,3 +185,4 @@ map("n", "yd", function()
 end, { desc = "Yank diagnostic message on current line" })
 
 map("n", "z<space>", "<cmd>%foldclose<CR>", { desc = "Close toplevel folds" })
+map("n", "dm", ":execute 'delmarks '.nr2char(getchar())<cr>", { silent = true })

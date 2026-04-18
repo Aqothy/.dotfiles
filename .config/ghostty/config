@@ -8,7 +8,7 @@ adjust-cursor-height = 8%
 mouse-hide-while-typing = true
 window-padding-color = extend
 
-theme = "Gruvbox Material Dark"
+theme = "TokyoNight Storm"
 
 macos-option-as-alt = true
 
