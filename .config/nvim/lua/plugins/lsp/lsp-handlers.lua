@@ -44,13 +44,13 @@ function M.setup()
                 [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
                 [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
             },
+            severity = { min = vim.diagnostic.severity.WARN },
         },
         virtual_text = {
             prefix = function(diagnostic)
                 return (icons.diagnostics[sev_list[s[diagnostic.severity]]] or "●") .. " "
             end,
         },
-        underline = { severity = { min = vim.diagnostic.severity.WARN } },
         severity_sort = true,
         float = {
             source = "if_many",

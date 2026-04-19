@@ -1,8 +1,5 @@
 require("config.options")
-vim.treesitter.language.register("bash", { "kitty", "zsh" })
-
 require("config")
-
 require("config.keymaps")
 require("config.commands")
 require("config.autocmds")

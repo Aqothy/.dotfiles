@@ -6,15 +6,15 @@ local function agent(action)
         end
     end
 
-    if action == "toggle" then
+    if action == "focus" then
         for _, t in ipairs(terms) do
             if t:is_open() then
-                t:hide()
+                t:focus()
                 return
             end
         end
 
-        require("sidekick.cli").toggle()
+        require("sidekick.cli").focus()
         return
     end
 
@@ -78,6 +78,9 @@ return {
             },
             cli = {
                 win = {
+                    split = {
+                        width = 0.5,
+                    },
                     keys = {
                         cycle_prev = {
                             "<A-[>",
@@ -105,11 +108,6 @@ return {
                             desc = "Select Agent",
                         },
                     },
-                    layout = "float",
-                    float = {
-                        width = 1,
-                        height = 1,
-                    },
                 },
             },
         },
@@ -126,9 +124,14 @@ return {
                 desc = "Goto/Apply Next Edit Suggestion",
             },
             {
+                "<leader>aa",
+                function() require("sidekick.cli").toggle() end,
+                desc = "Sidekick Toggle CLI",
+            },
+            {
                 "<c-.>",
-                function() agent("toggle") end,
-                desc = "Sidekick Toggle",
+                function() agent("focus") end,
+                desc = "Sidekick Focus",
                 mode = { "n", "t" },
             },
             {

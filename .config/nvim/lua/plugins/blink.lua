@@ -65,7 +65,7 @@ return {
                     return {
                         "exact",
                         function(a, b)
-                            if math.abs(a.score - b.score) > 4 then
+                            if math.abs(a.score - b.score) > 3 then
                                 return
                             end
 

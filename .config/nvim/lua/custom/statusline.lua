@@ -11,7 +11,6 @@ local autocmd = api.nvim_create_autocmd
 
 local has_icons, icons = pcall(require, "config.icons")
 local mini_icons_mod = nil
-local has_term_util, term_util = pcall(require, "vim._core.util")
 
 local function get_mini_icons()
     if mini_icons_mod == false then
@@ -257,16 +256,8 @@ function M.filetype_component()
     local modified_icon = "%{&modified?' ●':''}"
     local readonly_icon = "%{&readonly?' 󰌾':''}"
 
-    local extra = ""
-    if buftype == "terminal" and has_term_util then
-        local exit_code = term_util.term_exitcode()
-        if exit_code then
-            extra = " " .. exit_code
-        end
-    end
-
     local prefix = icon_hl .. icon .. "%* "
-    local suffix = modified_icon .. readonly_icon .. extra
+    local suffix = modified_icon .. readonly_icon
 
     local short_result = prefix .. short_path .. suffix
     local long_result = prefix .. long_path .. suffix

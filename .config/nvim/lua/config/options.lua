@@ -77,7 +77,6 @@ opt.guifont = "Hack Nerd Font Mono:h15"
 opt.wrap = false
 opt.smoothscroll = true
 opt.textwidth = 80
-opt.cmdheight = 0
 
 opt.fileencoding = "utf-8"
 

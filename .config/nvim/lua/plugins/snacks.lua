@@ -8,6 +8,12 @@ local git_ref_opts = {
                 require("diffview").open(args)
             end
         end,
+        ["diff"] = function(picker)
+            local currentCommit = picker:current().commit
+            if currentCommit then
+                require("diffview").open({ currentCommit })
+            end
+        end,
         ["copy_commit"] = function(picker)
             local currentCommit = picker:current().commit
             if currentCommit then
@@ -19,7 +25,8 @@ local git_ref_opts = {
     win = {
         input = {
             keys = {
-                ["<c-o>"] = { "diff_commit", desc = "Diff this commit", mode = { "n", "i" } },
+                ["<a-o>"] = { "diff_commit", desc = "Diff this commit", mode = { "n", "i" } },
+                ["<c-o>"] = { "diff", desc = "Diff", mode = { "n", "i" } },
                 ["<c-y>"] = { "copy_commit", desc = "Copy commit", mode = { "n", "i" } },
             },
         },
@@ -295,7 +302,7 @@ return {
         { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
         { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
         { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
-        { "<c-\\>", function() Snacks.terminal() end, mode = { "n", "t" }, desc = "Terminal" },
+        { "<c-\\>", function() Snacks.terminal.focus() end, mode = { "n", "t" }, desc = "Terminal" },
         { "<leader>sf", function() Snacks.picker.git_files({ layout = { preset = "vscode" } }) end, desc = "Search Files (git-files)" },
         { "<leader>sh", function() Snacks.picker.highlights() end, desc = "Highlights" },
         { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },

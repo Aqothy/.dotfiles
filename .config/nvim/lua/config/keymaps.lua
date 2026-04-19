@@ -28,6 +28,8 @@ map("x", "K", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { des
 map("n", "C", '"_C', { desc = "Change into void" })
 map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
 map("n", "*", "*``", { desc = "Same pos search" })
+map("x", "v", "an", { desc = "Incremental Selection", remap = true })
+map("x", "<c-r>", "in", { desc = "Reduce Selection", remap = true })
 
 local next_yank, prev_yank = rep.pair(function()
     require("custom.ying").cycle(1)
