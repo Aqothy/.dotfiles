@@ -12,7 +12,7 @@
       // Runtime and builtin libraries.
       "$VIMRUNTIME/lua",
       // Include some plugins for API completion.
-      "$XDG_DATA_HOME/nvim/lazy/nvim-lspconfig/lua/lspconfig/types/lsp"
+      "$XDG_DATA_HOME/nvim/lazy/nvim-lspconfig/lua/lspconfig"
     ]
   },
   "diagnostics": {
