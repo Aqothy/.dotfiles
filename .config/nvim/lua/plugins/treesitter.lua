@@ -252,7 +252,7 @@ return {
         event = "LazyFile",
         keys = {
             {
-                "[g",
+                "[C",
                 function()
                     require("treesitter-context").go_to_context(vim.v.count1)
                 end,

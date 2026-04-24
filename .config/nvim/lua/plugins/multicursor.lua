@@ -23,7 +23,7 @@ return {
     keys = {
         { "gl", mc("matchAddCursor", "match", 1), mode = { "n", "x" }, desc = "Add next match cursor" },
         { "gL", mc("matchAddCursor", "match", -1), mode = { "n", "x" }, desc = "Add previous match cursor" },
-        { "<s-tab>", mc("toggleCursor"), desc = "Toggle Cursor" },
+        { "gz", mc("toggleCursor"), desc = "Toggle Cursor" },
         { "m", mc("matchCursors"), mode = "x", desc = "Cursor on matches in selection" },
         { "gM", mc("operator", "match"), mode = { "n", "x" }, desc = "Cursor on all matches inside operator range" },
         { "gV", mc("restoreCursors"), desc = "Restore deleted cursors" },
