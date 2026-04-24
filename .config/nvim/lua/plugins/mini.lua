@@ -165,17 +165,6 @@ return {
 
             autocmd("User", {
                 group = group,
-                pattern = { "MiniFilesActionRename", "MiniFilesActionMove" },
-                callback = function(ev)
-                    Snacks.rename.on_rename_file(ev.data.from, ev.data.to)
-                    vim.schedule(function()
-                        mf.close()
-                    end)
-                end,
-            })
-
-            autocmd("User", {
-                group = group,
                 pattern = "MiniFilesActionDelete",
                 callback = function(ev)
                     local from = ev.data.to

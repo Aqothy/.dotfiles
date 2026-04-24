@@ -2,14 +2,7 @@ local M = {}
 
 local has_blink, blink = pcall(require, "blink.cmp")
 
-M.capabilities = {
-    workspace = {
-        fileOperations = {
-            didRename = true,
-            willRename = true,
-        },
-    },
-}
+M.capabilities = {}
 
 M.capabilities = vim.tbl_deep_extend(
     "force",
@@ -94,7 +87,6 @@ end
 
 -- stylua: ignore
 M.keys = {
-    { lhs = "gK", rhs = vim.lsp.buf.signature_help, desc = "Signature Help", has = "signatureHelp" },
     { lhs = "gd", rhs = function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
     { lhs = "grr", rhs = function() Snacks.picker.lsp_references() end, desc = "References", has = "references" },
     { lhs = "gri", rhs = function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation", has = "implementation" },
