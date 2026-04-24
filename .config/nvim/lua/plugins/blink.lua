@@ -36,7 +36,7 @@ return {
             },
             sources = {
                 per_filetype = {
-                    sql = { "snippets", "dadbod", "buffer" },
+                    sql = { "snippets", "dadbod_grip", "buffer" },
                 },
                 providers = {
                     lsp = {
@@ -52,7 +52,7 @@ return {
                             return ctx.trigger.initial_kind ~= "trigger_character"
                         end,
                     },
-                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+                    dadbod_grip = { name = "Dadbod Grip", module = "dadbod-grip.completion.blink" },
                 },
             },
             fuzzy = {

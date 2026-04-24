@@ -3,6 +3,7 @@
   "blink.indent": { "branch": "main", "commit": "9c80820ca77218a8d28e70075d6f44a1609911fe" },
   "conform.nvim": { "branch": "master", "commit": "dca1a190aa85f9065979ef35802fb77131911106" },
   "copilot.vim": { "branch": "release", "commit": "a12fd5672110c8aa7e3c8419e28c96943ca179be" },
+  "dadbod-grip.nvim": { "branch": "main", "commit": "3ee0a6d0000bebee89692a39e0d16605c5e17306" },
   "debugmaster.nvim": { "branch": "main", "commit": "505d9a269d657ce8e0fa5601e0530f0d8798038c" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "flash.nvim": { "branch": "main", "commit": "fcea7ff883235d9024dc41e638f164a450c14ca2" },
@@ -33,8 +34,5 @@
   "treesj": { "branch": "main", "commit": "5fa4e7ba3517f8fe743bb4488f9e9c7ce83330fc" },
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "ultimate-autopair.nvim": { "branch": "v0.6", "commit": "6b58234de921437836efe27714b2026ed2ee235a" },
-  "vim-dadbod": { "branch": "master", "commit": "6d1d41da4873a445c5605f2005ad2c68c99d8770" },
-  "vim-dadbod-completion": { "branch": "master", "commit": "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6" },
-  "vim-dadbod-ui": { "branch": "master", "commit": "07e92e22114cc5b1ba4938d99897d85b58e20475" },
   "vim-test": { "branch": "master", "commit": "bc0e94059de40641d163516a83c63bc45c716acf" }
 }
