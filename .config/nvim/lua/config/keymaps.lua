@@ -9,12 +9,11 @@ map("o", "ie", "<cmd>normal vie<cr>", { desc = "Operate whole buffer" })
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
-map("x", "<bs>", [["_d]], { desc = "Delete without yanking" })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
 map("x", "il", "^og_", { desc = "Select line without whitespace" })
 map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
-map("x", "y", "ygv<esc>", { desc = "Cursor-in-place copy" })
+map("x", "y", '"+ygv<esc>', { desc = "Cursor-in-place copy" })
 map("x", "Q", "<cmd>norm @q<CR>", { desc = "Run macro 'q' on selection" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
@@ -22,11 +21,8 @@ end, { desc = "Yank relative file path to clipboard" })
 map({ "n", "x", "o" }, "M", "%", { remap = true, desc = "Matchit" })
 map("n", "<leader>w", "<cmd>update<cr>", { desc = "Save File" })
 map("n", "<leader><c-l>", "<Cmd>nohlsearch|diffupdate|normal! <C-L><CR>", { desc = "Redraw" })
-map("n", "<leader><c-o>", "<cmd>pop<cr>", { desc = "Pop off tag stack" })
-map("x", "J", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down", silent = true })
-map("x", "K", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up", silent = true })
-map("n", "C", '"_C', { desc = "Change into void" })
-map({ "x", "n" }, "c", '"_c', { desc = "change into void" })
+map("n", "y", '"+y', { desc = "Yank to system clipboard" })
+map("x", "x", '"+d', { desc = "Cut to system clipboard" })
 map("n", "*", "*``", { desc = "Same pos search" })
 map("x", "v", "an", { desc = "Incremental Selection", remap = true })
 map("x", "<c-r>", "in", { desc = "Reduce Selection", remap = true })
@@ -63,6 +59,11 @@ local next_ll, prev_ll = rep.pair(function()
 end, function()
     pcall(vim.cmd.lprevious, { count = vim.v.count1 })
 end)
+local next_diff, prev_diff = rep.pair(function()
+    vim.cmd("normal! " .. vim.v.count1 .. "]c")
+end, function()
+    vim.cmd("normal! " .. vim.v.count1 .. "[c")
+end)
 
 -- Navigation and movement
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center screen" })
@@ -71,17 +72,19 @@ map("n", "n", "nzvzz", { desc = "Next search result, open folds, and center scre
 map("n", "N", "Nzvzz", { desc = "Previous search result, open folds, and center screen" })
 map("n", "<C-i>", "<C-i>zz", { desc = "Jump forward in jump list and center" })
 map("n", "<C-o>", "<C-o>zz", { desc = "Jump backward in jump list and center" })
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map({ "n", "x" }, "j", [[v:count > 5 ? "m'" . v:count . 'j' : 'gj']], { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "k", [[v:count > 5 ? "m'" . v:count . 'k' : 'gk']], { desc = "Up", expr = true, silent = true })
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
-map("n", "<leader>bb", "<c-^>", { desc = "Buffer Back" })
+map("n", "<leader><tab>", "<c-^>", { desc = "Alt Buf" })
 map("n", "]b", next_buffer, { desc = "Next Buffer" })
 map("n", "[b", prev_buffer, { desc = "Prev Buffer" })
 map("n", "]l", next_ll, { desc = "Next Location List Item" })
 map("n", "[l", prev_ll, { desc = "Prev Location List Item" })
+map("n", "]c", next_diff, { desc = "Next Diff" })
+map("n", "[c", prev_diff, { desc = "Prev Diff" })
 
 -- Terminal
 map("t", "<a-n>", "<c-\\><c-n>", { desc = "Terminal escape" })
@@ -97,7 +100,7 @@ end
 map("n", "<leader>\\", "<cmd>vs<cr>", { desc = "New Vertical Split" })
 map("n", "<leader><cr>", "<cmd>sp<cr>", { desc = "New Horizontal Split" })
 map("n", "<leader>tt", "<cmd>tabnew | term<cr>", { desc = "Tab terminal" })
-map("n", "<c-t>", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
+map("n", "<leader>ts", "<cmd>tab split<cr>", { desc = "Open window in new tab" })
 map("n", "<c-s-w>", "<cmd>tabclose<CR>", { desc = "Close tab" })
 map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
 map("n", "<a-s-,>", "<c-w>3<", { desc = "Resize window left" })
@@ -126,7 +129,7 @@ map("s", "<BS>", "<C-o>s", { desc = "Remove Snippet Placeholder" })
 map({ "i", "x", "n", "s" }, "<D-s>", "<esc><cmd>update<cr>", { desc = "Save File" })
 map("i", "<C-CR>", "<C-o>o", { desc = "Insert line below" })
 map("n", "<C-CR>", "]<space>", { remap = true, desc = "New line below" })
-map("i", "<C-;>", "<C-o>$;", { desc = "Append semicolon at EOL" })
+map("i", "<C-;>", "<End>", { desc = "Append semicolon at EOL" })
 map({ "i", "c" }, "<a-bs>", "<c-w>", { desc = "Delete word" })
 
 -- utils
@@ -159,32 +162,6 @@ map("n", "[d", prev_diag, { desc = "Prev Diagnostic" })
 map("n", "]e", next_error, { desc = "Next Error" })
 map("n", "[e", prev_error, { desc = "Prev Error" })
 map("n", "gh", vim.diagnostic.open_float, { desc = "Diagnostic Float" })
-map("n", "yd", function()
-    local diags = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
-    local n_diags = #diags
-
-    local function yank(msg)
-        if not msg then
-            return
-        end
-        vim.fn.setreg('"', msg)
-        vim.fn.setreg(vim.v.register, msg)
-    end
-
-    if n_diags == 1 then
-        local msg = diags[1].message
-        yank(msg)
-        return
-    end
-
-    vim.ui.select(
-        vim.tbl_map(function(d)
-            return d.message
-        end, diags),
-        { prompt = "Select diagnostic message to yank: " },
-        yank
-    )
-end, { desc = "Yank diagnostic message on current line" })
 
 map("n", "z<space>", "<cmd>%foldclose<CR>", { desc = "Close toplevel folds" })
-map("n", "dm", ":execute 'delmarks '.nr2char(getchar())<cr>", { silent = true })
+map("n", "dm", ":execute 'delmarks '.nr2char(getchar())<cr>", { desc = "Delete mark", silent = true })

@@ -36,9 +36,9 @@ opt.smartcase = true
 
 -- Sync clipboard between OS and Neovim.
 -- Schedule the setting after `UiEnter` because it can increase startup-time.
-vim.schedule(function()
-    opt.clipboard = "unnamedplus"
-end)
+-- vim.schedule(function()
+--     opt.clipboard = "unnamedplus"
+-- end)
 
 opt.mouse = "a"
 

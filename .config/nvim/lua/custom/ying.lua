@@ -10,6 +10,12 @@ M.config = {
     highlight_timeout = 60,
 }
 
+local CYCLE_REGISTER = "x"
+
+local function is_empty_content(content)
+    return not content or content == "" or (type(content) == "table" and #content == 0)
+end
+
 local function to_text(content)
     if type(content) == "table" then
         return table.concat(content, "\n")
@@ -17,9 +23,12 @@ local function to_text(content)
     return content
 end
 
+local function read_register(reg)
+    return vim.fn.getreg(reg, 1, true), vim.fn.getregtype(reg)
+end
+
 local function with_temp_register(reg, content, regtype, fn)
-    local old_content = vim.fn.getreg(reg, 1, true)
-    local old_type = vim.fn.getregtype(reg)
+    local old_content, old_type = read_register(reg)
 
     vim.fn.setreg(reg, content, regtype)
     local ok, result = pcall(fn)
@@ -44,9 +53,20 @@ function M.highlight(regtype)
     })
 end
 
+local function sync_system_clipboard()
+    local content, regtype = read_register("+")
+    if is_empty_content(content) then
+        return
+    end
+
+    vim.fn.setreg('"', content, regtype)
+
+    M.push(content, regtype)
+end
+
 -- History management
 function M.push(content, regtype)
-    if not content or content == "" or (type(content) == "table" and #content == 0) then
+    if is_empty_content(content) then
         return
     end
 
@@ -94,7 +114,6 @@ local function apply_put(reg, type, count, index, is_visual)
         count = count,
         index = resolved_index,
         type = type,
-        register = reg,
         is_visual = is_visual,
         tick = vim.b.changedtick,
     }
@@ -121,7 +140,7 @@ function M.cycle(dir)
     local entry = M.history[new_idx]
     vim.cmd("silent! undo")
 
-    local reg = M.state.register
+    local reg = CYCLE_REGISTER
     M.suppress_visual_delete = true
     local ok, err = pcall(function()
         with_temp_register(reg, entry.content, entry.type, function()
@@ -157,7 +176,9 @@ function M.picker()
     end)
 end
 
-function M.setup()
+function M.setup(opts)
+    M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+
     local group = vim.api.nvim_create_augroup("Ying", { clear = true })
 
     vim.api.nvim_create_autocmd("TextYankPost", {
@@ -179,20 +200,11 @@ function M.setup()
         vim.api.nvim_create_autocmd("FocusGained", {
             group = group,
             callback = function()
-                local cb = vim.fn.getreg("+")
-                local regtype = vim.fn.getregtype("+")
-                local text = to_text(cb)
-
-                if text ~= "" and (not M.history[1] or to_text(M.history[1].content) ~= text) then
-                    M.push(cb, regtype)
-                    vim.fn.setreg('"', cb, regtype)
-                end
+                sync_system_clipboard()
             end,
         })
-    end
 
-    if #M.history == 0 then
-        M.push(vim.fn.getreg('"', 1, true), vim.fn.getregtype('"'))
+        sync_system_clipboard()
     end
 end
 
