@@ -9,7 +9,7 @@ return {
             vim.treesitter.language.register("bash", { "kitty", "zsh" })
         end,
         opts = {
-            indent = { disable = { "swift" } },
+            indent = { disable = {} },
             highlight = { disable = {} },
             folds = { disable = {} },
             ensure_installed = {
