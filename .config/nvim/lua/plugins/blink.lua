@@ -6,8 +6,10 @@ return {
         opts = {
             keymap = {
                 preset = "enter",
-                ["<C-y>"] = { "select_and_accept" },
+                ["<C-y>"] = { "select_and_accept", "fallback" },
                 ["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
+                ["<C-c>"] = { "hide", "fallback" },
+                ["<C-e>"] = false,
                 ["<C-k>"] = false,
                 ["<Up>"] = false,
                 ["<Down>"] = false,

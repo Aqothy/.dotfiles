@@ -83,7 +83,7 @@ return {
                     },
                     keys = {
                         cycle_prev = {
-                            "<A-[>",
+                            "<a-u>",
                             function()
                                 agent("prev")
                             end,
@@ -91,7 +91,7 @@ return {
                             desc = "Cycle Prev Agent",
                         },
                         cycle_next = {
-                            "<A-]>",
+                            "<a-i>",
                             function()
                                 agent("next")
                             end,
