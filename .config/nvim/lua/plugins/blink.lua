@@ -34,6 +34,7 @@ return {
                     show_on_insert_on_trigger_character = false,
                 },
             },
+            snippets = { preset = "mini_snippets" },
             sources = {
                 per_filetype = {
                     sql = { "snippets", "dadbod_grip", "buffer" },

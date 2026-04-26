@@ -1,8 +1,13 @@
 {
   "fmt.Println": {
     "prefix": "l",
-    "body": "fmt.Println($1)",
+    "body": "fmt.Println(\"$1\")",
     "description": "Snippet for fmt.Println()"
+  },
+  "fmt.Printf": {
+    "prefix": "lf",
+    "body": "fmt.Printf(\"$1\", ${2:var})",
+    "description": "Snippet for fmt.Printf()"
   },
   "if err != nil": {
     "prefix": "ie",

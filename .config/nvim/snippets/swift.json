@@ -1,8 +1,8 @@
 {
   "print": {
     "prefix": "l",
-    "body": "print($0)",
-    "description": "print(...)"
+    "body": "print(\"$1\")\n$0",
+    "description": "print(\"...\")"
   },
   "swiftui-view": {
     "prefix": "view",
@@ -23,9 +23,9 @@
       "//  ${TM_FILENAME}",
       "//  ${WORKSPACE_NAME}",
       "//",
-      "//  Created by Anthony Qiu on ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}.",
+      "//  Created by $1 on ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}.",
       "//",
-      ""
+      "$0"
     ],
     "description": "header"
   }

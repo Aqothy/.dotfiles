@@ -17,6 +17,7 @@
   "mini.hipatterns": { "branch": "main", "commit": "9eff319bbe66adfaf781a0d0e174baa08ba94909" },
   "mini.icons": { "branch": "main", "commit": "bac6317300e205335df425296570d84322730067" },
   "mini.operators": { "branch": "main", "commit": "fccb5e3ef0cc319b217ed9c7db1a4672dd6b766c" },
+  "mini.snippets": { "branch": "main", "commit": "8e3acd41bd7ee8f89967c83bacc93871b98a14aa" },
   "multicursor.nvim": { "branch": "main", "commit": "704b99f10a72cc05d370cfeb294ff83412a8ab55" },
   "nvim-dap": { "branch": "master", "commit": "45a69eba683a2c448dd9ecfc4de89511f0646b5f" },
   "nvim-lspconfig": { "branch": "master", "commit": "81878de76c0de4ce289513734ad80c31ec7871b8" },

@@ -3,5 +3,33 @@
     "prefix": "cp",
     "body": "#include \"/Users/aqothy/.config/bits/stdc++.h\"\nusing namespace std;\n",
     "description": "Competitive programming headers"
+  },
+  "Starter Template": {
+    "prefix": "st",
+    "body": [
+      "#include <iostream>",
+      "",
+      "int main (int argc, char *argv[]) {",
+      "\t$1",
+      "",
+      "\treturn 0;",
+      "}"
+    ],
+    "description": "Standard starter template for a tiny C++ program"
+  },
+  "printf": {
+    "prefix": "lf",
+    "body": ["printf(\"$1\\n\"$0);"],
+    "description": "Generic printf() snippet"
+  },
+  "cout": {
+    "prefix": "l",
+    "body": ["std::cout << ${1:message};"],
+    "description": "Code snippet for printing to std::cout, provided the header is set"
+  },
+  "#ifndef": {
+    "prefix": "#ifndef",
+    "body": ["#ifndef ${1:DEBUG}", "$0", "#endif // !$1"],
+    "description": "Code snippet for #ifndef"
   }
 }
