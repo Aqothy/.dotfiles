@@ -45,6 +45,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
 
+    alt-g = 'workspace g'
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'
     alt-3 = 'workspace 3'
@@ -56,6 +57,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-9 = 'workspace 9'
 
 
+    alt-shift-g = 'move-node-to-workspace g'
     alt-shift-1 = 'move-node-to-workspace 1'
     alt-shift-2 = 'move-node-to-workspace 2'
     alt-shift-3 = 'move-node-to-workspace 3'
@@ -72,6 +74,7 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-semicolon = 'mode service'
 
 [workspace-to-monitor-force-assignment]
+    g = 'main'
     1 = 'main'
     2 = 'main'
     3 = 'main'
