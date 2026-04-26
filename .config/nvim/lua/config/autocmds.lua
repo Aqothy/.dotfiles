@@ -94,6 +94,24 @@ autocmd("BufReadPost", {
     end,
 })
 
+-- Automatically open binary files with the system default application
+local binary_extensions = { "pdf", "png", "jpg", "jpeg" }
+autocmd("BufReadCmd", {
+    group = augroup("binary_open"),
+    pattern = vim.tbl_map(function(ext)
+        return "*." .. ext
+    end, binary_extensions),
+    callback = function(ev)
+        vim.ui.open(ev.file)
+        -- Wipe the buffer so it doesn't stay open in Neovim
+        vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(ev.buf) then
+                vim.api.nvim_buf_delete(ev.buf, { force = true })
+            end
+        end)
+    end,
+})
+
 local home = vim.env.HOME
 local git_dir = home .. "/.dotfiles"
 
