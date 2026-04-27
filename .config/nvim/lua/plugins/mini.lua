@@ -283,14 +283,16 @@ return {
     {
         "nvim-mini/mini.operators",
         keys = {
+            { "g?", mode = { "n", "x" }, desc = "Evaluate operator" },
             { "cx", desc = "Exchange operator" },
             { "X", mode = "x", desc = "Exchange operator visual" },
+            { "gS", mode = { "n", "x" }, desc = "Sort operator" },
             { "gR", mode = { "n", "x" }, desc = "Replace operator" },
             { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
         },
         opts = {
             evaluate = {
-                prefix = "",
+                prefix = "g?",
             },
             exchange = {
                 prefix = "",
@@ -302,7 +304,7 @@ return {
                 prefix = "gR",
             },
             sort = {
-                prefix = "",
+                prefix = "gS",
             },
         },
         config = function(_, opts)

@@ -85,7 +85,8 @@ map("n", "]c", next_diff, { desc = "Next Diff" })
 map("n", "[c", prev_diff, { desc = "Prev Diff" })
 
 -- Terminal
-map("t", "<a-esc>", "<c-\\><c-n>", { desc = "Terminal escape" })
+map("t", "<C-/>", "<C-\\><C-n>", { desc = "Terminal escape" })
+map("t", "<C-_>", "<C-\\><C-n>", { desc = "Terminal escape" })
 
 -- Tabs and windows
 map({ "n", "t" }, "<a-]>", "<cmd>tabnext<cr>", { desc = "Next Tab" })

@@ -125,7 +125,16 @@ return {
             },
         },
 
-        bigfile = { enabled = true },
+        bigfile = {
+            enabled = true,
+            config = function(opts, defaults)
+                opts.setup = function(ctx)
+                    defaults.setup(ctx)
+                    vim.b.indent_guide = false
+                    vim.cmd("syntax off")
+                end
+            end,
+        },
 
         input = { enabled = true },
 
