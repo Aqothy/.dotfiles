@@ -366,8 +366,8 @@ return {
                 },
                 mappings = {
                     expand = "<C-j>",
-                    jump_next = "<tab>",
-                    jump_prev = "<s-tab>",
+                    jump_next = "",
+                    jump_prev = "",
                     stop = "",
                 },
                 expand = {

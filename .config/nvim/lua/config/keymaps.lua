@@ -108,7 +108,8 @@ map("n", "+", "3<C-W>+", { desc = "Resize window up" })
 map("n", "_", "3<C-W>-", { desc = "Resize window down" })
 
 -- Editing
-map({ "i", "c" }, "<C-a>", "<Home>", { desc = "Beginning of line" })
+map("c", "<C-a>", "<Home>", { desc = "Beginning of line" })
+map("i", "<C-a>", "<c-o>^", { desc = "Beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "Go EOL" })
 map(
     "x",

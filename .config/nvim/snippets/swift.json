@@ -7,6 +7,7 @@
   "swiftui-view": {
     "prefix": "view",
     "body": [
+      "import SwiftUI\n",
       "struct ${1:Name}: View {",
       "",
       "\tvar body: some View {",

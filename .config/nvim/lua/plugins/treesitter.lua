@@ -5,9 +5,6 @@ return {
         build = ":TSUpdate",
         event = { "VeryLazy", "LazyFile" },
         cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
-        init = function()
-            vim.treesitter.language.register("bash", { "kitty", "zsh" })
-        end,
         opts = {
             indent = { disable = {} },
             highlight = { disable = {} },

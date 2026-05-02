@@ -4,7 +4,7 @@ return {
         label = {
             uppercase = false,
             after = false,
-            before = true,
+            before = { 0, 0 },
             rainbow = {
                 enabled = true,
                 shade = 3,
