@@ -6,7 +6,6 @@ local M = {
 
 M.config = {
     history_length = 30,
-    sync_system_clipboard = true,
     highlight_timeout = 60,
 }
 
@@ -51,17 +50,6 @@ function M.highlight(regtype)
         timeout = M.config.highlight_timeout,
         event = { operator = "y", regtype = regtype, inclusive = true },
     })
-end
-
-local function sync_system_clipboard()
-    local content, regtype = read_register("+")
-    if is_empty_content(content) then
-        return
-    end
-
-    vim.fn.setreg('"', content, regtype)
-
-    M.push(content, regtype)
 end
 
 -- History management
@@ -195,17 +183,6 @@ function M.setup(opts)
             end
         end,
     })
-
-    if M.config.sync_system_clipboard then
-        vim.api.nvim_create_autocmd("FocusGained", {
-            group = group,
-            callback = function()
-                sync_system_clipboard()
-            end,
-        })
-
-        sync_system_clipboard()
-    end
 end
 
 return M

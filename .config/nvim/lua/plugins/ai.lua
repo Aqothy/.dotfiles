@@ -1,53 +1,3 @@
-local function agent(action)
-    local terms = {}
-    for _, s in ipairs(require("sidekick.cli.state").get({ attached = true })) do
-        if s.terminal then
-            table.insert(terms, s.terminal)
-        end
-    end
-
-    if action == "focus" then
-        for _, t in ipairs(terms) do
-            if t:is_open() then
-                t:focus()
-                return
-            end
-        end
-
-        require("sidekick.cli").focus()
-        return
-    end
-
-    if #terms < 2 then
-        return
-    end
-
-    -- Sort for consistent cycling
-    table.sort(terms, function(a, b)
-        return a.tool.name < b.tool.name
-    end)
-
-    local idx
-    for i, t in ipairs(terms) do
-        if t:is_open() then
-            idx = i
-            break
-        end
-    end
-
-    if idx then
-        terms[idx]:hide()
-
-        local step = action == "next" and 1 or -1
-        local target = terms[((idx - 1 + step) % #terms) + 1]
-
-        target:focus()
-        vim.schedule(function()
-            vim.cmd.startinsert()
-        end)
-    end
-end
-
 return {
     {
         "github/copilot.vim",
@@ -82,22 +32,6 @@ return {
                         width = 0.5,
                     },
                     keys = {
-                        cycle_prev = {
-                            "<a-u>",
-                            function()
-                                agent("prev")
-                            end,
-                            mode = { "n", "t" },
-                            desc = "Cycle Prev Agent",
-                        },
-                        cycle_next = {
-                            "<a-i>",
-                            function()
-                                agent("next")
-                            end,
-                            mode = { "n", "t" },
-                            desc = "Cycle Next Agent",
-                        },
                         select = {
                             "<a-.>",
                             function(term)
@@ -130,9 +64,9 @@ return {
             },
             {
                 "<c-.>",
-                function() agent("focus") end,
+                function() require("sidekick.cli").focus() end,
                 desc = "Sidekick Focus",
-                mode = { "n", "t" },
+                mode = { "n", "t", "i", "x" },
             },
             {
                 "<leader>as",

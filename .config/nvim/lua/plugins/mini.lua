@@ -36,7 +36,7 @@ return {
             },
             content = {
                 filter = function(entry)
-                    return not (entry.fs_type == "file" and entry.name == ".DS_Store")
+                    return entry.name ~= ".DS_Store"
                 end,
             },
             windows = {
@@ -160,21 +160,6 @@ return {
                 pattern = "MiniFilesExplorerOpen",
                 callback = function()
                     mf.set_bookmark("w", vim.uv.cwd(), { desc = "Working directory" })
-                end,
-            })
-
-            autocmd("User", {
-                group = group,
-                pattern = "MiniFilesActionDelete",
-                callback = function(ev)
-                    local from = ev.data.to
-                    local result = vim.system({ "trash", from }, { text = true }):wait()
-                    if result.code ~= 0 then
-                        vim.notify(
-                            "Failed to trash file: " .. from .. "\n" .. (result.stderr or ""),
-                            vim.log.levels.ERROR
-                        )
-                    end
                 end,
             })
         end,
@@ -311,74 +296,6 @@ return {
             local mo = require("mini.operators")
             mo.setup(opts)
             mo.make_mappings("exchange", { textobject = "cx", line = "cxx", selection = "X" })
-        end,
-    },
-    {
-        "echasnovski/mini.snippets",
-        event = "InsertEnter",
-        opts = function()
-            local ms = require("mini.snippets")
-            local gen_loader = ms.gen_loader
-
-            local autocmd = vim.api.nvim_create_autocmd
-            local group = vim.api.nvim_create_augroup("mini_snip", { clear = true })
-
-            autocmd("User", {
-                pattern = "MiniSnippetsSessionJump",
-                group = group,
-                callback = function(ev)
-                    if ev.data.tabstop_to == "0" then
-                        ms.session.stop()
-                    end
-                end,
-            })
-
-            autocmd("User", {
-                pattern = "MiniSnippetsSessionStart",
-                group = group,
-                callback = function()
-                    autocmd("ModeChanged", {
-                        pattern = "*:n",
-                        group = group,
-                        once = true,
-                        callback = function()
-                            while ms.session.get() do
-                                ms.session.stop()
-                            end
-                        end,
-                    })
-                end,
-            })
-
-            local jsx_patterns = { "javascript.json", "react-es7.json" }
-
-            local lang_patterns = {
-                jsx = jsx_patterns,
-                tsx = jsx_patterns,
-                javascript = jsx_patterns,
-                typescript = jsx_patterns,
-            }
-
-            return {
-                snippets = {
-                    gen_loader.from_file(vim.fn.stdpath("config") .. "/snippets/global.json"),
-                    gen_loader.from_lang({ lang_patterns = lang_patterns }),
-                },
-                mappings = {
-                    expand = "<C-j>",
-                    jump_next = "",
-                    jump_prev = "",
-                    stop = "",
-                },
-                expand = {
-                    select = function(snippets, insert)
-                        require("blink.cmp").cancel()
-                        vim.schedule(function()
-                            ms.default_select(snippets, insert)
-                        end)
-                    end,
-                },
-            }
         end,
     },
 }

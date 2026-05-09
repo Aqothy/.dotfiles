@@ -5,14 +5,16 @@ return {
         version = "*",
         opts = {
             keymap = {
-                preset = "enter",
+                preset = "none",
                 ["<C-y>"] = { "select_and_accept", "fallback" },
                 ["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
                 ["<C-c>"] = { "hide", "fallback" },
-                ["<C-e>"] = false,
-                ["<C-k>"] = false,
-                ["<Up>"] = false,
-                ["<Down>"] = false,
+                ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+                ["<CR>"] = { "accept", "fallback" },
+                ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+                ["<C-n>"] = { "select_next", "fallback_to_mappings" },
+                ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+                ["<C-f>"] = { "scroll_documentation_down", "fallback" },
             },
             cmdline = {
                 enabled = true,
@@ -36,7 +38,9 @@ return {
                     show_on_insert_on_trigger_character = false,
                 },
             },
-            snippets = { preset = "mini_snippets" },
+            snippets = {
+                expand = require("custom.snippet-fix").expand,
+            },
             sources = {
                 per_filetype = {
                     sql = { "snippets", "dadbod_grip", "buffer" },
@@ -60,25 +64,11 @@ return {
             },
             fuzzy = {
                 implementation = "lua",
-                sorts = function()
-                    if vim.api.nvim_get_mode().mode == "c" then
-                        return { "score", "sort_text" }
-                    end
-
-                    return {
-                        "exact",
-                        function(a, b)
-                            if math.abs(a.score - b.score) > 3 then
-                                return
-                            end
-
-                            return require("blink.cmp.fuzzy.sort").sort_text(a, b)
-                        end,
-                        "score",
-                        "label",
-                        "kind",
-                    }
-                end,
+                sorts = {
+                    "exact",
+                    "score",
+                    "sort_text",
+                },
             },
             appearance = {
                 kind_icons = require("config.icons").kinds,

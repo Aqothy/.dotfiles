@@ -7,15 +7,36 @@
   "swiftui-view": {
     "prefix": "view",
     "body": [
-      "import SwiftUI\n",
+      "import SwiftUI",
+      "",
       "struct ${1:Name}: View {",
       "",
       "\tvar body: some View {",
       "\t\t$0",
       "\t}",
+      "}",
+      "",
+      "#Preview {",
+      "\t${1:Name}()",
       "}"
     ],
     "description": "SwiftUI view declaration"
+  },
+  "swiftdata-container": {
+    "prefix": "sd",
+    "body": [
+      "private var sharedModelContainer: ModelContainer = {",
+      "\tlet schema = Schema([${1:Model}.self])",
+      "\tlet configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: ${2:false})",
+      "",
+      "\tdo {",
+      "\t\treturn try ModelContainer(for: schema, configurations: [configuration])",
+      "\t} catch {",
+      "\t\tfatalError(\"Failed to create ModelContainer: \\(error)\")",
+      "\t}",
+      "}()$0"
+    ],
+    "description": "SwiftData ModelContainer setup"
   },
   "header": {
     "prefix": "head",
