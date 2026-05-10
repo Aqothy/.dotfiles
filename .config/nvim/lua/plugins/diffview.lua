@@ -1,36 +1,55 @@
+local function get_branch()
+    for _, branch in ipairs({ "origin/main", "origin/master", "main" }) do
+        local result = vim.fn.systemlist({ "git", "rev-parse", "--verify", branch })
+        if vim.v.shell_error == 0 and result[1] ~= nil and result[1] ~= "" then
+            return branch
+        end
+    end
+
+    return "master"
+end
+
 return {
-    "sindrets/diffview.nvim",
+    -- maintained fork of diffview
+    "dlyongemallo/diffview.nvim",
     cmd = { "DiffviewOpen", "DiffviewFileHistory" },
     keys = {
+        { "<leader>gd", "<cmd>DiffviewToggle<cr>", desc = "Toggle Diffview" },
+        { "<leader>gh", ":DiffviewFileHistory %<cr>", mode = { "n", "x" }, desc = "Diff File/Selection History" },
+        { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", mode = "n", desc = "Diff Repo History" },
         {
-            "<leader>gd",
+            "<leader>gm",
             function()
-                Snacks.toggle({
-                    name = "Diffview",
-                    get = function()
-                        return require("diffview.lib").get_current_view() ~= nil
-                    end,
-                    set = function(state)
-                        vim.cmd("Diffview" .. (state and "Open" or "Close"))
-                    end,
-                }):toggle()
+                vim.cmd("DiffviewOpen " .. get_branch())
             end,
-            desc = "Toggle Diffview",
+            desc = "Diff Main",
         },
-        { "<leader>gh", ":DiffviewFileHistory %<cr>", mode = { "n", "x" }, desc = "Diff File History File/Selection" },
-        { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", mode = "n", desc = "Diff File History" },
-        { "<leader>gm", "<cmd>DiffviewOpen origin/main<cr>", desc = "Diff Main" },
-        { "<leader>gR", "<cmd>DiffviewOpen origin/main...HEAD<cr>", desc = "Git Review (vs main)" },
+        {
+            "<leader>gr",
+            function()
+                vim.cmd("DiffviewOpen " .. get_branch() .. "...HEAD")
+            end,
+            desc = "Git Review (vs main)",
+        },
     },
     opts = {
+        clean_up_buffers = true,
+        hide_merge_artifacts = true,
+        enhanced_diff_hl = true,
         show_help_hints = false,
         view = {
             merge_tool = {
                 layout = "diff3_mixed",
             },
+            cycle_layouts = {
+                default = { "diff2_horizontal", "diff1_inline" },
+                merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
+            },
+            foldlevel = 99,
         },
         file_panel = {
             listing_style = "list",
+            show_branch_name = true,
             win_config = {
                 win_opts = {
                     signcolumn = "no",
@@ -44,26 +63,6 @@ return {
         },
         default_args = {
             DiffviewOpen = { "--imply-local" },
-        },
-        hooks = {
-            diff_buf_win_enter = function(_, win, ctx)
-                vim.wo[win].foldenable = false
-                vim.wo[win].foldexpr = "0"
-                -- vscode like diff highlight
-                if ctx.layout_name:match("^diff2") then
-                    if ctx.symbol == "a" then
-                        vim.opt_local.winhl = table.concat({
-                            "DiffAdd:DiffviewDiffAddAsDelete",
-                            "DiffDelete:DiffviewDiffDeleteDim",
-                            "DiffChange:DiffviewChangeDelete",
-                        }, ",")
-                    elseif ctx.symbol == "b" then
-                        vim.opt_local.winhl = table.concat({
-                            "DiffDelete:DiffviewDiffDeleteDim",
-                        }, ",")
-                    end
-                end
-            end,
         },
     },
 }
