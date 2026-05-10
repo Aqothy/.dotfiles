@@ -2,7 +2,8 @@
 
 function build_nvim() {
     local NVIM_DIR="$HOME/Code/Personal/neovim"
-    local BRANCH="master"
+    local BRANCH="${1:-master}"
+    local COMMIT="${2:-$BRANCH}"
     local INSTALL_DIR="$HOME/.nvim"
 
     # Check if nvim directory exists
@@ -15,6 +16,7 @@ function build_nvim() {
 
     git checkout "$BRANCH"
     git pull
+    git checkout "$COMMIT"
 
     if [ -d "$INSTALL_DIR" ]; then
         echo "Cleaning out previous builds..."
