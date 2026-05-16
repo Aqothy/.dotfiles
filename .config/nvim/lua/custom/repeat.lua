@@ -9,25 +9,30 @@ function M.setup(opts)
     M.config = vim.tbl_deep_extend("force", M.config, opts or {})
 end
 
-local function run(key)
+local function fallback(key)
     local count = vim.v.count > 0 and vim.v.count or ""
-    vim.api.nvim_feedkeys(vim.keycode(count .. key), "n", false)
+    return count .. key
+end
+
+function M._repeat(dir)
+    local f = state[dir]
+    if f then
+        f()
+    end
 end
 
 function M.semicolon()
     if state.f then
-        state.f()
-    else
-        run(";")
+        return "<Cmd>lua require('custom.repeat')._repeat('f')<CR>"
     end
+    return fallback(";")
 end
 
 function M.comma()
     if state.b then
-        state.b()
-    else
-        run(",")
+        return "<Cmd>lua require('custom.repeat')._repeat('b')<CR>"
     end
+    return fallback(",")
 end
 
 function M.pair(fwd, bwd)

@@ -25,10 +25,6 @@ local function get_mini_icons()
     return ok and mod or nil
 end
 
-local function get_sidekick_status()
-    return package.loaded["sidekick.status"]
-end
-
 local groups = {}
 
 local function stl_escape(str)
@@ -364,20 +360,16 @@ function M.update_lsp_clients(buf)
         return
     end
 
-    local names = {}
+    local parts = {}
     for _, client in ipairs(clients) do
-        if not client.name:lower():find("copilot") then
-            table.insert(names, client.name)
+        if client.name:lower():find("copilot") then
+            table.insert(parts, 1, "")
+        else
+            table.insert(parts, client.name)
         end
     end
 
-    -- only client is copilot
-    if #names == 0 then
-        M.lsp_clients_cache[buf] = nil
-        return
-    end
-
-    M.lsp_clients_cache[buf] = "%#AqlineLspClients# " .. table.concat(names, " ") .. "%*"
+    M.lsp_clients_cache[buf] = "%#AqlineLspClients#" .. table.concat(parts, " ") .. "%*"
 end
 
 function M.lsp_clients_component()
@@ -388,31 +380,6 @@ function M.lsp_clients_component()
     end
 
     return ""
-end
-
-M.copilot_icons = {
-    Error = { text = "", hl = "DiagnosticError" },
-    Inactive = { text = "", hl = "Comment" },
-    Warning = { text = "", hl = "DiagnosticWarn" },
-    Normal = { text = "", hl = "Special" },
-}
-
-function M.copilot_component()
-    local sidekick = get_sidekick_status()
-    if not sidekick then
-        return ""
-    end
-
-    local status = sidekick.get()
-    if not status then
-        return ""
-    end
-
-    local config = M.copilot_icons[status.kind] or M.copilot_icons.Normal
-
-    local hl = status.busy and "DiagnosticWarn" or config.hl
-
-    return "%#" .. hl .. "#" .. config.text .. "%*"
 end
 
 local function format_filesize(size)
@@ -521,11 +488,6 @@ function M.render()
         local lsp_clients = M.lsp_clients_component()
         if lsp_clients ~= "" then
             parts[#parts + 1] = lsp_clients
-        end
-
-        local copilot_status = M.copilot_component()
-        if copilot_status ~= "" then
-            parts[#parts + 1] = copilot_status
         end
 
         local session = M.session_component()

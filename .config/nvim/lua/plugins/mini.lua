@@ -166,7 +166,6 @@ return {
     },
     {
         "echasnovski/mini.hipatterns",
-        event = "LazyFile",
         keys = {
             {
                 "<leader>uh",

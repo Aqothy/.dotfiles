@@ -16,7 +16,7 @@
   },
   "goimpl": {
     "prefix": "gi",
-    "body": "var impl $1 = &$2{}",
+    "body": "var _ ${1:itf} = (*${2:t})(nil)",
     "description": "Snippet for tricking gopls impl interface code action"
   },
   "for n statement": {

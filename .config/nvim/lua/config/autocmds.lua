@@ -116,23 +116,28 @@ local home = vim.env.HOME
 local git_dir = home .. "/.dotfiles"
 
 local function setup_git_env()
-    local result = vim.system({
+    local cwd = vim.fn.getcwd()
+    vim.system({
         "git",
         "--git-dir=" .. git_dir,
         "--work-tree=" .. home,
         "ls-files",
         "--",
-        vim.fn.getcwd(),
-    }, { text = true }):wait()
-    local stdout = result.stdout or ""
-
-    if result.code == 0 and #stdout > 0 then
-        vim.env.GIT_DIR = git_dir
-        vim.env.GIT_WORK_TREE = home
-    else
-        vim.env.GIT_DIR = nil
-        vim.env.GIT_WORK_TREE = nil
-    end
+        cwd,
+    }, { text = true }, function(result)
+        vim.schedule(function()
+            if vim.fn.getcwd() ~= cwd then
+                return
+            end
+            if result.code == 0 and #(result.stdout or "") > 0 then
+                vim.env.GIT_DIR = git_dir
+                vim.env.GIT_WORK_TREE = home
+            else
+                vim.env.GIT_DIR = nil
+                vim.env.GIT_WORK_TREE = nil
+            end
+        end)
+    end)
 end
 
 autocmd("DirChanged", {

@@ -16,7 +16,6 @@ setopt PROMPT_SUBST
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
-setopt CORRECT
 setopt GLOB_COMPLETE
 setopt GLOB_DOTS
 setopt HIST_VERIFY
@@ -39,12 +38,12 @@ alias md='mkdir -p'
 alias ls='ls -la --color=auto'
 
 d() {
-  git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+  git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME "$@"
 }
 
 sb() {
   if [[ -n "$1" ]]; then
-    git switch $1
+    git switch "$1"
     return
   fi
   local branches branch
@@ -55,7 +54,7 @@ sb() {
 
 co() {
   if [[ -n "$1" ]]; then
-    git checkout $1
+    git checkout "$1"
     return
   fi
   local commits commit
@@ -97,7 +96,7 @@ compdef _git sb=git-switch
 compdef _git co=git-checkout
 
 eval "$(mise activate zsh)"
-eval "$(uv generate-shell-completion zsh)"
+# eval "$(uv generate-shell-completion zsh)"
 
 source <(fzf --zsh)
 

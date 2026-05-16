@@ -148,42 +148,6 @@ return {
 
             return {
                 {
-                    "f",
-                    rep.builtin_f_expr,
-                    mode = { "n", "x", "o" },
-                    expr = true,
-                },
-                {
-                    "F",
-                    rep.builtin_F_expr,
-                    mode = { "n", "x", "o" },
-                    expr = true,
-                },
-                {
-                    "t",
-                    rep.builtin_t_expr,
-                    mode = { "n", "x", "o" },
-                    expr = true,
-                },
-                {
-                    "T",
-                    rep.builtin_T_expr,
-                    mode = { "n", "x", "o" },
-                    expr = true,
-                },
-                {
-                    ";",
-                    rep.semicolon,
-                    mode = { "n", "x", "o" },
-                    desc = "Repeat next move",
-                },
-                {
-                    ",",
-                    rep.comma,
-                    mode = { "n", "x", "o" },
-                    desc = "Repeat previous move",
-                },
-                {
                     "<localleader>a",
                     ts_bind("nvim-treesitter-textobjects.swap", "swap_next", args_attr),
                     desc = "Swap Next Arg",
