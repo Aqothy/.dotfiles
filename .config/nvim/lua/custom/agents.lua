@@ -3,10 +3,8 @@ local M = {}
 local defaults = {
     agents = {
         pi = { cmd = { "pi" } },
-        codex = { cmd = { "codex" } },
-        opencode = { cmd = { "opencode" } },
-        gemini = { cmd = { "gemini" } },
-        claude = { cmd = { "claude" } },
+        codex = { cmd = { "codex", "--yolo" } },
+        claude = { cmd = { "claude", "--dangerously-skip-permissions" } },
     },
     width = 0.4,
     keys = {

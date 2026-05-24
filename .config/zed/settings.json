@@ -1,4 +1,16 @@
 {
+  "show_edit_predictions": true,
+  "search": {
+    "regex": true
+  },
+  "use_smartcase_search": true,
+  "format_on_save": "off",
+  "toolbar": {
+    "breadcrumbs": false
+  },
+  "sticky_scroll": {
+    "enabled": true
+  },
   "document_symbols": "on",
   "git_panel": {
     "dock": "left"
@@ -33,16 +45,18 @@
     "dark": "Material Icon Theme"
   },
   "edit_predictions": {
+    "mode": "eager",
     "provider": "zed"
   },
   "agent": {
+    "sidebar_side": "right",
     "dock": "right",
     "default_profile": "write",
     "default_model": {
       "effort": "high",
       "enable_thinking": true,
       "provider": "zed.dev",
-      "model": "gpt-5.4"
+      "model": "gpt-5.5"
     }
   },
   "base_keymap": "VSCode",
@@ -53,12 +67,18 @@
   "vim_mode": true,
   "buffer_font_family": "Hack Nerd Font Mono",
   "terminal": {
+    "dock": "bottom",
     "line_height": { "custom": 1.2 }
   },
   "vim": {
-    "toggle_relative_line_numbers": true
+    "use_system_clipboard": "on_yank",
+    "toggle_relative_line_numbers": true,
+    "use_smartcase_find": true,
+    "use_regex_search": true,
+    "highlight_on_yank_duration": 60
   },
   "vertical_scroll_margin": 8,
+  "remove_trailing_whitespace_on_save": true,
   "theme": {
     "mode": "system",
     "light": "One Light",

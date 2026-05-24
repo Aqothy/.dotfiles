@@ -39,7 +39,7 @@ return {
         show_help_hints = false,
         view = {
             merge_tool = {
-                layout = "diff3_mixed",
+                layout = "diff1_plain",
             },
             cycle_layouts = {
                 default = { "diff2_horizontal", "diff1_inline" },

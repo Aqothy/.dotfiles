@@ -2,11 +2,14 @@ local M = {
     history = {},
     state = nil,
     suppress_visual_delete = false,
+    system_clipboard_text = nil,
+    system_clipboard_type = nil,
 }
 
 M.config = {
     history_length = 30,
     highlight_timeout = 60,
+    sync_system_clipboard = true,
 }
 
 local CYCLE_REGISTER = "x"
@@ -43,6 +46,38 @@ end
 local function is_visual_mode()
     local mode = vim.fn.mode()
     return mode == "v" or mode == "V" or mode == "\22"
+end
+
+local function sync_system_clipboard()
+    local content, regtype = read_register("+")
+    if is_empty_content(content) then
+        return false
+    end
+
+    local text = to_text(content)
+    if text == M.system_clipboard_text and regtype == M.system_clipboard_type then
+        return false
+    end
+
+    M.system_clipboard_text = text
+    M.system_clipboard_type = regtype
+    vim.fn.setreg('"', content, regtype)
+    M.push(content, regtype)
+
+    return true
+end
+
+local function mark_system_clipboard(content, regtype)
+    if is_empty_content(content) then
+        return
+    end
+
+    M.system_clipboard_text = to_text(content)
+    M.system_clipboard_type = regtype
+end
+
+local function is_default_register(reg)
+    return reg == nil or reg == "" or reg == '"'
 end
 
 function M.highlight(regtype)
@@ -108,7 +143,13 @@ local function apply_put(reg, type, count, index, is_visual)
 end
 
 function M.put(type)
-    apply_put(vim.v.register, type, vim.v.count1, nil, is_visual_mode())
+    local reg = vim.v.register
+
+    if M.config.sync_system_clipboard and is_default_register(reg) then
+        sync_system_clipboard()
+    end
+
+    apply_put(reg, type, vim.v.count1, nil, is_visual_mode())
 end
 
 function M.cycle(dir)
@@ -178,11 +219,24 @@ function M.setup(opts)
                 return
             end
 
+            if M.config.sync_system_clipboard then
+                if event.operator == "y" and is_default_register(event.regname) then
+                    vim.fn.setreg("+", event.regcontents, event.regtype)
+                    mark_system_clipboard(event.regcontents, event.regtype)
+                elseif event.regname == "+" then
+                    mark_system_clipboard(event.regcontents, event.regtype)
+                end
+            end
+
             if vim.tbl_contains({ "y", "d", "c" }, event.operator) then
                 M.push(event.regcontents, event.regtype)
             end
         end,
     })
+
+    if M.config.sync_system_clipboard then
+        sync_system_clipboard()
+    end
 end
 
 return M
