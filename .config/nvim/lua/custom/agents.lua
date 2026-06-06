@@ -128,6 +128,11 @@ local function line_ref(first, last)
     return last and last ~= first and (":L%d-L%d"):format(first, last) or (":L%d"):format(first)
 end
 
+local function set_agent_window_options(win)
+    vim.wo[win].scrolloff = -1
+    vim.wo[win].sidescrolloff = -1
+end
+
 local function open_right(buf)
     local width = config.width <= 1 and math.floor(vim.o.columns * config.width) or config.width
     if buf then
@@ -137,8 +142,7 @@ local function open_right(buf)
     end
     vim.cmd("vertical resize " .. width)
     local win = vim.api.nvim_get_current_win()
-    vim.wo[win].scrolloff = vim.go.scrolloff
-    vim.wo[win].sidescrolloff = vim.go.sidescrolloff
+    set_agent_window_options(win)
     return win
 end
 
@@ -169,6 +173,7 @@ local function open_win(tab, id, entry)
     else
         entry.win = open_right(entry.buf)
     end
+    set_agent_window_options(entry.win)
     tab.current = id
     restore_mode(entry)
 end

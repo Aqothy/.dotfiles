@@ -80,6 +80,14 @@ local function is_default_register(reg)
     return reg == nil or reg == "" or reg == '"'
 end
 
+function M.sync_system_clipboard(reg)
+    if not M.config.sync_system_clipboard or not is_default_register(reg or vim.v.register) then
+        return false
+    end
+
+    return sync_system_clipboard()
+end
+
 function M.highlight(regtype)
     vim.highlight.on_yank({
         timeout = M.config.highlight_timeout,
@@ -145,9 +153,7 @@ end
 function M.put(type)
     local reg = vim.v.register
 
-    if M.config.sync_system_clipboard and is_default_register(reg) then
-        sync_system_clipboard()
-    end
+    M.sync_system_clipboard(reg)
 
     apply_put(reg, type, vim.v.count1, nil, is_visual_mode())
 end

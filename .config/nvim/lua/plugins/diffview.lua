@@ -11,7 +11,7 @@ end
 
 return {
     -- maintained fork of diffview
-    "dlyongemallo/diffview.nvim",
+    "dlyongemallo/diffview-plus.nvim",
     cmd = { "DiffviewOpen", "DiffviewFileHistory" },
     keys = {
         { "<leader>gd", "<cmd>DiffviewToggle<cr>", desc = "Toggle Diffview" },
