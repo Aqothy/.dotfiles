@@ -14,7 +14,7 @@ if not vim.g.vscode then
         require("custom.folds").setup()
         require("custom.markdown_preview").setup()
         require("custom.agents").setup()
-        require("vim._core.ui2").enable({ msg = { target = "msg", msg = { timeout = 3000 } } })
+        require("vim._core.ui2").enable({ msg = { targets = "msg", msg = { timeout = 3000 } } })
     end)
     require("custom.statusline").setup()
     require("custom.session").setup({

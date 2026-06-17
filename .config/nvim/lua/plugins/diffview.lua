@@ -38,19 +38,27 @@ return {
         enhanced_diff_hl = true,
         show_help_hints = false,
         view = {
+            default = {
+                layout = "diff1_inline",
+            },
             merge_tool = {
                 layout = "diff1_plain",
             },
+            file_history = {
+                layout = "diff1_inline",
+            },
             cycle_layouts = {
-                default = { "diff2_horizontal", "diff1_inline" },
+                default = { "diff1_inline", "diff2_horizontal" },
                 merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
             },
+            inline = { style = "overleaf" },
             foldlevel = 99,
         },
         file_panel = {
             listing_style = "list",
             show_branch_name = true,
             win_config = {
+                width = 25,
                 win_opts = {
                     signcolumn = "no",
                 },
@@ -63,6 +71,11 @@ return {
         },
         default_args = {
             DiffviewOpen = { "--imply-local" },
+        },
+        hooks = {
+            diff_buf_read = function()
+                vim.opt_local.cursorline = false
+            end,
         },
     },
 }

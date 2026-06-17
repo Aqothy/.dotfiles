@@ -89,7 +89,7 @@ function M.sync_system_clipboard(reg)
 end
 
 function M.highlight(regtype)
-    vim.highlight.on_yank({
+    vim.hl.hl_op({
         timeout = M.config.highlight_timeout,
         event = { operator = "y", regtype = regtype, inclusive = true },
     })

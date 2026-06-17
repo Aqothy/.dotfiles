@@ -3,11 +3,11 @@ local function augroup(name)
 end
 local autocmd = vim.api.nvim_create_autocmd
 
--- Highlight on yank
-autocmd("TextYankPost", {
+-- Highlight on yank/post
+autocmd({ "TextYankPost", "TextPutPost" }, {
     group = augroup("highlight_yank"),
     callback = function()
-        (vim.hl or vim.highlight).on_yank({ timeout = 60 })
+        vim.hl.hl_op({ timeout = 60 })
     end,
 })
 
