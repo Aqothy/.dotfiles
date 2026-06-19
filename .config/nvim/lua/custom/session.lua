@@ -117,8 +117,7 @@ function M.create_autocmds()
             once = true,
             nested = true,
             callback = function()
-                local lazy_view = require("lazy.view")
-                if can_auto_start() and not lazy_view.visible() then
+                if can_auto_start() then
                     M.load()
                 end
             end,

@@ -19,6 +19,7 @@ return {
         },
         init = function()
             package.preload["nvim-web-devicons"] = function()
+                require("custom.pack").load({ "mini.icons" })
                 require("mini.icons").mock_nvim_web_devicons()
                 return package.loaded["nvim-web-devicons"]
             end

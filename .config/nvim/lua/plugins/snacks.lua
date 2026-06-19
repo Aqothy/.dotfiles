@@ -113,7 +113,7 @@ return {
                             return require("custom.session").exists()
                         end,
                     },
-                    { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = "󱐥 ", key = "p", desc = "Plugins", action = ":packupdate", enabled = vim.pack ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },
             },

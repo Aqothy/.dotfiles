@@ -212,6 +212,7 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
+        mod_name = "treesitter-context",
         event = "LazyFile",
         keys = {
             {
