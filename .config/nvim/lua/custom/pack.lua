@@ -43,7 +43,12 @@ end
 
 local function keys(spec)
     if spec._keys == nil then
-        spec._keys = type(spec.keys) == "function" and spec.keys(spec) or spec.keys or false
+        if type(spec.keys) == "function" then
+            local value = spec.keys(spec)
+            spec._keys = value == nil and false or value
+        else
+            spec._keys = spec.keys or false
+        end
     end
     return spec._keys ~= false and spec._keys or nil
 end
@@ -85,9 +90,9 @@ local function apply_keys(spec, buf)
         for _, b in ipairs(bufs) do
             local map_opts = vim.deepcopy(opts)
             map_opts.buffer = b or nil
-            if rhs ~= nil and rhs ~= false then
+            if rhs then
                 vim.keymap.set(mode, lhs, rhs, map_opts)
-            else
+            elseif rhs == false then
                 pcall(vim.keymap.del, mode, lhs, { buffer = b or nil })
             end
         end
@@ -102,9 +107,9 @@ load_plugin = function(spec, defer)
     loaded[spec.name] = true
 
     for _, dep in ipairs(list(spec.dependencies)) do
-        local dep_name = specs[dep] and dep or name_from_src(dep)
-        if specs[dep_name] then
-            load_plugin(specs[dep_name], defer)
+        local name = specs[dep] and dep or name_from_src(dep)
+        if specs[name] then
+            load_plugin(specs[name], defer)
         else
             vim.notify(("Missing pack dependency '%s' for %s"):format(dep, spec.name), vim.log.levels.WARN)
         end
@@ -114,16 +119,18 @@ load_plugin = function(spec, defer)
         pcall(vim.api.nvim_del_user_command, cmd)
     end
     for _, key in ipairs(list(keys(spec))) do
-        local mode, lhs = key_parts(key)
-        for _, m in ipairs(list(mode)) do
-            if key.ft then
-                for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-                    if vim.tbl_contains(list(key.ft), vim.bo[buf].filetype) then
-                        pcall(vim.keymap.del, m, lhs, { buffer = buf })
+        local mode, lhs, rhs = key_parts(key)
+        if rhs ~= false then
+            for _, m in ipairs(list(mode)) do
+                if key.ft then
+                    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                        if vim.tbl_contains(list(key.ft), vim.bo[buf].filetype) then
+                            pcall(vim.keymap.del, m, lhs, { buffer = buf })
+                        end
                     end
+                else
+                    pcall(vim.keymap.del, m, lhs)
                 end
-            else
-                pcall(vim.keymap.del, m, lhs)
             end
         end
     end
@@ -223,12 +230,7 @@ function M.setup(opts)
 
         local parsed = M.events[event]
         if parsed then
-            parsed = type(parsed) == "table" and vim.deepcopy(parsed) or { event = parsed }
-            if parsed.event == nil and parsed[1] ~= nil then
-                parsed = { event = parsed }
-            end
-            parsed.id = parsed.id or event
-            parsed.event = parsed.event or event
+            parsed = vim.deepcopy(parsed)
         else
             local event_name, pattern = event:match("^(%w+)%s+(.+)$")
             parsed = { id = event, event = event_name or event, pattern = pattern }
@@ -246,7 +248,7 @@ function M.setup(opts)
 
         if vim.uv.fs_stat(file) then
             add_specs(require(import))
-        else
+        elseif vim.uv.fs_stat(dir) then
             local entries = {}
             for name, kind in vim.fs.dir(dir) do
                 table.insert(entries, { name = name, kind = kind })
@@ -310,42 +312,43 @@ function M.setup(opts)
             end
 
             for _, key in ipairs(list(keys(spec))) do
-                local mode, lhs, _, key_opts = key_parts(key)
-                local function set_stub(buf)
-                    for _, m in ipairs(list(mode)) do
-                        vim.keymap.set(m, lhs, function()
-                            apply_keys(spec, buf)
-                            load_plugin(spec)
+                local mode, lhs, rhs, key_opts = key_parts(key)
+                if rhs ~= false then
+                    local function set_stub(buf)
+                        for _, m in ipairs(list(mode)) do
+                            vim.keymap.set(m, lhs, function()
+                                load_plugin(spec)
 
-                            local feed = lhs
-                            if m:sub(-1) == "a" then
-                                feed = feed .. "<C-]>"
-                            end
-                            feed = vim.api.nvim_replace_termcodes("<Ignore>" .. feed, true, true, true)
-                            vim.api.nvim_feedkeys(feed, "i", false)
-                        end, {
-                            buffer = buf,
-                            desc = key_opts.desc,
-                            nowait = key_opts.nowait,
-                            expr = true,
-                        })
+                                local feed = lhs
+                                if m:sub(-1) == "a" then
+                                    feed = feed .. "<C-]>"
+                                end
+                                feed = vim.api.nvim_replace_termcodes("<Ignore>" .. feed, true, true, true)
+                                vim.api.nvim_feedkeys(feed, "i", false)
+                            end, {
+                                buffer = buf,
+                                desc = key_opts.desc,
+                                nowait = key_opts.nowait,
+                                expr = true,
+                            })
+                        end
                     end
-                end
 
-                if key.ft then
-                    vim.api.nvim_create_autocmd("FileType", {
-                        pattern = key.ft,
-                        nested = true,
-                        callback = function(ev)
-                            if loaded[spec.name] then
-                                apply_keys(spec, ev.buf)
-                            else
-                                set_stub(ev.buf)
-                            end
-                        end,
-                    })
-                else
-                    set_stub()
+                    if key.ft then
+                        vim.api.nvim_create_autocmd("FileType", {
+                            pattern = key.ft,
+                            nested = true,
+                            callback = function(ev)
+                                if loaded[spec.name] then
+                                    apply_keys(spec, ev.buf)
+                                else
+                                    set_stub(ev.buf)
+                                end
+                            end,
+                        })
+                    else
+                        set_stub()
+                    end
                 end
             end
 
@@ -400,6 +403,7 @@ function M.setup(opts)
     -- newly-created handlers so plugins do not miss the event that loaded them.
     local event_group = vim.api.nvim_create_augroup("custom/pack-events", { clear = true })
     for id, queued in pairs(event_queue) do
+        local fired = false
         vim.api.nvim_create_autocmd(queued.event, {
             group = event_group,
             pattern = queued.pattern,
@@ -407,6 +411,11 @@ function M.setup(opts)
             nested = true,
             desc = "Pack lazy " .. id,
             callback = function(ev)
+                if fired then
+                    return
+                end
+                fired = true
+
                 local chain = {}
                 local current, data = ev.event, ev.data
 
@@ -435,11 +444,11 @@ function M.setup(opts)
                             data = item.data,
                         })
                     else
-                        local done = {}
+                        local replayed = {}
                         for _, autocmd in ipairs(vim.api.nvim_get_autocmds({ event = item.event })) do
                             local autocmd_id = autocmd.event .. ":" .. (autocmd.group or "")
-                            local skip = done[autocmd_id] or item.exclude[autocmd.group_name]
-                            done[autocmd_id] = true
+                            local skip = replayed[autocmd_id] or item.exclude[autocmd.group_name]
+                            replayed[autocmd_id] = true
                             if autocmd.group and not skip then
                                 vim.api.nvim_exec_autocmds(item.event, {
                                     buffer = item.buffer,
@@ -506,6 +515,18 @@ end
 
 function M.is_loaded(name)
     return loaded[specs[name] and name or name_from_src(name)] == true
+end
+
+function M.stats()
+    local count, loaded_count = 0, 0
+    for name in pairs(specs) do
+        count = count + 1
+        if loaded[name] then
+            loaded_count = loaded_count + 1
+        end
+    end
+
+    return { count = count, loaded = loaded_count }
 end
 
 return M

@@ -1,3 +1,5 @@
+vim.loader.enable()
+
 require("config.options")
 require("config")
 vim.schedule(function()
