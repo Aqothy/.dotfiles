@@ -166,16 +166,8 @@ function M.setup(opts)
     specs, loaded = {}, {}
 
     local config_lua = vim.fn.stdpath("config") .. "/lua"
-    local installed = {}
-    local pack_dir = vim.fn.stdpath("data") .. "/site/pack/core/opt"
-    local order, to_install, startup, event_queue, build_queue = {}, {}, {}, {}, {}
+    local order, to_add, startup, event_queue, build_queue = {}, {}, {}, {}, {}
     local installing = false
-
-    if vim.uv.fs_stat(pack_dir) then
-        for name in vim.fs.dir(pack_dir) do
-            installed[name] = true
-        end
-    end
 
     local function add_spec(spec)
         if type(spec) ~= "table" or type(spec[1]) ~= "string" then
@@ -291,9 +283,7 @@ function M.setup(opts)
     })
 
     for _, spec in ipairs(order) do
-        if not installed[spec.name] then
-            table.insert(to_install, pack_spec(spec))
-        end
+        table.insert(to_add, pack_spec(spec))
         if spec.init then
             spec.init()
         end
@@ -465,9 +455,9 @@ function M.setup(opts)
         })
     end
 
-    if #to_install > 0 then
+    if #to_add > 0 then
         installing = true
-        vim.pack.add(to_install, { confirm = false, load = function() end })
+        vim.pack.add(to_add, { confirm = false, load = function() end })
         installing = false
     end
 
