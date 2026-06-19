@@ -3,19 +3,6 @@ local function diffview_open(args)
     require("diffview").open(args)
 end
 
-local function startup_section()
-    local stats = require("custom.pack").stats()
-
-    return {
-        align = "center",
-        text = {
-            { "⚡ Neovim loaded ", hl = "footer" },
-            { stats.loaded .. "/" .. stats.count, hl = "special" },
-            { " plugins", hl = "footer" },
-        },
-    }
-end
-
 local git_ref_opts = {
     actions = {
         ["diff_commit"] = function(picker)
@@ -138,7 +125,6 @@ return {
                 { section = "header" },
                 { header = "Show me your dreams." },
                 { section = "keys", padding = 1 },
-                startup_section,
             },
         },
 

@@ -1,6 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     -- stylua: ignore
     keys = {
         { "<leader>lc", function() Snacks.picker.lsp_config() end, desc = "Lsp config" },

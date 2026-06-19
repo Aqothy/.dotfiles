@@ -17,7 +17,7 @@ local cond
 if vim.g.vscode then
     table.insert(imports, "config.vscode")
 
-    local enabled = {
+    local vscode_plugins = {
         "nvim-surround",
         "nvim-treesitter",
         "nvim-treesitter-textobjects",
@@ -32,7 +32,7 @@ if vim.g.vscode then
     }
 
     cond = function(plugin)
-        return vim.tbl_contains(enabled, plugin.name)
+        return vim.tbl_contains(vscode_plugins, plugin.name)
     end
 end
 
