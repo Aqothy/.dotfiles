@@ -49,6 +49,8 @@ local function keys(spec)
 end
 
 local function key_parts(key)
+    key = type(key) == "string" and { key } or key
+
     local mode, lhs, rhs
     if key[3] ~= nil then
         mode, lhs, rhs = key[1], key[2], key[3]
@@ -83,7 +85,7 @@ local function apply_keys(spec, buf)
         for _, b in ipairs(bufs) do
             local map_opts = vim.deepcopy(opts)
             map_opts.buffer = b or nil
-            if rhs ~= nil then
+            if rhs ~= nil and rhs ~= false then
                 vim.keymap.set(mode, lhs, rhs, map_opts)
             else
                 pcall(vim.keymap.del, mode, lhs, { buffer = b or nil })
