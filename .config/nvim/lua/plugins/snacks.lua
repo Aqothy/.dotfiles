@@ -1,17 +1,21 @@
+local function diffview_open(args)
+    require("custom.pack").load({ "diffview-plus.nvim" })
+    require("diffview").open(args)
+end
+
 local git_ref_opts = {
     actions = {
         ["diff_commit"] = function(picker)
             local currentCommit = picker:current().commit
             if currentCommit then
                 picker:close()
-                local args = { currentCommit .. "^" .. "!" }
-                require("diffview").open(args)
+                diffview_open({ currentCommit .. "^" .. "!" })
             end
         end,
         ["diff"] = function(picker)
             local currentCommit = picker:current().commit
             if currentCommit then
-                require("diffview").open({ currentCommit })
+                diffview_open({ currentCommit })
             end
         end,
         ["copy_commit"] = function(picker)
