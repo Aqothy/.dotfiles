@@ -40,6 +40,10 @@
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/nmac427/guess-indent.nvim"
     },
+    "kulala.nvim": {
+      "rev": "3dc1b52d89183650936a8d48fcc0cf7d279f5a9e",
+      "src": "https://github.com/mistweaverco/kulala.nvim"
+    },
     "mini.ai": {
       "rev": "4511b3481707c1d021485475d34f2ed2a50bf47b",
       "src": "https://github.com/nvim-mini/mini.ai"

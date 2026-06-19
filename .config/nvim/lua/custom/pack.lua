@@ -108,6 +108,24 @@ load_plugin = function(spec, defer)
         end
     end
 
+    for _, cmd in ipairs(list(spec.cmd)) do
+        pcall(vim.api.nvim_del_user_command, cmd)
+    end
+    for _, key in ipairs(list(keys(spec))) do
+        local mode, lhs = key_parts(key)
+        for _, m in ipairs(list(mode)) do
+            if key.ft then
+                for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                    if vim.tbl_contains(list(key.ft), vim.bo[buf].filetype) then
+                        pcall(vim.keymap.del, m, lhs, { buffer = buf })
+                    end
+                end
+            else
+                pcall(vim.keymap.del, m, lhs)
+            end
+        end
+    end
+
     vim.cmd.packadd({ spec.name, bang = defer })
 
     local opts = spec.opts
@@ -325,6 +343,7 @@ function M.setup(opts)
                 if key.ft then
                     vim.api.nvim_create_autocmd("FileType", {
                         pattern = key.ft,
+                        nested = true,
                         callback = function(ev)
                             if loaded[spec.name] then
                                 apply_keys(spec, ev.buf)
@@ -393,6 +412,7 @@ function M.setup(opts)
             group = event_group,
             pattern = queued.pattern,
             once = true,
+            nested = true,
             desc = "Pack lazy " .. id,
             callback = function(ev)
                 local chain = {}
@@ -462,6 +482,9 @@ function M.setup(opts)
 
     local function fire_very_lazy()
         vim.schedule(function()
+            if vim.v.exiting ~= vim.NIL then
+                return
+            end
             vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy", modeline = false })
         end)
     end
@@ -469,9 +492,10 @@ function M.setup(opts)
     if vim.v.vim_did_enter == 1 then
         fire_very_lazy()
     else
-        vim.api.nvim_create_autocmd("VimEnter", {
+        vim.api.nvim_create_autocmd("UIEnter", {
             group = vim.api.nvim_create_augroup("custom/pack-very-lazy", { clear = true }),
             once = true,
+            nested = true,
             callback = fire_very_lazy,
         })
     end
