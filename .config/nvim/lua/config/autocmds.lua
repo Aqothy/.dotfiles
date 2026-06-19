@@ -4,7 +4,7 @@ end
 local autocmd = vim.api.nvim_create_autocmd
 
 -- Highlight on yank/post
-autocmd({ "TextYankPost", "TextPutPost" }, {
+autocmd({ "TextYankPost" }, {
     group = augroup("highlight_yank"),
     callback = function()
         vim.hl.hl_op({ timeout = 60 })
@@ -39,6 +39,7 @@ autocmd("FileType", {
         "vim",
         "query",
         "gitsigns-blame",
+        "nvim-pack",
     },
     callback = function(ev)
         vim.bo[ev.buf].buflisted = false

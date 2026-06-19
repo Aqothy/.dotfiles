@@ -3,15 +3,11 @@ local map = vim.keymap.set
 local rep = require("custom.repeat")
 
 -- "Whole Buffer" text-object:
-map("x", "ie", "gg^oG$", { desc = "Select whole buffer" })
-map("o", "ie", "<cmd>normal vie<cr>", { desc = "Operate whole buffer" })
 map("x", ">", ">gv", { desc = "Indent and maintain selection" })
 map("x", "<", "<gv", { desc = "Outdent and maintain selection" })
 map("n", "J", "mzJ`z", { desc = "Join lines without moving cursor" })
 map({ "n", "x", "o" }, "H", "^", { desc = "Beginning of line" })
 map({ "n", "x", "o" }, "L", "g_", { desc = "End of line" })
-map("x", "il", "^og_", { desc = "Select line without whitespace" })
-map("o", "il", "<cmd>normal vil<cr>", { desc = "Operate line" })
 map("x", "Q", "<cmd>norm @q<CR>", { desc = "Run macro 'q' on selection" })
 map("n", "y<c-g>", function()
     vim.fn.setreg("+", vim.fn.expand("%:."))
