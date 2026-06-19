@@ -2,7 +2,9 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
+        build = function()
+            vim.cmd.TSUpdate()
+        end,
         event = { "VeryLazy", "LazyFile" },
         cmd = { "TSUpdate", "TSInstall", "TSLog", "TSUninstall" },
         opts = {

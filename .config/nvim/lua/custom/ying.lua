@@ -2,14 +2,14 @@ local M = {
     history = {},
     state = nil,
     suppress_visual_delete = false,
-    system_clipboard_text = nil,
-    system_clipboard_type = nil,
+    clip_text = nil,
+    clip_type = nil,
 }
 
 M.config = {
     history_length = 30,
     highlight_timeout = 60,
-    sync_system_clipboard = true,
+    sync_on_yank = true,
 }
 
 local CYCLE_REGISTER = "x"
@@ -48,44 +48,47 @@ local function is_visual_mode()
     return mode == "v" or mode == "V" or mode == "\22"
 end
 
-local function sync_system_clipboard()
-    local content, regtype = read_register("+")
-    if is_empty_content(content) then
-        return false
-    end
-
-    local text = to_text(content)
-    if text == M.system_clipboard_text and regtype == M.system_clipboard_type then
-        return false
-    end
-
-    M.system_clipboard_text = text
-    M.system_clipboard_type = regtype
-    vim.fn.setreg('"', content, regtype)
-    M.push(content, regtype)
-
-    return true
+local function same_clip(content, regtype)
+    return to_text(content) == M.clip_text and regtype == M.clip_type
 end
 
-local function mark_system_clipboard(content, regtype)
+local function mark_clip(content, regtype)
     if is_empty_content(content) then
         return
     end
 
-    M.system_clipboard_text = to_text(content)
-    M.system_clipboard_type = regtype
+    M.clip_text = to_text(content)
+    M.clip_type = regtype
+end
+
+local function capture_clip()
+    local content, regtype = read_register("+")
+    if is_empty_content(content) or same_clip(content, regtype) then
+        return
+    end
+
+    mark_clip(content, regtype)
+    M.push(content, regtype)
+
+    return content, regtype
 end
 
 local function is_default_register(reg)
     return reg == nil or reg == "" or reg == '"'
 end
 
-function M.sync_system_clipboard(reg)
-    if not M.config.sync_system_clipboard or not is_default_register(reg or vim.v.register) then
+function M.import_clip(reg)
+    if not M.config.sync_on_yank or not is_default_register(reg or vim.v.register) then
         return false
     end
 
-    return sync_system_clipboard()
+    local content, regtype = capture_clip()
+    if not content then
+        return false
+    end
+
+    vim.fn.setreg('"', content, regtype)
+    return true
 end
 
 function M.highlight(regtype)
@@ -153,7 +156,7 @@ end
 function M.put(type)
     local reg = vim.v.register
 
-    M.sync_system_clipboard(reg)
+    M.import_clip(reg)
 
     apply_put(reg, type, vim.v.count1, nil, is_visual_mode())
 end
@@ -225,12 +228,15 @@ function M.setup(opts)
                 return
             end
 
-            if M.config.sync_system_clipboard then
+            if M.config.sync_on_yank then
                 if event.operator == "y" and is_default_register(event.regname) then
                     vim.fn.setreg("+", event.regcontents, event.regtype)
-                    mark_system_clipboard(event.regcontents, event.regtype)
+                    mark_clip(event.regcontents, event.regtype)
                 elseif event.regname == "+" then
-                    mark_system_clipboard(event.regcontents, event.regtype)
+                    mark_clip(event.regcontents, event.regtype)
+                elseif vim.tbl_contains({ "d", "c" }, event.operator) and is_default_register(event.regname) then
+                    -- `d`/`c` already update `"`; just mark `+` as seen so paste keeps `"`.
+                    capture_clip()
                 end
             end
 
@@ -240,8 +246,8 @@ function M.setup(opts)
         end,
     })
 
-    if M.config.sync_system_clipboard then
-        sync_system_clipboard()
+    if M.config.sync_on_yank then
+        M.import_clip()
     end
 end
 

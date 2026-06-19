@@ -300,14 +300,13 @@ return {
             local map = vim.keymap.set
             local replace = "gR"
             local replace_line = replace .. vim.fn.strcharpart(replace, vim.fn.strchars(replace) - 1, 1)
-            local reg = vim.v.register
             map("n", replace, function()
-                ying.sync_system_clipboard(reg)
+                ying.import_clip()
                 return mo.replace()
             end, { expr = true, replace_keycodes = false, desc = "Replace operator" })
             map("n", replace_line, replace .. "_", { remap = true, desc = "Replace operator line" })
             map("x", replace, function()
-                ying.sync_system_clipboard(reg)
+                ying.import_clip()
                 mo.replace("visual")
             end, { desc = "Replace operator selection" })
         end,
