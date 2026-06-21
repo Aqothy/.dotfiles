@@ -16,7 +16,8 @@ local defaults = {
 }
 
 local config = vim.deepcopy(defaults)
-local state = { tabs = {} }
+local state = { tabs = {}, annotations = {} }
+local annotation_ns = vim.api.nvim_create_namespace("CustomAgentAnnotations")
 local severity = vim.diagnostic.severity
 local severity_name = {
     [severity.ERROR] = "ERROR",
@@ -41,8 +42,63 @@ local function notify(msg, level)
     vim.notify(msg, level or vim.log.levels.INFO, { title = "Agent" })
 end
 
+local function delete_annotation_marks(annotations)
+    for _, item in ipairs(annotations or {}) do
+        if item.buf and item.mark and vim.api.nvim_buf_is_valid(item.buf) then
+            pcall(vim.api.nvim_buf_del_extmark, item.buf, annotation_ns, item.mark)
+        end
+    end
+end
+
 local function visible(entry)
     return entry and entry.win and vim.api.nvim_win_is_valid(entry.win)
+end
+
+local function running_agents(tab)
+    local ids = {}
+    for id in pairs(tab.agents) do
+        ids[#ids + 1] = id
+    end
+    table.sort(ids, function(a, b)
+        local ea, eb = tab.agents[a], tab.agents[b]
+        if ea.name ~= eb.name then
+            return ea.name < eb.name
+        end
+        return a < b
+    end)
+    return ids
+end
+
+local function agent_winbar(tab)
+    local ids = running_agents(tab)
+    if #ids <= 1 then
+        return ""
+    end
+
+    local names = {}
+    for _, id in ipairs(ids) do
+        local name = " " .. tab.agents[id].name .. " "
+        if id == tab.current then
+            name = "%#TabLineSel#" .. name .. "%*"
+        end
+        names[#names + 1] = name
+    end
+    return table.concat(names)
+end
+
+local function update_agent_winbar(tab)
+    local entry = tab.current and tab.agents[tab.current]
+    if not visible(entry) then
+        return
+    end
+
+    if vim.api.nvim_win_get_buf(entry.win) ~= entry.buf then
+        vim.wo[entry.win].winbar = ""
+        entry.win = nil
+        return
+    end
+
+    vim.wo[entry.win].winbar = agent_winbar(tab)
 end
 
 local function cleanup_entry(entry)
@@ -60,6 +116,7 @@ local function finish_entry(tab, id, entry)
     if tab.current == id then
         tab.current = nil
     end
+    update_agent_winbar(tab)
 end
 
 local function stop_entry(tab, id, entry)
@@ -86,21 +143,6 @@ local function stop_all()
     for id, tab in pairs(state.tabs) do
         stop_tab(id, tab)
     end
-end
-
-local function running_agents(tab)
-    local ids = {}
-    for id in pairs(tab.agents) do
-        ids[#ids + 1] = id
-    end
-    table.sort(ids, function(a, b)
-        local ea, eb = tab.agents[a], tab.agents[b]
-        if ea.name ~= eb.name then
-            return ea.name < eb.name
-        end
-        return a < b
-    end)
-    return ids
 end
 
 local function hide(tab)
@@ -175,6 +217,7 @@ local function open_win(tab, id, entry)
     end
     set_agent_window_options(entry.win)
     tab.current = id
+    update_agent_winbar(tab)
     restore_mode(entry)
 end
 
@@ -253,6 +296,7 @@ local function start_agent(tab, name)
     })
     tab.agents[id] = entry
     tab.current = id
+    update_agent_winbar(tab)
 
     entry.job = vim.fn.jobstart(cmd.job_cmd, {
         cwd = vim.uv.cwd(),
@@ -445,6 +489,89 @@ local function get_selection()
     return first, last, text
 end
 
+local function annotation_preview(comment)
+    comment = vim.trim((comment or ""):gsub("%s+", " "))
+    if #comment > 80 then
+        return comment:sub(1, 77) .. "..."
+    end
+    return comment
+end
+
+local function code_fence(text, filetype)
+    local fence = "```"
+    while text:find(fence, 1, true) do
+        fence = fence .. "`"
+    end
+    return fence .. (filetype ~= "" and filetype or "") .. "\n" .. text .. "\n" .. fence
+end
+
+local function make_annotation(buf, first, last, text, comment)
+    return {
+        buf = buf,
+        first = first,
+        last = last,
+        text = text,
+        comment = comment,
+        filetype = vim.bo[buf].filetype,
+        ref = file_ref(buf),
+    }
+end
+
+local function mark_annotation(item)
+    if not (item.buf and vim.api.nvim_buf_is_valid(item.buf)) then
+        return
+    end
+
+    local line_count = vim.api.nvim_buf_line_count(item.buf)
+    local line = math.max(0, math.min(item.first - 1, line_count - 1))
+    local ok, mark = pcall(vim.api.nvim_buf_set_extmark, item.buf, annotation_ns, line, 0, {
+        virt_text = { { " 󰆈 " .. annotation_preview(item.comment), "Todo" } },
+        virt_text_pos = "eol",
+        hl_mode = "combine",
+    })
+    if ok then
+        item.mark = mark
+    end
+end
+
+local function prompt_annotation(cb)
+    vim.ui.input({ prompt = "Annotation: " }, function(comment)
+        comment = comment and vim.trim(comment)
+        if not comment or comment == "" then
+            return
+        end
+        cb(comment)
+    end)
+end
+
+local function add_annotation(buf, first, last, text, comment)
+    local item = make_annotation(buf, first, last, text, comment)
+    state.annotations[#state.annotations + 1] = item
+    mark_annotation(item)
+    notify(("Annotation %d added"):format(#state.annotations))
+end
+
+local function format_annotations(annotations)
+    local lines = {
+        "Code annotations:",
+        "The user comments below are attached to the selected code blocks.",
+    }
+
+    for i, item in ipairs(annotations) do
+        lines[#lines + 1] = ""
+        lines[#lines + 1] = ("## Annotation %d"):format(i)
+        lines[#lines + 1] = item.ref .. " " .. line_ref(item.first, item.last)
+        lines[#lines + 1] = ""
+        lines[#lines + 1] = "Comment:"
+        lines[#lines + 1] = item.comment
+        lines[#lines + 1] = ""
+        lines[#lines + 1] = "Code:"
+        lines[#lines + 1] = code_fence(item.text, item.filetype or "")
+    end
+
+    return table.concat(lines, "\n")
+end
+
 local function diag_line(diagnostic)
     local msg = vim.trim((diagnostic.message or ""):gsub("%s+", " "))
     local parts = {
@@ -528,39 +655,117 @@ function M.send_selection()
     send_block(buf, first, last, text)
 end
 
-function M.send_diagnostic()
+function M.annotate_selection()
     local buf = vim.api.nvim_get_current_buf()
-    local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
-    local items = vim.diagnostic.get(buf, { lnum = lnum })
-    if #items > 0 then
-        return send_diagnostics(items)
+    local first, last, text = get_selection()
+    prompt_annotation(function(comment)
+        add_annotation(buf, first, last, text, comment)
+    end)
+end
+
+function M.send_annotations()
+    if #state.annotations == 0 then
+        return notify("No annotations")
+    end
+
+    local text = format_annotations(state.annotations)
+    with_agent(function(entry)
+        paste(entry, text)
+        delete_annotation_marks(state.annotations)
+        state.annotations = {}
+    end)
+end
+
+function M.clear_annotations()
+    if #state.annotations == 0 then
+        return notify("No annotations")
+    end
+
+    local buf = vim.api.nvim_get_current_buf()
+    local lnum = vim.api.nvim_win_get_cursor(0)[1]
+    for i = #state.annotations, 1, -1 do
+        local item = state.annotations[i]
+        if item.buf == buf and lnum >= item.first and lnum <= item.last then
+            delete_annotation_marks({ table.remove(state.annotations, i) })
+            return notify("Annotation cleared")
+        end
     end
 
     local choices = {
-        {
-            label = "Current buffer diagnostics",
-            get = function()
-                return vim.diagnostic.get(buf)
-            end,
-        },
-        { label = "All open buffer diagnostics", get = open_diagnostics },
+        { all = true, label = "Clear all annotations" },
     }
+    for i, item in ipairs(state.annotations) do
+        choices[#choices + 1] = {
+            annotation = item,
+            label = ("%d. %s %s — %s"):format(
+                i,
+                item.ref,
+                line_ref(item.first, item.last),
+                annotation_preview(item.comment)
+            ),
+        }
+    end
+
     vim.ui.select(choices, {
-        prompt = "No diagnostic on current line",
+        prompt = "Clear annotation",
         format_item = function(item)
-            if not item.items then
-                item.items = item.get()
+            return item.label
+        end,
+    }, function(choice)
+        if not choice then
+            return
+        end
+        if choice.all then
+            delete_annotation_marks(state.annotations)
+            state.annotations = {}
+            return notify("Annotations cleared")
+        end
+        for i, item in ipairs(state.annotations) do
+            if item == choice.annotation then
+                delete_annotation_marks({ table.remove(state.annotations, i) })
+                return notify("Annotation cleared")
             end
-            return item.label .. " (" .. #item.items .. ")"
+        end
+    end)
+end
+
+function M.send_diagnostic()
+    local buf = vim.api.nvim_get_current_buf()
+    local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+    local line_items = vim.diagnostic.get(buf, { lnum = lnum })
+    if #line_items > 0 then
+        return send_diagnostics(line_items)
+    end
+
+    local buf_items = vim.diagnostic.get(buf)
+    if #buf_items == 0 then
+        return notify("No diagnostics")
+    end
+
+    local choices = {
+        { label = "All current buffer diagnostics", items = buf_items },
+    }
+    for _, item in ipairs(buf_items) do
+        choices[#choices + 1] = {
+            label = line_ref(item.lnum + 1) .. " " .. vim.trim((item.message or ""):gsub("%s+", " ")),
+            items = { item },
+        }
+    end
+
+    vim.ui.select(choices, {
+        prompt = "Buffer diagnostics",
+        format_item = function(item)
+            return item.label
         end,
     }, function(choice)
         if choice then
-            if not choice.items then
-                choice.items = choice.get()
-            end
             send_diagnostics(choice.items)
         end
     end)
+end
+
+function M.send_all_diagnostics()
+    send_diagnostics(open_diagnostics())
 end
 
 local function qf_ref(item)
@@ -607,11 +812,14 @@ function M.setup(opts)
             vim.schedule(cleanup_closed_tabs)
         end,
     })
-
     vim.keymap.set("n", "<c-.>", M.toggle, { desc = "Agent Toggle" })
     vim.keymap.set("n", "<leader>as", M.select, { desc = "Agent Select" })
+    vim.keymap.set("x", "<leader>aa", M.annotate_selection, { desc = "Agent Annotate Selection" })
+    vim.keymap.set("n", "<leader>aA", M.send_annotations, { desc = "Agent Send Annotations" })
+    vim.keymap.set("n", "<leader>ac", M.clear_annotations, { desc = "Agent Clear Annotation" })
     vim.keymap.set("x", "<leader>av", M.send_selection, { desc = "Agent Send Selection" })
     vim.keymap.set("n", "<leader>ad", M.send_diagnostic, { desc = "Agent Send Diagnostic" })
+    vim.keymap.set("n", "<leader>aD", M.send_all_diagnostics, { desc = "Agent Send All Diagnostics" })
     vim.keymap.set("n", "<leader>aq", M.send_quickfix, { desc = "Agent Send Quickfix" })
 end
 
