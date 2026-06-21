@@ -55,7 +55,7 @@ local function key_parts(key)
 
     local opts = {}
     for k, v in pairs(key) do
-        if type(k) == "string" and k ~= "mode" and k ~= "ft" then
+        if type(k) == "string" and k ~= "mode" then
             opts[k] = v
         end
     end
@@ -80,10 +80,6 @@ local function apply_keys(spec)
 
         if rhs then
             set_keymap(mode, lhs, rhs, opts)
-        elseif rhs == false then
-            for _, m in ipairs(list(mode)) do
-                del_keymap(m, lhs)
-            end
         end
     end
 end
@@ -108,11 +104,9 @@ load_plugin = function(spec)
         pcall(vim.api.nvim_del_user_command, cmd)
     end
     for _, key in ipairs(list(keys(spec))) do
-        local mode, lhs, rhs = key_parts(key)
-        if rhs ~= false then
-            for _, m in ipairs(list(mode)) do
-                del_keymap(m, lhs)
-            end
+        local mode, lhs = key_parts(key)
+        for _, m in ipairs(list(mode)) do
+            del_keymap(m, lhs)
         end
     end
 
@@ -283,7 +277,7 @@ function M.setup(opts)
             end
 
             for _, key in ipairs(list(spec_keys)) do
-                local mode, lhs, rhs, key_opts = key_parts(key)
+                local mode, lhs, _, key_opts = key_parts(key)
                 for _, m in ipairs(list(mode)) do
                     local function set_stub()
                         vim.keymap.set(m, lhs, function()
@@ -302,9 +296,7 @@ function M.setup(opts)
                         })
                     end
 
-                    if rhs ~= false then
-                        set_stub()
-                    end
+                    set_stub()
                 end
             end
 
