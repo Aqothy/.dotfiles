@@ -40,11 +40,11 @@ return {
         show_help_hints = false,
         view = {
             merge_tool = {
-                layout = "diff1_plain",
+                layout = "diff3_mixed",
             },
             cycle_layouts = {
                 default = { "diff2_horizontal", "diff1_inline" },
-                merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
+                merge_tool = { "diff3_mixed", "diff1_plain", "diff4_mixed", "diff3_horizontal" },
             },
             foldlevel = 99,
         },

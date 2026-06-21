@@ -111,7 +111,7 @@ return {
                 if path == nil then
                     return vim.notify("Cursor is not on valid entry")
                 end
-                vim.fn.setreg(vim.v.register, path)
+                vim.fn.setreg("+", path)
                 vim.notify("Yanked path: " .. path)
             end
 

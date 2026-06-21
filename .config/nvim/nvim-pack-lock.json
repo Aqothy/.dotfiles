@@ -26,7 +26,7 @@
       "src": "https://github.com/miroshQa/debugmaster.nvim"
     },
     "diffview-plus.nvim": {
-      "rev": "c65ddb4724cc772a77e9eca1478bff451867b2e2",
+      "rev": "de8bf7bc1b7382890de7b0623023e322c7a8ce7e",
       "src": "https://github.com/dlyongemallo/diffview-plus.nvim"
     },
     "flash.nvim": {
@@ -42,23 +42,23 @@
       "src": "https://github.com/nmac427/guess-indent.nvim"
     },
     "mini.ai": {
-      "rev": "4511b3481707c1d021485475d34f2ed2a50bf47b",
+      "rev": "d73c36349aa7b0bab5f77ad71701a1d42211a1df",
       "src": "https://github.com/nvim-mini/mini.ai"
     },
     "mini.files": {
-      "rev": "02874bc653fbecf2bee2c65441d0ebd09110f011",
+      "rev": "a5689dae6b732955e33eec225b798d6815063179",
       "src": "https://github.com/nvim-mini/mini.files"
     },
     "mini.hipatterns": {
-      "rev": "e25cf080aae092a651a92fa5e477f64a61adbebf",
+      "rev": "607d604e650cdf21d71f863d040c496a1d0cb320",
       "src": "https://github.com/echasnovski/mini.hipatterns"
     },
     "mini.icons": {
-      "rev": "ac38c983aed0a2bd32a65ca3e2348e12e58ca292",
+      "rev": "e56797f90192d81f1fda02e662fc3e8e3d775027",
       "src": "https://github.com/echasnovski/mini.icons"
     },
     "mini.operators": {
-      "rev": "d9b2f3892ad177cc141987ccfa8944cf21474f77",
+      "rev": "59c7f7362461a5db830a5752b22ce9f5cd25a966",
       "src": "https://github.com/nvim-mini/mini.operators"
     },
     "multicursor.nvim": {
@@ -66,11 +66,11 @@
       "src": "https://github.com/jake-stewart/multicursor.nvim"
     },
     "nvim-dap": {
-      "rev": "531771530d4f82ad2d21e436e3cc052d68d7aebb",
+      "rev": "9e848e09a697ee95302a3ef2dd43fd6eb709e570",
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-lspconfig": {
-      "rev": "fef8b117ad5fb73943913f444f22065c4b834a60",
+      "rev": "bfcc0171a43f22afa61d927ffe9fcb6cb85dc99e",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-spider": {
