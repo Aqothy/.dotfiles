@@ -2,8 +2,9 @@
  * Code Review Extension (inspired by Codex's /review feature)
  *
  * Usage:
- * - `/review` - show interactive selector
- * - `/review <instructions>` - run a custom-instructions review
+ * - `/review` - show interactive selector (structured targets can add optional focus instructions)
+ * - `/review <instructions>` - run a custom review in the current session
+ * - `/review-loop [instructions]` - repeatedly delegate review, validate findings, and fix them
  */
 
 import type {
@@ -23,15 +24,20 @@ import {
   Text,
 } from "@earendil-works/pi-tui";
 
-type ReviewTarget =
-  | { type: "baseBranch"; branch: string }
-  | { type: "uncommitted" }
-  | { type: "commit"; sha: string; title?: string }
-  | { type: "custom"; instructions: string };
+type StructuredReviewTarget =
+  | { type: "baseBranch"; branch: string; focus?: string }
+  | { type: "uncommitted"; focus?: string }
+  | { type: "commit"; sha: string; title?: string; focus?: string };
+
+type ReviewTarget = StructuredReviewTarget | { type: "custom"; instructions: string };
 
 type ReviewPresetValue = "baseBranch" | "uncommitted" | "commit" | "custom";
 
-type ReviewPreset = { value: ReviewPresetValue; label: string; description: string };
+type ReviewPreset = {
+  value: ReviewPresetValue;
+  label: string;
+  description: string;
+};
 
 const CUSTOM_REVIEW_PRESET: ReviewPreset = {
   value: "custom",
@@ -40,14 +46,24 @@ const CUSTOM_REVIEW_PRESET: ReviewPreset = {
 };
 
 const REVIEW_PRESETS: ReviewPreset[] = [
-  { value: "baseBranch", label: "Review against a base branch", description: "(PR style)" },
-  { value: "uncommitted", label: "Review uncommitted changes", description: "" },
+  {
+    value: "baseBranch",
+    label: "Review against a base branch",
+    description: "(PR style)",
+  },
+  {
+    value: "uncommitted",
+    label: "Review uncommitted changes",
+    description: "",
+  },
   { value: "commit", label: "Review a commit", description: "" },
   CUSTOM_REVIEW_PRESET,
 ];
 
 const UNCOMMITTED_PROMPT =
   "Review the current code changes (staged, unstaged, and untracked files) and provide prioritized findings.";
+
+const REVIEW_FOCUS_INPUT_PROMPT = "Enter optional focused review instructions (blank = none):";
 
 const BASE_BRANCH_PROMPT_WITH_MERGE_BASE =
   "Review the code changes against the base branch '{baseBranch}'. The merge base commit for this comparison is {mergeBaseSha}. Run `git diff {mergeBaseSha}` to inspect the changes relative to {baseBranch}. Provide prioritized, actionable findings.";
@@ -61,75 +77,76 @@ const COMMIT_PROMPT_WITH_TITLE =
 const COMMIT_PROMPT =
   "Review the code changes introduced by commit {sha}. Provide prioritized, actionable findings.";
 
-const REVIEW_GUIDELINES = `# Review guidelines:
+const REVIEW_LOOP_INSTRUCTIONS = `# Review and Fix Loop
 
-You are acting as a reviewer for a proposed code change made by another engineer.
+Run a review-and-fix loop for the review target below.
 
-Below are some default guidelines for determining whether the original author would appreciate the issue being flagged.
+For each iteration:
+1. Spawn subagents with the \`subagent\` tool in \`single\` or \`parallel\` mode using the user-level \`general\` agent. Give each subagent the complete review target, any focus instructions, and the complete **Subagent Review Rubric** below. The subagent task is read-only; do not ask it to edit files.
+2. Check every returned finding against the code and the requested diff. Keep only high-confidence issues that can realistically affect day-to-day use. Reject pre-existing issues, intentional behavior, cosmetic nits, highly improbable edge cases, and false positives.
+3. If no valid findings remain, stop.
+4. Fix every valid finding yourself with the simplest maintainable change that addresses the root cause. Run focused checks or tests when practical.
+5. Spawn a fresh general subagent with the same complete rubric and repeat against the resulting code. Do not assume an earlier fix is correct without the next independent review.
 
-These are not the final word in determining whether an issue is a bug. In many cases, you will encounter other, more specific guidelines. These may be present elsewhere in a developer message, a user message, a file, or repository instructions. Those guidelines should be considered to override these general instructions.
+Continue until a fresh review returns no findings or only findings you have verified as invalid. Do not delegate fixes to subagents. At the end, summarize the valid findings fixed, rejected findings if noteworthy, and verification performed.`;
 
-Here are the general guidelines for determining whether something is a bug and should be flagged.
+const REVIEW_RUBRIC = `# Code Review
 
-1. It meaningfully impacts the accuracy, performance, security, or maintainability of the code.
-2. The bug is discrete and actionable (i.e. not a general issue with the codebase or a combination of multiple issues).
-3. Fixing the bug does not demand a level of rigor that is not present in the rest of the codebase.
-4. The bug was introduced in the change being reviewed (pre-existing bugs should not be flagged).
-5. The author of the original change would likely fix the issue if they were made aware of it.
-6. The bug does not rely on unstated assumptions about the codebase or author's intent.
-7. It is not enough to speculate that a change may disrupt another part of the codebase. To be considered a bug, one must identify the other parts of the code that are provably affected.
-8. The bug is clearly not just an intentional change by the original author.
+Act as a rigorous reviewer for a proposed change made by another engineer. Inspect the repository and the requested diff directly. This is a read-only review: do not edit files, apply fixes, or generate a PR patch.
 
-When flagging a bug, provide an accompanying comment. Defer to any more specific instructions you encounter.
+## Review standard
 
-1. The comment should be clear about why the issue is a bug.
-2. The comment should appropriately communicate severity. It should not claim an issue is more severe than it actually is.
-3. The comment should be brief. The body should be at most one paragraph.
-4. The comment should not include code snippets longer than 3 lines.
-5. The comment should clearly and explicitly communicate the scenarios, environments, or inputs that are necessary for the bug to arise.
-6. The comment's tone should be matter-of-fact and not accusatory or overly positive. It should read as a helpful assistant suggestion.
-7. The comment should be written such that the original author can immediately grasp the idea without close reading.
-8. The comment should avoid excessive flattery and comments that are not helpful to the original author.
+Flag discrete, actionable issues introduced by the reviewed change that materially affect correctness, security, performance, compatibility, or maintainability and that the author would likely fix. Do not flag pre-existing problems, intentional behavior changes, speculative impact, or cosmetic nits. When claiming an affected caller or path, identify it concretely.
 
-Below are some more detailed guidelines that you should apply to this specific review.
+Audit both behavior and design, but report a design concern only when the change creates a concrete maintenance risk or obscures an important invariant. Do not reject working code merely because another style is possible.
 
-HOW MANY FINDINGS TO RETURN:
+For every meaningful change, ask:
+- Does it introduce an incorrect state, missed caller, unsafe boundary, compatibility break, or failure path?
+- Can fewer concepts express the same behavior without hiding policy in scattered conditionals?
+- Is state and policy owned by the canonical module, or duplicated across layers?
+- Does an abstraction remove meaningful complexity, or merely add a wrapper, mode, flag, or indirection?
+- Can independent operations run concurrently, and can related updates leave partially applied state?
 
-Output all findings that the original author would fix if they knew about them. If there is no finding that a person would definitely want to see and fix, prefer outputting no findings. Do not stop at the first qualifying finding. Continue until you've listed every qualifying finding.
+Prefer deletion, direct typed contracts, canonical helpers, focused modules, and explicit dispatch over generic machinery. Treat a change that pushes a file from below 1,000 lines to above 1,000 as a decomposition warning, not an automatic finding.
 
-GUIDELINES:
+Maintain a high bar. A preference without a concrete failure scenario, maintenance cost, and actionable remedy is not a finding. Prefer a small set of high-confidence findings over exhaustive commentary.
 
-- Ignore trivial style unless it obscures meaning or violates documented standards.
-- Use one comment per distinct issue (or a multi-line range if necessary).
-- Use suggestion blocks only for concrete replacement code, with minimal lines and no commentary inside the block.
-- In every suggestion block, preserve the exact leading whitespace of the replaced lines.
-- Do not introduce or remove outer indentation levels unless that is the actual fix.
+## Finding format
 
-The findings will be presented as review feedback. Avoid unnecessary location details in the body when the location is already provided. Always keep the line range as short as possible for interpreting the issue. Avoid ranges longer than 5-10 lines; instead, choose the most suitable subrange that pinpoints the problem.
+Each finding must:
 
-At the beginning of the finding title, tag the bug with a priority level. For example "[P1] Un-padding slices along wrong tensor dimensions".
-- [P0] - Drop everything to fix. Blocking release, operations, or major usage. Only use for universal issues that do not depend on assumptions about the inputs.
-- [P1] - Urgent. Should be addressed in the next cycle.
-- [P2] - Normal. To be fixed eventually.
-- [P3] - Low. Nice to have.
+- Start with \`[P0]\`, \`[P1]\`, \`[P2]\`, or \`[P3]\`.
+- Include the file path and the shortest useful line range, preferably overlapping the diff.
+- Explain in one concise paragraph why it matters, the scenario in which it matters, and the structural direction of the remedy.
+- Avoid snippets over three lines and avoid praise, filler, or softened language.
 
-At the end of your findings, output an overall correctness verdict of whether or not the patch should be considered correct. Correct implies that existing code and tests will not break, and the patch is free of bugs and other blocking issues. Ignore non-blocking issues such as style, formatting, typos, documentation, and other nits.
+Priorities: P0 blocks release or major usage universally; P1 is urgent; P2 is normal; P3 is low priority but still worth fixing. Return every qualifying finding, but prefer a small set of high-conviction comments over cosmetic noise.
 
-OUTPUT FORMAT:
+## Required output
 
-Provide a concise Markdown review with these sections:
+Output Markdown exactly in this shape:
 
 ## Findings
-- For each finding, include a priority-tagged title, file location, short line range, and one-paragraph explanation.
-- If there are no findings, say "No findings."
+- For each finding: priority-tagged title, file location, short line range, and one-paragraph explanation.
+- If none qualify, write \`No findings.\`
 
 ## Overall Correctness
-- Use exactly one of: "patch is correct" or "patch is incorrect".
+- Use exactly one of: \`patch is correct\` or \`patch is incorrect\`.
 
 ## Overall Explanation
-- Provide 1-3 sentences justifying the verdict.
+- Give 1-3 sentences justifying the verdict.
 
-Do not generate a PR fix or apply code changes.`;
+\`patch is correct\` requires no behavior-breaking issue or blocking structural regression under this review standard.`;
+
+const REVIEW_LOOP_PROMPT = `${REVIEW_LOOP_INSTRUCTIONS}
+
+## Subagent Review Rubric
+
+${REVIEW_RUBRIC}
+
+## Review Target
+
+{target}`;
 
 async function getMergeBase(pi: ExtensionAPI, branch: string): Promise<string | null> {
   try {
@@ -235,18 +252,25 @@ async function buildReviewPrompt(pi: ExtensionAPI, target: ReviewTarget): Promis
   }
 }
 
+function getReviewFocus(target: ReviewTarget): string | null {
+  if (target.type === "custom") return null;
+  return target.focus?.trim() || null;
+}
+
 function getUserFacingHint(target: ReviewTarget): string {
+  const focusSuffix = getReviewFocus(target) ? " with focus" : "";
+
   switch (target.type) {
     case "baseBranch":
-      return `changes against '${target.branch}'`;
+      return `changes against '${target.branch}'${focusSuffix}`;
     case "uncommitted":
-      return "current changes";
+      return `current changes${focusSuffix}`;
     case "commit": {
       const shortSha = target.sha.slice(0, 7);
-      return target.title ? `commit ${shortSha}: ${target.title}` : `commit ${shortSha}`;
+      return `${target.title ? `commit ${shortSha}: ${target.title}` : `commit ${shortSha}`}${focusSuffix}`;
     }
     case "custom":
-      return "custom review instructions";
+      return "focus on the following";
   }
 }
 
@@ -257,7 +281,7 @@ async function showReviewSelector(
   while (true) {
     const result = await ctx.ui.custom<ReviewPresetValue | null>((tui, theme, _kb, done) => {
       const container = new Container();
-      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+      container.addChild(new DynamicBorder((str: string) => theme.fg("accent", str)));
       container.addChild(new Text(theme.fg("accent", theme.bold("Select a review preset"))));
 
       const selectList = new SelectList(REVIEW_PRESETS, REVIEW_PRESETS.length, {
@@ -272,8 +296,10 @@ async function showReviewSelector(
       selectList.onCancel = () => done(null);
 
       container.addChild(selectList);
-      container.addChild(new Text(theme.fg("dim", "Press enter to confirm or esc to cancel")));
-      container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+      container.addChild(
+        new Text(theme.fg("dim", "Press enter to confirm or esc/ctrl-c to cancel")),
+      );
+      container.addChild(new DynamicBorder((str: string) => theme.fg("accent", str)));
 
       return {
         render(width: number) {
@@ -293,15 +319,30 @@ async function showReviewSelector(
 
     switch (result) {
       case "baseBranch": {
-        const target = await showBranchSelector(pi, ctx);
+        while (true) {
+          const target = await showBranchSelector(pi, ctx);
+          if (!target) break;
+
+          const targetWithFocus = await withOptionalReviewFocus(ctx, target);
+          if (targetWithFocus) return targetWithFocus;
+        }
+        break;
+      }
+      case "uncommitted": {
+        const target = await withOptionalReviewFocus(ctx, {
+          type: "uncommitted",
+        });
         if (target) return target;
         break;
       }
-      case "uncommitted":
-        return { type: "uncommitted" };
       case "commit": {
-        const target = await showCommitSelector(pi, ctx);
-        if (target) return target;
+        while (true) {
+          const target = await showCommitSelector(pi, ctx);
+          if (!target) break;
+
+          const targetWithFocus = await withOptionalReviewFocus(ctx, target);
+          if (targetWithFocus) return targetWithFocus;
+        }
         break;
       }
       case "custom": {
@@ -316,7 +357,7 @@ async function showReviewSelector(
 async function showBranchSelector(
   pi: ExtensionAPI,
   ctx: ExtensionContext,
-): Promise<ReviewTarget | null> {
+): Promise<StructuredReviewTarget | null> {
   const branches = await getLocalBranches(pi);
   const currentBranch = await getCurrentBranch(pi);
   const defaultBranch = await getDefaultBranch(pi);
@@ -348,7 +389,7 @@ async function showBranchSelector(
 async function showCommitSelector(
   pi: ExtensionAPI,
   ctx: ExtensionContext,
-): Promise<ReviewTarget | null> {
+): Promise<StructuredReviewTarget | null> {
   const commits = await getRecentCommits(pi);
   if (commits.length === 0) {
     ctx.ui.notify("No commits found", "error");
@@ -372,6 +413,17 @@ async function showCustomInstructionsInput(ctx: ExtensionContext): Promise<Revie
   return trimmed ? { type: "custom", instructions: trimmed } : null;
 }
 
+async function withOptionalReviewFocus(
+  ctx: ExtensionContext,
+  target: StructuredReviewTarget,
+): Promise<StructuredReviewTarget | null> {
+  const focus = await ctx.ui.editor(REVIEW_FOCUS_INPUT_PROMPT, "");
+  if (focus === undefined) return null;
+
+  const trimmed = focus.trim();
+  return trimmed ? { ...target, focus: trimmed } : target;
+}
+
 async function showSearchableList(
   ctx: ExtensionContext,
   title: string,
@@ -379,7 +431,7 @@ async function showSearchableList(
 ): Promise<string | null> {
   return ctx.ui.custom<string | null>((tui, theme, keybindings, done) => {
     const container = new Container();
-    container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+    container.addChild(new DynamicBorder((str: string) => theme.fg("accent", str)));
     container.addChild(new Text(theme.fg("accent", theme.bold(title))));
 
     const searchInput = new Input();
@@ -389,9 +441,9 @@ async function showSearchableList(
     const listContainer = new Container();
     container.addChild(listContainer);
     container.addChild(
-      new Text(theme.fg("dim", "Type to filter • enter to select • esc to cancel")),
+      new Text(theme.fg("dim", "Type to filter • enter to select • esc/ctrl-c to go back")),
     );
-    container.addChild(new DynamicBorder((str) => theme.fg("accent", str)));
+    container.addChild(new DynamicBorder((str: string) => theme.fg("accent", str)));
 
     let filteredItems = items;
     let selectList: SelectList | null = null;
@@ -474,32 +526,83 @@ async function showSearchableList(
   });
 }
 
+function buildFullReviewPrompt(hint: string, prompt: string): string {
+  return `${REVIEW_RUBRIC}
+
+---
+
+## Review Target
+
+${hint}
+
+${prompt}
+
+Perform the review now. Do not modify the working tree.`;
+}
+
 async function executeReview(
   pi: ExtensionAPI,
   ctx: ExtensionCommandContext,
   target: ReviewTarget,
 ): Promise<void> {
-  const prompt = await buildReviewPrompt(pi, target);
-  const hint = getUserFacingHint(target);
-  const fullPrompt = `${REVIEW_GUIDELINES}\n\n---\n\nPlease perform a code review with the following focus:\n\n${prompt}`;
+  const targetPrompt = await buildReviewPrompt(pi, target);
+  const focus = getReviewFocus(target);
+  const prompt = focus ? `${targetPrompt}\n\nAdditional focus:\n${focus}` : targetPrompt;
+  sendPrompt(pi, ctx, buildFullReviewPrompt(getUserFacingHint(target), prompt), "review", target);
+}
 
+async function executeReviewLoop(
+  pi: ExtensionAPI,
+  ctx: ExtensionCommandContext,
+  target: ReviewTarget,
+): Promise<void> {
+  const targetPrompt = await buildReviewPrompt(pi, target);
+  const focus = getReviewFocus(target);
+  const focusedPrompt = focus ? `${targetPrompt}\n\nAdditional focus:\n${focus}` : targetPrompt;
+  const prompt = `${focusedPrompt}\n\nOn later iterations, review the current working tree as an overlay on this target. Treat working-tree fixes as the resulting code, review those fixes too, and do not repeat a finding that the working tree already resolves.`;
+  sendPrompt(pi, ctx, REVIEW_LOOP_PROMPT.replace("{target}", prompt), "review loop", target);
+}
+
+function sendPrompt(
+  pi: ExtensionAPI,
+  ctx: ExtensionCommandContext,
+  prompt: string,
+  label: string,
+  target: ReviewTarget,
+): void {
+  const hint = getUserFacingHint(target);
   if (ctx.isIdle()) {
-    ctx.ui.notify(`Starting review: ${hint}`, "info");
-    pi.sendUserMessage(fullPrompt);
+    ctx.ui.notify(`Starting ${label}: ${hint}`, "info");
+    pi.sendUserMessage(prompt);
   } else {
-    ctx.ui.notify(`Queued review: ${hint}`, "info");
-    pi.sendUserMessage(fullPrompt, { deliverAs: "followUp" });
+    ctx.ui.notify(`Queued ${label}: ${hint}`, "info");
+    pi.sendUserMessage(prompt, { deliverAs: "followUp" });
   }
 }
 
 export default function reviewExtension(pi: ExtensionAPI) {
-  pi.registerCommand("review", {
-    description: "Review code changes",
+  registerReviewCommand(pi, "review", "Review code changes", executeReview);
+  registerReviewCommand(
+    pi,
+    "review-loop",
+    "Review and fix changes until no valid findings remain",
+    executeReviewLoop,
+  );
+}
+
+function registerReviewCommand(
+  pi: ExtensionAPI,
+  name: string,
+  description: string,
+  execute: (pi: ExtensionAPI, ctx: ExtensionCommandContext, target: ReviewTarget) => Promise<void>,
+): void {
+  pi.registerCommand(name, {
+    description,
     handler: async (args, ctx) => {
       const customInstructions = args?.trim();
       if (!customInstructions && ctx.mode !== "tui") {
         ctx.ui.notify(
-          "Review selector requires TUI mode; pass instructions as /review <instructions>",
+          `Review selector requires TUI mode; pass instructions as /${name} <instructions>`,
           "error",
         );
         return;
@@ -514,7 +617,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
         return;
       }
 
-      await executeReview(pi, ctx, target);
+      await execute(pi, ctx, target);
     },
   });
 }

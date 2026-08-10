@@ -53,7 +53,17 @@
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-j": "workspace::ActivatePaneDown"
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "space ,": "tab_switcher::ToggleAll",
+      "space tab": "pane::AlternateFile",
+      "z space": "editor::FoldAtLevel_1",
+      "y ctrl-g": "workspace::CopyRelativePath",
+      "space g l": "git_graph::Open",
+      "space g d": "git::Diff",
+      "space g b": "git::Branch",
+      "space g o": "editor::OpenPermalinkToLine",
+      "g y": "editor::CopyPermalinkToLine",
+      "g b": "editor::BlameHover"
     }
   },
   {
@@ -64,7 +74,9 @@
       "shift-s": "vim::PushAddSurrounds",
       "v": "editor::SelectLargerSyntaxNode",
       "ctrl-r": "editor::SelectSmallerSyntaxNode",
-      "shift-x": "vim::Exchange"
+      "shift-x": "vim::Exchange",
+      "shift-j": "editor::MoveLineDown",
+      "shift-k": "editor::MoveLineUp"
     }
   },
   {
@@ -92,6 +104,18 @@
     "context": "Editor && showing_completions",
     "unbind": {
       "tab": "editor::ComposeCompletion"
+    }
+  },
+  {
+    "context": "GitPanel && ChangesList && !GitBranchSelector",
+    "bindings": {
+      "s": "git::ToggleStaged"
+    }
+  },
+  {
+    "context": "GitPanel && ChangesList && !GitBranchSelector",
+    "unbind": {
+      "space": "git::ToggleStaged"
     }
   }
 ]

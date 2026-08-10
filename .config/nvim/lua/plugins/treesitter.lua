@@ -12,13 +12,12 @@ return {
             highlight = { disable = {} },
             folds = { disable = {} },
             ensure_installed = {
+                -- included
                 "c",
                 "lua",
-                "vim",
-                "vimdoc",
-                "query",
                 "markdown",
                 "markdown_inline",
+                "diff",
 
                 -- extras
                 "javascript",
@@ -35,7 +34,7 @@ return {
                 "html",
                 "rust",
                 "yaml",
-                "diff",
+                "query",
                 "http",
                 "sql",
                 "printf",

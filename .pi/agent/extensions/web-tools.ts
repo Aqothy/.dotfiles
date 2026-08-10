@@ -114,8 +114,11 @@ export default function (pi: ExtensionAPI) {
     name: "websearch",
     label: "Web Search",
     description:
-      "Search the web using Exa for current info when local files are insufficient. Returns key excerpts; fetch relevant URLs before relying on claims.",
-    promptSnippet: "Find web results",
+      "Search external sources for current or source-backed information. Returns excerpts rather than full page content.",
+    promptSnippet: "Discover current or external sources from the web.",
+    promptGuidelines: [
+      "Use websearch for current or source-backed information when local context is insufficient; prefer focused queries.",
+    ],
     parameters: Type.Object({
       query: Type.String({ description: "Natural language search query" }),
       numResults: Type.Optional(
@@ -158,8 +161,11 @@ export default function (pi: ExtensionAPI) {
     name: "webfetch",
     label: "Web Fetch",
     description:
-      "Fetch clean content from known URLs via Exa extraction. Handles JS sites, layouts, and paywalled content.",
-    promptSnippet: "Extract URL content",
+      "Fetch clean content from known URLs for reading, verifying, and citing web sources. Handles many JS-heavy sites and page layouts.",
+    promptSnippet: "Read content from URLS.",
+    promptGuidelines: [
+      "use webfetch with user provided or promising URLs when web content is needed; prefer authoritative sources.",
+    ],
     parameters: Type.Object({
       url: Type.Optional(Type.String({ description: "Single URL to fetch" })),
       urls: Type.Optional(

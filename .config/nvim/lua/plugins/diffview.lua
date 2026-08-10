@@ -49,10 +49,8 @@ return {
             foldlevel = 99,
         },
         file_panel = {
-            listing_style = "list",
-            show_branch_name = true,
             win_config = {
-                width = 25,
+                width = 30,
                 win_opts = {
                     signcolumn = "no",
                 },

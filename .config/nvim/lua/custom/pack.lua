@@ -84,8 +84,7 @@ local function apply_keys(spec)
     end
 end
 
-local load_plugin
-load_plugin = function(spec)
+local function load_plugin(spec)
     if not spec or loaded[spec.name] then
         return
     end

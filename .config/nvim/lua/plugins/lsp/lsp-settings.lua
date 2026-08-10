@@ -23,11 +23,11 @@ end
 
 -- pnpm add -g @typescript/native-preview
 M["tsgo"] = {
-    enabled = false,
+    enabled = true,
     on_attach = function(_, bufnr)
-        map("n", "<localleader>ri", function()
-            action("source.organizeImports")
-        end, { buf = bufnr, desc = "Refactor imports", silent = true })
+        map("n", "<localleader>ra", function()
+            action("source.fixAll")
+        end, { buf = bufnr, desc = "Refactor All", silent = true })
     end,
 }
 
@@ -51,7 +51,7 @@ local jsts_config = {
 
 -- pnpm add -g @vtsls/language-server
 M["vtsls"] = {
-    enabled = true,
+    enabled = false,
     settings = {
         vtsls = {
             autoUseWorkspaceTsdk = true,

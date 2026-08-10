@@ -2,6 +2,7 @@ notARepository: quit
 os:
   editPreset: nvim-remote
 gui:
+  sidePanelWidth: 0.25
   nerdFontsVersion: "3"
   filterMode: fuzzy
   mouseEvents: true

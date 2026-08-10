@@ -4,9 +4,10 @@ local defaults = {
     agents = {
         pi = { cmd = { "pi" } },
         codex = { cmd = { "codex", "--yolo" } },
-        claude = { cmd = { "claude", "--dangerously-skip-permissions" } },
+        claude = { cmd = { "claude" } },
     },
     width = 0.4,
+    annotation_position = "above", -- "above", "below", or "eol"
     keys = {
         select = { "<a-.>", "select", mode = { "n", "t" }, desc = "Agent Select" },
         toggle = { "<c-.>", "toggle", mode = { "n", "t" }, desc = "Agent toggle" },
@@ -523,12 +524,21 @@ local function mark_annotation(item)
     end
 
     local line_count = vim.api.nvim_buf_line_count(item.buf)
-    local line = math.max(0, math.min(item.first - 1, line_count - 1))
-    local ok, mark = pcall(vim.api.nvim_buf_set_extmark, item.buf, annotation_ns, line, 0, {
-        virt_text = { { " 󰆈 " .. annotation_preview(item.comment), "Todo" } },
-        virt_text_pos = "eol",
-        hl_mode = "combine",
-    })
+    local position = config.annotation_position
+    local anchor = position == "below" and item.last or item.first
+    local line = math.max(0, math.min(anchor - 1, line_count - 1))
+    local text = { { " 󰆈 " .. annotation_preview(item.comment), "Todo" } }
+    local opts = { hl_mode = "combine" }
+
+    if position == "eol" then
+        opts.virt_text = text
+        opts.virt_text_pos = "eol"
+    else
+        opts.virt_lines = { text }
+        opts.virt_lines_above = position == "above"
+    end
+
+    local ok, mark = pcall(vim.api.nvim_buf_set_extmark, item.buf, annotation_ns, line, 0, opts)
     if ok then
         item.mark = mark
     end
@@ -655,12 +665,22 @@ function M.send_selection()
     send_block(buf, first, last, text)
 end
 
-function M.annotate_selection()
-    local buf = vim.api.nvim_get_current_buf()
-    local first, last, text = get_selection()
+local function annotate(buf, first, last, text)
     prompt_annotation(function(comment)
         add_annotation(buf, first, last, text, comment)
     end)
+end
+
+function M.annotate_selection()
+    local buf = vim.api.nvim_get_current_buf()
+    local first, last, text = get_selection()
+    annotate(buf, first, last, text)
+end
+
+function M.annotate_line()
+    local buf = vim.api.nvim_get_current_buf()
+    local line = vim.api.nvim_win_get_cursor(0)[1]
+    annotate(buf, line, line, vim.api.nvim_get_current_line())
 end
 
 function M.send_annotations()
@@ -674,6 +694,15 @@ function M.send_annotations()
         delete_annotation_marks(state.annotations)
         state.annotations = {}
     end)
+end
+
+function M.copy_annotations()
+    if #state.annotations == 0 then
+        return notify("No annotations")
+    end
+
+    vim.fn.setreg("+", format_annotations(state.annotations))
+    notify(("%d annotation%s copied to clipboard"):format(#state.annotations, #state.annotations == 1 and "" or "s"))
 end
 
 function M.clear_annotations()
@@ -814,8 +843,10 @@ function M.setup(opts)
     })
     vim.keymap.set("n", "<c-.>", M.toggle, { desc = "Agent Toggle" })
     vim.keymap.set("n", "<leader>as", M.select, { desc = "Agent Select" })
+    vim.keymap.set("n", "<leader>aa", M.annotate_line, { desc = "Agent Annotate Line" })
     vim.keymap.set("x", "<leader>aa", M.annotate_selection, { desc = "Agent Annotate Selection" })
-    vim.keymap.set("n", "<leader>aA", M.send_annotations, { desc = "Agent Send Annotations" })
+    vim.keymap.set("n", "<leader>a<cr>", M.send_annotations, { desc = "Agent Send Annotations" })
+    vim.keymap.set("n", "<leader>ay", M.copy_annotations, { desc = "Agent Copy Annotations" })
     vim.keymap.set("n", "<leader>ac", M.clear_annotations, { desc = "Agent Clear Annotation" })
     vim.keymap.set("x", "<leader>av", M.send_selection, { desc = "Agent Send Selection" })
     vim.keymap.set("n", "<leader>ad", M.send_diagnostic, { desc = "Agent Send Diagnostic" })

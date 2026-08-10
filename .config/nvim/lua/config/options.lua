@@ -73,7 +73,6 @@ opt.listchars = {
 }
 opt.formatoptions = "jcroqlnt"
 opt.mousescroll = "ver:1,hor:1"
-opt.guifont = "Hack Nerd Font Mono:h15"
 opt.wrap = false
 opt.smoothscroll = true
 opt.textwidth = 80
